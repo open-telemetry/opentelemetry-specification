@@ -1,101 +1,43 @@
 # AGENTS.md
 
-## Purpose and Scope
+## Purpose
 
-This repository contains the OpenTelemetry specification. Agent work should
-protect specification consistency, interoperability, stability, clear normative
-language, and OpenTelemetry project values.
+This repository contains the OpenTelemetry specification. This file is a short
+routing guide for agents.
 
-Treat this file as a concise routing guide for the whole repository. If details
-differ, follow the canonical repository documents linked here, especially
-[CONTRIBUTING.md], [Specification Principles],
-[Notation Conventions and Compliance], and [Document Statuses].
+Canonical requirements and project guidance live in the repository documents.
+If details differ, follow the canonical repository documents linked here, especially [Contributing guidelines] and [Specification Principles].
 
-## Baseline Editing Guidance
+## Contributing
 
-- Specification content is written in Markdown and should render correctly on
-  GitHub. Prefer line breaks at 80 characters.
-- Use the project name "OpenTelemetry" and acronym "OTel" as described in
-  [Project Naming].
-- Keep changes focused, vendor-neutral, and implementable across languages.
-- Prefer specification text that describes what must interoperate, not how each
-  language or implementation must be built.
-- Preserve existing headings, anchors, status markers, reference links, and
-  table-of-contents markers unless the change explicitly requires updating
-  them.
+- Follow [Contributing guidelines].
 
-## Review Priorities
+## Review Focus
 
-- Check specification changes against related sections and documents. Flag
-  conflicts with existing requirements, terminology, data model behavior, or
-  compliance matrix entries.
-- Evaluate changes against the canonical [Specification Principles]:
-  Be User Driven, Be General, Be Stable, Be Consistent, and Be Simple.
-- Evaluate changes against OpenTelemetry [Mission and Values], especially ease
-  of use, universality, vendor neutrality, loose coupling, built-in telemetry,
-  compatibility, stability, resilience, and performance.
-- For changes that add features, change behavior, or affect stability, verify
-  that the PR is covered by an accepted issue or by an OTEP following the
-  [OTEP process].
-- For feature, behavior, or stability changes, also check whether prototypes
-  are required, whether [CHANGELOG.md] or compliance matrix entries need
-  updates, and whether the declarative configuration schema is affected.
-
-## Process Checks
-
-- New features at Development maturity, as defined in [Document Statuses],
-  require a prototype in an OpenTelemetry implementation with SIG maintainer
-  support.
-- Stabilization requires prototypes in multiple languages. Three languages is
-  typical, with coverage across typed object-oriented, dynamically typed, and
-  structural ecosystems when relevant.
-- Protocol changes should be prototyped on both the client and server sides.
-- If SDK component configuration is added or changed, check for a corresponding
-  proposed change to the [declarative configuration schema][config schema].
-- If compliance matrix source YAML changes, update the generated matrix and do
-  not require a changelog entry for that matrix-only update.
-
-## Normative Language and Status
-
-- For `specification/`, treat `MUST`, `MUST NOT`, `REQUIRED`, `SHOULD`,
+- Ensure the change adheres to the OpenTelemetry Values and review against the [Specification Principles].
+- Check if the changes are focused, vendor-neutral, and implementable across
+  languages.
+- Check related specification sections for conflicts in requirements,
+  terminology, or data model behavior.
+- For feature, behavior, or stability changes, check whether the pull request
+  links to an issue or OTEP and includes prototype links.
+- For SDK component configuration changes, check whether a corresponding
+  proposed change exists in the [declarative configuration schema].
+- In `specification/`, treat `MUST`, `MUST NOT`, `REQUIRED`, `SHOULD`,
   `SHOULD NOT`, `RECOMMENDED`, `NOT RECOMMENDED`, `MAY`, and `OPTIONAL` as
   BCP 14 terms only when they appear in all capitals.
-- Use or recommend uppercase BCP 14 keywords only for implementation
-  requirements needed for interoperability or to avoid harm.
-- Treat lowercase modal wording such as "must", "should", and "may" as
-  suspect in specification prose. For non-normative text, suggest neutral
-  wording such as "can", "typically", or direct phrasing. Do not mechanically
-  rewrite quotations or external standard language.
-- For notes, examples, operational guidance, and supplementary guidance, flag
-  wording that reads like a hidden requirement.
-- If a change adds, removes, or tightens normative requirements, verify the
-  affected document or section status. Status is commonly marked with a
-  `**Status**: ...` line or bold inline marker. No explicit status is
-  equivalent to Alpha; `Mixed` means individual sections can have different
-  statuses.
-- Flag changes that exceed the affected maturity level unless the PR explains
-  an approved stability exception. Stable and Release Candidate content should
-  avoid breaking changes except under special circumstances.
+- Flag lowercase modal wording such as "must", "should", and "may" in
+  specification prose when it reads like an implementation requirement. For
+  non-normative text, suggest neutral wording or explicit non-normative
+  framing instead of hidden requirements.
+- Verify the affected document or section [status] when a change adds, removes,
+  or tightens requirements. Status is commonly marked with a `**Status**: ...`
+  line or bold inline marker.
+- Flag possible stability or breaking-change impact for human review,
+  especially in Stable and Release Candidate content.
 
-## Validation Commands
-
-- Install dependencies with `npm install` after installing the latest LTS
-  release of Node.js.
-- Run all checks with `make check`.
-- Run focused checks with `make language-analysis`, `make markdownlint`, or
-  `make markdown-link-check`. Link checking requires Docker and can take a long
-  time.
-- Run `make fix` for textlint autofixes.
-- Run `make markdown-toc` after changing Markdown files with table-of-contents
-  markers.
-- If compliance matrix source YAML changes, run `make compliance-matrix`.
-
-[CHANGELOG.md]: CHANGELOG.md
-[CONTRIBUTING.md]: CONTRIBUTING.md
-[Document Statuses]: specification/document-status.md
-[config schema]: https://github.com/open-telemetry/opentelemetry-configuration
-[Mission and Values]: specification/specification-principles.md
-[Notation Conventions and Compliance]: specification/README.md
-[OTEP process]: oteps/README.md
-[Project Naming]: specification/README.md
+[Contributing guidelines]: CONTRIBUTING.md
 [Specification Principles]: specification/specification-principles.md
+[declarative configuration schema]: https://github.com/open-telemetry/opentelemetry-configuration
+
+[status]: specification/document-status.md
