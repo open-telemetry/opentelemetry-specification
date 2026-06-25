@@ -13,7 +13,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [How Schemas Work](#how-schemas-work)
@@ -27,7 +27,7 @@ path_base_for_github_subdir:
 - [API Support](#api-support)
 - [OpenTelemetry Schema](#opentelemetry-schema)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

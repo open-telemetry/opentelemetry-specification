@@ -1,6 +1,6 @@
 # Probability sampling of telemetry events
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [Examples](#examples)
@@ -35,7 +35,7 @@
 - [Recommended reading](#recommended-reading)
 - [Acknowledgements](#acknowledgements)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 Objective: Specify a foundation for sampling techniques in OpenTelemetry.
 

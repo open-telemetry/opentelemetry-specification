@@ -7,13 +7,13 @@ requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Configuration interface prioritization and `create`](#configuration-interface-prioritization-and-create)
 - [Programmatic customization and `create`](#programmatic-customization-and-create)
 - [Strict YAML parsing](#strict-yaml-parsing)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
