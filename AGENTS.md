@@ -13,7 +13,7 @@ especially [Contributing guidelines] and [Specification Principles].
 
 ## Review Focus
 
-- Ensure the change adheres to the OpenTelemetry Mission and Values and review
+- Ensure the changes adheres to the OpenTelemetry Mission and Values and review
   against the [Specification Principles].
 - Check if the changes are focused, vendor-neutral, and implementable across
   languages.
@@ -22,7 +22,7 @@ especially [Contributing guidelines] and [Specification Principles].
 - For feature, behavior, or stability changes, check whether the pull request
   links to an issue or OTEP and includes prototype links.
 - For SDK component configuration changes, check whether a corresponding
-  proposed change exists in the [declarative configuration schema].
+  proposed changes exists in the [declarative configuration schema].
 - In `specification/`, treat `MUST`, `MUST NOT`, `REQUIRED`, `SHOULD`,
   `SHOULD NOT`, `RECOMMENDED`, `NOT RECOMMENDED`, `MAY`, and `OPTIONAL` as
   BCP 14 terms only when they appear in all capitals.
