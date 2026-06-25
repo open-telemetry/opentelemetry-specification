@@ -39,5 +39,4 @@ especially [Contributing guidelines] and [Specification Principles].
 [Contributing guidelines]: CONTRIBUTING.md
 [Specification Principles]: specification/specification-principles.md
 [declarative configuration schema]: https://github.com/open-telemetry/opentelemetry-configuration
-
 [status]: specification/document-status.md
