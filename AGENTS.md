@@ -4,7 +4,8 @@ This repository contains the OpenTelemetry specification. This file is a short
 routing guide for agents.
 
 Canonical requirements and project guidance live in the repository documents.
-If details differ, follow the canonical repository documents linked here, especially [Contributing guidelines] and [Specification Principles].
+If details differ, follow the canonical repository documents linked here,
+especially [Contributing guidelines] and [Specification Principles].
 
 ## Contributing
 
@@ -12,7 +13,8 @@ If details differ, follow the canonical repository documents linked here, especi
 
 ## Review Focus
 
-- Ensure the change adheres to the OpenTelemetry Values and review against the [Specification Principles].
+- Ensure the change adheres to the OpenTelemetry Values and review against the
+  [Specification Principles].
 - Check if the changes are focused, vendor-neutral, and implementable across
   languages.
 - Check related specification sections for conflicts in requirements,
