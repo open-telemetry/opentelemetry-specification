@@ -11,10 +11,10 @@ especially [Contributing guidelines] and [Specification Principles].
 
 - Follow [Contributing guidelines].
 
-## Review Focus
+## Reviewing
 
-- Ensure the changes adheres to the OpenTelemetry Mission and Values and review
-  against the [Specification Principles].
+- Ensure the changes align with the [Contributing guidelines] and
+  [Specification Principles].
 - Check if the changes are focused, vendor-neutral, and implementable across
   languages.
 - Check related specification sections for conflicts in requirements,
