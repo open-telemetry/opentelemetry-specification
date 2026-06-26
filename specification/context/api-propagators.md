@@ -210,9 +210,9 @@ delegates or other ways.
 
 **Status**: [Deprecated](../document-status.md)
 
-The `Keys` function is deprecated. Language implementations SHOULD NOT require
-new `Getter` implementations to provide `Keys`. Existing implementations MAY
-continue to expose it for backwards compatibility.
+The `Keys` function is deprecated. Language implementations SHOULD NOT add
+`Keys` to new `Getter` APIs. Existing implementations MAY continue to expose it
+for backwards compatibility.
 
 When implemented, the `Keys` function MUST return the list of all the keys in
 the carrier.
