@@ -153,6 +153,9 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
+**Status**: [Development](../document-status.md) - `OTEL_BSP_ON_QUEUE_FULL` and
+`OTEL_BSP_BLOCK_ON_QUEUE_FULL_TIMEOUT`.
+
 | Name                                     | Description                                                                                                      | Default | Type         | Notes                                                                             |
 |------------------------------------------|------------------------------------------------------------------------------------------------------------------|---------|--------------|-----------------------------------------------------------------------------------|
 | OTEL_BSP_SCHEDULE_DELAY                  | Delay interval (in milliseconds) between two consecutive exports                                                 | 5000    | [Duration][] |                                                                                   |
@@ -163,6 +166,9 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE           | Maximum batch size                                                                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Batch LogRecord Processor
+
+**Status**: [Development](../document-status.md) - `OTEL_BLRP_ON_QUEUE_FULL` and
+`OTEL_BLRP_BLOCK_ON_QUEUE_FULL_TIMEOUT`.
 
 | Name                                      | Description                                                                                                       | Default | Type         | Notes                                                                              |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------|---------|--------------|------------------------------------------------------------------------------------|
