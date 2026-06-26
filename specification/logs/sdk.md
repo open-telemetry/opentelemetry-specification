@@ -547,6 +547,14 @@ to make sure that they are not invoked concurrently.
 * `exporter` - the exporter where the `LogRecord`s are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
   dropped. The default value is `2048`.
+* `onQueueFull` - the behavior when a new log record is received and the queue
+  is full. The possible values are `DROP` and `BLOCK`. If set to `DROP`, log
+  records are dropped. If set to `BLOCK`, adding the log record waits until
+  space is available in the queue or until `blockOnQueueFullTimeoutMillis`
+  elapses. The default value is `DROP`.
+* `blockOnQueueFullTimeoutMillis` - how long adding a log record can wait for
+  space in the queue before the log record is dropped when `onQueueFull` is set
+  to `BLOCK`. The default value is `0`, meaning no timeout.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `1000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
