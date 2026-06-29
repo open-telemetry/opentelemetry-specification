@@ -813,7 +813,7 @@ field name.
 | ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` converted to UNIX epoch nanoseconds according to the trace/session timestamp metadata (e.g. QPC, system time, or CPU cycle counter) | Timestamp                                                             |
 | Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
-| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<event.id>`           | `EventName`                                                          |
+| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<EventId>`            | `EventName`                                                          |
 | Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`; `Body` is left empty          | Body                                                         |
 | ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider.id"]`                                      |
 | EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event.id"]`                                        |
