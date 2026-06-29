@@ -9,6 +9,16 @@ release.
 
 ### Context
 
+- Clarify that environment variable propagation operational guidance is
+  non-normative and should be documented by language implementations.
+  ([#5165](https://github.com/open-telemetry/opentelemetry-specification/pull/5165))
+- Clean up implementation guidelines for environment variable propagation
+  carriers.
+  ([#5166](https://github.com/open-telemetry/opentelemetry-specification/pull/5166))
+- Remove caching behavior suggestions for environment variable propagation
+  carrier implementations.
+  ([#5179](https://github.com/open-telemetry/opentelemetry-specification/pull/5179))
+
 ### Traces
 
 ### Metrics
@@ -55,6 +65,7 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
+
 
 ### Profiles
 
@@ -107,6 +118,8 @@ release.
 
 ### OTEPs
 
+- Add OTEP proposing a central OpenTelemetry benchmarks repository.
+  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
 - Context-scoped Attributes.
   ([#4931](https://github.com/open-telemetry/opentelemetry-specification/pull/4931))
 
