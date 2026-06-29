@@ -13,7 +13,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
@@ -34,7 +34,7 @@ path_base_for_github_subdir:
   * [Configurable Parameters](#configurable-parameters)
   * [Exempt Entities](#exempt-entities)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

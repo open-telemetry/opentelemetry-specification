@@ -7,9 +7,7 @@ extra requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Usage](#usage)
   * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)
@@ -24,7 +22,7 @@ extra requirements to the existing specifications.
     + [Routing](#routing)
     + [Setup](#setup)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

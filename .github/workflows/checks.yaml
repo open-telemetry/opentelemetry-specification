@@ -62,10 +62,7 @@ jobs:
       run: npm install
 
     - name: run markdown-toc
-      run: make markdown-toc
-
-    - name: validate markdown-toc
-      run: git diff --exit-code ':*.md' || (echo 'Generated markdown Table of Contents is out of date, please run "make markdown-toc" and commit the changes in this PR.' && exit 1)
+      run: make markdown-toc-check
 
   compliance-matrix-check:
     runs-on: ubuntu-latest
