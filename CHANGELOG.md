@@ -115,6 +115,8 @@ release.
 
 ### OTEPs
 
+- Add OTEP proposing a central OpenTelemetry benchmarks repository.
+  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
 - Context-scoped Attributes.
   ([#4931](https://github.com/open-telemetry/opentelemetry-specification/pull/4931))
 

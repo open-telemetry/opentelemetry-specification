@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [When to Use Entity Events](#when-to-use-entity-events)
@@ -26,7 +26,7 @@ weight: 3
   * [Kubernetes Pod Entity State](#kubernetes-pod-entity-state)
   * [Entity Delete](#entity-delete)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

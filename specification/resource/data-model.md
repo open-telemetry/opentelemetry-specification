@@ -10,13 +10,13 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Identity](#identity)
 - [Merging Resources](#merging-resources)
   * [Merging Entities into a Resource](#merging-entities-into-a-resource)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

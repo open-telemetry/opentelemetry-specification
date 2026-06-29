@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
@@ -85,7 +85,7 @@ weight: 3
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -71,25 +71,15 @@ markdown-link-check:
 		-v \
 		home/repo
 
-# This target runs markdown-toc on all files that contain
-# a comment <!-- tocstop -->.
-#
-# The recommended way to prepate a .md file for markdown-toc is
-# to add these comments:
-#
-#   <!-- toc -->
-#   <!-- tocstop -->
 .PHONY: markdown-toc
 markdown-toc:
-	@if ! npm ls markdown-toc; then npm install; fi
-	@for f in $(ALL_DOCS); do \
-		if grep -q '<!-- tocstop -->' $$f; then \
-			echo markdown-toc: processing $$f; \
-			npx --no -- markdown-toc --no-first-h1 --no-stripHeadingTags -i $$f || exit 1; \
-		else \
-			echo markdown-toc: no TOC markers, skipping $$f; \
-		fi; \
-	done
+	@if ! npm ls doctoc; then npm ci; fi
+	npx --no -- doctoc . --update-only --mintocitems 1 --toc-pragma-style compact --notitle --entryprefix='-,*,+' || exit 1;
+
+.PHONY: markdown-toc-check
+markdown-toc-check:
+	@if ! npm ls doctoc; then npm ci; fi
+	npx --no -- doctoc . --update-only --mintocitems 1 --toc-pragma-style compact --notitle --entryprefix='-,*,+' --dryrun || exit 1;
 
 .PHONY: markdownlint
 markdownlint:
