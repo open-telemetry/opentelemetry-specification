@@ -99,6 +99,13 @@ read a non-normalized environment variable named `x-b3-traceid`, even though
 that name normalizes to `X_B3_TRACEID`.
 
 > [!NOTE]
+> On platforms with case-insensitive environment variable lookup, such as
+> Windows, the platform lookup performed by `Get` may match an environment
+> variable whose name differs from the normalized key only by case. For example,
+> if a Windows process environment contains `traceparent`, reading the
+> normalized key `TRACEPARENT` may return the value of `traceparent`.
+
+> [!NOTE]
 > This normalization is consistent with the environment variable naming rules
 > defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
 
@@ -158,13 +165,6 @@ that implement these operations themselves. Whichever component performs `Get`,
 `Set`, or `Keys` for environment variables is responsible for the normalization
 behavior described above. Language-specific helper components are only expected
 to operate on the carrier shapes supported by that language implementation.
-
-Implementations can consider a caching behavior that fits their API shape. For
-example, an implementation can:
-
-- Load environment variables whose names are already normalized into a cache
-  during initialization or on first use.
-- Cache the results of individual `Get` lookups by normalized key.
 
 Example implementations:
 
