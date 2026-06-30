@@ -10,7 +10,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Design Goals](#design-goals)
@@ -21,7 +21,7 @@ path_base_for_github_subdir:
 - [Specifications](#specifications)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -78,7 +78,7 @@ processors and exporters.
 
 OpenTelemetry requires a [separation of the API from the
 SDK](../library-guidelines.md#requirements), so that different SDKs can be
-configured at run time. Please refer to the overall [OpenTelemetry
+configured at runtime. Please refer to the overall [OpenTelemetry
 SDK](../overview.md#sdk) concept for more information.
 
 #### Programming Model

@@ -13,7 +13,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)
@@ -39,7 +39,7 @@ aliases:
 - [Declarative configuration](#declarative-configuration)
 - [Language Specific Environment Variables](#language-specific-environment-variables)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -221,7 +221,7 @@ usage in Zipkin Exporter configuration:
 
 - `OTEL_EXPORTER_ZIPKIN_PROTOCOL`
 
-This will be used to specify whether or not the exporter uses v1 or v2, json,
+This will be used to specify whether or not the exporter uses v1 or v2, JSON,
 thrift or protobuf.  As of 1.0 of the specification, there
 _is no specified default, or configuration via environment variables_.
 

@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
@@ -54,6 +54,7 @@ weight: 3
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
+  * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -89,9 +90,10 @@ weight: 3
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -352,6 +354,10 @@ The SDK MUST accept the following stream configuration parameters:
   MUST NOT obligate a user to provide one. If the user does not provide a
   `name` value, name from the Instrument the View matches MUST be used by
   default.
+
+  The `name` provided via stream configuration is NOT REQUIRED to conform to
+  the [instrument name syntax](./api.md#instrument-name-syntax), and the SDK
+  MUST NOT validate it against that syntax.
 * `description`: The metric stream description that SHOULD be used.
   
   Users can provide a `description`, but it is up to their discretion.
@@ -381,6 +387,20 @@ The SDK MUST accept the following stream configuration parameters:
   attribute key is both included and excluded, the SDK MAY fail fast in
   accordance with initialization [error handling
   principles](../error-handling.md#basic-error-handling-principles).
+
+  > [!NOTE]
+  > An attribute key removed from the metric stream by View configuration
+  > (for example, to remove an attribute containing sensitive data) may
+  > still be exported on Exemplars as a *filtered attribute*. If this is
+  > not desired, Exemplars can be disabled by configuring the `AlwaysOff`
+  > `ExemplarFilter`, or a custom `ExemplarFilter` / `ExemplarReservoir`
+  > can be configured to control which measurements are sampled as
+  > Exemplars.
+
+  SDK documentation SHOULD inform users that attributes excluded from a
+  metric stream by View configuration may still be exported on Exemplars
+  as filtered attributes, and describe how to disable or otherwise
+  configure Exemplar sampling.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
@@ -1041,6 +1061,30 @@ Note: If a user makes no configuration changes, `Enabled` returns `true` since b
 default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
 
+### Instrument bind
+
+**Status**: [Development](../document-status.md)
+
+A bound instrument MUST behave identically to calling the equivalent unbound recording
+operation with the pre-bound [Attributes](../common/README.md#attribute) on each
+measurement.
+
+[Attribute processing](#measurement-processing) and [cardinality limit](#cardinality-limits)
+evaluation MUST be performed at bind time. Each call to `Bind` MUST be independently
+evaluated against the cardinality state at that moment. As a consequence, separate calls
+to `Bind` with identical attributes may resolve to different aggregators (e.g. one to a
+concrete series, another to the [overflow series](#overflow-attribute)) based on the
+cardinality state at the time of each call. The resolved aggregator MUST be fixed and
+not change across collection cycles.
+
+Measurements recorded on a bound instrument MUST be candidates for [Exemplar](#exemplar)
+sampling. The [Context](../context/README.md) associated with each recording, whether
+implicit or explicit, MUST be used for exemplar [TraceBased](#tracebased) filtering and
+passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
+
+The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
+map lookup.
+
 ## Attribute limits
 
 **Status**: [Stable](../document-status.md)
@@ -1058,7 +1102,9 @@ Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
 aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
-just those that can also be derived from `Span`s.
+just those that can also be derived from `Span`s. Exemplars also preserve
+attributes that are dropped during aggregation (e.g. by View configuration),
+regardless of instrument type (including asynchronous instruments).
 
 An [Exemplar](./data-model.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
@@ -1068,8 +1114,8 @@ information:
 - The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
-- The associated [trace id and span
-  id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
+- For synchronous instruments, the associated [trace ID and span
+  ID](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
   the `Measurement` at API call time.
 
@@ -1092,7 +1138,7 @@ Then an exemplar output in OTLP would consist of:
 - The `time` when the `add` method was called.
 - The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
   resulting metric point.
-- The trace/span id for the `makeRequest` span.
+- The trace/span ID for the `makeRequest` span.
 
 While the metric data point for the counter would carry the attributes `X` and
 `Y`.
@@ -1900,6 +1946,12 @@ and `Shutdown` MUST be safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Metrics SDK SHOULD support [SDK self-observability](../self-observability.md).
 
 ## References
 

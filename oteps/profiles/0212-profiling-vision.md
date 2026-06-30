@@ -16,7 +16,7 @@ This document and efforts thus far are motivated by:
 
 - This [long-standing issue](https://github.com/open-telemetry/oteps/issues/139)
   created in October 2020
-- A conversation about priorities at the in-person OpenTelemetry meeting at Kubecon EU
+- A conversation about priorities at the in-person OpenTelemetry meeting at KubeCon EU
   2022
 - Increasing community interest in profiling as an observability signal
   alongside logs, metrics, and traces
@@ -81,11 +81,11 @@ factors such as:
 
 - Language (and language runtime)
 - Profiler Type
-- Data type being profiled (i.e. cpu, memory, etc)
+- Data type being profiled (i.e. CPU, memory, etc)
 - Availability or utilization of symbolic information
 
 A fairly comprehensive taxonomy of various profiling formats can be found on the
-[profilerpedia website](https://profilerpedia.markhansen.co.nz/formats/).
+[profilerpedia site](https://profilerpedia.markhansen.co.nz/formats/).
 
 As a result of this variation, the tooling and collection of profiling data
 lacks in exactly the areas in which OpenTelemetry has built as its core
@@ -95,7 +95,7 @@ engineering values:
   language has different ways of collecting, sending, and storing profiling data
   and often with no regard to linking to other signals
 - Profiling currently lacks consistency: Currently profiling agents and formats
-  can change arbitrarily with no unified criteria for how to take end-users into
+  can change arbitrarily with no unified criteria for how to take end users into
   account
 
 ## Making profiling compatible with other signals
@@ -134,14 +134,14 @@ For existing profilers we will provide instructions on how these legacy formats
 can emit profiles in a manner that makes them compatible with OpenTelemetry’s
 approach and enables telemetry data correlation.
 
-Particularly for popular profilers such as the ones native to Golang and Java
+Particularly for popular profilers such as the ones native to Go and Java
 (JFR) we will help to have them produce OpenTelemetry-compatible profiles with
 minimal overhead.
 
 ## Performance considerations
 
 Profiling agents can be architected in a variety of differing ways, with
-reasonable trade offs made that may impact performance, completeness, accuracy
+reasonable trade-offs made that may impact performance, completeness, accuracy
 and so on. Similarly, the manner in which such a profiler might produce or
 consume OpenTelemetry-compatible data could vary significantly. As such, in our
 standardization effort it is not feasible to be prescriptive on the matter of
@@ -159,7 +159,7 @@ Similar to other OpenTelemetry signals, we target production environments. Thus,
 profiling signal must be implementable with low overhead and conforming to
 OpenTelemetry-wide runtime overhead / intrusiveness and wire data size requirements.
 
-## Promoting cloud-native best practices with profiling
+## Promoting cloud native best practices with profiling
 
 The CNCF’s mission states: _Cloud native technologies empower organizations to
 build and run scalable applications in modern, dynamic environments such as

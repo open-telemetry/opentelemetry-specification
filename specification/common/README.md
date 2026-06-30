@@ -13,7 +13,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
@@ -27,12 +27,14 @@ path_base_for_github_subdir:
     + [Arrays](#arrays)
     + [Maps](#maps)
 - [Attribute](#attribute)
-  * [Attribute Collections](#attribute-collections)
+  * [Attribute representation for non-OTLP](#attribute-representation-for-non-otlp)
+- [Attribute Collections](#attribute-collections)
+  * [Attribute Collection representation for non-OTLP](#attribute-collection-representation-for-non-otlp)
 - [Attribute Limits](#attribute-limits)
   * [Configurable Parameters](#configurable-parameters)
   * [Exempt Entities](#exempt-entities)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -68,7 +70,7 @@ However, if it is impossible to make sure that no `null` values are accepted
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
 This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+indexes that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
@@ -154,25 +156,34 @@ They SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 #### Arrays
 
-Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
+Arrays, except for [byte arrays](#byte-arrays), SHOULD be represented as
+[JSON arrays](https://datatracker.ietf.org/doc/html/rfc8259#section-5).
 
-Nested byte arrays SHOULD be represented as
-[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
-Nested empty values SHOULD be represented as JSON null.
-The special floating point values NaN and Infinity SHOULD be represented as
-JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+Array elements SHOULD be represented as JSON values using the following rules:
+
+- [Strings](#strings) as [JSON strings](https://datatracker.ietf.org/doc/html/rfc8259#section-7),
+- [Booleans](#booleans) as [JSON booleans](https://datatracker.ietf.org/doc/html/rfc8259#section-3) (`true` or `false`),
+- [Integers](#integers) and [floating point numbers](#floating-point-numbers)
+  as [JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6),
+  except that the special floating point values NaN and Infinity SHOULD be
+  represented as JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`,
+- [Byte arrays](#byte-arrays) as
+  [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4)
+  JSON strings,
+- [Empty values](#empty-values) as [JSON `null`](https://datatracker.ietf.org/doc/html/rfc8259#section-3),
+- [Arrays](#arrays) as [JSON arrays](https://datatracker.ietf.org/doc/html/rfc8259#section-5),
+- [Maps](#maps) as [JSON objects](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
 
 Examples: `[]`, `[1, "-Infinity", "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
 
 #### Maps
 
-Maps SHOULD be represented as JSON objects.
+Maps SHOULD be represented as [JSON objects](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
 
-Nested byte arrays SHOULD be represented as
-[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
-Nested empty values SHOULD be represented as JSON null.
-The special floating point values NaN and Infinity SHOULD be represented as
-JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+Map keys SHOULD be represented as JSON string member names.
+
+Map values SHOULD be represented using the same rules as
+[array elements](#arrays).
 
 Examples: `{}`, `{"a": "-Infinity", "b": 2, "c": [3, null]}`
 
@@ -195,7 +206,35 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-### Attribute Collections
+### Attribute representation for non-OTLP
+
+**Status**: [Development](../document-status.md)
+
+For non-OTLP protocols that need to
+represent a single `Attribute` as a string, the RECOMMENDED form is a
+[JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4)
+containing a single name/value pair (member).
+
+The attribute key SHOULD be represented as a JSON object member
+name.
+
+The attribute value SHOULD be represented as a JSON object member value and
+follow the encoding rules defined in
+[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
+as it would be represented as an element in an [array](#arrays) and a value in
+a [map](#maps).
+
+Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
+`{"payload": "aGVsbG8gd29ybGQ="}`, `{"session.id": null}`,
+`{"colors": ["red", "blue"]}`, `{"context": {"nested": true}}`
+
+> [!NOTE]
+> This string representation is lossy. Type information is lost as all
+> values are converted to strings, and precision loss may occur for numeric values
+> (particularly for floating point numbers and large integers that exceed the
+> precision capabilities of the receiving system's string-to-number conversion).
+
+## Attribute Collections
 
 [Resources](../resource/sdk.md),
 [Instrumentation Scopes](instrumentation-scope.md),
@@ -245,6 +284,30 @@ responsibility to ensure keys are not duplicate.
 Collection of attributes are equal when they contain the same attributes,
 irrespective of the order in which those elements appear
 (unordered collection equality).
+
+### Attribute Collection representation for non-OTLP
+
+**Status**: [Development](../document-status.md)
+
+For non-OTLP protocols that need to represent an Attribute Collection as a
+string, the RECOMMENDED form is a
+[JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
+
+Each attribute key SHOULD be represented as a JSON object member name.
+
+Each attribute value SHOULD be represented as the corresponding JSON object
+member value and follow the encoding rules defined in
+[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
+as it would be represented as an element in an [array](#arrays) and a value in
+a [map](#maps).
+
+This representation follows the same JSON object form as [maps](#maps), but
+applies to top-level Attribute Collections rather than nested
+[`map<string, AnyValue>`](#mapstring-anyvalue) values.
+
+Examples: `{}`, `{"http.request.method": "GET", "retries": 3}`,
+`{"payload": "aGVsbG8gd29ybGQ=", "session.id": null}`,
+`{"colors": ["red", "blue"], "context": {"nested": true}}`
 
 ## Attribute Limits
 

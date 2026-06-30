@@ -7,7 +7,7 @@ weight: 2
 
 **Status**: [Stable](../document-status.md)
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Versioning policy and stability guarantees](#versioning-policy-and-stability-guarantees)
@@ -15,7 +15,7 @@ weight: 2
     + [YAML file format](#yaml-file-format)
     + [Environment variable substitution](#environment-variable-substitution)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Overview
 

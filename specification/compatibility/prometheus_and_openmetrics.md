@@ -12,11 +12,12 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Differences between Prometheus formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [Metric Metadata](#metric-metadata)
+  * [Timestamps](#timestamps)
   * [Counters](#counters)
   * [Gauges](#gauges)
   * [Info](#info)
@@ -26,7 +27,6 @@ aliases:
   * [Native Histograms](#native-histograms)
   * [Summaries](#summaries)
   * [Dropped Types](#dropped-types)
-  * [Start Time](#start-time)
   * [Exemplars](#exemplars)
   * [Instrumentation Scope](#instrumentation-scope)
   * [Resource Attributes](#resource-attributes)
@@ -36,13 +36,15 @@ aliases:
   * [Gauges](#gauges-1)
   * [Sums](#sums)
   * [Histograms](#histograms-1)
+    + [Histograms as Prometheus Histograms](#histograms-as-prometheus-histograms)
+    + [Histograms as Prometheus NHCB](#histograms-as-prometheus-nhcb)
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
   * [Metric Attributes](#metric-attributes)
-  * [Exemplars](#exemplars-1)
+  * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -82,18 +84,43 @@ at the time of writing:
 
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
-MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric. The name SHOULD NOT be altered.
 
 [Prometheus UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
-be translated from Prometheus conventions to OpenTelemetry conventions by:
+if present, MUST be converted to the unit of the OTLP metric. The unit MUST
+be translated from words to the UCUM abbreviation if it is in the following set
+of commonly-used units:
 
-* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
-* Special case: Converting "ratio" to "1".
-* Converting "foo_per_bar" to "foo/bar".
+| Prometheus Unit | UCUM Abbreviation |
+| :--- | :--- |
+| `days` | `d` |
+| `hours` | `h` |
+| `minutes` | `min` |
+| `seconds` | `s` |
+| `milliseconds` | `ms` |
+| `microseconds` | `us` |
+| `nanoseconds` | `ns` |
+| `bytes` | `By` |
+| `kibibytes` | `KiBy` |
+| `mebibytes` | `MiBy` |
+| `gibibytes` | `GiBy` |
+| `tebibytes` | `TiBy` |
+| `kilobytes` | `kBy` |
+| `megabytes` | `MBy` |
+| `gigabytes` | `GBy` |
+| `terabytes` | `TBy` |
+| `meters` | `m` |
+| `volts` | `V` |
+| `amperes` | `A` |
+| `joules` | `J` |
+| `watts` | `W` |
+| `grams` | `g` |
+| `celsius` | `Cel` |
+| `hertz` | `Hz` |
+| `percent` | `%` |
 
 [Prometheus HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be added as the description of the OTLP metric.
@@ -105,11 +132,23 @@ metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 The TYPE metadata MUST also be added to the OTLP [metric.metadata][metricMetadata]
 under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
+### Timestamps
+
+**Status**: [Stable](../document-status.md)
+
+If present, the Prometheus Metric Sample's Start timestamp (also referred to as the Created timestamp) MUST be converted to the Start timestamp of the OTLP data point. If no start timestamp is present, the start time of the OTLP data point SHOULD be left unset.
+
+If present, the Prometheus Metric Sample's Timestamp MUST be converted to the Timestamp of the OTLP data point. For metrics scraped from a Prometheus endpoint without an explicit timestamp, the timestamp of the OTLP data point MUST be set to the time of the scrape.
+
 ### Counters
 
 **Status**: [Stable](../document-status.md)
 
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+
+Exemplars on the Prometheus Counter Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Sum data point following the rules in
+[Exemplars](#exemplars).
 
 ### Gauges
 
@@ -147,6 +186,10 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
+
+Exemplars on the Prometheus Histogram Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Histogram data point following the rules in
+[Exemplars](#exemplars).
 
 ### Native Histograms
 
@@ -244,6 +287,10 @@ Native histograms of the float or gauge flavors MUST be dropped.
 Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
 -53 MUST be dropped.
 
+Exemplars on the Prometheus Native Histogram Sample MUST be converted to
+OpenTelemetry Exemplars on the OpenTelemetry Exponential Histogram data point
+following the rules in [Exemplars](#exemplars).
+
 ### Summaries
 
 **Status**: [Stable](../document-status.md)
@@ -261,36 +308,31 @@ In text formats where Prometheus Summaries are represented by multiple samples, 
 
 ### Dropped Types
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The following Prometheus types MUST be dropped:
 
 * [Prometheus GaugeHistogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#gaugehistogram)
 * [Prometheus Native GaugeHistogram](https://prometheus.io/docs/specs/native_histograms/#gauge-histograms-vs-counter-histograms)
 
-### Start Time
-
-**Status**: [Development](../document-status.md)
-
-Prometheus Cumulative metrics can include the start time using the [`_created` sample series](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#counter-1). When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
-
 ### Exemplars
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [Prometheus Exemplars](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars)
-can be attached to Prometheus Histogram bucket metric points and counter metric
-points. Exemplars on histogram buckets SHOULD be converted to exemplars on
-OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
-converted to exemplars on OpenTelemetry sums. If present, the timestamp
-MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
-retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span ids MUST be added to the OpenTelemetry
-exemplar as attributes.
+MUST be converted to OpenTelemetry Exemplars as follows:
+
+* If present, the timestamp MUST be used as the OpenTelemetry exemplar's
+  timestamp.
+* If present, and if the values are valid Trace and Span IDs, the `trace_id` and
+  `span_id` labels MUST be converted to the OpenTelemetry Exemplar's Trace ID and
+  Span ID, respectively.
+* All labels other than `trace_id` and `span_id` MUST be added to the OpenTelemetry
+  exemplar as filtered attributes.
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Labels with `otel_scope_` prefix MUST be dropped from all metric points
 and used as the Instrumentation Scope name (`otel_scope_name`),
@@ -365,32 +407,36 @@ in keys).
 
 ## OTLP Metric points to Prometheus
 
-**Status**: [Development](../document-status.md)
-
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
-comments for the same metric name to be returned in a single scrape of the
-Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
-TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
-UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
-comments (but not metric points) SHOULD be dropped. If dropping a comment or
-metric points, the exporter SHOULD warn the user through error logging.
+Prometheus Pull exporters for OpenTelemetry metric data MUST NOT allow duplicate
+UNIT, HELP, or TYPE comments for the same metric name to be returned in a single
+scrape of the Prometheus endpoint. Exporters MUST drop entire metrics to prevent
+conflicting TYPE comments, but SHOULD NOT drop metric points as a result of
+conflicting UNIT or HELP comments. Instead, all but one of the conflicting UNIT
+and HELP comments (but not metric points) SHOULD be dropped. If dropping a
+comment or metric points, the exporter SHOULD warn the user through error
+logging. Note that SDKs are required to [warn the user over duplicate instrument
+registration, indicative of the same problem](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#duplicate-instrument-registration).
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
-in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
-consecutive `_` characters SHOULD be replaced with a single `_` character.
+Prometheus naming conventions encourage metric names to match the regular
+expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters in the metric
+name SHOULD be replaced with the `_` character by default, aiming for
+compatibility with Prometheus conventions. Multiple consecutive `_` characters
+SHOULD be replaced with a single `_` character.
 
-The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible. This includes:
+The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
+equivalent unit word in Prometheus if it is included in the
+table in [Metric Metadata above](#metric-metadata).
 
-* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
-* Special case: Converting "1" to "ratio".
-* Converting "foo/bar" to "foo_per_bar".
+Portions of the Unit within brackets (e.g. {packet}) MUST be dropped.
+
+Units defined as rates over time (e.g. "m/s") MUST be converted to words (e.g.
+"meters_per_second").
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
@@ -407,7 +453,7 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
@@ -416,51 +462,146 @@ the scope schema URL as the `otel_scope_schema_url` label,
 the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
-Scope attributes with names 'name', 'version', or 'schema_url' MUST be dropped
-to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_version`, and
-`otel_scope_schema_url` labels.
+Scope attributes that, after adding the `otel_scope_` prefix and applying the
+label-name conversion described in [`Metric Attributes`](#metric-attributes),
+would conflict with `otel_scope_name`, `otel_scope_version`, or
+`otel_scope_schema_url` MUST be dropped.
 
 ### Gauges
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to
-a Prometheus Unknown-typed metric if the `prometheus.type` key of
-[metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
-to a Prometheus Gauge.
+An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted following 
+a hint present in [metric.metadata][metricMetadata]:
+- If the `prometheus.type` key is absent, or its value is equal to `gauge`, the datapoint MUST be transformed to a Prometheus Gauge.
+- If the `prometheus.type` key has value equal to `unkown`, the datapoint MUST be transformed to a Prometheus Unknown.
+- If the `prometheus.type` key has value equal to `info`, the datapoint SHOULD be transformed to a Prometheus Info.
+- If the `prometheus.type` key has value equal to `stateset`, the datapoint SHOULD be transformed to a Prometheus Stateset.
+
+Exemplars on OpenTelemetry Gauges SHOULD be dropped.
 
 ### Sums
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-[OpenTelemetry Sums](../metrics/data-model.md#sums) follows this logic:
+An [OpenTelemetry Sum](../metrics/data-model.md#sums) MUST be converted following the rules below:
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
-- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
-[metric.metadata][metricMetadata] is `info`, it MUST be converted to an OpenMetrics Info metric.
-- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
-[metric.metadata][metricMetadata] is `stateset`, it MUST be converted to an OpenMetrics StateSet metric.
-- If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
+- If the aggregation temporality is cumulative and the sum is non-monotonic, it should follow the same rules as described for [OpenTelemetry Gauge](#gauges-1)
+- If the aggregation temporality is delta and the sum is monotonic, it MAY be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
-- Otherwise, it MUST be dropped.
 
-If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
-Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
+If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged.
+
+Monotonic Sum metric points with `StartTimeUnixNano` SHOULD transform `StartTimeUnixNano` into Prometheus `StartTime`, following the appropriate format used by each Prometheus protocol. 
+
+If Sum is converted to a Prometheus Counter, then `Exemplars` MUST be converted
+as described in the [Exemplar Conversion](#exemplar-conversion) section.
+Otherwise, `Exemplars` SHOULD be dropped. If the Prometheus protocol only
+supports a single exemplar on the Counter sample, the latest exemplar SHOULD be
+converted. This matches the behavior of Prometheus client libraries, which is to keep the
+latest exemplar for counter instruments.
 
 ### Histograms
 
+**Status**: [Stable](../document-status.md), except where otherwise specified.
+
+An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default.
+
+[Development](../document-status.md): Users may opt-in to converting an OpenTelemetry Histogram to a [Prometheus Native Histogram with Custom Buckets](#histograms-as-prometheus-nhcb) (NHCB) instead when allowed by the Prometheus Protocol.
+
+OpenTelemetry Histograms with Delta aggregation temporality MAY be aggregated into a Cumulative aggregation temporality and follow the logic below, or MUST be dropped.
+
+#### Histograms as Prometheus Histograms
+
+**Status**: [Stable](../document-status.md)
+
+When converting to a Prometheus Histogram, an OpenTelemetry Histogram MUST
+be converted following the rules below:
+
+- `Count` is converted to the Histogram `Count`.
+- `Sum` is converted to the Histogram `Sum`. The sum is positive and monotonic
+  when all observations in the histogram are positive or zero.
+- The bucket boundaries in `ExplicitBounds` plus the implicit `+Inf` boundary
+  and the `BucketCounts` are converted to Histogram `Buckets` in ascending order
+  of the `ExplicitBounds` value. For each bucket the explicit bound is
+  converted to the upper bound and the sum of all bucket counts up to
+  and including the current bucket is converted to the cumulative count.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted as described in the
+  [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus
+  protocol only supports a single exemplar per-bucket, the latest
+  exemplar that falls into each bucket SHOULD be converted.
+
+#### Histograms as Prometheus NHCB
+
 **Status**: [Development](../document-status.md)
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
+NHCB output is currently only supported by the [Prometheus Remote-Write 2.0
+or later](https://prometheus.io/docs/specs/prw/remote_write_spec_2_0/) protocol.
 
-- A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
-- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
-- Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
 
-OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
+- The [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+  of the NHCB MUST be integer counter.
+- The `ResetHint` in the NHCB MUST be set to `UNKNOWN`. OpenTelemetry does not
+  carry an explicit reset flag, so `UNKNOWN` lets Prometheus auto-detect resets
+  from the values and avoids any semantic divergence with OpenTelemetry's reset
+  model.
+- The `Schema` in the NHCB MUST be set to -53.
+- `TimeUnixNano` is converted to the Prometheus `Timestamp` after
+  converting nanoseconds to milliseconds.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
+- The bucket boundaries in `ExplicitBounds` are written into the NHCB
+  `CustomValues` in ascending order. The implicit `+Inf` upper bound MUST NOT be
+  written into `CustomValues`; it is represented by the overflow bucket at index
+  `len(CustomValues)`.
+- All fields of the NHCB that are not explicitly referenced here MUST be set to
+  their zero value, such as zero threshold, zero count, negative spans, negative
+  deltas, etc.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
+  as described in the [Exemplar Conversion](#exemplar-conversion) section.
+- If the `NoRecordedValue` flag is set to `true`, the NHCB MUST be marked as
+  [stale](https://prometheus.io/docs/specs/native_histograms/#staleness-markers):
+  - The Native Histogram `Sum` MUST be set to the Stale NaN value.
+  - The Native Histogram `Count` MUST be set to zero. `PositiveSpans` and
+    `PositiveDeltas` MUST be left empty.
+- If the `NoRecordedValue` flag is set to `false`:
+  - `Count` is converted to Native Histogram `Count`.
+  - `Sum` is converted to the Native Histogram `Sum`.
+  - The dense `BucketCounts` are converted into the
+    [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative
+    boundaries).
+    - Non-zero bucket counts MUST be converted into `PositiveDeltas`. Zero-count
+      buckets MAY also be included in `PositiveDeltas` to extend an enclosing
+      span (rather than creating a gap between spans) and reduce the number of
+      `PositiveSpans`.
+    - Bucket counts that need to be converted are converted into
+      `PositiveDeltas`, which is delta encoded. The first converted value is
+      written as is, the rest as delta to the previous converted value. Unlike
+      the conversion to
+      [Prometheus Histograms](#histograms-as-prometheus-histograms), no
+      cumulative summation across buckets is required — OpenTelemetry and
+      Native Histogram bucket counts are already per-bucket.
+    - The `PositiveSpans` encode the index into the `CustomValues` for each
+      value in the `PositiveDeltas`. The first span's `Offset` is the index of
+      the upper bound of the first converted bucket (zero-based into
+      `CustomValues`). For subsequent spans, `Offset` is the number of buckets
+      that were not converted between the end of the previous span and the start
+      of this one. `Length` is the number of consecutive converted buckets in
+      the span.
+    - For example: if the bucket boundaries are `-2, -1, 0, 1, 2, +Inf` and
+      bucket counts are `10, 0, 0, 20, 5, 2`, then the `CustomValues` will be
+      `-2, -1, 0, 1, 2`. If only the non-zero bucket counts `10, 20, 5, 2` are
+      converted, then the `PositiveSpans` will be
+      `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}` and `PositiveDeltas`
+      will be `10, 10, -15, -3`.
 
 ### Exponential Histograms
 
@@ -495,64 +636,70 @@ Histogram as follows:
   result being that the Offset fields are different-by-one.
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
+- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
 
 [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
 metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
+An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be
+converted to a Prometheus Summary as follows:
 
-- A single `{name}_count` metric denoting the count field of the summary.
-  All attributes of the summary point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the summary, reported
-  only if the sum is positive and monotonic. All attributes of the summary
-  point are converted to Prometheus labels.
-- A series of `{name}` metric points that contain all attributes of the
-  summary point recorded as labels.  Additionally, a label, denoted as
-  `quantile` is added denoting a reported quantile point, and having its value
-  be the stringified floating point value of quantiles (between 0.0 and 1.0),
-  starting from lowest to highest, and all being non-negative.  The value of
-  each point is the computed value of the quantile point.
-- Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+- Attributes are converted as described in the
+  [`Metric Attributes`](#metric-attributes) section.
+- The count is converted to the Summary's count.
+- The sum is converted to the Summary's sum.
+- Quantiles are converted to the Summary's quantiles. The `quantile` label
+  value MUST be the stringified floating point value of each quantile (between
+  0.0 and 1.0), starting from lowest to highest, and all being non-negative.
+  The value of each quantile is the computed value of the quantile point.
+- When using a push protocol, such as Prometheus Remote Write,
+  `time_unix_nano` is converted to the Summary's timestamp. Explicit timestamps
+  SHOULD NOT be used for pull protocols, such as the Prometheus text exposition
+  format, where Prometheus assigns the scrape timestamp.
+- The `start_time_unix_nano` is converted to the Summary's start timestamp, if
+  supported.
+
+Exemplars on OpenTelemetry Summaries SHOULD be dropped.
 
 ### Metric Attributes
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
-the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions encourage metric names to match the following regex:
-`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
-Multiple consecutive `_` characters SHOULD be replaced with a single `_`
-character. This may cause ambiguity in scenarios where multiple similar-named
-attributes share invalid characters at the same location.  In such unlikely
-cases, if multiple key-value pairs are converted to have the same Prometheus
-key, the values MUST be concatenated together, separated by `;`, and ordered by
-the lexicographical order of the original keys.
+the [attribute specification](../common/README.md#anyvalue-representation-for-non-otlp-protocols). Prometheus
+naming conventions encourage metric names to match the following regular expression:
+`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replaced with the
+`_` character. Multiple consecutive `_` characters SHOULD be replaced with a
+single `_` character. This conversion, or other labels (e.g. `otel_scope_name`)
+added by this specification, may cause different OpenTelemetry keys to map to
+the same Prometheus key. In such cases, the values MUST be concatenated together,
+separated by `;`, and ordered by the lexicographical order of the original keys.
 
-### Exemplars
+### Exemplar Conversion
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-[Exemplars](../metrics/data-model.md#exemplars) on OpenTelemetry Histograms and Monotonic Sums SHOULD
-be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data
-points MUST be dropped. For Prometheus Remote Write exporters, multiple exemplars are
-able to be added to each bucket, so all exemplars SHOULD be converted. For
-Prometheus pull endpoints, only a single exemplar is able to be added to each
-bucket, so the largest exemplar from each bucket MUST be used, if attaching
-exemplars. If no exemplars exist on a bucket, the highest exemplar from a lower
-bucket MUST be used, even though it is a duplicate of another bucket's exemplar.
-Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace
-and span IDs, respectively. Timestamps MUST be added as timestamps on the
-Prometheus exemplar, and `filtered_attributes` MUST be added as labels on the
-Prometheus exemplar unless they would exceed the
-[limit on characters](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
+When an exemplar is converted per the metric-type-specific sections above,
+the [OpenTelemetry Exemplar](../metrics/data-model.md#exemplars) MUST be converted
+to a Prometheus exemplar if the Prometheus (push or pull) protocol being used
+supports them, as follows:
+
+* If present, the OpenTelemetry Exemplar's Trace ID and Span ID MUST be added as
+  Exemplar labels using the `trace_id` and `span_id` keys, respectively. These
+  labels MUST take precedence over labels from `filtered_attributes` in cases
+  where there is a key collision.
+* Timestamps MUST be added as timestamps on the Prometheus exemplar.
+* `filtered_attributes` MUST be added as labels on the Prometheus exemplar,
+  unless they would exceed the Prometheus protocol's exemplar limits. For
+  example, OpenMetrics 1.0 imposes a
+  [128 character limit](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
 
 ### Resource Attributes
 

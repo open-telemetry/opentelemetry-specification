@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Syslog RFC5424](#syslog-rfc5424)
@@ -13,7 +13,7 @@
   * [JSON Formats](#json-formats)
   * [Other Structured Formats](#other-structured-formats)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -34,7 +34,7 @@ which combination of fields is considered valid).
 
 ### Syslog RFC5424
 
-Trace id, span id and traceflags SHOULD be recorded via SD-ID "opentelemetry".
+Trace ID, span ID and traceflags SHOULD be recorded via SD-ID "OpenTelemetry".
 
 For example:
 

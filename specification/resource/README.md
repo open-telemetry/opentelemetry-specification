@@ -9,7 +9,7 @@ path_base_for_github_subdir:
  <details>
  <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Identity](#identity)
@@ -17,7 +17,7 @@ path_base_for_github_subdir:
   * [Telescoping](#telescoping)
 - [Specifications](#specifications)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -64,7 +64,7 @@ including more than one entity, like:
 
 - A process
 - A container
-- A kubernetes pod name
+- A Kubernetes pod name
 - A namespace
 - A deployment
 

@@ -7,7 +7,7 @@ Some other fundamental terms are documented in the [overview document](overview.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [User Roles](#user-roles)
   * [Application Owner](#application-owner)
@@ -43,7 +43,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Profile](#profile)
   * [Profiling](#profiling)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -105,11 +105,11 @@ Metrics, logs, and traces exported to telemetry backends are examples of out-of-
 
 ### Manual Instrumentation
 
-Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [Metrics API](metrics/api.md), or others to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
+Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [Metrics API](metrics/api.md), or others to collect telemetry from end user code or shared frameworks (e.g. MongoDB, Redis, etc.).
 
 ### Automatic Instrumentation
 
-Refers to telemetry collection methods that do not require the end-user to modify application's source code.
+Refers to telemetry collection methods that do not require the end user to modify application's source code.
 Methods vary by programming language, and examples include code manipulation (during compilation or at runtime),
 monkey patching, or running eBPF programs.
 
@@ -207,7 +207,7 @@ object, in the [Events](trace/api.md#add-events) list.
 
 ### Log Attributes
 
-Key/value pairs contained in a `Log Record`.
+Key-value pairs contained in a `Log Record`.
 
 ### Structured Logs
 

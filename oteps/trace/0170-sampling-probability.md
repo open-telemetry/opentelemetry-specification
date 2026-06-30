@@ -1,6 +1,6 @@
 # Probability sampling of telemetry events
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [Examples](#examples)
@@ -35,7 +35,7 @@
 - [Recommended reading](#recommended-reading)
 - [Acknowledgements](#acknowledgements)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 Objective: Specify a foundation for sampling techniques in OpenTelemetry.
 
@@ -515,7 +515,7 @@ reproduced here.
 
 This kind of Sampler allows non-root spans in a trace to raise the
 probability of tracing, using a conditional probability formula shown
-below.  Traces produced in this way are complete sub-trees, not
+below.  Traces produced in this way are complete subtrees, not
 necessarily complete.  This technique is successful especially in
 systems where a high-throughput service on occasion calls a
 low-throughput service.  Low-throughput services are meant to inflate

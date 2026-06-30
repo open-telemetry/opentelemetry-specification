@@ -6,7 +6,7 @@ A working group convened on 8/21/2019 to discuss and debate the two metrics RFCs
 
 ## Overview
 
-Introduce a `Measure` kind of metric object that supports a `Record` API method.  Like existing `Gauge` and `Cumulative` metrics, the new `Measure` metric supports pre-defined labels.  A new `RecordBatch` measurement API  is introduced for recording multiple metric observations simultaneously.
+Introduce a `Measure` kind of metric object that supports a `Record` API method.  Like existing `Gauge` and `Cumulative` metrics, the new `Measure` metric supports predefined labels.  A new `RecordBatch` measurement API  is introduced for recording multiple metric observations simultaneously.
 
 ## Terminology
 
@@ -14,15 +14,15 @@ This RFC changes how "Measure" is used in the OpenTelemetry metrics specificatio
 
 Since this document will be read in the future after the proposal has been written, uses of the word "current" lead to confusion.  For this document, the term "preceding" refers to the state that was current prior to these changes.
 
-The preceding specification used the term `TimeSeries` to describe an instrument bound with a set of pre-defined labels.  In this document, [the term "Handle" is used to describe an instrument with bound labels](0009-metric-handles.md).  In a future OTEP this will be again changed to "Bound instrument".  The term "Handle" is used throughout this document to refer to a bound instrument.
+The preceding specification used the term `TimeSeries` to describe an instrument bound with a set of predefined labels.  In this document, [the term "Handle" is used to describe an instrument with bound labels](0009-metric-handles.md).  In a future OTEP this will be again changed to "Bound instrument".  The term "Handle" is used throughout this document to refer to a bound instrument.
 
 ## Motivation
 
-In the preceding `Metric.GetOrCreateTimeSeries` API for Gauges and Cumulatives, the caller obtains a `TimeSeries` handle for repeatedly recording metrics with certain pre-defined label values set.  This enables an important optimization for exporting pre-aggregated metrics, since the implementation is able to compute the aggregate summary "entry" using a pointer or fast table lookup. The efficiency gain requires that the aggregation keys be a subset of the pre-defined labels.
+In the preceding `Metric.GetOrCreateTimeSeries` API for Gauges and Cumulatives, the caller obtains a `TimeSeries` handle for repeatedly recording metrics with certain predefined label values set.  This enables an important optimization for exporting pre-aggregated metrics, since the implementation is able to compute the aggregate summary "entry" using a pointer or fast table lookup. The efficiency gain requires that the aggregation keys be a subset of the predefined labels.
 
-Application programs with long-lived objects and associated Metrics can take advantage of pre-defined labels by computing label values once per object (e.g., in a constructor), rather than once per call site. In this way, the use of pre-defined labels improves the usability of the API as well as makes an important optimization possible to the implementation.
+Application programs with long-lived objects and associated Metrics can take advantage of predefined labels by computing label values once per object (e.g., in a constructor), rather than once per call site. In this way, the use of predefined labels improves the usability of the API as well as makes an important optimization possible to the implementation.
 
-The preceding raw statistics API did not specify support for pre-defined labels.  This RFC replaces the raw statistics API by a new, general-purpose kind of metric, `MeasureMetric`, generally intended for recording individual measurements like the preceding raw statistics API, with explicit support for pre-defined labels.
+The preceding raw statistics API did not specify support for predefined labels.  This RFC replaces the raw statistics API by a new, general-purpose kind of metric, `MeasureMetric`, generally intended for recording individual measurements like the preceding raw statistics API, with explicit support for predefined labels.
 
 The preceding raw statistics API supported all-or-none recording for interdependent measurements using a common label set.  This RFC introduces a `RecordBatch` API to support recording batches of measurements in a single API call, where a `Measurement` is now defined as a pair of `MeasureMetric` and `Value` (integer or floating point).
 
@@ -63,7 +63,7 @@ Metric instruments are constructed through the `Meter` API. Constructing an inst
 
 See the specification for more information on these fields, including formatting and uniqueness requirements.  To define a new metric, use one of the `Meter` API methods (e.g., with names like `NewCumulativeMetric`, `NewGaugeMetric`, or `NewMeasureMetric`).
 
-Metric instrument Handles combine a metric instrument with a set of pre-defined labels.  Handles are obtained by calling a language-specific API method (e.g., `GetHandle`) on the metric instrument with certain label values.  Handles may be used to `Set()`, `Add()`, or `Record()` metrics according to their kind.
+Metric instrument Handles combine a metric instrument with a set of predefined labels.  Handles are obtained by calling a language-specific API method (e.g., `GetHandle`) on the metric instrument with certain label values.  Handles may be used to `Set()`, `Add()`, or `Record()` metrics according to their kind.
 
 ## Selecting Metric Kind
 
@@ -140,13 +140,13 @@ The batch measurement API uses a language-specific method name (e.g., `RecordBat
 
 ## Prior art and alternatives
 
-Prometheus supports the notion of vector metrics, which are those that support pre-defined labels for a specific set of required keys.  The vector-metric API supports a variety of methods like `WithLabelValues` to associate labels with a metric handle, similar to `GetHandle` in OpenTelemetry.  As in this proposal, Prometheus supports a vector API for all metric types.
+Prometheus supports the notion of vector metrics, which are those that support predefined labels for a specific set of required keys.  The vector-metric API supports a variety of methods like `WithLabelValues` to associate labels with a metric handle, similar to `GetHandle` in OpenTelemetry.  As in this proposal, Prometheus supports a vector API for all metric types.
 
 ## Open questions
 
 ### `GetHandle` argument ordering
 
-Argument ordering has been proposed as the way to pass pre-defined label values in `GetHandle`.  The argument list must match the parameter list exactly, and if it doesn't we generally find out at runtime or not at all.  This model has more optimization potential, but is easier to misuse than the alternative.  The alternative approach is to always pass label:value pairs to `GetOrCreateTimeseries`, as opposed to an ordered list of values.
+Argument ordering has been proposed as the way to pass predefined label values in `GetHandle`.  The argument list must match the parameter list exactly, and if it doesn't we generally find out at runtime or not at all.  This model has more optimization potential, but is easier to misuse than the alternative.  The alternative approach is to always pass label:value pairs to `GetOrCreateTimeseries`, as opposed to an ordered list of values.
 
 ### `RecordBatch` argument ordering
 

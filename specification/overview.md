@@ -7,12 +7,13 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
+  * [Core Packages](#core-packages)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
 - [Tracing Signal](#tracing-signal)
@@ -34,7 +35,7 @@ weight: 1
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -86,13 +87,27 @@ provide language-specific support to the
 Additionally, attributes required by the specification will be listed
 [here](semantic-conventions.md).
 
+### Core Packages
+
+**Core packages** are not an additional package type. Instead, the term refers
+to OpenTelemetry client packages that implement specification-defined
+components across those categories, such as **API** packages, **SDK**
+packages, and plugin packages (like exporters, propagators).
+
+Core packages are maintained by an OpenTelemetry SIG and are distinct from
+Contrib packages, which are optional. The term describes specification-defined
+deliverables; it does not prescribe a specific repository, package, module,
+artifact, or release bundle layout for a language implementation.
+
 ### Contrib Packages
 
 The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
 Example API integrations include instrumentation for web frameworks, database clients, and message queues.
 Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
-Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
+Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
+are defined by the OpenTelemetry specification. These plugins are referred to as
+**Core packages**.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
@@ -109,7 +124,7 @@ A distributed trace is a set of events, triggered as a result of a single
 logical operation, consolidated across various components of an application. A
 distributed trace contains events that cross process, network and security
 boundaries. A distributed trace may be initiated when someone presses a button
-to start an action on a website - in this example, the trace will represent
+to start an action on a site - in this example, the trace will represent
 calls made between the downstream services that handled the chain of requests
 initiated by this button being pressed.
 
@@ -178,15 +193,15 @@ propagated from parent to child **Spans**.
   all processes.
 - **SpanId** is the identifier for a span. It is globally unique with
   practically sufficient probability by being made as 8 randomly generated
-  bytes. When passed to a child Span this identifier becomes the parent span id
+  bytes. When passed to a child Span this identifier becomes the parent span ID
   for the child **Span**.
 - **TraceFlags** represents the options for a trace. It is represented as 1
   byte (bitmap).
   - Sampling bit -  Bit to represent whether trace is sampled or not (mask
     `0x1`).
-- **Tracestate** carries tracing-system specific context in a list of key value
+- **Tracestate** carries tracing-system specific context in a list of key-value
   pairs. **Tracestate** allows different vendors propagate additional
-  information and inter-operate with their legacy Id formats. For more details
+  information and inter-operate with their legacy ID formats. For more details
   see [this](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Links between spans
@@ -220,10 +235,10 @@ scenarios.
 OpenTelemetry allows recording raw measurements or metrics with predefined
 aggregations and a [set of attributes](common/README.md#attribute).
 
-Using the OpenTelemetry API to record raw measurements gives end-users the
+Using the OpenTelemetry API to record raw measurements gives end users the
 flexibility to choose the aggregation algorithm for a given metric. This functionality
 is particularly useful in client libraries such as gRPC, where it enables the
-recording of raw measurements like "server_latency" or "received_bytes." End-users
+recording of raw measurements like "server_latency" or "received_bytes". End users
 then have the autonomy to decide on the aggregation method for these raw measurements,
 options for which range from straightforward averages to more complex histogram calculations.
 
@@ -352,7 +367,7 @@ The Propagators API currently defines one `Propagator` type:
 
 ## Collector
 
-The OpenTelemetry collector is a set of components that can collect traces,
+The OpenTelemetry Collector is a set of components that can collect traces,
 metrics and eventually other telemetry data (e.g. logs) from processes
 instrumented by OpenTelemetry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
@@ -360,7 +375,7 @@ metrics to one or more monitoring/tracing backends. The collector will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or
 scrub personal information).
 
-The OpenTelemetry collector has two primary modes of operation: Agent (a daemon
+The OpenTelemetry Collector has two primary modes of operation: Agent (a daemon
 running locally with the application) and Collector (a standalone running
 service).
 
@@ -387,7 +402,7 @@ to prefix packages with "opentelemetry-instrumentation", followed by the
 instrumented library name itself. Examples include:
 
 * opentelemetry-instrumentation-flask (Python)
-* @opentelemetry/instrumentation-grpc (Javascript)
+* @opentelemetry/instrumentation-grpc (JavaScript)
 
 Instrumentations libraries not hosted by OpenTelemetry should avoid
 potential naming collisions with OpenTelemetry-hosted packages.
@@ -395,6 +410,6 @@ For example, they may prefix instrumentation package name with their company or
 project name:
 
 * {company}-opentelemetry-instrumentation-{component} (Python)
-* @{company}/opentelemetry-instrumentation-{component} (Javascript)
+* @{company}/opentelemetry-instrumentation-{component} (JavaScript)
 
 See [Instrumentation Library](glossary.md#instrumentation-library) for more information.

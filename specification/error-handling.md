@@ -10,12 +10,12 @@ This makes for some unique requirements with respect to error handling.
 
 ## Basic error handling principles
 
-OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
+OpenTelemetry implementations MUST NOT throw unhandled exceptions at runtime.
 
 1. API methods MUST NOT throw unhandled exceptions when used incorrectly by end users.
    The API and SDK SHOULD provide safe defaults for missing or invalid arguments.
    For instance, a name like `empty` may be used if the user passes in `null` as the span name argument during `Span` construction.
-2. The API or SDK MAY _fail fast_ and cause the application to fail on initialization, e.g. because of a bad user config or environment, but MUST NOT cause the application to fail later at run time, e.g. due to dynamic config settings received from the Collector.
+2. The API or SDK MAY _fail fast_ and cause the application to fail on initialization, e.g. because of a bad user config or environment, but MUST NOT cause the application to fail later at runtime, e.g. due to dynamic config settings received from the Collector.
 3. The SDK MUST NOT throw unhandled exceptions for errors in their own operations.
    For example, an exporter should not throw an exception when it cannot reach the endpoint to which it sends telemetry data.
 
@@ -37,10 +37,10 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
 ## Error handling and performance
 
 Error handling and extensive input validation may cause performance degradation, especially on dynamic languages where the input object types are not guaranteed in compile time.
-Runtime type checks will impact performance and are error prone, exceptions may occur despite the best effort.
+Runtime type checks will impact performance and are error-prone, exceptions may occur despite the best effort.
 
 It is recommended to have a global exception handling logic that will guarantee that exceptions are not leaking to the user code.
-And make a reasonable trade off of the SDK performance and fullness of type checks that will provide a better on-error behavior and SDK errors troubleshooting.
+And make a reasonable trade-off of the SDK performance and fullness of type checks that will provide a better on-error behavior and SDK errors troubleshooting.
 
 ## Self-diagnostics
 
@@ -51,6 +51,9 @@ Another example may be a metric exposed by a `SpanProcessor` that describes the 
 
 Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
 SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
+
+See [Self-Observability](self-observability.md) for guidance on telemetry SDKs
+emit about their own behavior, including SDK self-observability metrics.
 
 ## Configuring Error Handlers
 

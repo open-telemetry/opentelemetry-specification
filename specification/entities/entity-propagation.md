@@ -9,7 +9,7 @@ linkTitle: Entity Propagation
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Specifying entity information via an environment variable](#specifying-entity-information-via-an-environment-variable)
@@ -22,7 +22,7 @@ linkTitle: Entity Propagation
   * [Error Handling](#error-handling)
 - [EnvEntityDetector](#enventitydetector)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -38,7 +38,7 @@ can discover on its own.
 Common scenarios where entity propagation is beneficial include:
 
 - Container orchestration systems where the orchestrator knows container metadata
-- CI/CD pipelines where the build system knows job and environment details  
+- CI/CD pipelines where the build tool knows job and environment details  
 - Batch processing systems where the scheduler knows task context
 - Command-line tools spawned with specific entity context
 
