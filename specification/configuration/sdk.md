@@ -7,7 +7,7 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
@@ -26,7 +26,7 @@ weight: 3
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Overview
 

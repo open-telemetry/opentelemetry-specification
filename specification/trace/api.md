@@ -10,7 +10,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Data types](#data-types)
   * [Time](#time)
@@ -50,7 +50,7 @@ weight: 1
 - [Included Propagators](#included-propagators)
 - [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

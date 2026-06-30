@@ -224,7 +224,7 @@ sections:
       - name: Instrument supports the advisory Attributes parameter.
         status: '?'
       - name: Synchronous instruments support Bind to pre-associate attributes.
-        status: '-'
+        status: '+'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '+'
       - name: All methods of `Meter` are safe to be called concurrently.

@@ -15,6 +15,9 @@ release.
 - Clean up implementation guidelines for environment variable propagation
   carriers.
   ([#5166](https://github.com/open-telemetry/opentelemetry-specification/pull/5166))
+- Remove caching behavior suggestions for environment variable propagation
+  carrier implementations.
+  ([#5179](https://github.com/open-telemetry/opentelemetry-specification/pull/5179))
 
 ### Traces
 
@@ -114,6 +117,8 @@ release.
 
 ### OTEPs
 
+- Add OTEP proposing a central OpenTelemetry benchmarks repository.
+  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
 - Context-scoped Attributes.
   ([#4931](https://github.com/open-telemetry/opentelemetry-specification/pull/4931))
 
@@ -529,6 +534,8 @@ release.
   ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
 
 ### OTEPs
+
+- Introduce Policies into the specification. ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
 
 - Extend attributes to support complex values.
   ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
