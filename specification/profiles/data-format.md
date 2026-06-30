@@ -295,7 +295,7 @@ running at 20Hz (one sample every 50ms of actual CPU execution time). Two
 unique stack traces were observed: One (seen 3 times) has the call stack
 `main -> foo -> bar` and the other (seen 2 times) has the call stack `main -> baz`.
 
-String and dictionary indices are shown inline for clarity.
+String and dictionary indexes are shown inline for clarity.
 
 ```
 ProfilesData {
