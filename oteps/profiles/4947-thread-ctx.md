@@ -296,7 +296,7 @@ This section is not intended to constrain implementers of the specification (nor
 * **Python:** Full support using native library. Tracers running on Python >= 3.14 can use [PyContext_WatchCallback](https://docs.python.org/3/c-api/contextvars.html#c.PyContext_WatchCallback) to track context activation; older versions must monkey-patch the runtime
 * **Ruby:** Full support via native extension. [ruby-profiler gem](https://github.com/socketry/ruby-profiler) shows an example of a very similar approach to doing this in Ruby (from Shopify)
 
-We believe these two runtimes are not going to be supported by this proposal for the forseeable future (details below):
+We believe these two runtimes are not going to be supported by this proposal for the foreseeable future (details below):
 
 * **Go:**
 * **Node.js**:
