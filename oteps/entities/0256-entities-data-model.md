@@ -4,7 +4,7 @@ This is a proposal of a data model to represent entities. The purpose of the dat
 is to have a common understanding of what an entity is, what data needs to be recorded,
 transferred, stored and interpreted by an entity observability system.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [Design Principles](#design-principles)
@@ -37,7 +37,7 @@ transferred, stored and interpreted by an entity observability system.
 - [Future Work](#future-work)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Motivation
 

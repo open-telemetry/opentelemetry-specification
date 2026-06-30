@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
@@ -43,8 +43,9 @@ weight: 3
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -706,3 +707,9 @@ to be called concurrently.
 
 **LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Logs SDK SHOULD support [SDK self-observability](../self-observability.md).

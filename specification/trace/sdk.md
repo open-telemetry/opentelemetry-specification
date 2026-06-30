@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
@@ -83,8 +83,9 @@ weight: 3
       - [Go SpanExporter Interface](#go-spanexporter-interface)
       - [Java SpanExporter Interface](#java-spanexporter-interface)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -1284,3 +1285,9 @@ concurrently.
 
 **Span Exporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Tracing SDK SHOULD support [SDK self-observability](../self-observability.md).
