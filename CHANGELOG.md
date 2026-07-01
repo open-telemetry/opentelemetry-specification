@@ -39,6 +39,7 @@ release.
 ### Common
 
 - Add `AttributeValueDepthLimit` for nested array and map attribute values.
+  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
 
 ### OpenTelemetry Protocol
 
