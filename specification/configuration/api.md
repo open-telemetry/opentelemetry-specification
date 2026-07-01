@@ -72,6 +72,9 @@ return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
 Register a listener to be notified when configuration at a specific watched path
 changes.
 
+This operation does not require a provider to support runtime configuration
+updates. It defines listener behavior when change notifications are supported.
+
 This API MUST accept the following parameters:
 
 * `path`: declarative configuration path to watch.
