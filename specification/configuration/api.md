@@ -13,7 +13,6 @@ weight: 1
   * [ConfigProvider](#configprovider)
     + [ConfigProvider operations](#configprovider-operations)
       - [Get instrumentation config](#get-instrumentation-config)
-      - [Add change listener](#add-change-listener)
   * [ConfigProperties](#configproperties)
 
 <!-- END DOCTOC -->
@@ -52,7 +51,6 @@ default `ConfigProvider`, and set/register it.
 The `ConfigProvider` MUST provide the following functions:
 
 * [Get instrumentation config](#get-instrumentation-config)
-* [Add change listener](#add-change-listener)
 
 TODO: decide if additional operations are needed to improve API ergonomics
 
@@ -66,75 +64,6 @@ configuration mapping node.
 
 If the `.instrumentation` node is not set, get instrumentation config SHOULD
 return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
-
-##### Add change listener
-
-Register a listener to be notified when configuration at a specific watched path
-changes.
-
-This operation does not require a provider to support runtime configuration
-updates. It defines listener behavior when change notifications are supported.
-
-This API MUST accept the following parameters:
-
-* `path`: declarative configuration path to watch.
-* `listener`: callback invoked on changes.
-
-**Returns:** A registration handle. The handle MUST provide a close (or language-equivalent) operation that unregisters the listener.
-
-Path requirements:
-
-* `path` MUST use the declarative configuration path syntax defined here.
-* `path` MUST start with `.`.
-* Nested named properties MUST be separated with `.`.
-* `path` matching is exact. Wildcards and prefix matching are not supported.
-* In this version, paths are defined only for named properties. Sequence/array
-  indexing is not supported.
-* Examples include `.instrumentation/development.general.http` and
-  `.instrumentation/development.java.methods`.
-
-Callback requirements:
-
-* Implementations MUST allow multiple listeners to be registered for the same
-  watched path. Each registration is independent and has its own registration
-  handle.
-* If a watched path changes, the callback MUST receive:
-  * `path`: the changed watched path.
-  * `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
-    path.
-* If the watched path resolves to a mapping node, `newConfig` MUST be a valid
-  [`ConfigProperties`](#configproperties) instance representing that mapping
-  node, including an explicitly empty mapping node (`{}`).
-* If the watched path is unset or cleared, `newConfig` MUST be null/nil/None,
-  according to what is idiomatic for the language.
-* Implementations MAY coalesce rapid successive updates for the same watched
-  path. If coalescing is performed, callback delivery MUST use the latest
-  configuration state.
-* For a single registration and watched path, callbacks SHOULD be invoked in the
-  same order as the corresponding configuration updates are accepted by the
-  provider.
-* Ordering across different watched paths or different registrations is not
-  specified.
-
-Concurrency and lifecycle requirements:
-
-* Implementations MUST document whether callbacks for the same registration may
-  be invoked concurrently.
-* If an implementation does not document callback concurrency behavior,
-  instrumentation and component authors MUST assume callbacks may be invoked
-  concurrently.
-* Callback implementations SHOULD avoid blocking operations.
-* Closing a registration handle MUST unregister the listener.
-* Close MUST be idempotent (subsequent calls have no effect).
-* After close returns, implementations SHOULD stop new callback delivery for that
-  registration. A callback already in progress MAY complete.
-* Registrations SHOULD be dropped automatically when the corresponding
-  `ConfigProvider` is shut down or otherwise disposed.
-
-Error handling and unsupported providers:
-
-* If callback execution throws an error, implementations SHOULD isolate the
-  failure to that callback and SHOULD continue notifying other callbacks.
 
 ### ConfigProperties
 

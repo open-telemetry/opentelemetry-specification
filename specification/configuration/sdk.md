@@ -12,6 +12,7 @@ weight: 3
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
   * [ConfigProvider](#configprovider)
+    + [Add change listener](#add-change-listener)
   * [SDK extension components](#sdk-extension-components)
     + [PluginComponentProvider](#plugincomponentprovider)
       - [Supported SDK plugin components](#supported-sdk-plugin-components)
@@ -69,9 +70,79 @@ created using a [`ConfigProperties`](./api.md#configproperties) representing
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
 mapping node of the [configuration model](./data-model.md).
 
-If an SDK implementation of `ConfigProvider` does not support change
-notifications, registration of a change listener MUST return a no-op
-registration handle, and callbacks MUST NOT be invoked.
+#### Add change listener
+
+Register a listener to be notified when configuration at a specific watched path
+changes.
+
+The SDK implementation of `ConfigProvider` MUST provide an operation to register
+change listeners. This operation does not require the SDK implementation to
+support runtime configuration updates.
+
+The registration operation MUST accept the following parameters:
+
+* `path`: declarative configuration path to watch.
+* `listener`: callback invoked on changes.
+
+**Returns:** A registration handle. The handle MUST provide a close (or
+language-equivalent) operation that unregisters the listener.
+
+Path requirements:
+
+* `path` MUST use the declarative configuration path syntax defined here.
+* `path` MUST start with `.`.
+* Nested named properties MUST be separated with `.`.
+* `path` matching is exact. Wildcards and prefix matching are not supported.
+* In this version, paths are defined only for named properties. Sequence/array
+  indexing is not supported.
+* Examples include `.instrumentation/development.general.http` and
+  `.instrumentation/development.java.methods`.
+
+Callback requirements:
+
+* SDK implementations MUST allow multiple listeners to be registered for the same
+  watched path. Each registration is independent and has its own registration
+  handle.
+* If a watched path changes, the callback MUST receive:
+  * `path`: the changed watched path.
+  * `newConfig`: the updated
+    [`ConfigProperties`](./api.md#configproperties) for that path.
+* If the watched path resolves to a mapping node, `newConfig` MUST be a valid
+  [`ConfigProperties`](./api.md#configproperties) instance representing that
+  mapping node, including an explicitly empty mapping node (`{}`).
+* If the watched path is unset or cleared, `newConfig` MUST be null/nil/None,
+  according to what is idiomatic for the language.
+* SDK implementations MAY coalesce rapid successive updates for the same watched
+  path. If coalescing is performed, callback delivery MUST use the latest
+  configuration state.
+* For a single registration and watched path, callbacks SHOULD be invoked in the
+  same order as the corresponding configuration updates are accepted by the
+  SDK implementation.
+* Ordering across different watched paths or different registrations is not
+  specified.
+
+Concurrency and lifecycle requirements:
+
+* SDK implementations MUST document whether callbacks for the same registration
+  may be invoked concurrently.
+* If an SDK implementation does not document callback concurrency behavior,
+  instrumentation and component authors MUST assume callbacks may be invoked
+  concurrently.
+* Callback implementations SHOULD avoid blocking operations.
+* Closing a registration handle MUST unregister the listener.
+* Close MUST be idempotent (subsequent calls have no effect).
+* After close returns, SDK implementations SHOULD stop new callback delivery for
+  that registration. A callback already in progress MAY complete.
+* SDK implementations SHOULD drop registrations automatically when the
+  corresponding `ConfigProvider` is shut down or otherwise disposed.
+
+Error handling and unsupported implementations:
+
+* If callback execution throws an error, SDK implementations SHOULD isolate the
+  failure to that callback and SHOULD continue notifying other callbacks.
+* If an SDK implementation of `ConfigProvider` does not support change
+  notifications, registration of a change listener MUST return a no-op
+  registration handle, and callbacks MUST NOT be invoked.
 
 ### SDK extension components
 
