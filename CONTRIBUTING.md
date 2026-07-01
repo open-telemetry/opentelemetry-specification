@@ -11,306 +11,168 @@ requirements and recommendations.
 Before you can contribute, you will need to sign the [Contributor License
 Agreement](https://easycla.lfx.linuxfoundation.org/).
 
-## Proposing a change
+## Proposing a Change
+
+### Trivial Changes
+
+_Examples: fixing a typo, rewording a sentence for clarity, correcting a
+broken link._
+
+Clarifications, wording, spelling/grammar, and formatting fixes can be made
+directly via pull request with no associated issue.
+
+### Smaller Changes
+
+_Examples: defining a new term, adding a new optional parameter to an existing
+API, stabilizing an existing feature, tightening a SHOULD to a MUST._
+
+[Create an issue](https://github.com/open-telemetry/opentelemetry-specification/issues/new/choose)
+describing the proposed change and wait for acceptance before opening a PR.
+If the issue is not accepted, the PR will be rejected. See
+[issue-management.md](./issue-management.md) for the full issue lifecycle,
+triage labels, and role definitions.
+
+A [Draft PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests)
+may be opened alongside the issue to illustrate the idea before it is accepted.
+
+The PR description must include links to prototypes:
+
+- For new features at Development maturity level, a prototype is required. It
+  should be a working demonstration in a spec-bound implementation with that
+  SIG's maintainers' support (e.g. an unmerged PR with stated intent to merge
+  if the spec PR is merged).
+- Before a feature can be stabilized, prototypes in multiple languages are
+  required. The number is at the discretion of the [spec maintainers][spec-maintainers],
+  though three is typical.
+
+If the change adds or modifies SDK component configuration, the PR must link
+to a corresponding proposed change to the
+[declarative configuration schema](https://github.com/open-telemetry/opentelemetry-configuration).
+These PRs should be approved and merged together.
+
+### Significant Changes
+
+_Examples: new metric types (e.g. [exponential histograms](./oteps/0149-exponential-histogram.md)),
+new signals (e.g. [Events and Logs API](./oteps/0202-events-and-logs-api.md)),
+new cross-cutting systems (e.g. [declarative configuration](./oteps/0225-configuration.md))._
 
 Significant changes should go through the [OpenTelemetry Enhancement
-Proposal](https://github.com/open-telemetry/oteps) process.
+Proposal](./oteps/README.md) process. See the OTEP README for guidance on what
+changes require an OTEP.
 
-Smaller changes can follow a shorter process:
+## Writing Specs
 
-- [Create an issue](https://github.com/open-telemetry/opentelemetry-specification/issues/new/choose)
-  in this repository and describe the proposed change.
-- Follow the [issue workflow](#issue-triaging) and make sure the issue is accepted with
-  a "Yes" response. If the response to the issue is not "Yes" then do not create a PR
-  that implements the change since it will be rejected.
-- If a Pull Request would be beneficial to illustrate the idea better and to show its effect on the specification, a
-  [Draft PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests)
-  may be opened and linked to the issue even before the proposed idea is accepted there.
-- Once the issue is accepted the assignee can work on it and create a PR that implements
-  the change described in the issue.
-- In the PR description, provide links to the prototypes. Depending on the scope
-  of the change, prototyping in multiple programming languages might be required
-  by the [specification
-  approvers](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto).
-  When proposing new features, we
-  encounter
-  a [chicken or the egg problem](https://en.wikipedia.org/wiki/Chicken_or_the_egg)
-  in that proposals require prototyping but implementations require
-  features to be in the specification. For this reason, when adding new features
-  with Development maturity level, a prototype is defined as a working
-  demonstration of the feature in a specification-bound implementation which has the
-  support of that SIG's maintainers. For example, this may be an unmerged
-  PR with an indication of maintainers' intent to merge in the event the
-  corresponding specification PR is merged.
+Specification is written in Markdown. Please make sure files render correctly
+on GitHub. We highly encourage line breaks at 80 characters wide — there are
+editor tools that can do this automatically. Please submit a proposal to include
+your editor settings so the out-of-the-box configuration for this repository
+stays consistent.
 
-Trivial changes, such as clarifications, wording changes, spelling/grammar
-corrections, etc. can be made directly via pull requests and do not require an associated
-issue.
+Clearly define requirements using the keywords defined in [Notation Conventions
+and Compliance](./specification/README.md#notation-conventions-and-compliance),
+while heeding the guidance in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
+about sparing use of imperatives:
 
-## Writing specs
+> Imperatives of the type defined in this memo must be used with care and
+> sparingly. In particular, they MUST only be used where it is actually required
+> for interoperation or to limit behavior which has potential for causing harm
+> (e.g., limiting retransmissions). For example, they must not be used to try
+> to impose a particular method on implementors where the method is not required
+> for interoperability.
 
-Specification is written in Markdown format. Please make sure files are rendered
-correctly on GitHub.
-
-Be sure to clearly define the specification requirements using appropriate
-keywords as defined in [Notation Conventions and
-Compliance](./specification/README.md#notation-conventions-and-compliance),
-while making sure to heed the guidance laid out in
-[RFC2119](https://datatracker.ietf.org/doc/html/rfc2119) about the sparing use of
-imperatives:
-
-> Imperatives of the type defined in this memo must be used with care
-> and sparingly.  In particular, they MUST only be used where it is
-> actually required for interoperation or to limit behavior which has
-> potential for causing harm (e.g., limiting retransmissions)  For
-> example, they must not be used to try to impose a particular method
-> on implementors where the method is not required for
-> interoperability.
-
-It is important to build a specification that is clear and useful, not
-one that is needlessly restrictive and complex.
+It is important to build a specification that is clear and useful, not one that
+is needlessly restrictive and complex.
 
 Please see [Specification Principles](specification/specification-principles.md)
 for more information.
 
-### Consistency Checks
+## Tooling
 
-The Specification has a number of tools it uses to check things like style,
-spelling and link validity. Before using the tools:
+Install the latest LTS release of [Node.js](https://nodejs.org/) and run
+`npm install` before using any of the targets below. For example, using
+[nvm][] under Linux:
 
-- Install the latest LTS release of **[Node](https://nodejs.org/)**.
-For example, using **[nvm][]** under Linux run:
+```bash
+nvm install --lts
+```
 
-  ```bash
-  nvm install --lts
-  ```
+[nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating
 
-- Install tooling packages:
+### Checks
 
-  ```bash
-  npm install
-  ```
-
-You can perform all checks locally using this command:
+Run all checks (spell, lint, style, links):
 
 ```bash
 make check
 ```
 
-Note: This can take a long time as it checks all links. You should use this
-prior to submitting a PR to ensure validity.  However, you can run individual
-checks directly.
+> [!NOTE]
+> Link checking requires Docker and can take a long time. Run it before
+> submitting a PR.
 
-See:
-
-- [MarkdownStyle](#markdown-style)
-- [Text Correction](#text-correction)
-- Markdown link checking (docs TODO)
-
-### Autoformatting
-
-The Specification has some autogenerated components and additionally can do
-automatic style/spell correction. You can run all of this via:
+Run checks individually:
 
 ```bash
-make fix
+make language-analysis  # spell (cspell) and prose (textlint)
+make markdownlint       # Markdown style
+make markdown-link-check # link validity (requires Docker)
 ```
 
-You can also run these fixes individually.
+See [markdownlint](.markdownlint.yaml) for the full rule set.
 
-See:
-
-- [Text Correction](#text-correction)
-- Table Generation (docs TODO)
-
-### Markdown style
-
-Markdown files should be properly formatted before a pull request is sent out.
-In this repository we follow the
-[markdownlint rules](https://github.com/DavidAnson/markdownlint#rules--aliases)
-with some customizations. See [markdownlint](.markdownlint.yaml) or
-[settings](.vscode/settings.json) for details.
-
-We highly encourage to use line breaks in Markdown files at `80` characters
-wide. There are tools that can do it for you effectively. Please submit proposal
-to include your editor settings required to enable this behavior so the out of
-the box settings for this repository will be consistent.
-
-To check for style violations, run:
+### Autofixes
 
 ```bash
-make markdownlint
+make fix          # fix textlint violations
+make markdown-toc # regenerate tables of contents
 ```
 
-To fix style violations, follow the
-[instruction](https://github.com/DavidAnson/markdownlint#optionsresultversion)
-with the Node version of markdownlint. If you are using Visual Studio Code,
-you can also use the `fixAll` command of the
-[Visual Studio Code markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
+To fix markdownlint violations, use the
+[Visual Studio Code markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint)
+`fixAll` command, or follow the
+[markdownlint instructions](https://github.com/igorshubovych/markdownlint-cli#fixing-issues).
 
-### Text Correction
-
-In addition, please make sure to clean up typos before you submit the change.
-
-To check for typos (misspell) and style of writing (textlint), run the following command:
-
-```bash
-make language-analysis
-```
-
-To quickly fix common misspellings and style, use
-
-```bash
-make textlint-correction
-```
-
-## Updating the Compliance Matrix
+### Compliance Matrix
 
 To update the [compliance matrix](./spec-compliance-matrix.md), edit the
-language YAML file in `spec-compliance-matrix/` (e.g., `go.yaml`, `java.yaml`, etc.)
-and regenerate the matrix:
+language YAML file in `spec-compliance-matrix/` (e.g. `go.yaml`, `java.yaml`)
+and regenerate:
 
 ```bash
 make compliance-matrix
 ```
 
-## Issue Triaging
-
-The following diagram shows the initial triaging of new issues.
-
-![Issue Triaging](internal/img/issue-triage-workflow.png)
-
-- Newly created issues are automatically assigned to a spec approver
-  (round-robin). The assignee has 3 business days for the first response.
-- The assignee checks if they are the right person to handle the first response
-  and if not re-assigns to a more appropriate person (typically based on the
-  [areas of interest](https://github.com/open-telemetry/community/blob/main/areas-of-interest.md)).
-- The assignee makes a decision about the first response. It should be one of
-  the 3 responses:
-  - Yes, this is a good issue and we want to work on it.
-  - Maybe, this issue needs to be clarified and/or others have to be pulled in
-    before we can make a decision. More information may be requested from the
-    issue author or others.
-  - No, this issue should not be accepted. This can happen when the issue is a
-    duplicate, was discussed and rejected in the past, is out of the project
-    scope, etc. The assignee labels the issue "won't do", closes it and provides
-    the reason for closing. The issue author has the choice to appeal the
-    decision, in which case the issue is reopened and the assignee asks other
-    spec approvers to help triage and facilitate the discussion.
-  - As a result of triaging one of the 3 labels must be applied to the issue:
-    `triaged-accepted`, `triaged-needmoreinfo`, `triaged-rejected`. Absence
-    of the label indicates that the issue still needs the first response.
-- If the first response is Yes, the assignee decides if they are the right
-  person to work on the issue long-term. If not, they will look for another
-  contributor who can work on the issue and re-assign to them, label the issue
-  as "backlog". If no-one is available to work on the issue the issue is labeled
-  as "help wanted" and unassigned.
-- Any other spec approver can take over the issue before the original assignee's
-  first response if they prefer to drive it themselves. In this case the other
-  spec approver must re-assign the issue to themselves, if necessary first
-  ensuring that no-one else is already working on the issue.
+Compliance matrix updates do not require a CHANGELOG entry. Use a `chore:`
+prefix in the PR title (e.g., `chore: Update .NET compliance matrix`).
 
 ## Pull Requests
 
-### How to create a PR
+A PR is **ready to merge** when:
 
-Everyone is welcome to contribute to the OpenTelemetry specification via GitHub
-pull requests (PRs).
+- It has received two or more approvals from [code owners][code-owners],
+  with approvals from at least two companies.
+- There are no outstanding `request changes` from [code owners][code-owners].
+- It has been at least two working days since the last modification (not required
+  for trivial changes such as typos, cosmetic fixes, or rebases).
+- For non-trivial changes, the `Unreleased` section of
+  [CHANGELOG.md](./CHANGELOG.md) has been updated under the appropriate
+  subsection.
 
-To [create a new
-PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request),
-fork the project in GitHub and clone the upstream repository:
+Any [spec maintainer][spec-maintainers]
+can merge a PR that is ready to merge. Maintainers may impose additional
+requirements at their discretion (e.g. more approvals, waiting for a release).
 
-```sh
-git clone https://github.com/open-telemetry/opentelemetry-specification.git
-```
+If a PR is stuck, the owner should:
 
-Add your fork as a remote:
+- Post a summary of open perspectives in the PR description.
+- Tag relevant subdomain experts (check the change history).
+- Raise it in the [#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
+  channel on CNCF Slack. If you are new to the CNCF Slack community,
+  you can [create an account](https://slack.cncf.io/).
+- Consider narrowing the scope or splitting the PR.
 
-```sh
-git remote add fork https://github.com/YOUR_GITHUB_USERNAME/opentelemetry-specification.git
-```
-
-Check out a new branch, make modifications and push the branch to your fork:
-
-```sh
-$ git checkout -b feature
-# edit files
-$ git commit
-$ git push fork feature
-```
-
-Open a pull request against the main `opentelemetry-specification` repository.
-
-If the PR is not ready for review, please mark it as
-[`draft`](https://github.blog/news-insights/product-news/introducing-draft-pull-requests/).
-
-For non-trivial changes, please update the [CHANGELOG](./CHANGELOG.md).
-
-Please make sure CLA is signed and CI is clear. We don't expect people to review
-and comment on a PR that doesn't have CLA signed.
-
-### How to get your PR merged
-
-A PR is considered to be **ready to merge** when:
-
-* It has received more than two approvals from the [code
-  owners](./.github/CODEOWNERS) (if approvals are from only one company, they
-  won't count).
-* There is no `request changes` from the [code owners](./.github/CODEOWNERS).
-* It has been at least two working days since the last modification (except for
-  the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
-  people reasonable time to review.
-* Trivial changes (typos, cosmetic changes, CI improvements, etc.) don't have to
-  wait for two days.
-* The [spec
-  maintainers](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
-  might make situational judgement and put additional requirements (e.g. need
-  more approvals, wait for the next release train, etc.).
-
-Any [spec
-maintainer](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto) can
-merge the PR once it is **ready to merge**.
-
-If a PR has been stuck (e.g. there are lots of debates and people couldn't agree
-on each other), the owner should try to get people aligned by:
-
-* Consolidating the perspectives and putting a summary in the PR. It is
-  recommended to add a link into the PR description, which points to a comment
-  with a summary in the PR conversation.
-* Tagging subdomain experts (by looking at the change history) in the PR asking
-  for suggestion.
-* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](https://slack.cncf.io/).
-* Stepping back to see if it makes sense to narrow down the scope of the PR or
-  split it up.
-
-If none of the above worked and the PR has been stuck for more than 2 weeks, the
-owner should bring it to the [OpenTelemetry Specification SIG
+If still stuck after two weeks, bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community/blob/main/README.md#specification-sigs).
 
-[nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating
-
-## Releasing
-
-Release Procedure:
-
-1. Prepare a [draft release here](https://github.com/open-telemetry/opentelemetry-specification/releases).
-   Don't publish it yet.
-2. Run [opentelemetry.io workflow](https://github.com/open-telemetry/opentelemetry.io/actions/workflows/build-dev.yml)
-   against `opentelemetry-specification` submodule as a smoke-test for docs. Fix broken links, if any.
-   Confirm this with the Communications SIG (#otel-comms channel in Slack).
-   Note: this has to be re-confirmed when new PRs are merged into the release PR.
-3. Update the [CHANGELOG.md](CHANGELOG.md):
-   a) Rename the existing "Unreleased" with the new version name (e.g. "1.50.0"), while removing
-   empty subsections (e.g. remove "Context" if it has no entries).
-   b) Add at the top a new "Unreleased" section with new empty subsections (e.g. "Context", "Traces", etc).
-   c) Ensure that no CHANGELOG entries are missing or ended up in the wrong section
-   (e.g., in the last released version rather than Unreleased).
-4. Add the changelog entries from `CHANGELOG.md` to the description of the
-   [release PR](
-   https://github.com/open-telemetry/opentelemetry-specification/releases) and un-draft it.
-5. Once it is approved, confirm the date in the CHANGELOG is up-to-date, and merge it,
-   creating a new release tag, e.g. "v1.50.0", containing the CHANGELOG contents.
-
-New release is then auto-discovered by [opentelemetry.io](https://github.com/open-telemetry/opentelemetry.io) pipelines which
-(via bot-generated PR) will eventually publish new version of the specification.
+[spec-maintainers]: README.md#maintainers
+[code-owners]: ./.github/CODEOWNERS

@@ -5,7 +5,7 @@ Note: this document is NOT a spec, it is provided to support the Logs
 for demonstrative purposes and are not exhaustive or canonical; please refer to
 the respective exporter documentation if exact details are required.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Appendix A. Example Mappings](#appendix-a-example-mappings)
   * [RFC5424 Syslog](#rfc5424-syslog)
@@ -21,7 +21,7 @@ the respective exporter documentation if exact details are required.
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Appendix A. Example Mappings
 
@@ -803,19 +803,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
-|-------------|-----------|------|------|-----------------|-----------------------------------|--------------|
-|             |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG         |
-|             |           |      |      | FINE            |                                   |DEBUG2        |
-|             |           |      |      | CONFIG          |                                   |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO          |
-|Notice       |           |      |      |                 |                                   |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |                                   |ERROR2        |
-|Alert        |           |      |Panic |                 |                                   |ERROR3        |
-|Emergency    |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL         |
+|Syslog              |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|---------------------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|                     |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
+|Debug (7)            |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
+|                     |           |      |      | FINE            |                                   |DEBUG2 (6)    |
+|                     |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
+|Informational (6)    |Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
+|Notice (5)           |           |      |      |                 |                                   |INFO2 (10)    |
+|Warning (4)          |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
+|Error (3)            |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
+|Critical (2)         |Critical   |      |Dpanic|                 |                                   |ERROR2 (18)   |
+|Alert (1)            |           |      |Panic |                 |                                   |ERROR3 (19)   |
+|Emergency (0)        |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
 
 ## References
 

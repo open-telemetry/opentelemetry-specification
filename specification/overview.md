@@ -7,12 +7,13 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
+  * [Core Packages](#core-packages)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
 - [Tracing Signal](#tracing-signal)
@@ -34,7 +35,7 @@ weight: 1
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -86,13 +87,27 @@ provide language-specific support to the
 Additionally, attributes required by the specification will be listed
 [here](semantic-conventions.md).
 
+### Core Packages
+
+**Core packages** are not an additional package type. Instead, the term refers
+to OpenTelemetry client packages that implement specification-defined
+components across those categories, such as **API** packages, **SDK**
+packages, and plugin packages (like exporters, propagators).
+
+Core packages are maintained by an OpenTelemetry SIG and are distinct from
+Contrib packages, which are optional. The term describes specification-defined
+deliverables; it does not prescribe a specific repository, package, module,
+artifact, or release bundle layout for a language implementation.
+
 ### Contrib Packages
 
 The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
 Example API integrations include instrumentation for web frameworks, database clients, and message queues.
 Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
-Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
+Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
+are defined by the OpenTelemetry specification. These plugins are referred to as
+**Core packages**.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
@@ -223,7 +238,7 @@ aggregations and a [set of attributes](common/README.md#attribute).
 Using the OpenTelemetry API to record raw measurements gives end users the
 flexibility to choose the aggregation algorithm for a given metric. This functionality
 is particularly useful in client libraries such as gRPC, where it enables the
-recording of raw measurements like "server_latency" or "received_bytes." end users
+recording of raw measurements like "server_latency" or "received_bytes". End users
 then have the autonomy to decide on the aggregation method for these raw measurements,
 options for which range from straightforward averages to more complex histogram calculations.
 
