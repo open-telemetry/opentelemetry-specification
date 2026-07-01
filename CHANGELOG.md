@@ -18,6 +18,9 @@ release.
 - Remove caching behavior suggestions for environment variable propagation
   carrier implementations.
   ([#5179](https://github.com/open-telemetry/opentelemetry-specification/pull/5179))
+- Mark "Environment Variables as Context Propagation Carriers" as Release
+  Candidate.
+  ([#5142](https://github.com/open-telemetry/opentelemetry-specification/pull/5142))
 
 ### Traces
 
