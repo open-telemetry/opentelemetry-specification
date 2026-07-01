@@ -99,10 +99,11 @@ Callback requirements:
   * `path`: the changed watched path.
   * `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
     path.
-* `newConfig` MUST be a valid [`ConfigProperties`](#configproperties) instance
-  (never null/nil/None).
-* If the watched node is unset or cleared, `newConfig` MUST represent an empty
-  mapping node (equivalent to `{}`).
+* If the watched path resolves to a mapping node, `newConfig` MUST be a valid
+  [`ConfigProperties`](#configproperties) instance representing that mapping
+  node, including an explicitly empty mapping node (`{}`).
+* If the watched path is unset or cleared, `newConfig` MUST be null/nil/None,
+  according to what is idiomatic for the language.
 * Implementations MAY coalesce rapid successive updates for the same watched
   path. If coalescing is performed, callback delivery MUST use the latest
   configuration state.
