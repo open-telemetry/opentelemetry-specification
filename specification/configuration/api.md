@@ -110,8 +110,11 @@ Callback requirements:
 * Implementations MAY coalesce rapid successive updates for the same watched
   path. If coalescing is performed, callback delivery MUST use the latest
   configuration state.
-* Ordering of callback delivery is not specified, including for updates touching
-  multiple watched paths in one configuration transaction.
+* For a single registration and watched path, callbacks SHOULD be invoked in the
+  same order as the corresponding configuration updates are accepted by the
+  provider.
+* Ordering across different watched paths or different registrations is not
+  specified.
 
 Concurrency and lifecycle requirements:
 
