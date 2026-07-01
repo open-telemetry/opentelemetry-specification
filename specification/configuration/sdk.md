@@ -69,6 +69,10 @@ created using a [`ConfigProperties`](./api.md#configproperties) representing
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
 mapping node of the [configuration model](./data-model.md).
 
+If an SDK implementation of `ConfigProvider` does not support change
+notifications, registration of a change listener MUST return a no-op
+registration handle, and callbacks MUST NOT be invoked.
+
 ### SDK extension components
 
 The SDK supports a variety of [plugin components](../glossary.md#sdk-plugins),
