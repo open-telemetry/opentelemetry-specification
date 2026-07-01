@@ -81,12 +81,14 @@ This API MUST accept the following parameters:
 
 Path requirements:
 
-* `path` MUST be an absolute declarative configuration path.
+* `path` MUST use the declarative configuration path syntax defined here.
+* `path` MUST start with `.`.
+* Nested named properties MUST be separated with `.`.
 * `path` matching is exact. Wildcards and prefix matching are not supported.
-* In this version, paths are defined only for named properties. Sequence/array indexing is not supported
-* API implementations SHOULD document accepted path syntax in language-specific
-  docs and include examples such as `.instrumentation/development.general.http`
-  and `.instrumentation/development.java.methods`.
+* In this version, paths are defined only for named properties. Sequence/array
+  indexing is not supported.
+* Examples include `.instrumentation/development.general.http` and
+  `.instrumentation/development.java.methods`.
 
 Callback requirements:
 
