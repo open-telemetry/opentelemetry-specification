@@ -118,10 +118,12 @@ Callback requirements:
 
 Concurrency and lifecycle requirements:
 
-* Callback implementations SHOULD be reentrant and SHOULD avoid blocking
-  operations.
-* Implementations MUST document callback concurrency guarantees. If they do not,
-  users MUST assume callbacks may be invoked concurrently.
+* Implementations MUST document whether callbacks for the same registration may
+  be invoked concurrently.
+* If an implementation does not document callback concurrency behavior,
+  instrumentation and component authors MUST assume callbacks may be invoked
+  concurrently.
+* Callback implementations SHOULD avoid blocking operations.
 * Closing a registration handle MUST unregister the listener.
 * Close MUST be idempotent (subsequent calls have no effect).
 * After close returns, implementations SHOULD stop new callback delivery for that
