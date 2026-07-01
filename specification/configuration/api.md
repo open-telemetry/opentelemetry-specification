@@ -90,6 +90,9 @@ Path requirements:
 
 Callback requirements:
 
+* Implementations MUST allow multiple listeners to be registered for the same
+  watched path. Each registration is independent and has its own registration
+  handle.
 * If a watched path changes, the callback MUST receive:
   * `path`: the changed watched path.
   * `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
