@@ -340,6 +340,8 @@ public interface LogRecordLimits {
   public int getAttributeCountLimit();
 
   public int getAttributeValueLengthLimit();
+
+  public int getAttributeValueDepthLimit();
 }
 ```
 

@@ -343,10 +343,26 @@ If an SDK provides a way to:
   - the count limit applies only to top-level attributes, not to nested key-value
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
+- set an attribute value depth limit such that for each attribute value:
+  - the SDK MUST start counting depth at 0 for the top-level attribute value,
+    and increment depth when descending into the elements of an array or the
+    values of a [map](#mapstring-anyvalue);
+  - scalar values MUST NOT be changed by the depth limit;
+  - array or map values at a depth greater than or equal to the limit MUST be
+    replaced with an empty value;
+  - if the limit is 0, top-level array and map values MUST be replaced with an
+    empty value, and scalar values MUST be preserved;
+  - if the limit is 1, top-level array and map values MUST be preserved, and
+    array and map values nested directly inside them MUST be replaced with an
+    empty value;
+  - if the limit is negative, the SDK MUST NOT apply an attribute value depth
+    limit;
+  - otherwise a value MUST NOT be changed due to the depth limit.
 
 There MAY be a log emitted to indicate to the user that an attribute was
-truncated or discarded. To prevent excessive logging, the log MUST NOT be
-emitted more than once per record on which an attribute is set.
+truncated, discarded, or replaced due to a limit. To prevent excessive logging,
+the log MUST NOT be emitted more than once per record on which an attribute is
+set.
 
 If the SDK implements the limits above, it MUST provide a way to change these
 limits programmatically. Names of the configuration options SHOULD be the same as
@@ -359,25 +375,32 @@ use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
 the general limit. If neither are defined, then the SDK MUST try to use the
 model-specific limit default value, followed by the global limit default value.
 
-Note that the limits apply only to attribute collections.
-Therefore, they do not apply to values within other data structures such as
+Note that the limits apply only to attribute collections. Attribute value length
+and depth limits apply recursively to attribute values, but they do not apply to
+values within other data structures such as
 [`LogRecord.Body`](../logs/data-model.md#field-body).
 
 ### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length (applies to string values and byte arrays);
+* `AttributeValueDepthLimit` (Default=64) - Maximum allowed attribute value depth (applies to arrays and maps);
 
 ### Exempt Entities
 
-Resource attributes SHOULD be exempt from the limits described above as resources
-are not susceptible to the scenarios (auto-instrumentation) that result in
-excessive attributes count or size. Resources are also sent only once per batch
-instead of per span so it is relatively cheaper to have more/larger attributes
-on them. Resources are also immutable by design and they are generally passed
-down to TracerProvider along with limits. This makes it awkward to implement
-attribute limits for Resources.
+Resource attributes SHOULD be exempt from `AttributeCountLimit` and
+`AttributeValueLengthLimit` as resources are not susceptible to the scenarios
+(auto-instrumentation) that result in excessive attributes count or size.
+Resources are also sent only once per batch instead of per span so it is
+relatively cheaper to have more/larger attributes on them. Resources are also
+immutable by design and they are generally passed down to TracerProvider along
+with limits. This makes it awkward to implement these attribute limits for
+Resources.
 
-Attributes, which belong to Metrics, are exempt from the limits described above
-at this time, as discussed in
+Resource attributes SHOULD NOT be exempt from `AttributeValueDepthLimit` as a
+deeply nested resource attribute value can result in excessive recursive
+processing independent of the number or size of resource attributes.
+
+Metric measurement attributes and metric data point attributes are exempt from
+the limits described above at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
