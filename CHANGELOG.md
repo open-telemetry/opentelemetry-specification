@@ -44,6 +44,10 @@ release.
 
 ### SDK Configuration
 
+- Define SDK `ConfigProvider` change-listener behavior for runtime declarative
+  configuration notifications.
+  ([#4900](https://github.com/open-telemetry/opentelemetry-specification/pull/4900))
+
 ### Supplementary Guidelines
 
 - Add non-normative [supplementary guidelines for SDK self-observability](specification/self-observability-supplementary-guidelines.md).

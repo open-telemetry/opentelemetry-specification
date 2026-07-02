@@ -12,6 +12,7 @@ weight: 3
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
   * [ConfigProvider](#configprovider)
+    + [Add change listener](#add-change-listener)
   * [SDK extension components](#sdk-extension-components)
     + [PluginComponentProvider](#plugincomponentprovider)
       - [Supported SDK plugin components](#supported-sdk-plugin-components)
@@ -68,6 +69,80 @@ The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
 created using a [`ConfigProperties`](./api.md#configproperties) representing
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
 mapping node of the [configuration model](./data-model.md).
+
+#### Add change listener
+
+Register a listener to be notified when configuration at a specific watched path
+changes.
+
+The SDK implementation of `ConfigProvider` MUST provide an operation to register
+change listeners. This operation does not require the SDK implementation to
+support runtime configuration updates.
+
+The registration operation MUST accept the following parameters:
+
+* `path`: declarative configuration path to watch.
+* `listener`: callback invoked on changes.
+
+**Returns:** A registration handle. The handle MUST provide a close (or
+language-equivalent) operation that unregisters the listener.
+
+Path requirements:
+
+* `path` MUST use the declarative configuration path syntax defined here.
+* `path` MUST start with `.`.
+* Nested named properties MUST be separated with `.`.
+* `path` matching is exact. Wildcards and prefix matching are not supported.
+* In this version, paths are defined only for named properties. Sequence/array
+  indexing is not supported.
+* Examples include `.instrumentation/development.general.http` and
+  `.instrumentation/development.java.methods`.
+
+Callback requirements:
+
+* SDK implementations MUST allow multiple listeners to be registered for the same
+  watched path. Each registration is independent and has its own registration
+  handle.
+* If a watched path changes, the callback MUST receive:
+  * `path`: the changed watched path.
+  * `newConfig`: the updated
+    [`ConfigProperties`](./api.md#configproperties) for that path.
+* If the watched path resolves to a mapping node, `newConfig` MUST be a valid
+  [`ConfigProperties`](./api.md#configproperties) instance representing that
+  mapping node, including an explicitly empty mapping node (`{}`).
+* If the watched path is unset or cleared, `newConfig` MUST be null/nil/None,
+  according to what is idiomatic for the language.
+* SDK implementations MAY coalesce rapid successive updates for the same watched
+  path. If coalescing is performed, callback delivery MUST use the latest
+  configuration state.
+* For a single registration and watched path, callbacks SHOULD be invoked in the
+  same order as the corresponding configuration updates are accepted by the
+  SDK implementation.
+* Ordering across different watched paths or different registrations is not
+  specified.
+
+Concurrency and lifecycle requirements:
+
+* SDK implementations MUST document whether callbacks for the same registration
+  may be invoked concurrently.
+* If an SDK implementation does not document callback concurrency behavior,
+  instrumentation and component authors MUST assume callbacks may be invoked
+  concurrently.
+* Callback implementations SHOULD avoid blocking operations.
+* Closing a registration handle MUST unregister the listener.
+* Close MUST be idempotent (subsequent calls have no effect).
+* After close returns, SDK implementations SHOULD stop new callback delivery for
+  that registration. A callback already in progress MAY complete.
+* SDK implementations SHOULD drop registrations automatically when the
+  corresponding `ConfigProvider` is shut down or otherwise disposed.
+
+Error handling and unsupported implementations:
+
+* If callback execution throws an error, SDK implementations SHOULD isolate the
+  failure to that callback and SHOULD continue notifying other callbacks.
+* If an SDK implementation of `ConfigProvider` does not support change
+  notifications, registration of a change listener MUST return a no-op
+  registration handle, and callbacks MUST NOT be invoked.
 
 ### SDK extension components
 
@@ -135,18 +210,18 @@ The following table lists the current status of all SDK plugin components in the
 
 | SDK plugin component                                                                        | Declarative config type                                                                                                                                |
 |---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
-| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
-| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
-| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#idgenerator-)                                     |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel/configuration/types/) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel/configuration/types/)             |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel/configuration/types/)                  |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel/configuration/types/)                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://opentelemetry.io/docs/specs/otel/configuration/types/)                       |
+| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://opentelemetry.io/docs/specs/otel/configuration/types/)                   |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://opentelemetry.io/docs/specs/otel/configuration/types/)            |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://opentelemetry.io/docs/specs/otel/configuration/types/)            |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://opentelemetry.io/docs/specs/otel/configuration/types/)                |
 | [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://opentelemetry.io/docs/specs/otel/configuration/types/)             |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://opentelemetry.io/docs/specs/otel/configuration/types/)            |
 
 ##### PluginComponentProvider operations
 
@@ -269,10 +344,10 @@ are defined in the configuration data model.
 
 A few examples to illustrate:
 
-* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+* If configuring [`BatchSpanProcessor`](https://opentelemetry.io/docs/specs/otel/configuration/types/)
   and `schedule_delay` is not present or present but null, the component is
   configured according to the `defaultBehavior` of `5000`.
-* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+* If configuring [`SpanExporter`](https://opentelemetry.io/docs/specs/otel/configuration/types/)
   and `console` is present and null, the component is configured with a
   `console` exporter with default configuration since `console` is nullable.
 
@@ -281,7 +356,7 @@ The [configuration model](data-model.md) uses the JSON schema
 annotation to capture property semantics which cannot be encoded using standard
 JSON schema keywords. Create SHOULD return an error if it encounters a value
 which is invalid according to the property `description`. For example, if
-configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+configuring [`HttpTls`](https://opentelemetry.io/docs/specs/otel/configuration/types/)
 and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
