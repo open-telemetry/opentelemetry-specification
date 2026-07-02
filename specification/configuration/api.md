@@ -13,6 +13,7 @@ weight: 1
   * [ConfigProvider](#configprovider)
     + [ConfigProvider operations](#configprovider-operations)
       - [Get instrumentation config](#get-instrumentation-config)
+      - [Add change listener](#add-change-listener)
   * [ConfigProperties](#configproperties)
 
 <!-- END DOCTOC -->
@@ -51,6 +52,7 @@ default `ConfigProvider`, and set/register it.
 The `ConfigProvider` MUST provide the following functions:
 
 * [Get instrumentation config](#get-instrumentation-config)
+* [Add change listener](#add-change-listener)
 
 TODO: decide if additional operations are needed to improve API ergonomics
 
@@ -64,6 +66,37 @@ configuration mapping node.
 
 If the `.instrumentation` node is not set, get instrumentation config SHOULD
 return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
+
+##### Add change listener
+
+Register a listener to be notified when configuration at a specific watched path
+changes.
+
+This operation MUST accept the following parameters:
+
+* `path`: declarative configuration path to watch.
+* `listener`: callback invoked on changes.
+
+Path requirements:
+
+* `path` MUST use the declarative configuration path syntax defined here.
+* `path` MUST start with `.`.
+* Nested named properties MUST be separated with `.`.
+* `path` matching is exact. Wildcards and prefix matching are not supported.
+* In this version, paths are defined only for named properties. Sequence/array
+  indexing is not supported.
+* Examples include `.instrumentation/development.general.http` and
+  `.instrumentation/development.java.methods`.
+
+The callback MUST accept the following parameters:
+
+* `path`: the changed watched path.
+* `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
+  path, or null/nil/None if the watched path is unset or cleared, according to
+  what is idiomatic for the language.
+
+**Returns:** A registration handle. The handle MUST provide a close (or
+language-equivalent) operation that unregisters the listener.
 
 ### ConfigProperties
 
