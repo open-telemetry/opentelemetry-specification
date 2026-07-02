@@ -388,18 +388,13 @@ values within other data structures such as
 
 ### Exempt Entities
 
-Resource attributes SHOULD be exempt from `AttributeCountLimit` and
-`AttributeValueLengthLimit` as resources are not susceptible to the scenarios
-(auto-instrumentation) that result in excessive attributes count or size.
-Resources are also sent only once per batch instead of per span so it is
-relatively cheaper to have more/larger attributes on them. Resources are also
-immutable by design and they are generally passed down to TracerProvider along
-with limits. This makes it awkward to implement these attribute limits for
-Resources.
-
-Resource attributes SHOULD NOT be exempt from `AttributeValueDepthLimit` as a
-deeply nested resource attribute value can result in excessive recursive
-processing independent of the number or size of resource attributes.
+Resource attributes SHOULD be exempt from the limits described above as resources
+are not susceptible to the scenarios (auto-instrumentation) that result in
+excessive attributes count or size. Resources are also sent only once per batch
+instead of per span so it is relatively cheaper to have more/larger attributes
+on them. Resources are also immutable by design and they are generally passed
+down to TracerProvider along with limits. This makes it awkward to implement
+attribute limits for Resources.
 
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
