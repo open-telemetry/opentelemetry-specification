@@ -38,6 +38,9 @@ release.
 
 ### Common
 
+- Add `AttributeValueDepthLimit` for nested array and map attribute values.
+  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
@@ -64,7 +67,6 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
-
 
 ### Profiles
 
