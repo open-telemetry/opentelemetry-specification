@@ -18,6 +18,10 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+- [Identity Scope](#identity-scope)
+  * [Local and Global Identity](#local-and-global-identity)
+  * [ID Context Type](#id-context-type)
+  * [Global Identity Composition](#global-identity-composition)
 - [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
@@ -52,6 +56,7 @@ physical format and encoding of how entity data is recorded).
 | Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
 | ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
+| ID Context Type | string | Type of the entity that establishes the context within which this entity's ID is unique. See [ID Context Type](#id-context-type). |
 
 ## Minimally Sufficient Identity
 
@@ -152,12 +157,121 @@ different values, then **only** the `k8s.node` entity can reference this key
 Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
 telemetry channel (e.g., entity events) where full ownership context is known.
 
+## Identity Scope
+
+An entity's identity has two distinct aspects:
+
+- **Scope kind** — declared once in semantic conventions for each
+  entity type. Says whether the entity's ID is unique on its own
+  (`global`) or only within some other entity (`local`).
+- **Context entity** — chosen by the emitter at emission time, only
+  for entities whose scope kind is `local`. Identifies the specific
+  entity that establishes the boundary within which this entity's ID
+  is unique. The type of the context entity is recorded in the **ID
+  Context Type** field.
+
+Scope kinds:
+
+- **global**: the ID is universally unique. Any two observers anywhere
+  that report the same entity will produce the same ID. Examples:
+  `k8s.pod.uid` (a Kubernetes-issued UUID), `host.id`.
+- **local**: the ID is unique only within a context entity. Examples:
+  `process` is identified by (`process.pid`, `process.creation.time`),
+  unique only within a single host (or container, in some setups);
+  `k8s.container` is identified by `k8s.container.name`, unique only
+  within a single Kubernetes Pod.
+
+The scope kind for each entity type is declared in the OpenTelemetry
+[semantic conventions](https://github.com/open-telemetry/semantic-conventions).
+
+### Local and Global Identity
+
+For an entity whose scope kind is `global`, **Local Identity** and
+**Global Identity** are the same: the entity's ID attributes.
+
+For an entity whose scope kind is `local`, the entity's ID attributes
+form its **Local Identity**, sufficient to distinguish the entity
+within its context entity. **Global Identity** is the union of the
+entity's Local Identity with the Global Identity of its context
+entity.
+
+If a `local` entity has no context entity set, its Local Identity
+functions as its effective identity within the producing Resource.
+This means the context is irrelevant to whoever is looking at it.
+
+### ID Context Type
+
+For entities whose scope kind is `local`, the OpenTelemetry semantic
+conventions do not prescribe a single context entity type. The same
+entity type can potentially have a different context entity in different
+deployments. For example:
+
+- A `process` typically has a `host` context, but in a multi-process
+  container setup it may have a `container` context instead.
+
+The context entity type is recorded in the **ID Context Type** field
+of the entity. The referenced context entity MUST be present on the
+same Resource. This is unambiguous because at most one entity of a
+given type may appear on a Resource.
+
+For `global` entities, the ID Context Type field MUST be empty.
+
+For `local` entities, the emitter SHOULD set the ID Context Type to
+the type of the context entity on the Resource whenever it knows that
+context. This allows receivers to compose a Global Identity for the
+entity.
+
+An emitter MAY leave the ID Context Type empty when it does not know
+the context entity — for example, a process detector that runs
+independently of any host or container detector. In this case the
+emitter records only the entity's Local Identity. A downstream
+component (a sibling detector on the same Resource, or a processor
+with broader topology knowledge) MAY later add the missing context
+entity to the Resource and set the ID Context Type, completing the
+Global Identity.
+
+If no component ever sets the ID Context Type, the entity's identity
+is meaningful only within the producing Resource.
+
+### Global Identity Composition
+
+A receiver computes an entity's Global Identity by walking the
+context entity chain on the same Resource:
+
+1. Start with the entity's Local Identity (its ID attributes).
+2. If the entity's ID Context Type is empty, stop. The accumulated
+   identity is the Global Identity.
+3. Otherwise, look up the entity on the Resource whose type matches
+   the ID Context Type, union its Local Identity into the accumulated
+   identity, and repeat from step 2 with that context entity.
+
+A receiver SHOULD treat the entity's identity as valid only within the
+producing Resource if any of the following holds:
+
+- The ID Context Type is empty for a `local` entity.
+- The referenced context entity is not present on the Resource.
+
+In these cases the receiver MUST NOT merge the entity with same-Local-Identity
+entities from other Resources.
+
+> [!NOTE]
+> The ID Context Type field captures only the identity-defining
+> relationship — the entity within which this entity's ID is unique.
+> It is intentionally narrow. Other kinds of relationships between
+> entities (membership, deployment, runs-on, etc.) are out of scope
+> for this section and are expected to be modeled in a separate
+> channel (such as entity events) by a future general entity
+> relationship model, which would be additive and would not redefine
+> the meaning of ID Context Type.
+
 ## Merging of Entities
 
 Entities MAY be merged if and only if their types are the same, their
-identity attributes are exactly the same AND their schema_url is the same.
-This means both Entities MUST have the same identity attribute keys and
-for each key, the values of the key MUST be the same.
+identity attributes are exactly the same, their ID context types are
+the same (including the case where both are empty), AND their
+schema_url is the same. This means both Entities MUST have the same
+identity attribute keys and for each key, the values of the key MUST
+be the same.
 
 Here's an example algorithm that will check compatibility:
 
@@ -165,6 +279,7 @@ Here's an example algorithm that will check compatibility:
 can_merge(current_entity, new_entity) {
   current_entity.type == new_entity.type &&
   current_entity.schema_url == new_entity.schema_url &&
+  current_entity.id_context_type == new_entity.id_context_type &&
   has_same_attributes(current_entity.identity, new_entity.identity)
 }
 ```
@@ -209,6 +324,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><strong>Identifying Attributes</strong>
     </td>
+    <td><strong>Scope Kind</strong>
+    </td>
     <td><strong>Descriptive Attributes</strong>
     </td>
    </tr>
@@ -218,6 +335,8 @@ _Note: These examples MAY diverge from semantic conventions._
     <td><pre>container</pre>
     </td>
     <td>container.id
+    </td>
+    <td>global
     </td>
     <td>container.image.id<br/>
         container.image.name<br/>
@@ -236,6 +355,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>host.id
     </td>
+    <td>global
+    </td>
     <td>host.arch<br/>
         host.name<br/>
         host.type<br/>
@@ -252,6 +373,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>k8s.node.uid
     </td>
+    <td>global
+    </td>
     <td>k8s.node.name
     </td>
    </tr>
@@ -262,9 +385,38 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>k8s.pod.uid
     </td>
+    <td>global
+    </td>
     <td>k8s.pod.name<br/>
         k8s.pod.label.{key}<br/>
         k8s.pod.annotation.{key}<br/>
+    </td>
+   </tr>
+   <tr>
+    <td>Kubernetes Container
+    </td>
+    <td><pre>k8s.container</pre>
+    </td>
+    <td>k8s.container.name
+    </td>
+    <td>local (typical context: <code>k8s.pod</code>)
+    </td>
+    <td>k8s.container.restart_count
+    </td>
+   </tr>
+   <tr>
+    <td>Process
+    </td>
+    <td><pre>process</pre>
+    </td>
+    <td>process.pid<br/>
+        process.creation.time
+    </td>
+    <td>local (typical context: <code>host</code>; may be <code>container</code>)
+    </td>
+    <td>process.command<br/>
+        process.executable.name<br/>
+        process.owner
     </td>
    </tr>
    <tr>
@@ -272,9 +424,9 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><pre>service.instance</pre>
     </td>
-    <td>service.instance.id<br/>
-        service.name<br/>
-        service.namespace
+    <td>service.instance.id
+    </td>
+    <td>local (typical context: <code>service</code>)
     </td>
     <td>service.version
     </td>
