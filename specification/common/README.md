@@ -349,7 +349,8 @@ If an SDK provides a way to:
   - if the limit is 0, the SDK MUST use the default attribute value depth
     limit;
   - the SDK MUST start counting depth at 1 for the top-level attribute value,
-    and increment depth when descending into arrays or [maps](#mapstring-anyvalue);
+    and increment depth when descending into arrays (both homogeneous and
+    heterogeneous) or [maps](#mapstring-anyvalue);
   - when applying a positive limit, arrays or map at a depth greater to
     the limit MUST be replaced with an empty value;
   - otherwise a value MUST NOT be changed due to the depth limit.
