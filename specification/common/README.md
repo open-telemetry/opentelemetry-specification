@@ -401,6 +401,6 @@ Resource attributes SHOULD NOT be exempt from `AttributeValueDepthLimit` as a
 deeply nested resource attribute value can result in excessive recursive
 processing independent of the number or size of resource attributes.
 
-Metric measurement attributes and metric data point attributes are exempt from
-the limits described above at this time, as discussed in
+Attributes, which belong to Metrics, are exempt from the limits described above
+at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
