@@ -89,7 +89,7 @@ Having read the record, the reader then processes `attrs-data` to resolve each k
 
 ### Thread-Local Variable Resolution
 
-`otel_thread_ctx_v1` must be an exported ELF TLS symbol. The following TLS access models are supported:
+`otel_thread_ctx_v1` must be exported as an ELF TLS symbol in the dynamic symbol table (`.dynsym`), even for statically linked binaries (e.g. via `--export-dynamic-symbol` or equivalent linker options). The following TLS access models are supported:
 
 - **Global Dynamic / TLSDESC** (recommended): the symbol uses the TLSDESC dialect (e.g. `-mtls-dialect=gnu2` in GCC or Clang), producing TLSDESC relocations in shared libraries. This is the preferred model as it offers the best runtime performance for the writer.
 - **Global Dynamic / legacy GNU**: the symbol uses traditional GNU TLS General Dynamic relocations. This is supported but not preferred.
