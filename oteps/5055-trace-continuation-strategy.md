@@ -1,8 +1,10 @@
 # Trace Continuation Strategy
 
-Make it possible to configure propagators behavior depending on rules.
-Introduce a location in the context for forwarding of restarted traces as links
-that is understood by the SDK.
+Introduce an SDK component that decides whether an extracted or active trace
+context is continued, restarted with a link, or restarted without a link.
+The component is similar to the sampler in lifecycle and configurability, but it
+answers a different question: which trace context, if any, is used for
+continuation across a boundary?
 
 ## Motivation
 
@@ -16,9 +18,9 @@ following problems:
 
 - Multiple organizations share a trace ID even though they cannot share full
   trace data.
-- Callee services inherit upstream sampling decisions that may be unsafe or
+- Callee services inherit upstream sampling decisions that can be unsafe or
   undesirable for local policies.
-- Baggage can be propagated to external systems where it may expose sensitive or
+- Baggage can be propagated to external systems where it can expose sensitive or
   internal information.
 - Automatic instrumentation lacks a standard way to apply boundary behavior
   consistently without manual per-call code.
@@ -29,7 +31,14 @@ These scenarios are common in practice, for example:
 - webhooks,
 - synthetic monitoring and edge traffic,
 - mixed internal/external API gateway usage,
-- local sidecars/proxies where trace headers can cause functional side effects.
+- local sidecars/proxies where trace headers can cause functional side effects,
+- SaaS products that need both an internal trace and a customer-facing trace.
+
+The important commonality is that the decision is rarely based only on the
+incoming propagation headers. A boundary can be identified by route, host,
+destination, transport, authorization state, tenant, audience, deployment
+metadata, or instrumentation-specific attributes. Propagators parse wire context,
+but they do not reliably have access to those trusted inputs.
 
 Users need a standard strategy to preserve causal relationships without always
 continuing parentage across boundaries. A restart-based approach provides that
@@ -40,377 +49,353 @@ Standardizing this behavior in OpenTelemetry gives:
 
 - safer default building blocks for boundary-aware instrumentation,
 - a shared cross-language contract between propagation and tracing components,
-- better interoperability for zero-code and library instrumentation.
+- better interoperability for zero-code and library instrumentation,
+- one SDK-level policy mechanism instead of many instrumentation-specific
+  callbacks.
 
 ## Explanation
 
 This proposal defines a policy-driven trace continuation model for trust and
-propagation boundaries. Instead of a single hardcoded choice between "continue"
-and "restart", extraction evaluates a trace continuation policy and records the
-result in context for later span creation.
+propagation boundaries. Existing propagators continue to parse and inject trace
+context. A new SDK component, provisionally called the **Trace Continuation
+Decider**, evaluates richer boundary inputs and chooses how trace context is
+used.
 
-This proposal introduces two new rule-based propagators: one for W3C Trace
-Context and one for W3C Baggage.
+The decider produces one of three trace continuation strategies:
 
-The rule-based W3C trace context propagator introduces three policies:
+1. **CONTINUE**: use the candidate `SpanContext` as the parent according to
+   existing parentage rules.
+2. **RESTART_WITH_LINK**: do not use the candidate `SpanContext` as a parent.
+   Start a new trace and add a link to the candidate context when creating the
+   restarted root span.
+3. **RESTART_WITHOUT_LINK**: do not use the candidate `SpanContext` as a parent
+   and do not preserve it as a link.
 
-1. **CONTINUE**: extract the remote `SpanContext` and make it the current
-   parent.
-2. **RESTART_WITH_LINK**: extract the remote `SpanContext`, but do not use it as
-   a parent. Instead, store it as a pending link for the next root span.
-3. **RESTART_WITHOUT_LINK**: extract for evaluation purposes, but do not use the
-   remote context as a parent and do not preserve it as a link.
+The decider is similar to a sampler because it is an SDK component that evaluates
+a structured input and returns a structured decision. It is not a sampler because
+it does not decide whether a span is recorded or sampled. It decides which trace
+context, if any, is eligible for parentage or linking.
 
-The trace continuation rules are composed of:
-- a predicate taking the `tracestate` header value
-- a policy as described before
+### Why not decide in propagators?
 
-The rule-based W3C baggage propagator works as a filter for the baggage context
-in both extraction and injection.
-It introduces two explicit outcomes:
+A propagator can see a carrier and the values encoded in that carrier. It cannot
+reliably know whether an HTTP request matched an external webhook route, whether
+the remote caller was authenticated as a tenant, whether an outgoing request is
+headed to a third-party SaaS provider, or whether the current process is inside a
+company perimeter.
 
-1. **KEEP**: keep the baggage entry in the baggage context.
-2. **DROP**: suppress the baggage entry from the baggage context.
+Some of these values can appear in headers, but they are not equivalent to a
+trusted policy input. In particular, client-provided `tracestate` is not a secure
+basis for enforcing a trust boundary. A policy that depends only on trace headers
+is useful for some operational routing cases, but it is too narrow for security,
+tenancy, and SaaS audience boundaries.
 
-The baggage filtering rules are composed of:
-- a predicate taking the name and the value of a valid baggage entry
-- a baggage outcome as described before
+Moving the decision into the SDK lets instrumentation supply trusted or derived
+metadata before the decision is made, while preserving the existing W3C Trace
+Context and Baggage wire formats.
 
-A predicate that drops baggage entries independently of key and value is
-equivalent to dropping baggage as a whole.
+### Component lifecycle
 
-Each propagator is independent of the other.
+The Trace Continuation Decider runs after propagation has produced a candidate
+context and before the SDK finalizes parentage for a new span or propagates
+context across an outgoing boundary.
 
-### Conceptual request flow for rule based W3C trace context propagator
+For ingress, the lifecycle is:
+
+1. Instrumentation receives a request and invokes propagators to extract a remote
+   context candidate.
+2. Instrumentation and the SDK assemble a trace continuation input containing the
+   candidate context and available request metadata.
+3. The decider returns `CONTINUE`, `RESTART_WITH_LINK`, or
+   `RESTART_WITHOUT_LINK`.
+4. Span start logic applies the decision before sampling.
+5. The sampler evaluates the span with the final parentage context.
+
+For egress, the lifecycle is:
+
+1. Instrumentation prepares an outgoing request and identifies the current active
+   context or other propagation candidate.
+2. Instrumentation and the SDK assemble a trace continuation input containing the
+   destination metadata and active context candidate.
+3. The decider returns an egress continuation decision.
+4. Injection logic applies that decision before writing propagation headers.
+
+This proposal intentionally separates propagation parsing from continuation
+policy. Language implementations MAY integrate the mechanics differently, but the
+observable behavior SHOULD match this lifecycle.
+
+### Decision input
+
+The decider input SHOULD be a structured value with fields equivalent to:
+
+- the candidate `SpanContext`, if one is available,
+- direction: `ingress` or `egress`,
+- span kind, if known,
+- instrumentation scope,
+- span attributes: including route, host, path, method, destination, transport, or peer metadata provided by
+  instrumentation,
+- authorization, tenant, audience, or perimeter hints when provided by trusted
+  application or instrumentation code,
+
+Not every implementation or instrumentation can provide every field. The decider
+contract is defined around inputs that can be absent and deterministic behavior
+when inputs are absent.
+
+### Decision result
+
+The decider result SHOULD contain:
+
+- a trace continuation strategy,
+- OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINK`,
+- OPTIONAL diagnostic attributes or reason codes for implementation-specific
+  observability,
+- OPTIONAL baggage or propagation actions if baggage control remains in scope.
+
+The link attributes are useful for recording why a causal relationship was
+preserved without parentage. For example, an implementation might record that the
+link represents an external audience, public endpoint, partner boundary, or
+policy rule. Exact attribute names are left open by this OTEP.
+
+### Conceptual request flows
 
 Normal continuation:
 
 - Extract remote context.
-- Evaluate policy and obtain `CONTINUE`.
-- Start span as child of remote parent.
-- Continue same trace ID and parent chain.
+- Assemble trace continuation input from the remote context and request metadata.
+- Decider returns `CONTINUE`.
+- Start span as a child of the remote parent.
+- Sampler runs with the continued parentage.
 
 Boundary restart with link:
 
 - Extract remote context.
-- Evaluate policy and obtain `RESTART_WITH_LINK`.
-- Store the extracted remote context as a pending link.
+- Assemble trace continuation input from the remote context and trusted boundary
+  metadata.
+- Decider returns `RESTART_WITH_LINK`.
 - Start a new root span.
-- Add one link to the stored remote context.
+- Add one link to the extracted remote context, including any link attributes
+  returned by the decider.
+- Sampler runs for the new root span.
 
 Boundary restart without link:
 
 - Extract remote context.
-- Evaluate policy and obtain `RESTART_WITHOUT_LINK`.
-- Start a new root span with no parent and no link to the incoming context.
+- Assemble trace continuation input from the remote context and trusted boundary
+  metadata.
+- Decider returns `RESTART_WITHOUT_LINK`.
+- Start a new root span with no parent and no automatic link to the incoming
+  context.
+- Sampler runs for the new root span.
 
-### Policy evaluation for rule based W3C trace context propagator
+Egress suppression:
 
-The `opentelemetry-python` prototype evaluates ordered rules over incoming
-`tracestate`. The first matching rule wins, and if no rule matches the default
-behavior is `CONTINUE`.
+- An outgoing request is prepared with an active in-process context.
+- Instrumentation provides the span attributes.
+- Decider returns `RESTART_WITHOUT_LINK` or an egress-specific equivalent that
+  suppresses propagation of the current trace context to that destination.
+- Injection omits the suppressed trace context while preserving other configured
+  propagation behavior.
 
-That prototype shape is useful because it:
+### Audience framing
 
-- avoids wire-format changes,
-- allows policy to be decided using metadata already carried with the trace,
-- keeps policy enforcement inside propagation and tracing components rather than
-  requiring every instrumentation to reimplement the logic.
+Some SaaS products need to reason about more than one audience. A request can
+arrive with a customer trace context, while the service also needs an internal
+trace for its own operations. In that case, the customer context is useful causal
+information, but it does not necessarily become the default parent for the
+internal trace.
 
-This OTEP standardizes the behavior that results from policy evaluation. It does
-not require every language to expose the exact same rule classes, but it should
-be possible to express equivalent behavior.
-
-### Policy evaluation for rule based W3C baggage propagator
-
-The `opentelemetry-python` prototype evaluates ordered rules for each valid
-incoming and outgoing baggage entry. The first matching rule wins, and if no rule matches the
-default behavior is `KEEP`.
-
-That prototype shape is useful because it:
-
-- lets baggage filtering be configured using the same ordered-rule mental model
-  as trace continuation,
-- allows selective suppression instead of requiring all-or-nothing baggage
-  handling,
-- preserves the existing baggage wire format and parser behavior.
+This proposal treats the default OpenTelemetry context as the current audience's
+trace context. A decider can restart the default trace while preserving the
+incoming audience context as a link, or can discontinue it entirely. Future work
+can define more explicit multi-audience context handling, but that is not part of
+the initial continuation strategy.
 
 ### Configuration model
 
-The canonical configuration schema for these propagators SHOULD be defined in
+The canonical configuration schema for this component SHOULD be defined in
 `opentelemetry-configuration`.
 
-That configuration SHOULD follow the same structural conventions used by
+Configuration SHOULD follow the same structural conventions used by
 `ExperimentalComposableRuleBasedSampler` and
 `ExperimentalComposableRuleBasedSamplerRule`:
 
-- a rule-based propagator configuration object contains a `rules` array,
+- a trace continuation decider configuration object contains a `rules` array,
 - rules are matched in order,
 - each rule can contain multiple match conditions and all conditions in a rule
-  must match,
+  MUST match,
 - if no conditions are specified, the rule matches all inputs that reach it,
-- if no rule matches, the propagator falls back to its default behavior.
+- if no rule matches, the decider falls back to its default behavior.
 
-For these propagators, the default behaviors are:
-
-- trace context: `CONTINUE`,
-- baggage: `KEEP`.
-
-For trace context configuration, the standardized schema SHOULD be based on
-sampler-style condition objects rather than language-specific helper classes. In
-particular, it SHOULD support structures equivalent to:
-
-- `trace_state_values`, analogous to
-  `ExperimentalComposableRuleBasedSamplerRuleAttributeValues`,
-- `trace_state_patterns`, analogous to
-  `ExperimentalComposableRuleBasedSamplerRuleAttributePatterns`.
-
-For baggage configuration, the standardized schema SHOULD likewise support:
-
-- `baggage_values`,
-- `baggage_patterns`.
-
-Pattern semantics SHOULD follow the same rules used by
-`ExperimentalComposableRuleBasedSamplerRuleAttributePatterns`:
-
-- matching is case-sensitive,
-- exact string matches are supported,
-- wildcard matching uses `?` for a single character and `*` for any number of
-  characters including none,
-- `excluded` is evaluated after `included`,
-- if `included` is omitted, all values for the named key are considered
-  included.
-
-Using those conventions, the prototype's helper predicates map naturally into
-the configuration model:
-
-- `OnKeyPresence(key)` maps to a `*_patterns` condition with `key` specified and
-  no `included` or `excluded` lists,
-- `OnKeyValue(key, value)` maps to a `*_values` condition with a single value,
-- `AlwaysPredicate()` maps to a rule with no match conditions.
-
-Each trace-context rule SHOULD require a `policy` field. Each baggage rule
-SHOULD require an `action` field. The exact extension names to be added to
-`opentelemetry-configuration` remain to be standardized, but their schema shape
-should mirror the sampler's rule-based model.
-
-<!-- TODO: The configuration may not match exactly the python prototype regarding values -->
+The default behavior SHOULD preserve existing OpenTelemetry behavior by returning
+`CONTINUE`. Deployments that enforce security or tenant boundaries SHOULD be able
+to configure allowlist-style policies where continuation is permitted only for
+known trusted inputs and all other candidates restart or are dropped.
 
 Illustrative configuration shape using placeholder extension names:
 
 ```yaml
-propagator:
-  composite:
-    - tracecontext_rule_based/development:
-        rules:
-          - trace_state_values:
-              key: ot.boundary
-              values:
-                - "public"
-            policy: restart_with_link
-          - trace_state_patterns:
-              key: ot.synthetic
-            policy: restart_without_link
-    - baggage_rule_based/development:
-        inject_rules:
-          - baggage_patterns:
-              key: tenant.id
-            action: drop
-          - baggage_values:
-              key: debug
-              values:
-                - "true"
-            action: keep
-        extract_rules:
-          - baggage_patterns:
-              key: tenant.id
-            action: drop
-          - baggage_values:
-              key: debug
-              values:
-                - "true"
-            action: keep
+tracer_provider:
+  trace_continuation_decider:
+    rule_based/development:
+      default_strategy: restart_with_link
+      rules:
+        - conditions:
+            attributes:
+              http.route: /internal/*
+              net.host.name: internal.example.com
+          strategy: continue
+        - conditions:
+            attributes:
+              http.route: /webhooks/*
+          strategy: restart_with_link
+          link_attributes:
+            otel.trace_continuation.reason: external_webhook
+        - conditions:
+            attributes:
+              server.address: api.third-party.example
+              otel.trace_continuation.direction: egress
+          strategy: restart_without_link
 ```
+
+The exact schema shape remains to be standardized. The important requirements are
+that the model supports ordered rules, reusable condition objects, direction-aware
+matching, and conservative allowlist deployment patterns.
 
 ## Internal details
 
-### Behavioral contract for rule based W3C trace context propagator
+### Behavioral contract
 
 This proposal introduces a cross-component behavioral contract between
-propagation and tracing:
+instrumentation, propagation, tracing, and sampling:
 
-- **Pending-link context value**: a standard context semantic meaning "an
-  extracted remote parent candidate that is eligible for linking but not for
-  parentage."
-- Language implementations MAY store either a `Link` or enough information to
-  construct one later, but MUST preserve the semantic contract across propagator
-  and tracer components.
-- The pending-link value is a one-shot hint for the next restarted root span,
-  not a new general-purpose parent channel.
+- Propagators parse or inject trace context but do not make the final boundary
+  policy decision.
+- Instrumentation SHOULD provide relevant request, route, destination, and
+  trusted application metadata when available.
+- The SDK invokes the Trace Continuation Decider before final parentage is chosen
+  for a span.
+- The SDK invokes the sampler after trace continuation has established the span's
+  parentage or root status.
+- Restart-with-link uses existing span links to preserve causal relationship
+  without parentage.
 
-### Required behavior for rule based W3C trace context propagator
+Language implementations MAY store either a `Link` or enough information to
+construct one later, but MUST preserve the semantic contract across decider,
+propagator, and tracer components.
 
-When trace continuation policy is evaluated for an extracted remote context:
+### Required ingress behavior
+
+When trace continuation is evaluated for an extracted remote context:
 
 1. Extraction logic MUST parse incoming remote context according to existing
    propagator behavior.
-2. Policy evaluation MUST be deterministic.
-3. If multiple configured rules match, implementations SHOULD use a first-match
+2. Decider evaluation MUST be deterministic for a given input and configuration.
+3. If multiple configured rules match, implementations SHOULD use first-match
    wins rule order.
 4. If no configured rule matches, implementations SHOULD preserve existing
-   continuation behavior by defaulting to `CONTINUE`.
+   continuation behavior unless configured otherwise.
 
-When the selected policy is `CONTINUE`:
+When the selected strategy is `CONTINUE`:
 
-1. The extracted remote context MUST become the current remote parent according
-   to existing continuation behavior.
-2. Any pending-link value associated with that extraction outcome MUST NOT be
-   left behind.
+1. The candidate remote context MUST be eligible for parentage according to
+   existing parentage rules.
+2. Any pending-link value associated with that candidate MUST NOT be left behind.
 
-When the selected policy is `RESTART_WITH_LINK`:
+When the selected strategy is `RESTART_WITH_LINK`:
 
-1. Extraction logic MUST NOT make the extracted remote context the active
+1. Span start logic MUST NOT use the candidate remote context as the active
    parent.
-2. Extraction logic MUST store the extracted remote context as a pending-link
-   value, or an equivalent link-only representation.
+2. Span start logic MUST create a new root span unless an explicit in-process
+   parent override takes precedence.
+3. Span start logic SHOULD add exactly one automatic link to the candidate remote
+   context.
+4. If the decider returns link attributes, implementations SHOULD attach them to
+   the automatic link.
 
-When the selected policy is `RESTART_WITHOUT_LINK`:
+When the selected strategy is `RESTART_WITHOUT_LINK`:
 
-1. Extraction logic MUST NOT make the extracted remote context the active
+1. Span start logic MUST NOT use the candidate remote context as the active
    parent.
-2. Extraction logic MUST NOT store a pending-link value for that extraction
-   outcome.
-
-When span start logic runs:
-
-1. If a valid parent is available through the normal parentage rules, existing
-   parentage behavior remains unchanged.
-2. If no valid parent is available, span start logic MUST create a new root
-   span.
-3. If no valid parent is available and a valid pending-link value is present,
-   span start logic SHOULD add exactly one link to the new root span.
-4. If user code supplied explicit links at span start, implementations MUST
-   preserve those links when adding the pending link.
-5. Child spans MUST NOT inherit a pending link that was intended only for the
-   restarted root span.
-
-The `opentelemetry-python` prototype achieves the last requirement by clearing
-the pending link when a span is installed into context. Other languages may use
-different mechanics, but the observable behavior should be the same.
+2. Span start logic MUST NOT create an automatic link for that candidate.
 
 ### Parentage precedence
 
 To avoid ambiguous behavior, span start logic MUST use the following parentage
 order:
 
-1. Explicit API parent override (if provided by the caller).
+1. Explicit API parent override, if provided by the caller.
 2. Active in-process span context.
-3. Extracted remote parent context under the `CONTINUE` policy.
+3. Extracted remote parent context under the `CONTINUE` strategy.
 4. Root span if none apply.
 
-The pending-link value MUST NOT be used as a parent in this order.
+A candidate selected for `RESTART_WITH_LINK` or `RESTART_WITHOUT_LINK` MUST NOT
+be used as a parent in this order.
 
-### Rule model informed by the prototype
+### Link consumption
 
-The `opentelemetry-python` prototype uses simple ordered predicates to make the
-behavior concrete:
+If the implementation stores a pending link before span start, that value is a
+one-shot hint for the restarted root span. Child spans MUST NOT inherit a pending
+link that was intended only for the restarted root span.
 
-- `OnKeyPresence(key)`,
-- `OnKeyValue(key, value)`,
-- `AlwaysPredicate()`.
+If user code supplied explicit links at span start, implementations MUST preserve
+those links when adding the automatic continuation link.
 
-For trace continuation, those predicates are evaluated against `tracestate` and
-yield one of the three policies.
+### Required egress behavior
 
-For baggage filtering, those predicates are evaluated per valid baggage entry and
-yield one of two baggage outcomes:
+When trace continuation is evaluated for egress:
 
-- `KEEP`,
-- `DROP`.
+1. Injection logic MUST preserve existing propagator behavior when the decider
+   returns `CONTINUE`.
+2. If the selected strategy restarts or suppresses continuation for the outgoing
+   boundary, injection logic MUST NOT propagate the suppressed trace context as
+   the active parent context for that destination.
+3. Egress decisions MUST be direction-aware so an ingress rule does not
+   accidentally suppress unrelated outgoing propagation, or vice versa.
 
-This OTEP does not require those exact class names or constructor shapes, but it
-does intentionally reflect the prototype's design choices:
+The exact representation of egress restart remains open. Some implementations
+can model egress suppression as `RESTART_WITHOUT_LINK`; others can require an
+explicit egress action such as `DROP_PROPAGATION`. The OTEP needs to resolve
+this before advancing to specification text.
 
-- ordered evaluation,
-- deterministic first-match behavior,
-- default continuation when no rule matches,
-- separate policy decisions for trace continuation and baggage propagation.
+### Interaction with samplers
 
-For standardized configuration, the equivalent behavior SHOULD be expressed
-using the sampler-inspired schema described above, rather than requiring these
-exact helper names to exist in every language API.
+The Trace Continuation Decider runs before the sampler observes the span's final
+parentage. This ordering is important because parent-based samplers and
+attribute-based samplers need to evaluate the span that will actually be created.
 
-### Behavioral contract for rule based W3C baggage propagator
+The decider MUST NOT make recording or sampling decisions. A sampler does not
+need to understand why parentage was continued or restarted. Implementations
+MAY expose decider diagnostics as span attributes or metrics, but those
+observability details are not part of the sampling decision.
 
-This proposal introduces a standardized baggage rule schema at the behavioral
-level:
+### Interaction with baggage
 
-- baggage rules are evaluated independently for each valid extracted and injected
-  baggage entry,
-- each baggage rule consists of a predicate and one baggage outcome,
-- the standardized baggage outcomes are `KEEP` and `DROP`,
-- language implementations MAY represent those outcomes internally using enums,
-  booleans, or similar constructs, but their observable behavior MUST be
-  equivalent to `KEEP` and `DROP`.
+This OTEP keeps baggage filtering out of the initial normative scope.
 
-### Required behavior for rule based W3C baggage propagator
+Baggage filtering is related operationally because the same boundaries often need
+both trace restart and baggage suppression. However, combining both in the first
+version would make the new SDK component decide parentage, linking, context
+injection, and baggage filtering at once. That risks obscuring the core trace
+continuation behavior.
 
-When baggage entries are evaluated:
+The proposed first version standardizes trace continuation decisions and SDK
+consumption semantics. Baggage filtering is treated as one of:
 
-1. Implementations MUST parse and validate baggage entries according to existing
-   W3C baggage propagator behavior before applying rule evaluation.
-2. Policy evaluation MUST be deterministic for each valid baggage entry.
-3. If multiple configured rules match a baggage entry, implementations SHOULD
-   use a first-match wins rule order.
-4. If no configured rule matches a baggage entry, implementations SHOULD keep
-   that entry by default.
+- a follow-up OTEP using the same decision input and rule vocabulary,
+- an OPTIONAL extension point on the decider result,
+- a separate rule-based baggage propagator or processor if the SIG prefers to
+  keep baggage behavior near propagation.
 
-When a baggage rule outcome is `KEEP`:
-
-1. The baggage entry MUST be added to the baggage context on extraction and kept
-   on injection according to existing baggage extraction behavior.
-
-When a baggage rule outcome is `DROP`:
-
-1. The baggage entry MUST NOT be added to the extracted or injected baggage context.
-
-### Interaction with existing functionality
-
-- Existing propagation formats are unchanged.
-- Existing APIs can remain source-compatible if policy evaluation and
-  pending-link handling are implemented internally by propagators,
-  instrumentation, and SDK components.
-- Configuration for these propagators SHOULD be integrated into
-  `opentelemetry-configuration` using the same rule-oriented style already used
-  by `ExperimentalComposableRuleBasedSampler`.
-- Linking is already a supported tracing concept, so correlation across the
-  boundary is represented without introducing a new data model primitive.
-- Trace restart behavior and baggage filtering are related operationally, but
-  they remain distinct controls.
-
-### Baggage interaction
-
-The `opentelemetry-python` prototype also adds a rule-based baggage propagator.
-It evaluates ordered rules per baggage entry and can selectively suppress
-entries during extraction and injection.
-
-This is important because many real boundary scenarios want both:
-
-- trace restart policy, and
-- baggage filtering policy.
-
-This OTEP standardizes the baggage rule schema at the behavioral level so that:
-
-- implementations share the same ordered rule semantics,
-- baggage outcomes are expressed consistently as `KEEP` and `DROP`,
-- baggage filtering composes cleanly with trace continuation policy without
-  coupling the two behaviors.
+Any future baggage design needs to cover both ingress and egress and support
+allowlist-style deployment for sensitive boundaries.
 
 ### Error modes and handling
 
-- Invalid extracted remote context: ignore it and keep the pre-existing context
-  unchanged.
-- No matching rule: default to `CONTINUE`.
+- Invalid extracted remote context: ignore it and keep existing behavior.
+- No matching rule: default to `CONTINUE` unless configuration explicitly chooses
+  a different default.
+- Missing trusted metadata: evaluate deterministically using the inputs that are
+  available.
 - Missing or invalid pending-link value at span start: start a new root span
   without an automatically added link.
 - Duplicate or conflicting pending-link candidates: implementation SHOULD keep a
@@ -419,74 +404,118 @@ This OTEP standardizes the baggage rule schema at the behavioral level so that:
 
 ### Corner cases
 
-- If both a current in-process span and a pending link exist, current in-process
-  span parentage rules win and the pending link MUST NOT be inherited by child
-  spans.
-- If explicit links are provided at span start, the automatic pending link is
-  additive rather than replacing user-supplied links.
+- If both a current in-process span and a restartable remote candidate exist,
+  current in-process span parentage rules win unless the caller explicitly asks
+  to evaluate the remote candidate as the parent.
+- If explicit links are provided at span start, the automatic continuation link
+  is additive rather than replacing user-supplied links.
 - If sampling flags or `tracestate` arrive in the remote context, they MUST NOT
-  force parentage continuation under a restart policy.
-- If baggage handling is separately restricted at the boundary, this proposal
-  remains compatible: trace restart-with-link does not require baggage
-  propagation.
+  force parentage continuation under a restart strategy.
+- Trace restart-with-link does not require baggage propagation.
+- Egress suppression of trace context does not imply suppression of all other
+  propagation formats unless separately configured.
+
+## Examples
+
+### Public webhook endpoint
+
+A service exposes `/webhooks/{partner}` to external systems and `/internal/*` to
+internal callers. Both routes can carry W3C Trace Context. The external webhook
+route is authenticated, but the incoming trace belongs to the partner audience,
+not the service's internal trace.
+
+For `/webhooks/{partner}` the decider returns `RESTART_WITH_LINK`. The SDK starts
+a new internal root span and links to the partner-provided context. Internal child
+spans follow the new trace. The partner context is visible as causal information
+without becoming the default parent.
+
+For `/internal/*` the decider returns `CONTINUE`, so internal service-to-service
+calls preserve the existing trace ID and parent chain.
+
+### SaaS internal and customer traces
+
+A SaaS service receives a request made on behalf of a customer. The customer
+wants to trace the call through the SaaS boundary, while the SaaS operator needs a
+separate internal trace for authorization, fanout, database calls, and background
+work.
+
+The decider uses trusted authorization or tenant metadata supplied by the
+application or instrumentation. It starts a new internal trace and links to the
+incoming customer context. The internal trace can be sampled, retained, and
+shared according to the SaaS operator's policy without requiring the customer
+trace ID to become the internal trace ID.
+
+### Egress to third-party SaaS
+
+A service calls both internal dependencies and an external SaaS API. The active
+in-process span is valid for internal calls, but the operator does not want to
+propagate internal trace context to the external provider.
+
+For internal destinations the decider returns `CONTINUE`, and injectors preserve
+normal trace context propagation. For the external SaaS destination the decider
+returns a restart or suppression decision, and injection omits the internal trace
+context for that outgoing request.
 
 ## Trade-offs and mitigations
 
+### Trade-off: A new SDK component adds surface area
+
+Adding a component increases SDK complexity and configuration surface.
+
+Mitigation:
+
+- Reuse sampler-style configuration and rule semantics where possible.
+- Keep the first version focused on trace continuation only.
+- Avoid requiring every language to expose identical helper classes.
+
 ### Trade-off: Trace tree continuity is broken at boundaries
 
-Restarting at a boundary creates a new root span, so parent/child continuity is
-no longer represented as a single tree in one trace.
+Restarting at a boundary creates a new root span, so parent/child continuity is no
+longer represented as a single tree in one trace.
 
 Mitigation:
 
-- Preserve causal relationship using a span link to the extracted remote
-  context when policy selects `RESTART_WITH_LINK`.
-- Document this as intentional behavior and provide guidance for backend query
-  patterns that use links.
+- Preserve causal relationship using a span link when policy selects
+  `RESTART_WITH_LINK`.
+- Allow link attributes to describe the boundary or audience relationship.
+- Document backend query patterns that use links.
 
-### Trade-off: Potential cross-language divergence
+### Trade-off: Instrumentation metadata availability varies
 
-Without clear behavioral requirements, language implementations could differ in
-how they store pending links, evaluate rules, handle unmatched policy cases, or
-expose configuration schemas.
+Some instrumentations can provide route, host, destination, and auth metadata;
+others cannot.
 
 Mitigation:
 
-- Define language-agnostic MUST/SHOULD behavior for extraction, parentage
-  precedence, and link creation.
-- Keep key material and public helper APIs language-specific, but keep semantic
-  meaning standardized.
-- Reuse `opentelemetry-configuration` rule-schema conventions instead of
-  introducing a completely separate configuration model.
-- Add conformance-style test scenarios as follow-up spec work.
+- Define inputs that can be absent and deterministic behavior when inputs are
+  absent.
+- Let simple deployments use carrier-only or resource-only rules.
+- Encourage instrumentations to provide standard semantic convention attributes
+  before invoking the decider when practical.
 
 ### Trade-off: Policy misconfiguration can over-fragment traces
 
-If restart rules are too broad, users may unintentionally restart too many
+If restart rules are too broad, users can unintentionally restart too many
 requests and reduce end-to-end trace readability.
 
 Mitigation:
 
-- Recommend conservative defaults that preserve current continuation unless
-  restart is explicitly configured.
-- Encourage implementations to expose diagnostics such as counts of `continue`,
-  `restart_with_link`, and `restart_without_link` decisions.
-- Encourage staged rollout and observation before enforcing broad restart rules.
+- Preserve `CONTINUE` as the compatibility default.
+- Support allowlist defaults for deployments that need strict trust boundaries.
+- Encourage diagnostics such as counts of `continue`, `restart_with_link`, and
+  `restart_without_link` decisions.
 
 ### Trade-off: Relationship to baggage controls can be confusing
 
-Users often want both trace restart and baggage suppression/filtering. If these
-are not clearly separated, implementations may couple them inconsistently.
+Users often want both trace restart and baggage suppression or filtering.
 
 Mitigation:
 
-- Specify that trace continuation policy and baggage policy are independent.
-- Use the prototype as evidence that both can be rule-driven without sharing the
-  same internal state.
-- Standardize baggage rule behavior in this OTEP while keeping room for later
-  work on shared configuration formats.
+- Keep baggage out of the initial normative scope.
+- Require any future baggage work to cover both ingress and egress.
+- Reuse the same rule vocabulary if baggage filtering becomes a follow-up.
 
-### Trade-off: Security expectations may be overstated
+### Trade-off: Security expectations can be overstated
 
 Restarting trace parentage reduces correlation continuity but does not by itself
 eliminate all metadata exposure risks.
@@ -495,26 +524,26 @@ Mitigation:
 
 - Explicitly state that this proposal is not a full data-loss-prevention
   mechanism.
-- Recommend combining boundary restart policy with network controls and baggage
-  governance where required.
+- Do not treat untrusted trace headers as sufficient trust-boundary inputs.
+- Recommend combining continuation policy with authorization, network controls,
+  and baggage governance where needed.
 
 ## Prior art and alternatives
 
 ### Prior art
 
-The closest existing OpenTelemetry prior art is in
-`opentelemetry-go-contrib` `otelhttp` via
+The closest existing OpenTelemetry prior art is in `opentelemetry-go-contrib`
+`otelhttp` via
 [`WithPublicEndpointFn`](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/instrumentation/net/http/otelhttp/v0.65.0/instrumentation/net/http/otelhttp/config.go#L99),
 as used in
 [handler logic](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/dbf7b0a8a37a70ea1848bfdee02ff6c68b0fa9d6/instrumentation/net/http/otelhttp/handler.go#L103).
-In that model, user-supplied logic decides when to start a new trace and link
-to the extracted remote context.
+In that model, user-supplied logic decides when to start a new trace and link to
+the extracted remote context.
 
-The `opentelemetry-python` prototype provides more direct prior art for this
-OTEP. It implements:
+The `opentelemetry-python` [prototype for the earlier version of this OTEP](https://github.com/open-telemetry/opentelemetry-python/pull/5134) implements:
 
 - a `RuleBasedTraceContextTextMapPropagator`,
-- three explicit trace policies: `CONTINUE`, `RESTART_WITH_LINK`, and
+- three explicit trace strategies: `CONTINUE`, `RESTART_WITH_LINK`, and
   `RESTART_WITHOUT_LINK`,
 - ordered first-match rule evaluation over `tracestate`,
 - context helpers for storing and consuming a pending link,
@@ -523,10 +552,12 @@ OTEP. It implements:
 - a separate `RuleBasedW3CBaggagePropagator` with ordered `KEEP`/`DROP`
   semantics for selective baggage suppression.
 
-The `opentelemetry-configuration` repository provides the configuration prior
-art for how rule-driven behavior should be expressed. In particular,
-`ExperimentalComposableRuleBasedSampler` demonstrates a schema structure that is
-well suited for these propagators:
+That prototype demonstrates the restart/link behavior, but its policy placement
+is too limited for the broader boundary cases described in this OTEP.
+
+The `opentelemetry-configuration` repository provides configuration prior art for
+rule-driven behavior. In particular, `ExperimentalComposableRuleBasedSampler`
+demonstrates:
 
 - a top-level plugin object,
 - an ordered `rules` array,
@@ -536,71 +567,82 @@ well suited for these propagators:
 
 ### Alternatives considered
 
-1. Keep the status quo (always continue by default everywhere).
-   - Rejected as insufficient for security, privacy, and policy-controlled
-     boundary scenarios described by users.
+1. Keep the status quo, always continuing by default everywhere.
+   - Rejected as insufficient for security, privacy, tenancy, and
+     policy-controlled boundary scenarios described by users.
 
 2. Implement restart behavior only in individual instrumentations.
-   - Rejected as too inconsistent. The prototype shows that the behavior can be
-     expressed once in propagation and tracing components instead of being
-     reimplemented per framework or protocol.
+   - Rejected as too inconsistent. Existing instrumentation hooks are useful
+     prior art, but they do not provide a cross-language SDK contract or shared
+     declarative configuration model.
 
-3. Modify W3C Trace Context semantics or header format in this proposal.
-   - Rejected for this OTEP scope. This proposal standardizes OpenTelemetry
+3. Use rule-based propagators as the primary policy mechanism.
+   - Rejected for this alternate direction. Propagators are a reasonable place to
+     parse carriers, but they only see wire-format inputs. Trust-boundary policy
+     often needs route, host, destination, authorization, audience, or deployment
+     metadata that is unavailable or untrusted at propagation time.
+
+4. Extend the sampler directly.
+   - Attractive because samplers already have lifecycle similarities, rule
+     engines, and access to useful attributes. Rejected as the initial proposal
+     because sampling and trace continuation are separate decisions. Combining
+     them risks confusing parentage with recording and sampling semantics.
+
+5. Add a new SDK component adjacent to the sampler.
+   - Preferred. It keeps trace continuation semantics separate from sampling
+     while reusing sampler-style inputs, configuration patterns, and lifecycle
+     placement.
+
+6. Use an external authorization or remote-sampler-like service.
+   - Promising future direction, especially for centrally managed policy. Not
+     needed for the first version because the specification still needs a local
+     SDK contract for decision inputs, outputs, ordering, and link behavior.
+
+7. Modify W3C Trace Context semantics or header formats.
+   - Rejected for this OTEP scope. This proposal standardizes OpenTelemetry SDK
      behavior while remaining compatible with current propagation formats.
-
-4. Support only `RESTART_WITH_LINK` and not `RESTART_WITHOUT_LINK`.
-   - Rejected because the prototype shows users sometimes want a hard restart
-     with no causal link preserved at all.
-
-5. Drop context without preserving causal relation as the only restart option.
-   - Rejected as too limiting. `RESTART_WITH_LINK` preserves useful
-     troubleshooting correlation while still breaking parentage.
 
 ## Open questions
 
-1. Should `tracestate` be the primary standardized policy input, or should the
-   model also directly cover route-based, destination-based, or environment-based
-   policy inputs?
+1. What final name fits the component? Options include
+   `TraceContinuationDecider` and `TraceContinuationPolicy`.
 
-2. Should trace continuation and baggage filtering share a common standardized
-   predicate vocabulary, or should implementations be free to expose equivalent
-   language-specific helpers?
+2. Does egress use the same three strategies as ingress, or does it define an
+   explicit `DROP_PROPAGATION` action?
 
-3. What exact extension names should be added to
-   `opentelemetry-configuration` for the rule-based trace-context and baggage
-   propagators?
+3. Which link attributes, if any, are standardized for restart-with-link
+   relationships?
+
+4. Is baggage filtering a follow-up OTEP, an OPTIONAL result field on this
+   component, or a separate propagation feature?
+
+5. Which semantic convention attributes are RECOMMENDED as common decision
+   inputs?
+
+6. How does declarative configuration represent allowlist defaults without
+   breaking existing continue-by-default behavior?
 
 ## Prototypes
 
-This proposal is backed by a prototype in `opentelemetry-python` that
-demonstrates the full end-to-end behavior:
+- TODO in Python
 
-- prototype PR: [open-telemetry/opentelemetry-python#5134](https://github.com/open-telemetry/opentelemetry-python/pull/5134),
+Prototype scenarios should cover:
 
-- extraction uses ordered rules over `tracestate` to select `CONTINUE`,
-  `RESTART_WITH_LINK`, or `RESTART_WITHOUT_LINK`,
-- `RESTART_WITH_LINK` stores a pending link in context instead of a parent,
-- span activation clears the pending link so it is consumed only by the next
-  restarted root span,
-- root span creation preserves user-supplied links and appends the pending link,
-- child spans do not inherit the pending link,
-- baggage extraction and injection can separately apply ordered keep/drop rules to baggage
-  entries.
-
-The prototype includes tests for:
-
-- continue vs restart behavior during extraction,
+- continue vs restart behavior during ingress span creation,
 - first-match-wins rule evaluation,
 - restart with and without preserved causal links,
+- link attributes returned by the decider,
 - correct link consumption during root span creation,
 - prevention of accidental link inheritance by child spans,
-- rule-based baggage suppression with ordered `KEEP`/`DROP` behavior.
+- sampler ordering after continuation decision,
+- egress suppression or restart behavior,
+- allowlist-style configuration for trusted boundaries.
 
 ## Future possibilities
 
-- Promotion of the corresponding `opentelemetry-configuration` schema entries
-  from experimental to stable once the behavior has interoperable
-  implementations.
-- Additional sampler-style condition objects for non-header policy inputs such as
-  route, destination, or transport metadata.
+- Integration with OpAMP or telemetry policy for centrally managed boundary
+  policy updates.
+- A follow-up baggage filtering proposal that reuses the same direction-aware
+  rule vocabulary.
+- External policy service integration, such as an authorization service or
+  remote-sampler-like service returning trace continuation decisions.
