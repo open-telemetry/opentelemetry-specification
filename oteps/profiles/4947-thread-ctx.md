@@ -24,7 +24,7 @@ Because this mechanism relies on having a native component and knowing when a ru
 
 The TLS-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLS, or for which OS-thread-local context is not the appropriate execution-context model, are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
 
-When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread-local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
+When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID, and trace flags in the format described in this document to the appropriate thread-local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
 ### Interaction with other context sources
 
@@ -81,9 +81,11 @@ The key map is intended to attach a minimal set of contextual attributes to prof
 
 Keys do not need to be registered at process startup. New keys may be appended over time as the SDK encounters new attribute names. Updates are expected to be infrequent; in practice, the key set is typically established early in the process lifetime. Prior implementations have shown that a small number of keys is sufficient for the common case.
 
-When a key is appended, the SDK must update the `attribute_key_map` entry in the Process Context. This spec does not define how threads coordinate on this update; implementors may use a mutex or any mechanism that satisfies the update protocol described in OTEP 4719.
+When a key is appended, the SDK must update the `attribute_key_map` entry in the Process Context. Readers rely on the OTEP 4719 update protocol to read the entire Process Context block free of torn/corrupted reads. The SDK is responsible for ensuring it acts as a single writer to the Process Context, e.g. via a mutex or equivalent internal coordination across its own threads, so that concurrent key appends from multiple application threads do not race with each other or violate the OTEP 4719 update protocol.
 
 The uint8 key index caps the map at 256 entries. This is a conscious trade-off for v1; if it proves limiting, future versions may extend the dictionary or allow inline keys for high-cardinality use cases.
+
+Having read the record, the reader then processes `attrs-data` to resolve each key index against its cached `attribute_key_map`. If it encounters an index it doesn't recognize at that point, it MUST refresh the cached map before continuing.
 
 ### Thread-Local Variable Resolution
 
@@ -106,14 +108,14 @@ We introduce a single thread-local - `otel_thread_ctx_v1`. This is a pointer to 
 
 This is the attached thread record itself. SDK-side implementations may choose to hold multiple instances of this for active spans, and attach/detach them by setting the TLS to point to the appropriate entry. We err on the side of simplicity and support string (utf-8 bytes) attributes only.
 
-The record layout is byte-packed exactly as shown, with no implicit compiler padding between fields.
+The record layout is byte-packed exactly as shown, with no implicit compiler padding between fields. Multi-byte fields are in native machine (host) endianness.
 
 | Name            |            | Data type                          | Notes                                                                                                                                                    |
 | :-------------- | :--------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | trace-id        |            | uint8[16]                          | In W3C Trace Context format. Zeroes can be used to indicate none active. If either of trace-id/span-id are set, both must be set.                        |
 | span-id         |            | uint8[8]                           | In W3C Trace Context format.                                                                                                                             |
-| valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set when they read.                           |
-| _reserved       |            | uint8                              | Reserved for future usage. For now should be set to zeroes. (Also means that attrs-data-size will be aligned)                                            |
+| valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set  when they read.                          |
+| trace-flags     |            | uint8                              | W3C Trace Context trace-flags byte associated with trace-id/span-id above, including the sampled and random-trace-id bits. Zero if trace-id/span-id are unset. Also serves to align attrs-data-size at a two byte boundary.                          |
 | attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer. The total record is recommended to stay at or under 640 bytes. |
 | attrs-data      |            | uint8[]                            | A byte buffer containing the attributes themselves. Its total length is given by `attrs-data-size`.                                                      |
 |                 | [x].key    | uint8 (*See below for alternative) | Index into the key table. Readers MUST ignore entries whose key index is outside `threadlocal.attribute_key_map`.                                        |
@@ -151,8 +153,8 @@ At process startup, the SDK:
 When a request context is attached to a thread, the SDK:
 
 1. Obtains a contiguous buffer large enough to store the anticipated record size
-2. Constructs a new **Thread-Local Context Record** within the buffer containing:
-   - Trace context (trace ID, span ID)
+2. Constructs a new **Thread-Local Context Record**  within the buffer containing:
+   - Trace context (trace ID, span ID, trace flags)
    - Any configured attributes, encoded per the record format
 3. Sets the `valid` field to indicate the record is complete
 4. Updates the TLS pointer to reference the new record
