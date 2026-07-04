@@ -110,7 +110,7 @@ Metrics are different. They are pre-aggregated and exported periodically, so the
 
 ### Declarative configuration
 
-Because the component is specified, it can be referenced from OpenTelemetry's declarative (file-based) configuration like any other spec-defined component: the user names it and supplies its settings (for example `provider_name`), as in the example above. One structural difference from the common case, for logs and spans, is that this processor does not embed a separate exporter; it performs the export itself as part of processing. Accommodating a processor that is also the terminal sink is concrete schema work (new schema entries, plugin-provider behavior, and validation rules), not a new concept. The exact schema shape is to be finalized in the specification.
+Because the component is specified, it can be referenced from OpenTelemetry's declarative (file-based) configuration like any other spec-defined component: a user references it by name and supplies its settings (for example `provider_name`), as in the example above. One structural difference from the common case, for logs and spans, is that this processor does not embed a separate exporter; it performs the export itself as part of processing. Accommodating a processor that is also the terminal sink is concrete schema work (new schema entries, plugin-provider behavior, and validation rules), not a new concept. The exact schema shape is to be finalized in the specification.
 
 ### Consumers
 
@@ -126,7 +126,7 @@ The disabled path is cheap because the OS-native log processor implements the Op
 
 The three signals are not encoded the same way, because the right encoding depends on what consumers do with the data.
 
-Logs and spans are written in the facility's own event format (ETW TraceLogging fields; EventHeader/tracefs fields for `user_events`), not OTLP bytes or an opaque blob, one event per log or per span end. Native encoding is what lets standard OS tools (`perf`, `logman`, PerfView) and pipeline receivers act on events without OpenTelemetry-specific decoding, and it is what makes them triggerable: a consumer (or the facility itself, or an eBPF program) can react to event *content*, for example "when an event named `FOO` arrives, capture a process dump", without first decoding the payload.
+Logs and spans are written in the facility's own event format (ETW TraceLogging fields; EventHeader/`tracefs` fields for `user_events`), not OTLP bytes or an opaque blob, one event per log or per span end. Native encoding is what lets standard OS tools (`perf`, `logman`, PerfView) and pipeline receivers act on events without OpenTelemetry-specific decoding, and it is what makes them triggerable: a consumer (or the facility itself, or an eBPF program) can react to event *content*, for example "when an event named `FOO` arrives, capture a process dump", without first decoding the payload.
 
 This OTEP proposes that there be a defined mapping from the OpenTelemetry log and span data model onto each facility's native fields, covering at a high level: event identity, body, severity number and text (logs), span fields (name, kind, status, start and end time, span/trace/parent IDs, attributes, events, links), timestamps, trace context, and attributes. The precise per-field encoding for each facility is to be finalized in the specification.
 
@@ -150,8 +150,8 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 - Privilege asymmetry. On both ETW and `user_events`, *emitting* events requires minimal privilege (almost any process can write), while *subscribing* to them requires elevated privilege. Enabling collection is therefore an inherently privileged, deliberate act performed from outside the producing process. This is a reasonable default posture: an unprivileged application cannot cause its own telemetry to be collected, and turning collection on is gated by OS permissions.
 - Local readability. Once a privileged consumer subscribes, the events are readable by that consumer, and potentially by any other sufficiently privileged process on the same host, including standard OS tools. Telemetry exported this way inherits the access-control model of the underlying OS facility. Any sensitive data (PII, secrets) present in telemetry is exposed to local tracing consumers under that model, exactly as it would be for any other use of these facilities. This is a property operators must account for when deciding what to emit.
-- Multi-tenant and container visibility. In shared environments, a consumer running on the host may be able to observe events from multiple co-located workloads (for example several pods on a node). Whether that is acceptable, and how to scope or isolate it, depends on the deployment and is primarily a consumer-side concern, governed by who is permitted to run a subscribing session. As this OTEP covers only the producer side, it does not attempt to solve consumer-side isolation; it notes the consideration so that consumer designs and deployment guidance can address it.
-- Practical guidance. Treat any emitted payload as readable by local administrators, tracing-privileged users, and host or node-level agents, potentially across containers or pods on the same node. Do not emit secrets, and apply the same redaction and attribute policies used for any telemetry, while assuming a host-local privileged reader can see past application-level intent. The specific controls differ by platform: on Windows, collection is governed by ETW session permissions and administrative or trace privileges; on Linux, it depends on the kernel version and on tracefs and perf permissions and capabilities as configured by the distribution. Container isolation of these facilities is not guaranteed by this OTEP.
+- Multi-tenant and container visibility. In shared environments, a consumer running on the host may be able to observe events from multiple workloads sharing a node (for example several pods on one node). Whether that is acceptable, and how to scope or isolate it, depends on the deployment and is primarily a consumer-side concern, governed by who is permitted to run a subscribing session. As this OTEP covers only the producer side, it does not attempt to solve consumer-side isolation; it notes the consideration so that consumer designs and deployment guidance can address it.
+- Practical guidance. Treat any emitted payload as readable by local administrators, tracing-privileged users, and host or node-level agents, potentially across containers or pods on the same node. Do not emit secrets, and apply the same redaction and attribute policies used for any telemetry, while assuming a host-local privileged reader can see past application-level intent. The specific controls differ by platform: on Windows, collection is governed by ETW session permissions and administrative or trace privileges; on Linux, it depends on the kernel version and on `tracefs` and perf permissions and capabilities as configured by the distribution. Container isolation of these facilities is not guaranteed by this OTEP.
 
 ## Prior art
 
@@ -174,7 +174,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
   There is no backpressure to the application. The kernel drops the event and increments its own lost-event counter for the session; the producer is never stalled. This proposal should surface that counter as an OpenTelemetry semantic-convention metric so operators can detect and quantify loss.
 
-- Why not send OTLP over a local transport such as a Unix domain socket, named pipe, or shared memory?
+- Why not send OTLP over a local transport such as a UNIX domain socket, named pipe, or shared memory?
 
   That can make the local hop cheaper, and it is a reasonable option on its own. It still delivers to a single listening endpoint, though, so it provides none of the out-of-band, consumer-controlled enablement, readability by standard OS tools, multi-consumer fan-out, kernel-backed durability, or content-based triggering that motivate this proposal. Those properties come from the OS facility, not merely from staying on-host.
 
@@ -233,7 +233,7 @@ ETW is the built-in, high-performance tracing facility of the Windows operating 
 
 Linux tracepoints have existed for well over a decade (since kernel 2.6.x, 2008), providing low-overhead static instrumentation points in kernel code, observable via ftrace and `perf`. Historically only kernel code could define and emit tracepoints.
 
-`user_events` is the newer facility that lets user-mode applications register and write to this same tracepoint/tracefs infrastructure, so user-space events are observable with the standard kernel tooling. It became generally available in Linux 6.4 (2023) and should be treated as requiring kernel 6.4+ in practice.
+`user_events` is the newer facility that lets user-mode applications register and write to this same tracepoint/`tracefs` infrastructure, so user-space events are observable with the standard kernel tooling. It became generally available in Linux 6.4 (2023) and should be treated as requiring kernel 6.4+ in practice.
 
 References:
 
