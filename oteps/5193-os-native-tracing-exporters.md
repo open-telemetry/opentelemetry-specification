@@ -92,10 +92,6 @@ Once configured (illustrated with logs):
 
 The common topology is: application -> OS-native tracing facility -> local consumer -> existing pipeline (OTLP, etc.) -> backend.
 
-#### Same-host constraint
-
-The one structural difference from OTLP is listener reachability. OTLP can deliver to a local, remote, or managed backend across the network, whereas OS-native export writes to an on-host facility, so a *collecting* consumer must run on the same node. With no local listener, nothing is collected. Because the facility is also readable by standard OS tools, an operator can additionally attach directly on demand (`perf`, `logman`, PerfView) to inspect a live process with no collector involved at all.
-
 #### Example: SDK self-logs
 
 The capability applies to ordinary application telemetry; nothing about it is specific to any particular source. As one illustration, consider the SDK's own internal logs, where the same mechanism applies unchanged with the SDK as just another producer. SDK internal logs are the classic case of telemetry that is usually noise in steady state but valuable when investigating a problem, and awkward to expose through the normal pipeline (feedback loops, steady-state overhead). Exporting them to an OS-native facility fits well: free while unobserved, and an operator can attach a tool on demand to read them from a live process, with no redeploy. A real example already exists. The OpenTelemetry .NET SDK emits its internal logs through .NET `EventSource` (`OpenTelemetry-Sdk`, ETW-backed on Windows), viewable with PerfView or `dotnet-trace`, as documented in its [troubleshooting guide](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/README.md#troubleshooting).
@@ -155,7 +151,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 ## Trade-offs and mitigations
 
-- Requires a same-host collecting consumer. A listener must run on the same node, or nothing is collected. This is inherent to writing to an on-host facility; it is by design and not mitigated (see [Same-host constraint](#same-host-constraint)).
+- Requires a same-host collecting consumer. OTLP can deliver to a local, remote, or managed backend across the network, whereas OS-native export writes to an on-host facility, so a collecting consumer must run on the same node; with no local listener, nothing is collected. This is inherent to writing to an on-host facility; it is by design and not mitigated.
 - Linux requires kernel 6.4 or newer for `user_events`. There is no mitigation; deployments on older kernels cannot use the Linux path. (ETW has no equivalent version floor.) Even on a 6.4+ kernel, `user_events` needs `tracefs` access, which containerized and managed environments often do not expose, so the Linux path may be unavailable there regardless of kernel version, unless the operator chooses to expose `tracefs` to the workload.
 - On Linux, `user_events` enablement is reference-counted, so recording pauses if all consumers detach (for example during a consumer restart) and resumes on reattach; events emitted in between are not recorded and are not reflected in loss counters. Overlapping consumers during upgrades avoid the pause; ETW sessions persist independently of the consumer and are unaffected (see ["What the model provides"](#what-the-model-provides)).
 - Per-event size cap (about 64 KB on ETW; `user_events` events are similarly bounded by the kernel's buffer configuration). Individual events rarely approach this in practice. The common exception is a long exception stack trace; where the log is emitted at the throw or catch site, the synchronous model lets a listener capture the emitting thread's live stack out of band instead of embedding it in the payload. This does not help when the stack trace belongs to an exception originating elsewhere, so it is a partial mitigation, not a general one.
