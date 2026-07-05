@@ -167,6 +167,10 @@ Alternatives considered:
 
 ## Frequently asked questions
 
+- OpenTelemetry is consolidating on OTLP and retiring Jaeger and Zipkin. Why add new exporters?
+
+  Jaeger and Zipkin are being retired because they are alternative *network wire protocols* for the job OTLP already does: carrying telemetry across the network to a backend. Maintaining parallel protocols for the same job is redundant. OS-native export is not another network protocol competing with OTLP; it is a different *transport* with properties OTLP does not offer: out-of-band, consumer-controlled enablement, near-zero cost when nobody is listening, kernel-backed durability, readability by standard OS tools, and content-based triggering. It is also where telemetry already lives on a host: the kernel, drivers, and system services all emit into these facilities, and there is no way to ask them to send OTLP to a collector instead. OTLP remains the portable default and the usual downstream path (a local consumer typically forwards over OTLP); this complements it rather than competing with it.
+
 - Exporters for these facilities already exist in contrib. Why standardize in the spec?
 
   Today's contrib exporters (Rust, .NET, C++) each encode with Microsoft Common Schema, so producers and consumers only interoperate if built against the same encoding. The spec defines one vendor-neutral OpenTelemetry mapping, so any conforming producer and consumer work together across languages and vendors.
