@@ -120,7 +120,7 @@ The consumer side is out of scope here (see [Scope](#scope)); building consumers
 
 ### The disabled fast path for Logs
 
-The disabled path is cheap because the OS-native log processor implements the OpenTelemetry logs `Enabled()` check, answering it from the facility's live enablement state, so when no consumer is subscribed the `LogRecord` is never constructed. OpenTelemetry Rust contrib benchmarks measure roughly 1-2 ns for a disabled log on this path; absolute numbers vary by language and implementation. This applies to logs today; spans and metrics have no standardized `Enabled()`-style gate yet (see ["What the model provides"](#what-the-model-provides)). When other processors share the pipeline, skipping record construction at the API level depends on pipeline composition (routing a log to a single processor, or a routing processor whose `Enabled()` consults the OS-native side), a prototyping detail rather than part of this proposal.
+The disabled path is cheap because the OS-native log processor implements the OpenTelemetry logs `Enabled()` check, answering it from the facility's live enablement state, so when no consumer is subscribed the `LogRecord` is never constructed. OpenTelemetry Rust contrib benchmarks measure roughly 1-2 ns for a disabled log on this path; absolute numbers vary by language and implementation. This applies to logs today; spans and metrics have no standardized `Enabled()`-style gate yet (see ["What the model provides"](#what-the-model-provides)). When other processors share the pipeline, skipping record construction at the API level depends on pipeline composition (routing a log to a single processor, or a routing processor whose `Enabled()` consults the OS-native side), an implementation detail rather than part of this proposal.
 
 ### Per-signal handling and encoding
 
@@ -152,6 +152,13 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 - Local readability. Once a privileged consumer subscribes, the events are readable by that consumer, and potentially by any other sufficiently privileged process on the same host, including standard OS tools. Telemetry exported this way inherits the access-control model of the underlying OS facility. Any sensitive data (PII, secrets) present in telemetry is exposed to local tracing consumers under that model, exactly as it would be for any other use of these facilities. This is a property operators must account for when deciding what to emit.
 - Multi-tenant and container visibility. In shared environments, a consumer running on the host may be able to observe events from multiple workloads sharing a node (for example several pods on one node). Whether that is acceptable, and how to scope or isolate it, depends on the deployment and is primarily a consumer-side concern, governed by who is permitted to run a subscribing session. As this OTEP covers only the producer side, it does not attempt to solve consumer-side isolation; it notes the consideration so that consumer designs and deployment guidance can address it.
 - Practical guidance. Treat any emitted payload as readable by local administrators, tracing-privileged users, and host or node-level agents, potentially across containers or pods on the same node. Do not emit secrets, and apply the same redaction and attribute policies used for any telemetry, while assuming a host-local privileged reader can see past application-level intent. The specific controls differ by platform: on Windows, collection is governed by ETW session permissions and administrative or trace privileges; on Linux, it depends on the kernel version and on `tracefs` and perf permissions and capabilities as configured by the distribution. Container isolation of these facilities is not guaranteed by this OTEP.
+
+## Trade-offs and mitigations
+
+- Requires a same-host collecting consumer. A listener must run on the same node, or nothing is collected. This is inherent to writing to an on-host facility; it is by design and not mitigated (see [Same-host constraint](#same-host-constraint)).
+- Linux requires kernel 6.4 or newer for `user_events`. There is no mitigation; deployments on older kernels cannot use the Linux path. (ETW has no equivalent version floor.) Even on a 6.4+ kernel, `user_events` needs `tracefs` access, which containerized and managed environments often do not expose, so the Linux path may be unavailable there regardless of kernel version, unless the operator chooses to expose `tracefs` to the workload.
+- Per-event size cap (about 64 KB). Individual events rarely approach this in practice. The common exception is a long exception stack trace; where the log is emitted at the throw or catch site, the synchronous model lets a listener capture the emitting thread's live stack out of band instead of embedding it in the payload. This does not help when the stack trace belongs to an exception originating elsewhere, so it is a partial mitigation, not a general one.
+- Per-event `Resource` and `InstrumentationScope`, where OTLP carries them once per batch (see [Resource and instrumentation scope](#resource-and-instrumentation-scope)). Much of `Resource` can be filled in by the local consumer rather than emitted per event. `InstrumentationScope` is known only to the producer and must be carried on each event, which duplicates it across events; there is no established way to avoid this today, and reducing it is left to the specification phase.
 
 ## Prior art and alternatives
 
@@ -197,7 +204,6 @@ These are expected to be resolved during the specification phase, not in this OT
 - The declarative-configuration schema for a processor that is also the terminal sink.
 - Ordering and correlation across independent, per-CPU events.
 - Stable, collision-resistant provider and event naming.
-- Handling oversized events. A single event is capped (about 64 KB on ETW), so large payloads such as long exception stack traces may need truncation or splitting, and no clean general split algorithm exists; the spec must define the behavior.
 
 ## Prototypes
 
@@ -225,7 +231,7 @@ This is the property the OTEP borrows. Instrumentation can be dense and pervasiv
 
 ### Event Tracing for Windows (ETW)
 
-ETW is the built-in, high-performance tracing facility of the Windows operating system, present since Windows 2000 and central to Windows diagnostics for roughly two decades. Providers register and emit events; sessions (started by tools such as `logman`, or analyzed with PerfView) subscribe out of band; and events cost effectively nothing when no session is enabled.
+ETW is the built-in, high-performance tracing facility of the Windows operating system, present since Windows 2000 and central to Windows diagnostics for over two decades. Providers register and emit events; sessions (started by tools such as `logman`, or analyzed with PerfView) subscribe out of band; and events cost effectively nothing when no session is enabled.
 
 - ETW overview: <https://learn.microsoft.com/windows/win32/etw/event-tracing-portal>
 - TraceLogging (the self-describing event schema used by the dynamic-provider model): <https://learn.microsoft.com/windows/win32/tracelogging/trace-logging-portal>
