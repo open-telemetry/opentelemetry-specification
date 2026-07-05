@@ -23,7 +23,7 @@ Bringing these facilities into OpenTelemetry takes a set of techniques long prov
 
 Concretely, this OTEP proposes that OpenTelemetry:
 
-1. Define OS-native tracing exporters (ETW and `user_events`), together with the mapping from the OpenTelemetry data model (logs, spans, and metrics) onto each facility's native event model. This follows the precedent of spec-defined exporters such as Zipkin (and formerly Jaeger), each paired with a defined data-model mapping. The mapping is largely common across the two facilities, with some differences that are inherent to ETW and `user_events`, and it is the interoperability contract that any consumer decodes against.
+1. Define OS-native tracing exporters (ETW and `user_events`), together with the mapping from the OpenTelemetry data model (logs, spans, and metrics) onto each facility's native event model. This mirrors how OpenTelemetry has previously specified exporters, such as Zipkin (and formerly Jaeger), each paired with a defined data-model mapping. The mapping is largely common across the two facilities, with some differences that are inherent to ETW and `user_events`, and it is the interoperability contract that any consumer decodes against.
 2. Specify the SDK pipeline component that emits these events and the emission semantics it must guarantee (synchronous, per-emit), so producer behavior and configuration are uniform across languages.
 3. Keep the capability OPTIONAL per language SDK and additive, changing nothing about OTLP, the data model, or existing exporters.
 
@@ -114,13 +114,13 @@ Because the component is specified, it can be referenced from OpenTelemetry's de
 
 ### Consumers
 
-The consumer side is out of scope here (see [Scope](#scope)). A consumer must be same-host, and building one is left to its implementers; the OpenTelemetry Collector, for instance, is free to add a receiver for these facilities or not, at the Collector SIG's discretion.
+The consumer side is out of scope here (see [Scope](#scope)); building consumers for these facilities is left to their implementers.
 
 ## Internal details
 
 ### The disabled fast path for Logs
 
-The disabled path is cheap because the OS-native log processor implements the OpenTelemetry logs `Enabled()` check, answering it from the facility's live enablement state, so when no consumer is subscribed the `LogRecord` is never constructed. OpenTelemetry Rust contrib benchmarks measure roughly 1-2 ns for a disabled log on this path; absolute numbers vary by language and implementation. This applies to logs today; spans and metrics have no standardized `Enabled()`-style gate yet (see ["What the model provides"](#what-the-model-provides)).
+The disabled path is cheap because the OS-native log processor implements the OpenTelemetry logs `Enabled()` check, answering it from the facility's live enablement state, so when no consumer is subscribed the `LogRecord` is never constructed. OpenTelemetry Rust contrib benchmarks measure roughly 1-2 ns for a disabled log on this path; absolute numbers vary by language and implementation. This applies to logs today; spans and metrics have no standardized `Enabled()`-style gate yet (see ["What the model provides"](#what-the-model-provides)). When other processors share the pipeline, skipping record construction at the API level depends on pipeline composition (routing a log to a single processor, or a routing processor whose `Enabled()` consults the OS-native side), a prototyping detail rather than part of this proposal.
 
 ### Per-signal handling and encoding
 
@@ -153,12 +153,17 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 - Multi-tenant and container visibility. In shared environments, a consumer running on the host may be able to observe events from multiple workloads sharing a node (for example several pods on one node). Whether that is acceptable, and how to scope or isolate it, depends on the deployment and is primarily a consumer-side concern, governed by who is permitted to run a subscribing session. As this OTEP covers only the producer side, it does not attempt to solve consumer-side isolation; it notes the consideration so that consumer designs and deployment guidance can address it.
 - Practical guidance. Treat any emitted payload as readable by local administrators, tracing-privileged users, and host or node-level agents, potentially across containers or pods on the same node. Do not emit secrets, and apply the same redaction and attribute policies used for any telemetry, while assuming a host-local privileged reader can see past application-level intent. The specific controls differ by platform: on Windows, collection is governed by ETW session permissions and administrative or trace privileges; on Linux, it depends on the kernel version and on `tracefs` and perf permissions and capabilities as configured by the distribution. Container isolation of these facilities is not guaranteed by this OTEP.
 
-## Prior art
+## Prior art and alternatives
 
 - ETW and `user_events` exporters already exist in OpenTelemetry contrib for three languages (Rust, .NET, C++); for example, Rust `opentelemetry-etw-logs` and `opentelemetry-user-events-logs`. They encode payloads using Microsoft Common Schema; this proposal instead defines an OpenTelemetry-standard encoding, but the existing exporters are proven prior art for the mechanism and its feasibility. The standard encoding is additive; existing encoders can continue to exist and nothing here forces a migration.
 - On the consumer side, the OpenTelemetry Arrow `df_engine` (`otap-dataflow`) `etw_receiver` and `user_events_receiver` already read these facilities and produce OpenTelemetry data.
 - The OpenTelemetry .NET SDK already exposes its own internal logs over ETW via `EventSource` (`OpenTelemetry-Sdk`), demonstrating the "free until observed" self-diagnostics pattern (see [Troubleshooting](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/README.md#troubleshooting)).
 - The approach was presented in the talk ["Beyond OTLP: Unlocking the Potential of OS-native Tracing"](https://youtu.be/Ej-z2WwWWak) (Cijo Thomas and Chris Gray, OpenTelemetry Community Day 2025, Denver).
+
+Alternatives considered:
+
+- OTLP over a local IPC transport (UNIX domain socket, named pipe, or shared memory). This can make the local hop cheaper and is a reasonable option on its own, but it still delivers to a single listening endpoint, so it provides none of the out-of-band, consumer-controlled enablement, readability by standard OS tools, multi-consumer fan-out, kernel-backed durability, or content-based triggering that motivate this proposal. Those properties come from the OS facility, not merely from staying on-host.
+- Writing OTLP to a file or stdout and shipping it externally. Same reason: it provides neither out-of-band, near-zero-cost enablement nor kernel-backed durability, and the producer pays full cost regardless of whether anyone reads.
 
 ## Frequently asked questions
 
@@ -172,15 +177,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 - What happens when the buffer is full?
 
-  There is no backpressure to the application. The kernel drops the event and increments its own lost-event counter for the session; the producer is never stalled. This proposal should surface that counter as an OpenTelemetry semantic-convention metric so operators can detect and quantify loss.
-
-- Why not send OTLP over a local transport such as a UNIX domain socket, named pipe, or shared memory?
-
-  That can make the local hop cheaper, and it is a reasonable option on its own. It still delivers to a single listening endpoint, though, so it provides none of the out-of-band, consumer-controlled enablement, readability by standard OS tools, multi-consumer fan-out, kernel-backed durability, or content-based triggering that motivate this proposal. Those properties come from the OS facility, not merely from staying on-host.
-
-- Why not just write OTLP to a file or stdout and ship it externally?
-
-  Same reason: it provides neither out-of-band, near-zero-cost enablement nor kernel-backed durability, and the producer pays full cost regardless of whether anyone reads.
+  There is no backpressure to the application. The kernel drops the event and increments its own lost-event counter for the session; the producer is never stalled. Reading and reporting that counter is a consumer-side concern, out of scope here.
 
 - OpenTelemetry already has eBPF-based projects. How does this relate?
 
@@ -202,9 +199,9 @@ These are expected to be resolved during the specification phase, not in this OT
 
 Feasibility is already demonstrated across producers, consumers, and the mapping itself:
 
-- Producers: the Rust, .NET, and C++ contrib exporters for ETW and `user_events` listed under [Prior art](#prior-art).
-- Consumers: the `df_engine` `etw_receiver` and `user_events_receiver` in the `otap-dataflow` project.
-- Mapping: the ETW-to-logs field mapping already merged into the logs data-model appendix.
+- Producers: the Rust, .NET, and C++ contrib exporters for ETW and `user_events` listed under [Prior art and alternatives](#prior-art-and-alternatives). The Rust crates are [`opentelemetry-etw-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-etw-logs) and [`opentelemetry-user-events-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-user-events-logs).
+- Consumers: the [`etw_receiver`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/etw_receiver) and [`user_events_receiver`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/user_events_receiver) in the [`otap-dataflow`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow) project.
+- Mapping: the [ETW-to-logs field mapping](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model-appendix.md#etw-event-tracing-for-windows) already merged into the logs data-model appendix.
 
 ## Future possibilities
 
