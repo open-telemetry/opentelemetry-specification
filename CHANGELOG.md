@@ -45,6 +45,9 @@ release.
 
 ### OTEPs
 
+- Add OTEP for exporting OpenTelemetry to OS-native tracing facilities (ETW and `user_events`).
+  ([#5193](https://github.com/open-telemetry/opentelemetry-specification/pull/5193))
+
 ## v1.58.0 (2025-06-22)
 
 ### Context
