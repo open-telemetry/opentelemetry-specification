@@ -1,19 +1,23 @@
-# Exporting OpenTelemetry to OS-native tracing facilities (ETW and `user_events`)
+# Exporting OpenTelemetry to OS-native tracing facilities (Linux `user_events` and Windows ETW)
 
-Recognize emitting telemetry to OS-native tracing facilities, [Event Tracing for Windows (ETW)](https://learn.microsoft.com/windows/win32/etw/event-tracing-portal) on Windows and [`user_events`](https://docs.kernel.org/trace/user_events.html) on Linux, as a supported OpenTelemetry export path, and define how the OpenTelemetry data model (logs, spans, and metrics) maps onto them.
+Recognize emitting telemetry to OS-native tracing facilities, [`user_events`](https://docs.kernel.org/trace/user_events.html) on Linux and [Event Tracing for Windows (ETW)](https://learn.microsoft.com/windows/win32/etw/event-tracing-portal) on Windows, as a supported OpenTelemetry export path, and define how the OpenTelemetry data model (logs, spans, and metrics) maps onto them.
 
 ## Motivation
 
+Telemetry volume, and its cost, is one of the most widely felt concerns across the OpenTelemetry community. That cost is not fundamental to *having* instrumentation; it is a consequence of *always emitting* it. A single ordinary machine already contains hundreds of thousands of trace points across its kernel, drivers, and system services, capable of producing millions of events per second — yet nobody worries about what they cost, because they emit nothing until a consumer explicitly subscribes. Collection is decided by the consumer, at runtime, only when the data is actually wanted. This OTEP brings the capabilities that allow OpenTelemetry to follow that same model, for users who choose to.
+
 OpenTelemetry's exporting model today assumes telemetry leaves the process by being sent to an endpoint: OTLP to a collector or a backend, or a pull-based scrape such as Prometheus. Both deliver telemetry across the network to a listening endpoint. This has served the project well.
 
-Getting telemetry out of a process is not unique to OpenTelemetry. Operating systems have offered facilities for it for a long time, built around a different model: ETW on Windows, and kernel tracepoints and the newer `user_events` interface on Linux. These facilities are mature, ubiquitous, and relied upon every day by kernel components, device drivers, and core operating-system services. They are a natural destination for application telemetry too, and one that OpenTelemetry does not yet take advantage of.
+Getting telemetry out of a process is not unique to OpenTelemetry. Operating systems have offered facilities for it for a long time, built around a different model: kernel tracepoints and the newer `user_events` interface on Linux, added to the mainline kernel precisely to give user-space applications this same capability, and ETW on Windows. These facilities are mature, ubiquitous, and relied upon every day by kernel components, device drivers, and core operating-system services. They are a natural destination for application telemetry too, and one that OpenTelemetry does not yet take advantage of.
 
 Two properties make them compelling as a telemetry destination:
 
-1. Exporting an event is extremely fast: a synchronous, in-memory write to a kernel-backed, per-CPU buffer. There is no network client and no in-process batching. Because the buffers are per-CPU, concurrent emitters do not contend with each other, so throughput scales with CPU count.
+1. Exporting an event is extremely fast: a synchronous, in-memory write to a kernel-backed, per-CPU buffer. There is no network client and no in-process batching. Because the buffers are per-CPU, concurrent emitters do not contend with each other, so throughput scales with CPU count. And when no consumer has enabled collection, emission cost is measured in nanoseconds: OpenTelemetry Rust contrib benchmarks measure roughly 1–2 ns for a disabled log, cheap enough to leave dense instrumentation compiled in and always ready.
 2. Enablement is controlled out of band by the consumer. A tracing session started from outside the process decides at runtime whether a producer's telemetry is collected, with no change to and no redeploy of the running application. When nobody is listening, emission costs almost nothing.
 
 Together these change the economics of instrumentation. Dense instrumentation and low telemetry cost stop being in tension. OpenTelemetry has made it easy to instrument applications richly; this model lets that richness be paid for only when the data is actually being collected. The appendix, ["Instrumentation density vs. telemetry cost"](#perspective-instrumentation-density-vs-telemetry-cost), develops this point.
+
+Beyond cost, these facilities place OpenTelemetry data inside the host's existing tracing ecosystem. An OpenTelemetry event written to `user_events` or ETW lands in the same stream as kernel, driver, and runtime events — captured in the same session, on the same clock — so an application's logs and spans can be analyzed side by side with a scheduler trace or a disk-latency event, using tools that have existed for decades (`perf`, PerfView, `logman`) and require no OpenTelemetry pipeline. The interoperability contract cuts the other way too: the vast ecosystem of consumers already built around these facilities gains a defined way to read OpenTelemetry data. This is a capability OTLP structurally cannot offer, because the kernel and drivers cannot be asked to send OTLP to a collector.
 
 These properties are complementary to OpenTelemetry's existing exporters rather than a replacement for them. OTLP remains the portable default for delivering telemetry across the network. What is missing is a recognized way for an OpenTelemetry SDK to *also* emit into an OS-native tracing facility when the properties above are wanted, and a defined contract for how the data model maps onto those facilities so that the events are interoperable.
 
@@ -23,9 +27,11 @@ Bringing these facilities into OpenTelemetry takes a set of techniques long prov
 
 Concretely, this OTEP proposes that OpenTelemetry:
 
-1. Define OS-native tracing exporters (ETW and `user_events`), together with the mapping from the OpenTelemetry data model (logs, spans, and metrics) onto each facility's native event model. This mirrors how OpenTelemetry has previously specified exporters, such as Zipkin (and formerly Jaeger), each paired with a defined data-model mapping. The mapping is largely common across the two facilities, with some differences that are inherent to ETW and `user_events`, and it is the interoperability contract that any consumer decodes against.
+1. Define OS-native tracing exporters (`user_events` and ETW), together with the mapping from the OpenTelemetry data model (logs, spans, and metrics) onto each facility's native event model. This mirrors how OpenTelemetry has previously specified exporters, such as Zipkin (and formerly Jaeger), each paired with a defined data-model mapping. The mapping is largely common across the two facilities, with some differences that are inherent to `user_events` and ETW, and it is the interoperability contract that any consumer decodes against.
 2. Specify the SDK pipeline component that emits these events and the emission semantics it must guarantee (synchronous, per-emit), so producer behavior and configuration are uniform across languages.
 3. Keep the capability OPTIONAL per language SDK and additive, changing nothing about OTLP, the data model, or existing exporters.
+
+The primary artifact here is the mapping: it is what makes producers and consumers interoperable across languages and vendors. Three contrib implementations (Rust, .NET, C++) already interoperate today by sharing a mapping — but a vendor's (Microsoft Common Schema), not one OpenTelemetry defines. This OTEP proposes OpenTelemetry own that contract.
 
 The precise per-field encodings, naming rules, and configuration schema are left to the specification phase. The normative work is expected to proceed signal by signal, beginning with logs, where the enablement gate and the prior art are strongest, then spans, then metrics. This OTEP asks the community to agree that this is a direction worth specifying, and establishes the shape of that specification.
 
@@ -37,7 +43,7 @@ This OTEP's scope is the producer (SDK) side: the exporter that writes telemetry
 
 Once the mapping is established, the reading side follows from it and is out of scope here. Any consumer (native OS tools, the OpenTelemetry Collector, the [OpenTelemetry Arrow `df_engine`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow), or a vendor's own agent) can decode the events by following the same contract. How those consumers are built and deployed is governed outside this specification.
 
-A few boundaries are worth stating explicitly. This OTEP focuses on ETW and `user_events` because they are mature and already have prior art; the same pattern can extend to other operating systems' facilities (for example macOS `os_log` and `os_signpost`, or DTrace) in later work, and those are out of scope here. It covers the logs, spans, and metrics signals; profiles are out of scope for now. It requires no changes to the OpenTelemetry API and introduces no new semantic conventions for telemetry content: it defines an on-host transport and an encoding of the existing data model, selected per signal through existing SDK extension points and declarative configuration.
+A few boundaries are worth stating explicitly. This OTEP focuses on Linux `user_events` and Windows ETW because they are mature and already have prior art; the same pattern can extend to other operating systems' facilities (for example macOS `os_log` and `os_signpost`, or DTrace) in later work, and those are out of scope here. It covers the logs, spans, and metrics signals; profiles are out of scope for now. It requires no changes to the OpenTelemetry API and introduces no new semantic conventions for telemetry content: it defines an on-host transport and an encoding of the existing data model, selected per signal through existing SDK extension points and declarative configuration.
 
 ## Explanation
 
@@ -94,7 +100,7 @@ The common topology is: application -> OS-native tracing facility -> local consu
 
 #### Example: SDK self-logs
 
-The capability applies to ordinary application telemetry; nothing about it is specific to any particular source. As one illustration, consider the SDK's own internal logs, where the same mechanism applies unchanged with the SDK as just another producer. SDK internal logs are the classic case of telemetry that is usually noise in steady state but valuable when investigating a problem, and awkward to expose through the normal pipeline (feedback loops, steady-state overhead). Exporting them to an OS-native facility fits well: free while unobserved, and an operator can attach a tool on demand to read them from a live process, with no redeploy. A real example already exists. The OpenTelemetry .NET SDK emits its internal logs through .NET `EventSource` (`OpenTelemetry-Sdk`, ETW-backed on Windows), viewable with PerfView or `dotnet-trace`, as documented in its [troubleshooting guide](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/README.md#troubleshooting).
+The capability applies to ordinary application telemetry; nothing about it is specific to any particular source. As one illustration, consider the SDK's own internal logs, where the same mechanism applies unchanged with the SDK as just another producer. SDK internal logs are the classic case of telemetry that is usually noise in steady state but valuable when investigating a problem, and awkward to expose through the normal pipeline (feedback loops, steady-state overhead). Exporting them to an OS-native facility fits well: free while unobserved, and an operator can attach a tool on demand to read them from a live process, with no redeploy. A real example already exists. The OpenTelemetry .NET SDK emits its internal logs through .NET `EventSource` (`OpenTelemetry-Sdk`, ETW-backed on Windows), viewable with PerfView or `dotnet-trace`, as documented in its [troubleshooting guide](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/README.md#troubleshooting). Exposing OpenTelemetry's own internals this way also aligns with the community's broader push to make self-observability a core engineering value ([open-telemetry/community#3544](https://github.com/open-telemetry/community/pull/3544)).
 
 ### Pipeline modeling: a processor
 
@@ -122,7 +128,7 @@ The disabled path is cheap because the OS-native log processor implements the Op
 
 The three signals are not encoded the same way, because the right encoding depends on what consumers do with the data.
 
-Logs and spans are written in the facility's own event format (ETW TraceLogging fields; EventHeader/`tracefs` fields for `user_events`), not OTLP bytes or an opaque blob, one event per log or per span end. Native encoding is what lets standard OS tools (`perf`, `logman`, PerfView) and pipeline receivers act on events without OpenTelemetry-specific decoding, and it is what makes them triggerable: a consumer (or the facility itself, or an eBPF program) can react to event *content*, for example "when an event named `FOO` arrives, capture a process dump", without first decoding the payload.
+Logs and spans are written in the facility's own event format (EventHeader/`tracefs` fields for `user_events`; ETW TraceLogging fields), not OTLP bytes or an opaque blob, one event per log or per span end. Native encoding is what lets standard OS tools (`perf`, `logman`, PerfView) and pipeline receivers act on events without OpenTelemetry-specific decoding, and it is what makes them triggerable: a consumer (or the facility itself, or an eBPF program) can react to event *content*, for example "when an event named `FOO` arrives, capture a process dump", without first decoding the payload.
 
 This OTEP proposes that there be a defined mapping from the OpenTelemetry log and span data model onto each facility's native fields, covering at a high level: event identity, body, severity number and text (logs), span fields (name, kind, status, start and end time, span/trace/parent IDs, attributes, events, links), timestamps, trace context, and attributes. The precise per-field encoding for each facility is to be finalized in the specification.
 
@@ -144,7 +150,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 ## Security and trust boundary
 
-- Privilege asymmetry. On both ETW and `user_events`, *emitting* events requires minimal privilege (almost any process can write), while *subscribing* to them requires elevated privilege. Enabling collection is therefore an inherently privileged, deliberate act performed from outside the producing process. This is a reasonable default posture: an unprivileged application cannot cause its own telemetry to be collected, and turning collection on is gated by OS permissions.
+- Privilege asymmetry. On both `user_events` and ETW, *emitting* events requires minimal privilege (almost any process can write), while *subscribing* to them requires elevated privilege. Enabling collection is therefore an inherently privileged, deliberate act performed from outside the producing process. This is a reasonable default posture: an unprivileged application cannot cause its own telemetry to be collected, and turning collection on is gated by OS permissions.
 - Local readability. Once a privileged consumer subscribes, the events are readable by that consumer, and potentially by any other sufficiently privileged process on the same host, including standard OS tools. Telemetry exported this way inherits the access-control model of the underlying OS facility. Any sensitive data (PII, secrets) present in telemetry is exposed to local tracing consumers under that model, exactly as it would be for any other use of these facilities. This is a property operators must account for when deciding what to emit.
 - Multi-tenant and container visibility. In shared environments, a consumer running on the host may be able to observe events from multiple workloads sharing a node (for example several pods on one node). Whether that is acceptable, and how to scope or isolate it, depends on the deployment and is primarily a consumer-side concern, governed by who is permitted to run a subscribing session. As this OTEP covers only the producer side, it does not attempt to solve consumer-side isolation; it notes the consideration so that consumer designs and deployment guidance can address it.
 - Practical guidance. Treat any emitted payload as readable by local administrators, tracing-privileged users, and host or node-level agents, potentially across containers or pods on the same node. Do not emit secrets, and apply the same redaction and attribute policies used for any telemetry, while assuming a host-local privileged reader can see past application-level intent. The specific controls differ by platform: on Windows, collection is governed by ETW session permissions and administrative or trace privileges; on Linux, it depends on the kernel version and on `tracefs` and perf permissions and capabilities as configured by the distribution. Container isolation of these facilities is not guaranteed by this OTEP.
@@ -160,7 +166,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 ## Prior art and alternatives
 
-- ETW and `user_events` exporters already exist in OpenTelemetry contrib for three languages (Rust, .NET, C++); for example, Rust `opentelemetry-etw-logs` and `opentelemetry-user-events-logs`. They encode payloads using Microsoft Common Schema; this proposal instead defines an OpenTelemetry-standard encoding, but the existing exporters are proven prior art for the mechanism and its feasibility. The standard encoding is additive; existing encoders can continue to exist and nothing here forces a migration.
+- `user_events` and ETW exporters already exist in OpenTelemetry contrib for three languages (Rust, .NET, C++); for example, Rust `opentelemetry-user-events-logs` and `opentelemetry-etw-logs`. They encode payloads using Microsoft Common Schema; this proposal instead defines an OpenTelemetry-standard encoding, but the existing exporters are proven prior art for the mechanism and its feasibility. The standard encoding is additive; existing encoders can continue to exist and nothing here forces a migration.
 - On the consumer side, the OpenTelemetry Arrow `df_engine` (`otap-dataflow`) `etw_receiver` and `user_events_receiver` already read these facilities and produce OpenTelemetry data.
 - The OpenTelemetry .NET SDK already exposes its own internal logs over ETW via `EventSource` (`OpenTelemetry-Sdk`), demonstrating the "free until observed" self-diagnostics pattern (see [Troubleshooting](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/README.md#troubleshooting)).
 - The approach was presented in the talk ["Beyond OTLP: Unlocking the Potential of OS-native Tracing"](https://youtu.be/Ej-z2WwWWak) (Cijo Thomas and Chris Gray, OpenTelemetry Community Day 2025, Denver).
@@ -196,7 +202,7 @@ Alternatives considered:
 
 These are expected to be resolved during the specification phase, not in this OTEP:
 
-- Per-field encoding of the log and span data model onto ETW and `user_events` fields.
+- Per-field encoding of the log and span data model onto `user_events` and ETW fields.
 - Fallback rules for event identity when `LogRecord.EventName` is absent.
 - The producer/consumer split for `Resource`, and how `InstrumentationScope` is carried per event.
 - The declarative-configuration schema for a processor that is also the terminal sink.
@@ -207,7 +213,7 @@ These are expected to be resolved during the specification phase, not in this OT
 
 Feasibility is already demonstrated across producers, consumers, and the mapping itself:
 
-- Producers: the Rust, .NET, and C++ contrib exporters for ETW and `user_events` listed under [Prior art and alternatives](#prior-art-and-alternatives). The Rust crates are [`opentelemetry-etw-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-etw-logs) and [`opentelemetry-user-events-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-user-events-logs).
+- Producers: the Rust, .NET, and C++ contrib exporters for `user_events` and ETW listed under [Prior art and alternatives](#prior-art-and-alternatives). The Rust crates are [`opentelemetry-user-events-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-user-events-logs) and [`opentelemetry-etw-logs`](https://github.com/open-telemetry/opentelemetry-rust-contrib/tree/main/opentelemetry-etw-logs).
 - Consumers: the [`etw_receiver`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/etw_receiver) and [`user_events_receiver`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/user_events_receiver) in the [`otap-dataflow`](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow) project.
 - Mapping: the [ETW-to-logs field mapping](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model-appendix.md#etw-event-tracing-for-windows) already merged into the logs data-model appendix.
 
@@ -217,7 +223,7 @@ Feasibility is already demonstrated across producers, consumers, and the mapping
 2. A built-in SDK capability. Further out, OS-native export could become a core property of the SDK itself on platforms that support it, always present rather than wired up as an opt-in exporter or processor. Because it costs effectively nothing until a consumer subscribes, the SDK could always be ready to emit to the OS facility, so the OpenTelemetry data is simply there whenever an operator needs it, with no configuration and no redeploy.
 3. Raw measurements as triggerable events. If OpenTelemetry introduces a `MeasurementProcessor`-style concept (access to individual measurements before aggregation), those raw measurements could be written to the OS facility like logs and spans, synchronously and in native event format, rather than as aggregated binary metrics. Modeled this way, a measurement becomes a triggerable event: for example, a histogram recording `req_size` could drive a trigger such as "if `req_size` > 3 MB, capture and dump the packet for analysis." This is explicitly out of scope for this OTEP (it depends on a concept that does not yet exist) but motivates keeping the per-signal model open.
 4. Reference blueprint and demo. A reference blueprint for the end-to-end pattern, and inclusion in the OpenTelemetry Demo so the model can be exercised and evaluated by the community.
-5. Dynamic control via OpAMP. With telemetry flowing through OS-native facilities whose enablement is controlled out of band, a control plane such as OpAMP could enable and disable sources dynamically and remotely across a fleet. This is a natural extension of the out-of-band enablement property, and is being pursued separately.
+5. Dynamic control via OpAMP. With telemetry flowing through OS-native facilities whose enablement is controlled out of band, a control plane such as OpAMP could enable and disable sources dynamically and remotely across a fleet — potentially down to individual events, since event identity is a first-class concept in these facilities. This is a natural extension of the out-of-band enablement property, and is being pursued separately.
 
 ## Appendix: background on the OS-native facilities
 
@@ -226,13 +232,6 @@ Feasibility is already demonstrated across producers, consumers, and the mapping
 Telemetry volume, and its cost, is a well-recognized and growing concern across the OpenTelemetry community. It is worth noting that this concern is not fundamental to *having* instrumentation; it is a consequence of *always emitting* it. A single ordinary machine already contains an enormous amount of instrumentation: hundreds of thousands of trace points across the kernel, drivers, and system services, capable of producing millions of events per second. Yet nobody worries about the cost of all that instrumentation, because it emits nothing unless a consumer explicitly turns it on. The volume exists only when, where, and for as long as someone is actually collecting it.
 
 This is the property the OTEP borrows. Instrumentation can be dense and pervasive without being expensive, provided enablement is controlled out of band by the consumer rather than paid for continuously by the producer. It lets an application be instrumented liberally, with the cost incurred only when the data is genuinely wanted.
-
-### Event Tracing for Windows (ETW)
-
-ETW is the built-in, high-performance tracing facility of the Windows operating system, present since Windows 2000 and central to Windows diagnostics for over two decades. Providers register and emit events; sessions (started by tools such as `logman`, or analyzed with PerfView) subscribe out of band; and events cost effectively nothing when no session is enabled.
-
-- ETW overview: <https://learn.microsoft.com/windows/win32/etw/event-tracing-portal>
-- TraceLogging (the self-describing event schema used by the dynamic-provider model): <https://learn.microsoft.com/windows/win32/tracelogging/trace-logging-portal>
 
 ### Linux tracepoints and `user_events`
 
@@ -245,3 +244,10 @@ References:
 - Kernel documentation: <https://docs.kernel.org/trace/user_events.html>
 - Initial implementation commit (`7f5a08c79df3`, adds `kernel/trace/trace_events_user.c`): <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f5a08c79df35e68f1a43033450c5050f12bc155>
 - LWN overview, "User-space event tracing" (2022): <https://lwn.net/Articles/889607/>
+
+### Event Tracing for Windows (ETW)
+
+ETW is the built-in, high-performance tracing facility of the Windows operating system, present since Windows 2000 and central to Windows diagnostics for over two decades. Providers register and emit events; sessions (started by tools such as `logman`, or analyzed with PerfView) subscribe out of band; and events cost effectively nothing when no session is enabled.
+
+- ETW overview: <https://learn.microsoft.com/windows/win32/etw/event-tracing-portal>
+- TraceLogging (the self-describing event schema used by the dynamic-provider model): <https://learn.microsoft.com/windows/win32/tracelogging/trace-logging-portal>
