@@ -329,6 +329,7 @@ sections:
     hide_optional_column: true
   - name: Declarative configuration
     features:
+      - name: Register a `ConfigProvider` change listener
       - name: '`Parse` a configuration file'
       - name: The `Parse` operation accepts the configuration YAML file format
       - name: The `Parse` operation performs environment variable substitution

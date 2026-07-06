@@ -298,6 +298,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
+| Register a `ConfigProvider` change listener |  |  |  |  |  |  |  |  |  |  |  |  |
 | `Parse` a configuration file | + | + | + |  |  |  | + |  | + |  |  | - |
 | The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + |  |  | - |
 | The `Parse` operation performs environment variable substitution | + | + | + |  |  |  | + |  | + |  |  | - |
