@@ -144,7 +144,7 @@ a `Meter` whose behavior conforms to that `MeterConfig`.
 Configuration (
 i.e. [MetricExporters](#metricexporter), [MetricReaders](#metricreader), [Views](#view),
 and (**Development**) [MeterConfigurator](#meterconfigurator) and
-`view_matching_mode`) MUST be
+(**Development**) [view_matching_mode](#view-matching-mode)) MUST be
 owned by the `MeterProvider`. The configuration MAY be applied at the time
 of `MeterProvider` creation if appropriate.
 
@@ -171,6 +171,7 @@ MUST support the following values:
   See [Measurement processing](#measurement-processing) for details.
 
 If `view_matching_mode` is not specified, the SDK MUST use `independent`.
+Any other value MUST be treated as unsupported.
 
 If an unsupported value is provided, the SDK MUST either fail fast during
 initialization in accordance with the [error handling
@@ -459,6 +460,8 @@ The SDK MUST accept the following stream configuration parameters:
 
 #### Measurement processing
 
+**Status**: [Mixed](../document-status.md)
+
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
@@ -469,8 +472,7 @@ made with an Instrument:
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
-  * If `view_matching_mode` is `independent` (or unspecified), and the Instrument could match the instrument selection criteria, for each
-    View:
+  * If `view_matching_mode` is `independent` (or unspecified), and the Instrument matches the instrument selection criteria of one or more Views, for each matching View:
     * Try to apply the View's stream configuration independently of any other
       Views registered for the same matching Instrument (i.e. Views are not
       merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
@@ -495,7 +497,7 @@ made with an Instrument:
       * Each distinct configured stream `name` creates a separate stream. If no
         matching View configures a stream `name`, create a single group and
         stream using the Instrument's default name.
-    * For each resulting stream, apply the matching Views in registration order.
+    * For each resulting stream, apply the Views in its group in registration order.
       For all aspects of the [Stream configuration](#stream-configuration) other
       than `attribute_keys` (`name`, `description`, `aggregation`,
       `exemplar_reservoir`, `aggregation_cardinality_limit`), the first matching
@@ -503,7 +505,7 @@ made with an Instrument:
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
       Views.
-    * For `attribute_keys`, matching Views are merged by combining their attribute filters using logical AND: an attribute key is preserved if it is included in all specified allow-lists (if any) and not excluded by any specified exclude-lists.
+    * For `attribute_keys`, merge the Views in the group by combining their attribute filters using logical AND: an attribute key is preserved if it is included in all specified allow-lists (if any) and not excluded by any specified exclude-lists.
     * For each resulting stream:
       * If a setting selected for the stream would produce semantic errors, the
         implementation SHOULD emit a warning and use the next valid setting for
