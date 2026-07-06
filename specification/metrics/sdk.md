@@ -160,12 +160,22 @@ configuration only via this reference.
 
 **Status**: [Development](../document-status.md)
 
-A `MeterProvider` MAY accept a `view_matching_mode` parameter which controls how multiple matching [Views](#view) are applied to an [Instrument](./api.md#instrument).
+A `MeterProvider` MAY accept a `view_matching_mode` parameter which controls
+how multiple matching [Views](#view) are applied to an
+[Instrument](./api.md#instrument). A `MeterProvider` that accepts this parameter
+MUST support the following values:
 
-Acceptable values are:
+* `independent`: Each matching View creates a separate metric stream
+  independently of any other Views registered for the same matching Instrument.
+* `composable`: Matching Views are combined (merged) to modify metric streams.
+  See [Measurement processing](#measurement-processing) for details.
 
-* `independent`: (Default) Each matching View creates a separate metric stream independently of any other Views registered for the same matching Instrument.
-* `composable`: Matching Views are combined (merged) to modify metric streams. See [Measurement processing](#measurement-processing) for details.
+If `view_matching_mode` is not specified, the SDK MUST use `independent`.
+
+If an unsupported value is provided, the SDK MUST either fail fast during
+initialization in accordance with the [error handling
+principles](../error-handling.md#basic-error-handling-principles), or emit a
+warning, ignore the value, and use `independent`.
 
 #### MeterConfigurator
 
