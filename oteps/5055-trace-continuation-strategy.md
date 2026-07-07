@@ -117,7 +117,7 @@ For egress, the lifecycle is:
    context or other propagation candidate.
 2. Instrumentation and the SDK assemble a trace continuation input containing the
    destination metadata and active context candidate.
-3. The decider returns an egress continuation decision.
+3. The decider returns an egress propagation action.
 4. Injection logic applies that decision before writing propagation headers.
 
 This proposal intentionally separates propagation parsing from continuation
@@ -142,7 +142,7 @@ when inputs are absent.
 
 ### Decision result
 
-The decider result SHOULD contain:
+The ingress decider result SHOULD contain:
 
 - a trace continuation strategy,
 - OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINK`,
@@ -190,8 +190,8 @@ Egress suppression:
 
 - An outgoing request is prepared with an active in-process context.
 - Instrumentation provides the span attributes.
-- Decider returns `RESTART_WITHOUT_LINK` or an egress-specific equivalent that
-  suppresses propagation of the current trace context to that destination.
+- Decider returns an egress propagation action such as
+  `SUPPRESS_TRACE_CONTEXT`.
 - Injection omits the suppressed trace context while preserving other configured
   propagation behavior.
 
@@ -225,10 +225,30 @@ Configuration SHOULD follow the same structural conventions used by
 - if no conditions are specified, the rule matches all inputs that reach it,
 - if no rule matches, the decider falls back to its default behavior.
 
-The default behavior SHOULD preserve existing OpenTelemetry behavior by returning
-`CONTINUE`. Deployments that enforce security or tenant boundaries SHOULD be able
-to configure allowlist-style policies where continuation is permitted only for
-known trusted inputs and all other candidates restart or are dropped.
+The default behavior SHOULD preserve existing OpenTelemetry behavior. For
+ingress, the default strategy SHOULD be `CONTINUE`. For egress, the default
+propagation action SHOULD be `INJECT_TRACE_CONTEXT`. Deployments that enforce
+security or tenant boundaries SHOULD be able to configure allowlist-style
+policies where continuation is permitted only for known trusted inputs and all
+other candidates restart or are dropped.
+
+Rules SHOULD distinguish match inputs from rule outputs:
+
+- `direction` SHOULD be a first-class rule condition with values equivalent to
+  `ingress` and `egress`.
+- `span_kind` SHOULD be a first-class rule condition when span kind is known.
+- `attributes` SHOULD match span, request, route, destination, transport, or
+  other trusted metadata provided by instrumentation. Direction SHOULD NOT be
+  represented as a synthetic attribute.
+- Ingress rules SHOULD produce a trace continuation `strategy`.
+- Egress rules SHOULD produce an `egress_action`.
+- `link_attributes` SHOULD only apply when the selected ingress strategy is
+  `RESTART_WITH_LINK`.
+
+For operator convenience, implementations MAY accept `strategy` on an egress
+rule and map `CONTINUE` to `INJECT_TRACE_CONTEXT` and restart strategies to
+`SUPPRESS_TRACE_CONTEXT`, but the canonical configuration model SHOULD expose
+egress propagation actions explicitly.
 
 Illustrative configuration shape using placeholder extension names:
 
@@ -236,29 +256,36 @@ Illustrative configuration shape using placeholder extension names:
 tracer_provider:
   trace_continuation_decider:
     rule_based/development:
-      default_strategy: restart_with_link
+      default_ingress_strategy: restart_with_link
+      default_egress_action: inject_trace_context
       rules:
-        - conditions:
+        - direction: ingress
+          span_kind: server
+          conditions:
             attributes:
               http.route: /internal/*
               net.host.name: internal.example.com
           strategy: continue
-        - conditions:
+        - direction: ingress
+          span_kind: server
+          conditions:
             attributes:
               http.route: /webhooks/*
           strategy: restart_with_link
           link_attributes:
             otel.trace_continuation.reason: external_webhook
-        - conditions:
+        - direction: egress
+          span_kind: client
+          conditions:
             attributes:
               server.address: api.third-party.example
-              otel.trace_continuation.direction: egress
-          strategy: restart_without_link
+          egress_action: suppress_trace_context
 ```
 
 The exact schema shape remains to be standardized. The important requirements are
 that the model supports ordered rules, reusable condition objects, direction-aware
-matching, and conservative allowlist deployment patterns.
+matching, separate ingress and egress outputs, and conservative allowlist
+deployment patterns.
 
 ## Internal details
 
@@ -344,17 +371,27 @@ those links when adding the automatic continuation link.
 When trace continuation is evaluated for egress:
 
 1. Injection logic MUST preserve existing propagator behavior when the decider
-   returns `CONTINUE`.
-2. If the selected strategy restarts or suppresses continuation for the outgoing
-   boundary, injection logic MUST NOT propagate the suppressed trace context as
-   the active parent context for that destination.
+   returns `INJECT_TRACE_CONTEXT`.
+2. If the selected action is `SUPPRESS_TRACE_CONTEXT`, injection logic MUST NOT
+   propagate the suppressed trace context as the active parent context for that
+   destination.
 3. Egress decisions MUST be direction-aware so an ingress rule does not
    accidentally suppress unrelated outgoing propagation, or vice versa.
 
-The exact representation of egress restart remains open. Some implementations
-can model egress suppression as `RESTART_WITHOUT_LINK`; others can require an
-explicit egress action such as `DROP_PROPAGATION`. The OTEP needs to resolve
-this before advancing to specification text.
+Egress is about propagation, not span parentage. The egress result SHOULD
+therefore be represented as an explicit propagation action rather than a
+parentage restart strategy. The initial egress actions are:
+
+1. `INJECT_TRACE_CONTEXT`: preserve existing trace context injection behavior.
+2. `SUPPRESS_TRACE_CONTEXT`: do not inject the selected trace context for this
+   outgoing boundary.
+
+Rule-based configuration MAY use the same strategy names as ingress for
+operator convenience. If so, implementations SHOULD map `CONTINUE` to
+`INJECT_TRACE_CONTEXT` and map restart strategies to `SUPPRESS_TRACE_CONTEXT`.
+Language implementations MAY represent the selected egress action using context
+state, span state, an SDK propagation hook, or another mechanism, but injection
+MUST observe the selected action before writing propagation headers.
 
 ### Interaction with samplers
 
@@ -606,8 +643,9 @@ demonstrates:
 1. What final name fits the component? Options include
    `TraceContinuationDecider` and `TraceContinuationPolicy`.
 
-2. Does egress use the same three strategies as ingress, or does it define an
-   explicit `DROP_PROPAGATION` action?
+2. Is `SUPPRESS_TRACE_CONTEXT` the right name for the egress action, or should
+   the action be named `DROP_TRACE_CONTEXT`, `DROP_PROPAGATION`, or something
+   else?
 
 3. Which link attributes, if any, are standardized for restart-with-link
    relationships?
