@@ -560,7 +560,7 @@ demonstrates:
 
 - a top-level plugin object,
 - an ordered `rules` array,
-- per-rule match conditions with AND semantics,
+- per-rule case sensitive match conditions with AND semantics,
 - a match-all rule represented by omitting conditions,
 - shared helper object shapes for exact-value and pattern-based matching.
 
@@ -620,6 +620,18 @@ demonstrates:
 
 6. How does declarative configuration represent allowlist defaults without
    breaking existing continue-by-default behavior?
+
+7. For egress, where is the continuation decision stored so injection can observe
+   it across different instrumentation patterns? Outgoing instrumentation often
+   creates a client or producer span, makes that span current, and later invokes
+   propagation injection. In many languages these steps are not a single SDK
+   operation: span creation, scope activation, and injection can be performed by
+   different helper APIs or different layers of instrumentation. If the SDK
+   stores egress suppression only in one activation path, other valid activation
+   paths can miss the decision and accidentally propagate the suppressed trace
+   context. Possible designs include an API-level context marker, API-visible
+   span state, a propagation-time SDK hook, or a dedicated egress continuation
+   API that instrumentation calls before injection.
 
 ## Prototypes
 
