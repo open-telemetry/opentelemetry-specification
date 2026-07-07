@@ -173,6 +173,7 @@ MUST support the following values:
 If `view_matching_mode` is not specified, the SDK MUST use `independent`.
 Any other value MUST be treated as unsupported.
 
+Any other value MUST be treated as unsupported.
 If an unsupported value is provided, the SDK MUST either fail fast during
 initialization in accordance with the [error handling
 principles](../error-handling.md#basic-error-handling-principles), or emit a
