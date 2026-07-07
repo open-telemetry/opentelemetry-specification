@@ -223,7 +223,9 @@ Configuration SHOULD follow the same structural conventions used by
 - rules are matched in order,
 - each rule can contain multiple match conditions and all conditions in a rule
   MUST match,
-- if no conditions are specified, the rule matches all inputs that reach it,
+- each rule MUST declare a direction,
+- if no optional conditions are specified, the rule matches all inputs for its
+  declared direction,
 - if no rule matches, the decider falls back to its default behavior.
 
 The default behavior SHOULD preserve existing OpenTelemetry behavior. For
@@ -235,7 +237,7 @@ other candidates restart or are dropped.
 
 Rules SHOULD distinguish match inputs from rule outputs:
 
-- `direction` SHOULD be a first-class rule condition with values equivalent to
+- `direction` MUST be a first-class rule field with values equivalent to
   `ingress` and `egress`.
 - `span_kind` SHOULD be a first-class rule condition when span kind is known.
 - `attributes` SHOULD match span, request, route, destination, transport, or
