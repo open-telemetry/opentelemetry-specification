@@ -188,7 +188,7 @@ Alternatives considered:
 
 - Exporters for these facilities already exist in contrib. Why standardize in the spec?
 
-  Today's contrib exporters (Rust, .NET, C++) each encode with Microsoft Common Schema, so producers and consumers only interoperate if built against the same encoding. The spec defines one vendor-neutral OpenTelemetry mapping, so any conforming producer and consumer work together across languages and vendors.
+  Today's contrib exporters (Rust, .NET, C++) each encode with Microsoft Common Schema. The self-describing formats let a generic consumer read any event's fields; interpreting those fields as the OpenTelemetry data model requires knowing the encoding. The spec defines that interpretation once, vendor-neutrally, so any conforming producer and consumer work together across languages and vendors.
 
 - Does the synchronous write block the application's hot path?
 
