@@ -131,7 +131,6 @@ The decider input SHOULD be a structured value with fields equivalent to:
 - the candidate `SpanContext`, if one is available,
 - direction: `ingress` or `egress`,
 - span kind, if known,
-- instrumentation scope,
 - span attributes: including route, host, path, method, destination, transport, or peer metadata provided by
   instrumentation,
 - authorization, tenant, audience, or perimeter hints when provided by trusted
