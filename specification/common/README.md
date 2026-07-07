@@ -344,15 +344,13 @@ If an SDK provides a way to:
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
 - set an attribute value depth limit such that for each attribute value:
-  - if the limit is negative, the SDK MUST NOT apply an attribute value depth
-    limit;
   - if the limit is 0, the SDK MUST use the default attribute value depth
     limit;
   - the SDK MUST start counting depth at 1 for the top-level attribute value,
     and increment depth when descending into arrays (both homogeneous and
     heterogeneous) or [maps](#mapstring-anyvalue);
-  - when applying a positive limit, arrays or map at a depth greater than
-    the limit MUST be replaced with an empty value;
+  - arrays or map at a depth greater than the limit MUST be replaced with an
+    empty value;
   - otherwise a value MUST NOT be changed due to the depth limit.
 
 There MAY be a log emitted to indicate to the user that an attribute was
