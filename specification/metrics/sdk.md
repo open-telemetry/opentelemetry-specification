@@ -171,7 +171,6 @@ MUST support the following values:
   See [Measurement processing](#measurement-processing) for details.
 
 If `view_matching_mode` is not specified, the SDK MUST use `independent`.
-Any other value MUST be treated as unsupported.
 
 Any other value MUST be treated as unsupported.
 If an unsupported value is provided, the SDK MUST either fail fast during
