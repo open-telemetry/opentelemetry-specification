@@ -128,13 +128,14 @@ observable behavior SHOULD match this lifecycle.
 
 The decider input SHOULD be a structured value with fields equivalent to:
 
-- the candidate `SpanContext`, if one is available,
+- the `Context`,
 - direction: `ingress` or `egress`,
-- span kind, if known,
+- span kind,
 - span attributes: including route, host, path, method, destination, transport, or peer metadata provided by
   instrumentation,
-- authorization, tenant, audience, or perimeter hints when provided by trusted
-  application or instrumentation code,
+
+Authorization, tenant, audience, or perimeter hints when provided by trusted application or instrumentation
+code can be passed in the `Context` or as span attributes.
 
 Not every implementation or instrumentation can provide every field. The decider
 contract is defined around inputs that can be absent and deterministic behavior
