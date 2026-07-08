@@ -259,7 +259,7 @@ Illustrative configuration shape using placeholder extension names:
 
 ```yaml
 tracer_provider:
-  trace_continuation_decider:
+  trace_continuation_decider/development:
     rule_based/development:
       default_ingress_strategy: restart_with_link
       default_egress_action: inject_trace_context
@@ -287,10 +287,7 @@ tracer_provider:
           egress_action: suppress_trace_context
 ```
 
-The exact schema shape remains to be standardized. The important requirements are
-that the model supports ordered rules, reusable condition objects, direction-aware
-matching, separate ingress and egress outputs, and conservative allowlist
-deployment patterns.
+[PR for the configuration](https://github.com/open-telemetry/opentelemetry-configuration/pull/688).
 
 ## Internal details
 
