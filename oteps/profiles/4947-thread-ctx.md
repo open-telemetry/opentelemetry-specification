@@ -82,6 +82,7 @@ The key map is intended to attach a minimal set of contextual attributes to prof
 Keys do not need to be registered at process startup. New keys may be appended over time as the SDK encounters new attribute names. Updates are expected to be infrequent; in practice, the key set is typically established early in the process lifetime. Prior implementations have shown that a small number of keys is sufficient for the common case.
 
 When a key is appended, the SDK must update the `attribute_key_map` entry in the Process Context. Readers rely on the OTEP 4719 update protocol to read the entire Process Context block free of torn/corrupted reads. The SDK is responsible for ensuring it acts as a single writer to the Process Context, e.g. via a mutex or equivalent internal coordination across its own threads, so that concurrent key appends from multiple application threads do not race with each other or violate the OTEP 4719 update protocol.
+As long as writers correctly execute the OTEP 4719 update protocol, the OTEP 4719 reader protocol guarantees that readers will observe a correct and complete process context payload, including the `attribute_key_map`, even when a reader is concurrent/racing with a writer.
 
 The uint8 key index caps the map at 256 entries. This is a conscious trade-off for v1; if it proves limiting, future versions may extend the dictionary or allow inline keys for high-cardinality use cases.
 
