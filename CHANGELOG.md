@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Amend the description of Composite/Composable samplers.
+  ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
+
 ### Context
 
 - Clarify that environment variable propagation operational guidance is
@@ -18,12 +21,19 @@ release.
 - Remove caching behavior suggestions for environment variable propagation
   carrier implementations.
   ([#5179](https://github.com/open-telemetry/opentelemetry-specification/pull/5179))
+- Mark "Environment Variables as Context Propagation Carriers" as Release
+  Candidate.
+  ([#5142](https://github.com/open-telemetry/opentelemetry-specification/pull/5142))
 
 ### Traces
 
 ### Metrics
 
 ### Logs
+
+- Add ETW (Event Tracing for Windows) example mapping to the logs data
+  model appendix, including the ETW level to `SeverityNumber` mapping.
+  ([#5159](https://github.com/open-telemetry/opentelemetry-specification/pull/5159))
 
 ### Baggage
 
