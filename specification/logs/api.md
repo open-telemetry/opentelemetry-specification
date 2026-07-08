@@ -149,8 +149,9 @@ value of `false` means the `Logger` is disabled for the provided arguments.
 The returned value is not always static; it can change over time.
 Language-specific API implementations SHOULD document that calling this API is
 optional, intended to avoid expensive `LogRecord` generation when the record
-would be dropped, and that its result applies only to the current emission and
-cannot safely be cached or reused across emissions.
+would be dropped, and that its result applies only to the current
+[LogRecord emission](#emit-a-logrecord) and cannot safely be cached or reused
+across emissions.
 
 ## Optional and required parameters
 
