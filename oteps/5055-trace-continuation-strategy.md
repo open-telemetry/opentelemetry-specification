@@ -23,8 +23,6 @@ following problems:
 
 - Multiple organizations share a trace ID even though they cannot share full
   trace data.
-- Callee services inherit upstream sampling decisions that can be unsafe or
-  undesirable for local policies.
 - Internal trace context can be propagated to external systems where it exposes
   correlation or sampling information that belongs to a different trust domain.
 - Automatic instrumentation lacks a standard way to apply boundary behavior
