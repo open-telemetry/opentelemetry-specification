@@ -151,10 +151,11 @@ API is not a prerequisite for emitting a `LogRecord`; it is intended to help
 instrumentation avoid expensive work when generating a `LogRecord` that would
 be dropped.
 
-When instrumentation calls this API, the API SHOULD document that its result is
-only current for a single intended [LogRecord emission](#emit-a-logrecord), and
-that instrumentation calls this API separately for each `LogRecord` it intends
-to emit instead of caching or reusing the result.
+Language-specific API implementations SHOULD document that when instrumentation
+calls this API, its result is only current for a single intended
+[LogRecord emission](#emit-a-logrecord), and that instrumentation calls this API
+separately for each `LogRecord` it intends to emit instead of caching or reusing
+the result.
 
 ## Optional and required parameters
 
