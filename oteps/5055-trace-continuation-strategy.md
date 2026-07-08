@@ -10,8 +10,13 @@ continuation across a boundary?
 
 OpenTelemetry currently defaults to continuing remote parent context when
 extracting and starting server spans. This behavior works well inside a single
-trust domain, but it is insufficient for common boundary scenarios discussed in
-issue #1633.
+trust domain, but it is insufficient for the trace-continuation subset of common
+boundary scenarios discussed in issue #1633.
+
+Issue #1633 also asks for destination-aware baggage and header suppression. This
+OTEP does not address that broader propagation-filtering scope. It standardizes
+only how trace context is continued, restarted with a link, restarted without a
+link, or omitted from trace-context injection.
 
 When context is continued unchanged across trust boundaries, users report the
 following problems:
@@ -20,8 +25,8 @@ following problems:
   trace data.
 - Callee services inherit upstream sampling decisions that can be unsafe or
   undesirable for local policies.
-- Baggage can be propagated to external systems where it can expose sensitive or
-  internal information.
+- Internal trace context can be propagated to external systems where it exposes
+  correlation or sampling information that belongs to a different trust domain.
 - Automatic instrumentation lacks a standard way to apply boundary behavior
   consistently without manual per-call code.
 
@@ -148,8 +153,7 @@ The ingress decider result SHOULD contain:
 - a trace continuation strategy,
 - OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINK`,
 - OPTIONAL diagnostic attributes or reason codes for implementation-specific
-  observability,
-- OPTIONAL baggage or propagation actions if baggage control remains in scope.
+  observability.
 
 The link attributes are useful for recording why a causal relationship was
 preserved without parentage. For example, an implementation might record that the
@@ -389,6 +393,11 @@ parentage restart strategy. The initial egress actions are:
 2. `SUPPRESS_TRACE_CONTEXT`: do not inject the selected trace context for this
    outgoing boundary.
 
+`SUPPRESS_TRACE_CONTEXT` intentionally preserves all other configured
+propagation behavior. It does not suppress baggage, non-trace propagation
+formats, or arbitrary application headers; destination-aware filtering for those
+values is future work outside this OTEP.
+
 Rule-based configuration MAY use the same strategy names as ingress for
 operator convenience. If so, implementations SHOULD map `CONTINUE` to
 `INJECT_TRACE_CONTEXT` and map restart strategies to `SUPPRESS_TRACE_CONTEXT`.
@@ -409,7 +418,7 @@ observability details are not part of the sampling decision.
 
 ### Interaction with baggage
 
-This OTEP keeps baggage filtering out of the initial normative scope.
+This OTEP keeps baggage filtering out of scope.
 
 Baggage filtering is related operationally because the same boundaries often need
 both trace restart and baggage suppression. However, combining both in the first
@@ -418,10 +427,10 @@ injection, and baggage filtering at once. That risks obscuring the core trace
 continuation behavior.
 
 The proposed first version standardizes trace continuation decisions and SDK
-consumption semantics. Baggage filtering is treated as one of:
+consumption semantics. Destination-aware baggage suppression, propagation-format
+filtering, and arbitrary header filtering are treated as future work, such as:
 
 - a follow-up OTEP using the same decision input and rule vocabulary,
-- an OPTIONAL extension point on the decider result,
 - a separate rule-based baggage propagator or processor if the SIG prefers to
   keep baggage behavior near propagation.
 
@@ -653,8 +662,7 @@ demonstrates:
 3. Which link attributes, if any, are standardized for restart-with-link
    relationships?
 
-4. Is baggage filtering a follow-up OTEP, an OPTIONAL result field on this
-   component, or a separate propagation feature?
+4. Is baggage filtering a follow-up OTEP or a separate propagation feature?
 
 5. Which semantic convention attributes are RECOMMENDED as common decision
    inputs?
