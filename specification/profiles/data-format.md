@@ -12,7 +12,7 @@
   * [Message embedding](#message-embedding)
   * [Dictionary](#dictionary)
   * [Attributes](#attributes)
-  * [Dictionary use in KeyValue](#dictionary-use-in-keyvalue)
+  * [Dictionary use in `KeyValue`](#dictionary-use-in-keyvalue)
 - [Message descriptions](#message-descriptions)
   * [Message: `ProfilesData`](#message-profilesdata)
   * [Message: `ProfilesDictionary`](#message-profilesdictionary)
@@ -139,7 +139,7 @@ The data format uses two kinds of attributes:
    (unit in [UCUM](https://ucum.org/)) to express their unit explicitly
    rather than relying solely on semantic conventions.
 
-### Dictionary use in KeyValue
+### Dictionary use in `KeyValue`
 
 To minimize payload size, the data format extends the standard
 OpenTelemetry [`KeyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
