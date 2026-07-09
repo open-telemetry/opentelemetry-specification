@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Add non-normative "Instrumentation Supplementary Guidelines" consolidating
+  cross-language guidance for instrumentation library authors.
+  ([#5148](https://github.com/open-telemetry/opentelemetry-specification/issues/5148))
 - Amend the description of Composite/Composable samplers.
   ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
 
