@@ -11,7 +11,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
@@ -60,7 +60,7 @@ weight: 2
 - [References](#references)
 - [Footnotes](#footnotes)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -412,6 +412,8 @@ in OTLP consist of the following:
     that are not less than the previous value.
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
+  - A numeric value representing either a delta or cumulative sum, depending on
+    the aggregation temporality.
   - A time window (of `(start, end]`) time for which the Sum was calculated.
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since

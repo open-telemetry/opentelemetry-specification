@@ -10,7 +10,7 @@ aliases: [tracestate-probability-sampling-experimental]
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Definitions](#definitions)
@@ -39,7 +39,7 @@ aliases: [tracestate-probability-sampling-experimental]
   * [Converting threshold to a sampling probability](#converting-threshold-to-a-sampling-probability)
   * [Converting threshold to an adjusted count (sampling rate)](#converting-threshold-to-an-adjusted-count-sampling-rate)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

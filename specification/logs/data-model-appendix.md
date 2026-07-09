@@ -5,7 +5,7 @@ Note: this document is NOT a spec, it is provided to support the Logs
 for demonstrative purposes and are not exhaustive or canonical; please refer to
 the respective exporter documentation if exact details are required.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Appendix A. Example Mappings](#appendix-a-example-mappings)
   * [RFC5424 Syslog](#rfc5424-syslog)
@@ -18,10 +18,11 @@ the respective exporter documentation if exact details are required.
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
   * [Elastic Common Schema](#elastic-common-schema)
+  * [ETW (Event Tracing for Windows)](#etw-event-tracing-for-windows)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Appendix A. Example Mappings
 
@@ -801,21 +802,79 @@ This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/docs/reference/ecs/ecs-field-reference)
 for an exhaustive list.
 
+### ETW (Event Tracing for Windows)
+
+The following table shows how the fields of an ETW event map to the log data
+model. ETW header metadata is preserved under `etw.*` attributes, and
+TDH-decoded TraceLogging payload fields are added as attributes keyed by their
+field name.
+
+| ETW Field              | Type      | Description                                                                  | Maps to Unified Model Field                                            |
+| ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` converted to UNIX epoch nanoseconds according to the trace/session timestamp metadata (e.g. QPC, system time, or CPU cycle counter) | Timestamp                                                             |
+| Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
+| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<EventId>`            | `EventName`                                                          |
+| Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`; `Body` is left empty          | Body                                                         |
+| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider.id"]`                                      |
+| EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event.id"]`                                        |
+| Opcode                 | uint8     | Opcode from the event descriptor                                            | `Attributes["etw.opcode"]`                                          |
+| Version                | uint8     | Version from the event descriptor                                           | `Attributes["etw.version"]`                                         |
+| Keywords               | uint64    | Keywords bitmask from the event descriptor                                  | `Attributes["etw.keywords"]`                                        |
+| ProcessId              | uint32    | Emitting process ID from the event header                                   | `Attributes["etw.process.id"]`                                      |
+| ThreadId               | uint32    | Emitting thread ID from the event header                                    | `Attributes["etw.thread.id"]`                                       |
+| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                  | `Attributes["etw.activity.id"]`                                     |
+| Decoded payload fields | any       | TDH-decoded TraceLogging fields, keyed by field name                        | `Attributes[<field name>]`                                          |
+
+The ETW `Level` is an 8-bit value whose meaning is defined by the
+[`EVENT_DESCRIPTOR`](https://learn.microsoft.com/windows/win32/api/evntprov/ns-evntprov-event_descriptor). `SeverityText`
+carries the original ETW level name as it is known at the source.
+
+| ETW Level | ETW Name         | SeverityNumber  | SeverityText              |
+| --------- | ---------------- | --------------- | ------------------------- |
+| 0         | LOG_ALWAYS       | 0 (UNSPECIFIED) | LOG_ALWAYS                |
+| 1         | CRITICAL         | 21 (FATAL)      | CRITICAL                  |
+| 2         | ERROR            | 17 (ERROR)      | ERROR                     |
+| 3         | WARNING          | 13 (WARN)       | WARNING                   |
+| 4         | INFO             | 9 (INFO)        | INFO                      |
+| 5         | VERBOSE          | 5 (DEBUG)       | VERBOSE                   |
+| 6–15      | reserved         | 0 (UNSPECIFIED) | (none)                    |
+| 16–255    | provider-defined | 0 (UNSPECIFIED) | provider-defined (if any) |
+
+`Level 0` (`LOG_ALWAYS`) is **not** a severity — it is a filtering directive.
+Because ETW delivers an event when `event.level <= session.level`, a level-0
+event is always delivered regardless of the configured session level. It carries
+no severity information, so `SeverityNumber` maps to `UNSPECIFIED (0)` rather than
+inventing a specific severity; the original source name is still recorded in
+`SeverityText` as `LOG_ALWAYS`. Levels 6–15 are reserved by Microsoft and are not
+available for provider definitions, so they carry no name. Levels
+16–255 are
+[provider-defined custom levels](https://learn.microsoft.com/windows/win32/wes/defining-severity-levels);
+each provider's manifest may assign a name (e.g. `NotValid`), but there is no
+name standardized across providers, so `SeverityText` is whatever the provider
+defines for that level, if any. Both ranges carry no standardized severity and
+map to `UNSPECIFIED (0)`. In all cases the raw ETW level is preserved
+in `Attributes["etw.level"]`, so the mapping remains reversible.
+
+An example implementation of this mapping is the
+[ETW receiver](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/etw_receiver)
+in the OpenTelemetry otel-arrow project. This reference is illustrative and
+non-normative; the mapping above is not tied to any specific implementation.
+
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog              |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
-|---------------------|-----------|------|------|-----------------|-----------------------------------|--------------|
-|                     |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
-|Debug (7)            |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
-|                     |           |      |      | FINE            |                                   |DEBUG2 (6)    |
-|                     |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
-|Informational (6)    |Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
-|Notice (5)           |           |      |      |                 |                                   |INFO2 (10)    |
-|Warning (4)          |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
-|Error (3)            |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
-|Critical (2)         |Critical   |      |Dpanic|                 |                                   |ERROR2 (18)   |
-|Alert (1)            |           |      |Panic |                 |                                   |ERROR3 (19)   |
-|Emergency (0)        |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
+|Syslog               |WinEvtLog  |ETW        |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|---------------------|-----------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|                     |           |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
+|Debug (7)            |Verbose    |VERBOSE    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
+|                     |           |           |      |      | FINE            |                                   |DEBUG2 (6)    |
+|                     |           |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
+|Informational (6)    |Information|INFO       |INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
+|Notice (5)           |           |           |      |      |                 |                                   |INFO2 (10)    |
+|Warning (4)          |Warning    |WARNING    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
+|Error (3)            |Error      |ERROR      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
+|Critical (2)         |Critical   |           |      |Dpanic|                 |                                   |ERROR2 (18)   |
+|Alert (1)            |           |           |      |Panic |                 |                                   |ERROR3 (19)   |
+|Emergency (0)        |           |CRITICAL   |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
 
 ## References
 

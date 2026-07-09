@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
@@ -85,7 +85,7 @@ weight: 3
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -630,13 +630,26 @@ sample/drop decision that AlwaysRecord modifies.
 
 **Status**: [Development](../document-status.md)
 
-CompositeSampler is a decorator that implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
+CompositeSampler implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
 
-The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.  See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for more details.
+The CompositeSampler takes a ComposableSampler as input and uses it as a delegate to help make the final sampling decision. See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for basics of Consistent Probability Sampling.
+
+The process of constructing the final SamplingResult in response to a call to ShouldSample consists of the following steps.
+
+* The sampler calls `GetSamplingIntent` on the delegate (see ComposableSampler below),
+* If the received THRESHOLD value is `null`, the sampling decision is `DROP`, otherwise
+* The sampler checks the received `adjusted_count_reliable`, and in case of `true` derives the Randomness value R from the TraceState or TraceId as described in [Randomness Value (R)](./tracestate-probability-sampling.md#randomness-value-r), and in case of `false` it generates a new Randomness value R by hex-encoding a new random 56-bit number
+* The sampler compares (lexicographically or by other means, depending on the implementation) the received THRESHOLD value with the Randomness value R to arrive at the final sampling `Decision` as described in [Decision algorithm](./tracestate-probability-sampling.md#decision-algorithm),
+* The sampler calls the received `trace_state_provider` function passing the parent `Tracestate` and the final sampling `Decision` to get the new `Tracestate` to be associated with the `Span`,
+* In case of positive sampling decision:
+  - the sampler calls the received `attributes_provider` function to determine the set of `Attributes` to be added to the `Span`,
+  - if the `adjusted_count_reliable` is `true` it modifies the `th` value for the `ot` key in the `Tracestate` according to the received THRESHOLD; if the returned value was `false`, it removes the `th` value for the `ot` key from the `Tracestate`,
+* In case of negative sampling decision, it removes the `th` value for the `ot` key from the `Tracestate`.
 
 ##### ComposableSampler
 
-ComposableSampler is a specialized interface that extends the standard Sampler functionality. It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
+ComposableSampler is a specialized interface that is used by the CompositeSampler.
+It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
 
 ###### GetSamplingIntent
 
@@ -644,7 +657,7 @@ Returns a SamplingIntent structure that indicates the sampler's preference for s
 
 **Required arguments:**
 
-* All of the original Sampler API parameters are included
+* All of the original Sampler API parameters except `traceId` are included
 * Parent context, threshold, incoming trace state, and trace flag
   information MAY be precomputed so that ComposableSamplers do not
   repeatedly probe the Context for this information.
@@ -658,7 +671,7 @@ state.
 The method returns a `SamplingIntent` structure with the following elements:
 
 * `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
-* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for
+* `adjusted_count_reliable` - A boolean indicating if the threshold can be reliably used for
    [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
 * `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
 * `trace_state_provider` - An optional provider of a modified TraceState.
@@ -667,7 +680,7 @@ Note that `trace_state_provider` may be a significant source of
 complexity.  ComposableSamplers MUST NOT modify the OpenTelemetry
 TraceState (i.e., the `ot` sub-key of TraceState).  The calling
 CompositeSampler SHOULD update the threshold of the outgoing
-TraceState (unless `!threshold_reliable`) and that the explicit
+TraceState, as described above. The explicit
 randomness values MUST not be modified.
 
 ##### Built-in ComposableSamplers
@@ -675,19 +688,19 @@ randomness values MUST not be modified.
 ###### ComposableAlwaysOn
 
 * Always returns a `SamplingIntent` with threshold set to sample all spans (threshold = 0)
-* Sets `threshold_reliable` to `true`
+* Sets `adjusted_count_reliable` to `true`
 * Does not add any attributes
 
 ###### ComposableAlwaysOff
 
 * Always returns a `SamplingIntent` with no threshold, indicating all spans should be dropped
-* Sets `threshold_reliable` to `false`
+* Sets `adjusted_count_reliable` to `false`
 * Does not add any attributes
 
 ###### ComposableProbability
 
 * Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
-* Sets `threshold_reliable` to `true`
+* Sets `adjusted_count_reliable` to `true`
 * Does not add any attributes
 
 **Required parameters:**
@@ -705,7 +718,7 @@ a `Composite(ComposableProbability(ratio))` configuration.
 * For spans without a parent context, delegate to the root sampler
 * For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
 * Returns the parent's threshold if available; otherwise, if the parent's *sampled* flag is set, returns threshold=0; otherwise, if the parent's *sampled* flag is not set, no threshold is returned.
-* Sets `threshold_reliable` to match the parent's reliability, which is true if the parent had a threshold.
+* Sets `adjusted_count_reliable` to match the parent's reliability, which is true if the parent had a threshold.
 * Does not add any attributes
 
 **Required parameters:**
