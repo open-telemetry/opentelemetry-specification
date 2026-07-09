@@ -99,20 +99,23 @@ Context and Baggage wire formats.
 
 ### Component lifecycle
 
-The Trace Continuation Decider runs after propagation has produced a candidate
-context and before the SDK finalizes parentage for a new span or propagates
-context across an outgoing boundary.
+The Trace Continuation Decider runs after the existing span creation API has
+selected a parent `Context` and before the SDK finalizes parentage for a new span
+or propagates context across an outgoing boundary.
 
 For ingress, the lifecycle is:
 
-1. Instrumentation receives a request and invokes propagators to extract a remote
-   context candidate.
-2. Instrumentation and the SDK assemble a trace continuation input containing the
-   candidate context and available request metadata.
-3. The decider returns `CONTINUE`, `RESTART_WITH_LINK`, or
+1. Instrumentation receives a request and invokes propagators to extract remote
+   context according to existing behavior.
+2. Span start logic selects the parent `Context` using the existing span creation
+   API.
+3. If the selected parent `Context` contains a valid remote span context,
+   instrumentation and the SDK assemble a trace continuation input containing
+   that candidate and available request metadata.
+4. The decider returns `CONTINUE`, `RESTART_WITH_LINK`, or
    `RESTART_WITHOUT_LINK`.
-4. Span start logic applies the decision before sampling.
-5. The sampler evaluates the span with the final parentage context.
+5. Span start logic applies the decision before sampling.
+6. The sampler evaluates the span with the final parentage context.
 
 For egress, the lifecycle is:
 
@@ -163,7 +166,9 @@ policy rule. Exact attribute names are left open by this OTEP.
 Normal continuation:
 
 - Extract remote context.
-- Assemble trace continuation input from the remote context and request metadata.
+- Select a parent `Context` containing the remote span context.
+- Assemble trace continuation input from the selected remote span context and
+  request metadata.
 - Decider returns `CONTINUE`.
 - Start span as a child of the remote parent.
 - Sampler runs with the continued parentage.
@@ -171,22 +176,24 @@ Normal continuation:
 Boundary restart with link:
 
 - Extract remote context.
-- Assemble trace continuation input from the remote context and trusted boundary
-  metadata.
+- Select a parent `Context` containing the remote span context.
+- Assemble trace continuation input from the selected remote span context and
+  trusted boundary metadata.
 - Decider returns `RESTART_WITH_LINK`.
 - Start a new root span.
-- Add one link to the extracted remote context, including any link attributes
+- Add one link to the selected remote span context, including any link attributes
   returned by the decider.
 - Sampler runs for the new root span.
 
 Boundary restart without link:
 
 - Extract remote context.
-- Assemble trace continuation input from the remote context and trusted boundary
-  metadata.
+- Select a parent `Context` containing the remote span context.
+- Assemble trace continuation input from the selected remote span context and
+  trusted boundary metadata.
 - Decider returns `RESTART_WITHOUT_LINK`.
 - Start a new root span with no parent and no automatic link to the incoming
-  context.
+  remote span context.
 - Sampler runs for the new root span.
 
 Egress suppression:
@@ -313,7 +320,8 @@ propagator, and tracer components.
 
 ### Required ingress behavior
 
-When trace continuation is evaluated for an extracted remote context:
+When trace continuation is evaluated for a valid remote span context in the
+selected parent `Context`:
 
 1. Extraction logic MUST parse incoming remote context according to existing
    propagator behavior.
@@ -333,11 +341,9 @@ When the selected strategy is `RESTART_WITH_LINK`:
 
 1. Span start logic MUST NOT use the candidate remote context as the active
    parent.
-2. Span start logic MUST create a new root span unless an explicit in-process
-   parent override takes precedence.
-3. Span start logic SHOULD add exactly one automatic link to the candidate remote
+2. Span start logic SHOULD add exactly one automatic link to the candidate remote
    context.
-4. If the decider returns link attributes, implementations SHOULD attach them to
+3. If the decider returns link attributes, implementations SHOULD attach them to
    the automatic link.
 
 When the selected strategy is `RESTART_WITHOUT_LINK`:
@@ -346,18 +352,28 @@ When the selected strategy is `RESTART_WITHOUT_LINK`:
    parent.
 2. Span start logic MUST NOT create an automatic link for that candidate.
 
-### Parentage precedence
+### Parent context selection
 
-To avoid ambiguous behavior, span start logic MUST use the following parentage
-order:
-
-1. Explicit API parent override, if provided by the caller.
-2. Active in-process span context.
-3. Extracted remote parent context under the `CONTINUE` strategy.
-4. Root span if none apply.
-
-A candidate selected for `RESTART_WITH_LINK` or `RESTART_WITHOUT_LINK` MUST NOT
-be used as a parent in this order.
+Trace continuation is evaluated against the parent `Context` selected by the
+existing span creation API.
+Before invoking the Trace Continuation Decider, span start logic MUST first select
+the parent `Context` using existing API behavior: use the caller-provided
+`Context` when one is supplied, otherwise use the current active `Context`.
+If the selected parent `Context` contains no valid span context, or represents an
+explicit root request, the span is started as a root and the decider is not
+invoked.
+If the selected parent `Context` contains a valid local span context, existing
+local parentage behavior is preserved and the decider is not invoked.
+If the selected parent `Context` contains a valid remote span context, that remote
+span context is the trace continuation candidate. The decider MUST evaluate it:
+- `CONTINUE` uses the remote span context as the parent.
+- `RESTART_WITH_LINK` starts a new root span and adds one automatic link to the
+    remote span context.
+- `RESTART_WITHOUT_LINK` starts a new root span without an automatic link.
+The API does not distinguish an extracted remote context from any other
+caller-provided remote parent context. Therefore, a caller-provided remote parent
+is subject to the decider unless a language defines an explicit separate API for
+forcing remote parentage.
 
 ### Link consumption
 
@@ -447,9 +463,10 @@ allowlist-style deployment for sensitive boundaries.
 
 ### Corner cases
 
-- If both a current in-process span and a restartable remote candidate exist,
-  current in-process span parentage rules win unless the caller explicitly asks
-  to evaluate the remote candidate as the parent.
+- If both a current in-process span and a remote span context exist, existing
+  parent `Context` selection rules determine which one is selected. A caller can
+  ask to evaluate the remote span context by supplying it as the parent
+  `Context`; that caller-provided remote parent is still subject to the decider.
 - If explicit links are provided at span start, the automatic continuation link
   is additive rather than replacing user-supplied links.
 - If sampling flags or `tracestate` arrive in the remote context, they MUST NOT
