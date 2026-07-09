@@ -463,3 +463,19 @@ Both the Client and the Server are also a `Node`. This term is used in the docum
 ## Acknowledgements
 
 Special thanks to Owais Lone who helped to conduct experiments with Load Balancers, to Paulo Janotti, Bogdan Drutu and Yuri Shkuro for thoughtful discussions around the protocol.
+
+ghcr.io/devcontainers/features/common-utils🥈
+
+| parse tolower(_ResourceId) with "/subscriptions/" subscriptionId "/resourcegroups/" 
+    resourceGroup "/providers/" provider "/" resourceType "/" resourceNamefind where TimeGenerated between(startofday(ago(1d))..startofday(now())) project _BilledSize, _IsBillable, _SubscriptionId
+| where _IsBillable == true 
+| summarize BillableDataBytes = sum(_BilledSize) by _SubscriptionId 
+| sort by BillableDataBytes nulls lastfind where TimeGenerated between(startofday(ago(1d))..startofday(now())) project _BilledSize, _IsBillable, Computer, Type
+| where _IsBillable == true and Type != "Usage"
+| extend computerName = tolower(tostring(split(Computer, '.')[0]))
+| summarize BillableDataBytes = sum(_BilledSize) by  computerName 
+| sort by BillableDataBytes desc nulls lastfind in (Table1, Table2, Table3) where Fruit=="apple"
+
+find in (database('*').*) where Fruit == "apple"
+
+find in (cluster('cluster_name').database('MyDB*').*) where Fruit == "apple"
