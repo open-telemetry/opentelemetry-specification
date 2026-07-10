@@ -125,6 +125,7 @@ The record layout is byte-packed exactly as shown, with no implicit compiler pad
 
 Entries in `attrs-data` are packed consecutively with no padding between entries.
 Readers MUST stop parsing `attrs-data` if the remaining buffer cannot hold a complete entry.
+If the same key index appears more than once in `attrs-data`, readers MUST use the last occurrence. This allows writers to append an updated value for an existing key without rewriting prior entries.
 
 The record MUST start at an address aligned to at least a 2-byte boundary.
 
