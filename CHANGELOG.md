@@ -57,29 +57,16 @@ release.
 - Amend the description of Composite/Composable samplers.
   ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
 
-### Metrics
-
 ### Logs
 
 - Add ETW (Event Tracing for Windows) example mapping to the logs data
   model appendix, including the ETW level to `SeverityNumber` mapping.
   ([#5159](https://github.com/open-telemetry/opentelemetry-specification/pull/5159))
 
-### Baggage
-
 ### Profiles
 
-### Resource
-
-### Entities
-
-### Common
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Add Profiles data model (data-model.md).
+  ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
 
 ### Supplementary Guidelines
 
@@ -244,9 +231,6 @@ release.
 
 - Add event to span event bridge.
   ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
-
-- Add Profiles data model (data-model.md).
-  ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
 
 ### Resource
 
