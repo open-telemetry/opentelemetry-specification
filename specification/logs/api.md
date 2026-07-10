@@ -146,12 +146,14 @@ This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned
 value of `false` means the `Logger` is disabled for the provided arguments.
 
-The returned value is not always static; it can change over time.
-Language-specific API implementations SHOULD document that calling this API is
-optional, intended to avoid expensive `LogRecord` generation when the record
-would be dropped, and that its result applies only to the current
-[LogRecord emission](#emit-a-logrecord) and cannot safely be cached or reused
-across emissions.
+The API documentation SHOULD state that calling `Enabled` is optional: it is a
+performance optimization rather than a required check before
+[emitting a `LogRecord`](#emit-a-logrecord). It is most useful when producing
+data solely for the `LogRecord` would otherwise require expensive work, such as
+allocations, serialization, or computing attribute values; in those cases
+instrumentation can call `Enabled` first and skip that work when it returns
+`false`. The documentation SHOULD also state that the returned value is not
+static and can change over time, so a cached value can become stale.
 
 ## Optional and required parameters
 
