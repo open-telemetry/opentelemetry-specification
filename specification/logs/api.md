@@ -148,12 +148,12 @@ value of `false` means the `Logger` is disabled for the provided arguments.
 
 The API documentation SHOULD state that calling `Enabled` is optional: it is a
 performance optimization rather than a required check before
-[emitting a `LogRecord`](#emit-a-logrecord). It is most useful when producing
-data solely for the `LogRecord` would otherwise require expensive work, such as
-allocations, serialization, or computing attribute values; in those cases
-instrumentation can call `Enabled` first and skip that work when it returns
-`false`. The documentation SHOULD also state that the returned value is not
-static and can change over time, so a cached value can become stale.
+[emitting a `LogRecord`](#emit-a-logrecord). It is most useful when the
+`LogRecord`'s body or attributes are expensive to compute, such as a value
+fetched from a database. In that case, instrumentation can call `Enabled` first
+and skip that work when it returns `false`. The documentation SHOULD also state
+that the returned value is not static and can change over time, so a cached
+value can become stale.
 
 ## Optional and required parameters
 
