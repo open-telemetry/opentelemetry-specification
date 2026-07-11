@@ -1,5 +1,3 @@
-include_fragments = true
-
 accept = ["200..=299", "403", "429"]
 
 remap = [
@@ -21,7 +19,11 @@ exclude = [
   'https://w3c.github.io/trace-context/#trace-id',
   'https://facebook.github.io/zstd/#small-data',
   'https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/latest/org.apache.logging.log4j/org/apache/logging/log4j/Logger.html',
-  'https://www.jaegertracing.io/docs/1.8/client-libraries/client-features/' # was removed and old version is 404
+  'https://www.jaegertracing.io/docs/1.8/client-libraries/client-features/', # was removed and old version is 404
+  '^https://yaml.org/spec/1.2.2/', # 404s for bots but valid in browser
+  # anchors on this page are rendered client-side (JS accordion), so lychee
+  # cannot verify the #type-* fragments even though they work in a browser
+  '^https://opentelemetry.io/docs/specs/otel-config/types/#'
 ]
 
 # better to be safe and avoid failures
