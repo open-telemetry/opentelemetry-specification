@@ -30,6 +30,7 @@ rules:
       - 'to-?do(s)?(?=[ ,.])'
       - "indexes\\b"
       - "repo\\b"
+      - 'KeyValue(?:AndUnit)?'
     terms:
       - Actix
       - Ajax
