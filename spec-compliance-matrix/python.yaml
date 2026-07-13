@@ -90,7 +90,7 @@ sections:
           - name: links collection size limit
             status: '+'
           - name: '[SpanProcessor.OnEnding](specification/trace/sdk.md#onending)'
-            status: '+'
+            status: '-'
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
@@ -156,7 +156,7 @@ sections:
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
             status: '?'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '+'
+            status: '?'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
             status: '?'
   - name: Baggage
@@ -248,7 +248,7 @@ sections:
       - name: The `MeterProvider` provides methods to update the configuration
         status: '+'
       - name: The updated configuration applies to all already returned `Meter`s.
-        status: '+'
+        status: '-'
       - name: There is a way to register `View`s with a `MeterProvider`.
         status: '+'
       - name: The `View` instrument selection criteria is as specified.
