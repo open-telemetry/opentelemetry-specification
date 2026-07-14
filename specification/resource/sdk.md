@@ -185,10 +185,11 @@ reserved for built-in resource detectors published with language SDKs:
 
 **Status**: [Development](../document-status.md)
 
-When [`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#entity-configuration)
-is set to `true`, resource detectors operate in entity-aware mode, producing resources
-with [entities](../entities/data-model.md) attached rather than simple flat attribute
-collections.
+Resource detectors SHOULD produce resources with [entities](../entities/data-model.md)
+attached. The SDK MUST strip entity information from detected resources before
+associating them with a provider unless
+[`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#entity-configuration)
+is set to `true`.
 
 ### Specifying resource information via an environment variable
 
