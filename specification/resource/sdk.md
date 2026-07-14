@@ -66,7 +66,7 @@ The interface MUST provide a way to create a new resource, from [`Attributes`](.
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
-Required parameters:
+Parameters:
 
 - [`Attributes`](../common/README.md#attribute)
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
