@@ -181,6 +181,15 @@ reserved for built-in resource detectors published with language SDKs:
   environment variable; populates `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
 
+#### Entity-aware resource detectors
+
+**Status**: [Development](../document-status.md)
+
+When [`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#entity-configuration)
+is set to `true`, resource detectors operate in entity-aware mode, producing resources
+with [entities](../entities/data-model.md) attached rather than simple flat attribute
+collections.
+
 ### Specifying resource information via an environment variable
 
 The SDK MUST extract information from the `OTEL_RESOURCE_ATTRIBUTES` environment
