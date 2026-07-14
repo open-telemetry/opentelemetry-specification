@@ -60,6 +60,48 @@ Significant changes should go through the [OpenTelemetry Enhancement
 Proposal](./oteps/README.md) process. See the OTEP README for guidance on what
 changes require an OTEP.
 
+## When an Issue Is Closed
+
+If you opened an issue and later found it closed, please don't read it as a sign
+that we didn't value it — quite the opposite. We read every issue, and closing
+one is never meant to dismiss you or your contribution.
+
+### Why was my issue closed?
+
+OpenTelemetry serves a large and diverse community, and we can't always act on
+every request. Sometimes proposals conflict with one another, sometimes a change
+would pull the specification in a direction it can't go right now, and sometimes
+we simply have to make a call between competing priorities. When that happens,
+closing an issue is how we keep the tracker honest about what is actively being
+worked on — it is not a judgment that your idea was unimportant or unwelcome.
+
+You can often tell _why_ an issue was closed from its `triage:rejected:*` label
+(for example `duplicate`, `out-of-scope`, or `insufficient-info`). See
+[issue-management.md](./issue-management.md) for what each label means.
+
+### A closed issue is not a deleted issue
+
+Closing an issue only changes its status — nothing is lost. The discussion, the
+context, and your idea all stay on GitHub, and we can reopen an issue at any time
+if circumstances change or new information comes to light. Plenty of closed
+issues come back to life later.
+
+### We're human, and we sometimes get it wrong
+
+Triage is done by people, and people make mistakes. If you think your issue was
+closed in error, or that it deserves another look, please say so! You can comment
+on the issue or reach out in the
+[#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
+channel on CNCF Slack. If you are new to the CNCF Slack community, you can
+[create an account](https://slack.cncf.io/). We try to be reasonable and we're
+always glad to reconsider.
+
+### Please keep contributing
+
+However this particular issue turns out, we hope you'll stick around. Your input
+makes OpenTelemetry better, and we'd love to see your next issue, comment, or
+pull request. Thank you for being part of the community.
+
 ## Writing Specs
 
 Specification is written in Markdown. Please make sure files render correctly
