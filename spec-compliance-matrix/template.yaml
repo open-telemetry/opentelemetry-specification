@@ -78,8 +78,6 @@ sections:
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
-          - name: Set order preserved
-            optional: true
           - name: String type
           - name: Boolean type
           - name: Double floating-point type

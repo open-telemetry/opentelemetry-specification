@@ -95,8 +95,6 @@ sections:
         features:
           - name: SetAttribute
             status: '+'
-          - name: Set order preserved
-            status: '-'
           - name: String type
             status: '+'
           - name: Boolean type

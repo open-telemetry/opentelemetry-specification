@@ -59,7 +59,6 @@ formats is required. Implementing more than one format is optional.
 | [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | N/A | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
 | String type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Boolean type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + | + |
