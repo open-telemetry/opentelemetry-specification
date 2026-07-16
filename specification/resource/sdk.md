@@ -72,7 +72,7 @@ Parameters:
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted resource. If the `schema_url` parameter is unspecified
   then the created resource will have an empty Schema URL.
-- [experimental since 1.6.0](../document-status.md) `entities` (optional): Specifies the entities that
+- [experimental since 1.60.0](../document-status.md) `entities` (optional): Specifies the [entities](data-model.md) that
   should be recorded in the emitted resource. If the `entities` parameter is
   unspecified then the created resource will have no entities.
 
