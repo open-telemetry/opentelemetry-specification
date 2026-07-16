@@ -23,6 +23,10 @@ release.
 
 ### Entities
 
+- Remove `OTEL_ENTITIES` from env var spec, indicate resource detectors should
+  be entity aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`
+  ([#5210](https://github.com/open-telemetry/opentelemetry-specification/pull/5210))
+
 ### Common
 
 ### OpenTelemetry Protocol
