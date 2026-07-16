@@ -54,10 +54,7 @@ processing requirements.
 
 The SDK that has access to environment variables MUST provide
 an `EnvEntityDetector` which will use the `OTEL_ENTITIES` environment variable
-to discover and associate defined entities with the resource. The `EnvEntityDetector`
-MUST only parse `OTEL_ENTITIES` when
-[`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#entity-configuration)
-is set to `true`.
+to discover and associate defined entities with the resource.
 
 The `OTEL_ENTITIES` environment variable contains a list of entities in a
 compact format designed for human readability and concise representation.
