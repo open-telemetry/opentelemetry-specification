@@ -179,6 +179,16 @@ The intention of this design is to enable flexibility for the writers. We envisi
 
 In both cases, all pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler. This design assumes signal handler-like semantics, therefore it is unnecessary to guard against CPU reordering.
 
+##### When growing or shrinking only the attrs-data
+
+Readers only care about the first `attrs-data-size` bytes starting from the `attrs-data`.
+A writer that wants to append attributes MAY freely mutate the bytes starting from `attrs-data + attrs-data-size` without detaching the context or even changing `valid`.
+
+In this situation, only appropriate fencing needs to happen to make the final update to `attrs-data-size` (thus making the new attributes visible) happens last.
+
+A similar situation can happen with "shrinking": replacing a `attrs-data-size` value with a smaller one MAY be done without changing `valid`
+as long as appropriate fencing ensures it's not reordered with other changes.
+
 #### 3. Context Detachment
 
 When a request context is no longer active on a thread, the SDK either sets the TLS pointer to `NULL`, or sets the `valid` flag to `false`.
