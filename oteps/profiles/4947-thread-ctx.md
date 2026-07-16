@@ -370,10 +370,10 @@ We decided to keep this OTEP Linux-specific as:
   * **[OpenTelemetry eBPF Profiler PR](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229)**: Reads thread context information and propagates it with profiles
 
 * Writers:
-  * **[ctx-sharing-demo repo](https://github.com/scottgerring/ctx-sharing-demo)**: Multiple writer examples, including in rust and C
-  * **[opentelemetry-rust](https://github.com/open-telemetry/opentelemetry-rust/compare/main...scottgerring:opentelemetry-rust:feat/otep-4719)**: Experimental implementation of both process context and thread context for rust SDK
+  * **[ctx-sharing-demo repo](https://github.com/scottgerring/ctx-sharing-demo)**: Multiple writer examples, including in Rust and C
+  * **[opentelemetry-rust](https://github.com/open-telemetry/opentelemetry-rust/compare/main...scottgerring:opentelemetry-rust:feat/otep-4719)**: Experimental implementation of both process context and thread context for Rust SDK
   * **[Node.js thread context](https://github.com/polarsignals/custom-labels/tree/otel-thread-ctx-wip/js)**: Experimental implementation of thread context for Node.js
-  * **[libdd-otel-thread-ctx](https://github.com/DataDog/libdatadog/tree/main/libdd-otel-thread-ctx)**: Datadog's open-source implementation of thread context in Rust
+  * **[libdd-otel-thread-ctx](https://github.com/DataDog/libdatadog/tree/main/libdd-otel-thread-ctx)**: Datadog's Open Source implementation of thread context in Rust
   * **[Datadog's dd-trace-java SDK](https://github.com/DataDog/java-profiler/pull/347)**: Shows a high-performance implementation of thread context, and includes adoption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
 
 ## Future possibilities
