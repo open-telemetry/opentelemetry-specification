@@ -374,7 +374,7 @@ We decided to keep this OTEP Linux-specific as:
   * **[opentelemetry-rust](https://github.com/open-telemetry/opentelemetry-rust/compare/main...scottgerring:opentelemetry-rust:feat/otep-4719)**: Experimental implementation of both process context and thread context for rust SDK
   * **[Node.js thread context](https://github.com/polarsignals/custom-labels/tree/otel-thread-ctx-wip)**: Experimental implementation of thread context for Node.js
   * **[libdd-otel-thread-ctx](https://github.com/DataDog/libdatadog/tree/main/libdd-otel-thread-ctx)**: Datadog's open-source implementation of thread context in Rust
-  * **[Datadog's dd-trace-java SDK](https://github.com/DataDog/java-profiler/pull/347)**: Shows an high-performance implementation of thread context, and includes doption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
+  * **[Datadog's dd-trace-java SDK](https://github.com/DataDog/java-profiler/pull/347)**: Shows an high-performance implementation of thread context, and includes adoption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
 
 ## Future possibilities
 
