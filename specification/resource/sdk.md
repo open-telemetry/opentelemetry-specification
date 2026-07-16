@@ -188,7 +188,7 @@ reserved for built-in resource detectors published with language SDKs:
 Resource detectors SHOULD produce resources with [entities](../entities/data-model.md)
 attached. The SDK MUST strip entity information from detected resources before
 associating them with a provider unless
-[`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#entity-configuration)
+[`OTEL_EXPERIMENTAL_ENTITIES_ENABLED`](../configuration/sdk-environment-variables.md#general-sdk-configuration)
 is set to `true`.
 
 ### Specifying resource information via an environment variable
