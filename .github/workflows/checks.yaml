@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdownlint
       run: make markdownlint
@@ -44,7 +44,7 @@ jobs:
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdown-link-check
       run: make markdown-link-check
@@ -59,7 +59,7 @@ jobs:
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdown-toc
       run: make markdown-toc-check
@@ -96,7 +96,7 @@ jobs:
       uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run textlint
       run: make textlint format=github
