@@ -80,7 +80,8 @@ You can often tell _why_ an issue was closed from its `triage:rejected:*` label
 
 Closing an issue only changes its status. The discussion, the
 context, and your idea all stay on GitHub, and we can reopen an issue at any time
-if circumstances change or new information comes to light.
+if circumstances change or new information comes to light. Closed issues have been
+reopened before.
 
 ### We're human, and we sometimes get it wrong
 
