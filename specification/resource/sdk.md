@@ -221,11 +221,13 @@ associated with a resource.
 
 There is no need to guarantee the order of the attributes.
 
+When entities are enabled and present for the Resource, this list MUST
+include all attributes, including those associated with entities.
+
 The most common operation when retrieving attributes is to enumerate over them. As
 such, it is recommended to optimize the resulting collection for fast
 enumeration over other considerations such as a way to quickly retrieve a value
 for a attribute with a specific key.
-
 
 ### Retrieve entities
 
