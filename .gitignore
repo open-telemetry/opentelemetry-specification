@@ -24,7 +24,6 @@ bin
 
 # Node.js files for tools (e.g. markdown-toc)
 node_modules/
-package-lock.json
 
 # Python virtual environment
 venv/
