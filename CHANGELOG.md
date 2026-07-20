@@ -47,7 +47,7 @@ release.
 ### Entities
 
 - Add Entity specification.
-  ([#5180](https://github.com/open-telemetry/opentelemetry-specification/pull/5180))
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
 
 ### Common
 
