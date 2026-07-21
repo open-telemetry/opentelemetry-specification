@@ -20,13 +20,12 @@ jobs:
           stale-pr-message: 'This PR was marked stale. It will be closed in 14 days without additional activity.'
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
-          stale-issue-message: > 
-            This issue was marked stale due to lack of activity. Please leave a comment if you would like to keep this issue open.
+          stale-issue-message: 'This issue was marked stale due to lack of activity. Please leave a comment if you would like to keep this issue open.'
           close-issue-message: |
             Closed due to inactivity.
 
             We appreciate your input, and if this issue is still relevant,
-            please reopen it, or comment "/reopen" and we'll reopen it for you.
+            please reopen it, or comment "/reopen" and we'll do it for you.
 
             Thank you for your contribution!
           # applies only to pull requests
