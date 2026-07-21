@@ -10,6 +10,7 @@ jobs:
   stale:
     permissions:
       pull-requests: write # required for marking and closing stale PRs
+      actions: write # required for the stale action to manage (reset) its state cache
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@1e223db275d687790206a7acac4d1a11bd6fe629 # v10.4.0
