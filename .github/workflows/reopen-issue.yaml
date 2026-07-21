@@ -8,15 +8,15 @@ permissions:
 
 jobs:
   reopen:
-    # Only run on issues (not PRs), on closed issues, when the comment starts with "/reopen",
-    # and only if the commenter is the issue author or a member/collaborator/owner.
+    # Only run on issues (not PRs), on closed issues, when the comment is exactly "/reopen",
+    # and only if the commenter is the issue author or a member/collaborator/owner/contributor.
     if: >
       !github.event.issue.pull_request &&
       github.event.issue.state == 'closed' &&
       startsWith(github.event.comment.body, '/reopen') &&
       (
         github.event.comment.user.login == github.event.issue.user.login ||
-        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR", "CONTRIBUTOR"]'), github.event.comment.author_association)
       )
     permissions:
       issues: write # required to reopen the issue
