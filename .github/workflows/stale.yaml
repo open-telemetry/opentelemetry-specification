@@ -27,6 +27,6 @@ jobs:
           # applies only to pull requests
           days-before-pr-stale: 14
           days-before-pr-close: 14
-          # applies only to issues (~12 months of inactivity)
+          # applies only to issues
           days-before-issue-stale: 365
           days-before-issue-close: 14
