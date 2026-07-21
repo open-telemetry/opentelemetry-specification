@@ -29,8 +29,8 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          # Require the comment to be exactly "/reopen" (ignoring surrounding whitespace)
-          if [ "$(echo "$COMMENT_BODY" | tr -d '[:space:]')" != "/reopen" ]; then
+          # Require the comment to be exactly "/reopen" (ignoring trailing whitespace)
+          if [[ ! "$COMMENT_BODY" =~ ^/reopen[[:space:]]*$ ]]; then
             echo "Comment is not an exact /reopen command; skipping."
             exit 0
           fi
