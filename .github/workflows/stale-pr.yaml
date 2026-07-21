@@ -1,4 +1,4 @@
-name: "Close stale pull requests"
+name: "Close stale pull requests and issues"
 on:
   schedule:
     - cron: "12 3 * * *" # arbitrary time not to DDOS GitHub
@@ -10,6 +10,7 @@ jobs:
   stale:
     permissions:
       pull-requests: write # required for marking and closing stale PRs
+      issues: write # required for marking and closing stale issues
       actions: write # required for the stale action to manage (reset) its state cache
     runs-on: ubuntu-latest
     steps:
@@ -19,9 +20,14 @@ jobs:
           stale-pr-message: 'This PR was marked stale. It will be closed in 14 days without additional activity.'
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
-          # opt out of defaults to avoid marking issues as stale
+          stale-issue-message: 'This issue was marked stale due to lack of activity. It will be closed in 14 days without additional activity.'
+          close-issue-message: 'Closed as inactive. Feel free to reopen if this issue is still relevant.'
+          # opt out of defaults to set explicit per-type values below
           days-before-stale: -1
           days-before-close: -1
           # overrides the above only for pull requests
           days-before-pr-stale: 14
           days-before-pr-close: 14
+          # overrides the above only for issues (~12 months of inactivity)
+          days-before-issue-stale: 365
+          days-before-issue-close: 14
