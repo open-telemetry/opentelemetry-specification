@@ -72,7 +72,8 @@ Parameters:
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted resource. If the `schema_url` parameter is unspecified
   then the created resource will have an empty Schema URL.
-- [experimental since 1.60.0](../document-status.md) `entities` (optional): Specifies the [entities](data-model.md) that
+- **Status**: [Development](../document-status.md) since 1.60.0 - `entities` (optional):
+  Specifies the [entities](data-model.md) that
   should be recorded in the emitted resource. If the `entities` parameter is
   unspecified then the created resource will have no entities.
 
@@ -108,7 +109,7 @@ Required parameters:
 
 #### Merge behavior with entities
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 When a Resource contains entities, the merge operation MUST follow the
 [resource data model's merge algorithm](./data-model.md#merging-resources).
@@ -231,18 +232,18 @@ for a attribute with a specific key.
 
 ### Retrieve entities
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
-The SDK should provide a way to retrieve the entities associated with a
+The SDK SHOULD provide a way to retrieve the entities associated with a
 resource.
 
 There is no need to guarantee the order of entities.
 
 ### Retrieve unassociated attributes
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
-The SDK should provide a way to retrieve attributes which are NOT associated
+The SDK SHOULD provide a way to retrieve attributes which are NOT associated
 with an entity in the resource.
 
 There is no need to guarantee the order of attributes.
