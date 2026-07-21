@@ -21,8 +21,7 @@ jobs:
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
           stale-issue-message: > 
-            This issue was marked stale due to lack of activity. It will be closed in 14 days without additional activity.
-            Please leave a comment if you would like to keep this issue open.
+            This issue was marked stale due to lack of activity. Please leave a comment if you would like to keep this issue open.
           close-issue-message: |
             Closed due to inactivity.
 

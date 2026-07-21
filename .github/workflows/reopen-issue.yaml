@@ -35,4 +35,3 @@ jobs:
             exit 0
           fi
           gh issue reopen "$ISSUE_NUMBER" --repo "$REPO"
-
