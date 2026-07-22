@@ -916,7 +916,7 @@ add `1<<scale` to the index and divide the result by `2`.
 *Note that floating-point to integer type conversions have been
 omitted from the code fragments above, to improve readability.*
 
-#### ExponentialHistogram: Producer Recommendations
+##### Extreme value handling
 
 At the lowest or highest end of the 64 bit IEEE floating point, a
 bucket's range may only be partially representable by the floating
@@ -924,18 +924,27 @@ point number format.  When mapping a number in these buckets, a
 producer may correctly return the index of such a partially
 representable bucket.  This is considered a normal condition.
 
-For positive scales, the logarithm method is preferred because it
-requires very little code, is easy to validate and is nearly as fast
-and accurate as the lookup table approach.  For zero scale and
-negative scales, directly calculating the index from the
-floating-point representation is more efficient.
+As examples:
 
-The use of a built-in logarithm function could lead to results that
+- The smallest normal value `0x1p-1022` belongs to a bucket that
+  includes subnormal values.
+- The largest bucket at any given scale will contain the value
+  `0x1p+1024`, which is unrepresentable.
+
+##### Table lookup implementation
+
+A table lookup implementation is described as an alterative to the
+logarithm method for positive scales. As an alternative to the
+logarithm method, the implementation [detailed in a supplemental
+document](./exponential-histogram-table-lookup.md) uses a table of
+exact logarithm values as the basis for a fast and exact bucket
+calculation.
+
+The use of a built-in logarithm function can lead to results that
 differ from the bucket index that would be computed using arbitrary
-precision or a lookup table, however producers are not required to
-perform an exact computation.  As a result, ExponentialHistogram
-exemplars could map into buckets with zero count.  We expect to find
-such values counted in the adjacent buckets.
+precision logarithm function. As a result, ExponentialHistogram
+exemplars could map into buckets with zero count. The table lookup
+method addresses the problem because it is exact.
 
 #### ExponentialHistogram: Consumer Recommendations
 
