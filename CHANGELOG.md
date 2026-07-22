@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
+  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
+
 ### Logs
 
 ### Baggage

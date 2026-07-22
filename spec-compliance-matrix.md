@@ -149,6 +149,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  |  |  | - |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  | - |
+| The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching. | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Default` aggregation uses the specified aggregation by instrument. |  | + | + | + | + | + | + |  | + | + | + |  | - |
