@@ -21,6 +21,10 @@
       "groupName": "github-actions deps"
     }
   ],
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ["* 0-7 * * 2"], // weekly, before 8am on Tuesday
+  },
   "labels": [
     "dependencies"
   ]
