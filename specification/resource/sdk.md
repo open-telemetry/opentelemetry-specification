@@ -72,10 +72,14 @@ Parameters:
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted resource. If the `schema_url` parameter is unspecified
   then the created resource will have an empty Schema URL.
-- **Status**: [Development](../document-status.md) since 1.60.0 - `entities` (optional):
+- **Status**: [Development](../document-status.md) since 1.60.0 - `Entities` (optional):
   Specifies the [entities](data-model.md) that
   should be recorded in the emitted resource. If the `entities` parameter is
   unspecified then the created resource will have no entities.
+
+Note: When both `Entities` and `Attributes` are provided in the create method,
+the system SHOULD behave as if a Resource is created with just `Attributes`
+and then merges with another Resource created with just `Entities`.
 
 ### Merge
 
@@ -113,6 +117,14 @@ Required parameters:
 
 When a Resource contains entities, the merge operation MUST follow the
 [resource data model's merge algorithm](./data-model.md#merging-resources).
+
+The resulting `SchemaURL` MUST match the behavior defined in the merge
+algorithm, which is compatible with previous resource behavior - and updated
+to account for `SchemaURL` being tracked in Entities.
+
+`SchemaURL` on Resource is preserved as a backwards-compatibility measure, but
+SHOULD NOT be used in entity-aware systems, where multiple `SchemaURL`s will
+apply to `Resource`.
 
 ### The empty resource
 
