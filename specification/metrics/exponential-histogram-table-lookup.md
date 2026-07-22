@@ -1,20 +1,12 @@
 <!--- Hugo front matter used to generate the website version of this page:
-linkTitle: Exponential Histogram Table Lookup
-aliases: [/docs/reference/specification/metrics/datamodel]
+linkTitle: Exponential-Histogram Table Lookup
+aliases: [/docs/reference/specification/metrics/exponentialhistogramtablelookup]
 weight: 2
 --->
 
-# Metrics Data Model
+# Exponential-Histogram Table Lookup
 
 **Status**: [Mixed](../document-status.md)
-
-<details>
-<summary>Table of Contents</summary>
-
-<!-- START DOCTOC -->
-<!-- END DOCTOC -->
-
-</details>
 
 ## Overview
 
@@ -35,7 +27,7 @@ A second table of size `2^(S+1)` is calculated. Because the logarithm
 function is concave, a linear-approximate lookup in the second table
 narrows the search to a single boundary, leaving one comparison.
 
-### Data Structures
+## Data Structures
 
 Two tables are generated for a chosen maximum table scale `S`, where
 `N = 2^S`. Our goal is to exactly subdivide the range `[1, 2)` into N
@@ -43,7 +35,7 @@ exact significand boundaries; the same table lookup is applied
 regardless of the exponent, which serves to shift the result by
 multiples of N.
 
-#### Boundaries
+### Boundaries
 
 The `BOUNDARIES` array consists of `2^S` exact logarithm significand
 values and two sentinel values.
@@ -87,7 +79,7 @@ for k in 0..N:
 Note that boundary positions are shifted by one, to account for the
 additional sentinel. This will be corrected during lookup.
 
-#### Index Table
+### Index Table
 
 The `INDEX_TABLE` is a linear-to-exponential bucket mapping with `2N`
 entries. An accessory value `SHIFT` determines how many bits are
@@ -112,7 +104,7 @@ bucket, including the `+1` offset. Since at most one boundary can fall
 within any linear region, this gives the correct index or one less
 than the correct index.
 
-### Algorithm
+## Algorithm
 
 The input is a positive IEEE 754 double-precision value, with the
 zero, NaN and Inf cases handled separately. The significand `s` is a
@@ -147,7 +139,7 @@ above, handling the special case for exact powers of two. The final
 right-shift downscales from the table's built-in resolution to the
 requested scale.
 
-### Correctness Proof
+## Correctness Proof
 
 The logarithm function is concave, steepest at small significand
 values.  By dividing the significand range `[1, 2)` into `2N` equal
@@ -155,7 +147,7 @@ parts, each region can hold at most one exponential bucket boundary.
 
 TODO:
 
-### Table Size and Scale Selection
+## Table Size and Scale Selection
 
 The table dimensions are determined by the maximum table scale `S`:
 

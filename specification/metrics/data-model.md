@@ -941,10 +941,10 @@ exact logarithm values as the basis for a fast and exact bucket
 calculation.
 
 The use of a built-in logarithm function can lead to results that
-differ from the bucket index that would be computed using arbitrary
-precision logarithm function. As a result, ExponentialHistogram
-exemplars could map into buckets with zero count. The table lookup
-method addresses the problem because it is exact.
+differ from the exactly-correct bucket index that would be computed
+with greater precision. As a result, ExponentialHistogram exemplars
+computed alongside the logrithm function could map into buckets with
+zero count. The table lookup method addresses this problem.
 
 #### ExponentialHistogram: Consumer Recommendations
 
