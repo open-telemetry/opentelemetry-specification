@@ -128,9 +128,10 @@ When either Resource contains entities, the merge operation MUST follow the
 The resulting `SchemaURL` MUST match the behavior defined in the merge
 algorithm.
 
-Note: `SchemaURL` on Resource is preserved as a backwards-compatibility measure.
-It is not used in entity-aware systems, where multiple `SchemaURL`s will
-apply to `Resource`.
+> [!NOTE]
+> `SchemaURL` on Resource is preserved as a backwards-compatibility measure.
+> It is not used in entity-aware systems, where multiple `SchemaURL`s will
+> apply to `Resource`.
 
 ### The empty resource
 
