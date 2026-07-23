@@ -165,3 +165,17 @@ per power-of-two octave with ~0.14% relative error. This covers the
 practical range of scales used in observability scenarios.
 
 Implementations control maximum table scale.
+
+## References
+
+- **Dynatrace** — Otmar Ertl's [DynaHist
+  library](https://github.com/dynatrace-oss/dynahist)
+  ([ExponentialHistogramLargeInclusiveLayout](https://github.com/dynatrace-oss/dynahist/blob/main/src/main/java/com/dynatrace/dynahist/layout/ExponentialHistogramLargeInclusiveLayout.java))
+  uses `N` linear buckets with 2 boundary corrections.
+
+- **NewRelic** — Yuke Zhuge's [NrSketch
+  library](https://github.com/newrelic-experimental/newrelic-sketch-java)
+  ([SubBucketLookupIndexer](https://github.com/newrelic-experimental/newrelic-sketch-java/blob/main/src/main/java/com/newrelic/nrsketch/indexer/SubBucketLookupIndexer.java),
+  [algorithm
+  description](https://github.com/newrelic-experimental/newrelic-sketch-java/blob/main/Indexer.md))
+  uses `2N` linear buckets with 1 boundary correction.
