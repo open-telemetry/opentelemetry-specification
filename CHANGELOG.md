@@ -9,6 +9,15 @@ release.
 
 ### Context
 
+- Clarify that environment variable propagation operational guidance is
+  non-normative and should be documented by language implementations.
+  ([#5165](https://github.com/open-telemetry/opentelemetry-specification/pull/5165))
+- Clean up implementation guidelines for environment variable propagation
+  carriers.
+  ([#5166](https://github.com/open-telemetry/opentelemetry-specification/pull/5166))
+- Deprecate `Keys` on `TextMap` extract `Getter` implementations.
+  ([#5150](https://github.com/open-telemetry/opentelemetry-specification/issues/5150))
+
 ### Traces
 
 ### Metrics
@@ -96,7 +105,6 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
-
 
 ### Profiles
 
