@@ -13,6 +13,14 @@ release.
 
 ### Metrics
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize client libs section.
+    ([#5106](https://github.com/open-telemetry/opentelemetry-specification/pull/5106))
+  - Stabilize Prometheus Metrics Exporter default aggregation configuration.
+    ([#5113](https://github.com/open-telemetry/opentelemetry-specification/pull/5113))
+  - Stabilize `resource_constant_labels` configuration.
+    ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
+
 ### Logs
 
 ### Baggage
