@@ -1118,6 +1118,15 @@ an empty batch OR skip the export and consider it to be completed immediately.
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached, spans are
   dropped. The default value is `2048`.
+* **Status**: [Development](../document-status.md) - `onQueueFull` - the behavior
+  when a new span is received and the queue is full. The possible values are
+  `DROP` and `BLOCK`. If set to `DROP`, spans are dropped. If set to `BLOCK`,
+  adding the span waits until space is available in the queue or until
+  `blockOnQueueFullTimeoutMillis` elapses. The default value is `DROP`.
+* **Status**: [Development](../document-status.md) -
+  `blockOnQueueFullTimeoutMillis` - how long adding a span can wait for space in
+  the queue before the span is dropped when `onQueueFull` is set to `BLOCK`. The
+  default value is `0`, meaning no timeout.
 * `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.

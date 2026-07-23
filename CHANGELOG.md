@@ -31,6 +31,10 @@ release.
 
 ### SDK Configuration
 
+- Add Development configuration for blocking behavior when batch processor
+  queues are full.
+  ([#5181](https://github.com/open-telemetry/opentelemetry-specification/pull/5181))
+
 ### Supplementary Guidelines
 
 ### OTEPs
@@ -96,7 +100,6 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
-
 
 ### Profiles
 
