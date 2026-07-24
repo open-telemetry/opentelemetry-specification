@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add the traces data model.
+
 ### Metrics
 
 - Stabilize sections of Prometheus Metrics Exporter.
