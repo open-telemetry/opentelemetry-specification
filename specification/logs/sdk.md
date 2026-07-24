@@ -243,15 +243,17 @@ unnecessary processing of large attribute values that would be truncated anyway.
 
 **Status**: [Development](../document-status.md) Before processing a log record,
 the implementation MUST apply the filtering rules defined by the
-[LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
-emitting the record):
+[LoggerConfig](#loggerconfig):
 
-1. **Minimum severity**: If the log record's
+1. **Disabled**: If the `Logger` is disabled (i.e. `LoggerConfig.enabled` is
+   `false`), the log record MUST be dropped.
+
+2. **Minimum severity**: If the log record's
    [SeverityNumber](./data-model.md#field-severitynumber) is specified
    (i.e. not `0`) and is less than the configured `minimum_severity`, the log
    record MUST be dropped.
 
-2. **Trace-based**: If `trace_based` is `true`, and if the log record has a
+3. **Trace-based**: If `trace_based` is `true`, and if the log record has a
    [`SpanId`](./data-model.md#field-spanid) and the
    [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is unset,
    the log record MUST be dropped.

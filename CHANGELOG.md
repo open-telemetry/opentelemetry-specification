@@ -15,6 +15,11 @@ release.
 
 ### Logs
 
+- Clarify the Logs SDK Emit-time LoggerConfig filtering rules: remove the
+  conditional framing around `Enabled`, and list the disabled-`Logger`
+  condition alongside minimum-severity and trace-based filtering.
+  ([#5229](https://github.com/open-telemetry/opentelemetry-specification/pull/5229))
+
 ### Baggage
 
 ### Profiles
