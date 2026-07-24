@@ -66,12 +66,20 @@ The interface MUST provide a way to create a new resource, from [`Attributes`](.
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
-Required parameters:
+Parameters:
 
 - [`Attributes`](../common/README.md#attribute)
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted resource. If the `schema_url` parameter is unspecified
   then the created resource will have an empty Schema URL.
+- **Status**: [Development](../document-status.md) since 1.60.0 - `Entities` (optional):
+  Specifies the [entities](data-model.md) that
+  should be recorded in the emitted resource. If the `entities` parameter is
+  unspecified then the created resource will have no entities.
+
+When both `Entities` and `Attributes` are provided in the create method,
+the system MUST behave as if a Resource is created with just `Attributes`
+and then merges with another Resource created with just `Entities`.
 
 ### Merge
 
@@ -81,6 +89,18 @@ updating resource to be merged into a new resource.
 Note: This is intended to be utilized for merging of resources whose attributes
 come from different sources,
 such as environment variables, or metadata extracted from the host or container.
+
+Required parameters:
+
+- the old resource
+- the updating resource whose attributes take precedence
+
+If either resource contains `Entities` then
+[merge behavior with Entiites](#merge-behavior-with-entities) MUST be used,
+otherwise [merge behavior without Entities](#merge-behavior-without-entities)
+MUST be used.
+
+#### Merge behavior without Entities
 
 The resulting resource MUST have all attributes that are on any of the two input resources.
 If a key exists on both the old and updating resource, the value of the updating
@@ -98,10 +118,20 @@ The resulting resource will have the Schema URL calculated as follows:
   and updating resources are not empty and are different). The resulting resource is
   undefined, and its contents are implementation-specific.
 
-Required parameters:
+#### Merge behavior with entities
 
-- the old resource
-- the updating resource whose attributes take precedence
+**Status**: [Development](../document-status.md)
+
+When either Resource contains entities, the merge operation MUST follow the
+[resource data model's merge algorithm](./data-model.md#merging-resources).
+
+The resulting `SchemaURL` MUST match the behavior defined in the merge
+algorithm.
+
+> [!NOTE]
+> `SchemaURL` on Resource is preserved as a backwards-compatibility measure.
+> It is not used in entity-aware systems, where multiple `SchemaURL`s will
+> apply to `Resource`.
 
 ### The empty resource
 
@@ -211,7 +241,28 @@ associated with a resource.
 
 There is no need to guarantee the order of the attributes.
 
+When entities are enabled and present for the Resource, this list MUST
+include all attributes, including those associated with entities.
+
 The most common operation when retrieving attributes is to enumerate over them. As
 such, it is recommended to optimize the resulting collection for fast
 enumeration over other considerations such as a way to quickly retrieve a value
 for a attribute with a specific key.
+
+### Retrieve entities
+
+**Status**: [Development](../document-status.md)
+
+The SDK SHOULD provide a way to retrieve the entities associated with a
+resource.
+
+There is no need to guarantee the order of entities.
+
+### Retrieve unassociated attributes
+
+**Status**: [Development](../document-status.md)
+
+The SDK SHOULD provide a way to retrieve attributes which are NOT associated
+with an entity in the resource.
+
+There is no need to guarantee the order of attributes.
