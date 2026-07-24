@@ -54,7 +54,7 @@ sections:
           - name: Conforms to the W3C TraceContext spec
             status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '?'
+            status: '-'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
@@ -140,25 +140,25 @@ sections:
           - name: ShouldSample gets full parent Context
             status: '-'
           - name: 'Sampler: JaegerRemoteSampler'
-            status: '?'
+            status: '-'
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
             status: '-'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
-            status: '?'
+            status: '-'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
-            status: '?'
+            status: '-'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '?'
+            status: '-'
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '?'
+            status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '?'
+            status: '-'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
-            status: '?'
+            status: '-'
   - name: Baggage
     features:
       - name: Basic support
@@ -176,7 +176,7 @@ sections:
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
         status: '-'
       - name: '`get_meter` accepts `attributes`.'
-        status: '?'
+        status: '+'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
         status: '-'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
@@ -260,7 +260,7 @@ sections:
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '-'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
-        status: '?'
+        status: '+'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
         status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
@@ -408,7 +408,7 @@ sections:
       - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
         status: '+'
       - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
-        status: '-'
+        status: '+'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -510,35 +510,35 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '+'
       - name: OTEL_CONFIG_FILE
-        status: '?'
+        status: '-'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
-        status: '?'
+        status: '-'
       - name: The `Parse` operation accepts the configuration YAML file format
-        status: '?'
+        status: '-'
       - name: The `Parse` operation performs environment variable substitution
-        status: '?'
+        status: '-'
       - name: The `Parse` operation returns configuration model
-        status: '?'
+        status: '-'
       - name: The `Parse` operation resolves plugin component configuration to `properties`
-        status: '?'
+        status: '-'
       - name: '`Create` SDK components'
-        status: '?'
+        status: '-'
       - name: The `Create` operation accepts configuration model
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `TracerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `MeterProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `LoggerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `Propagators`
-        status: '?'
+        status: '-'
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
-        status: '?'
+        status: '-'
       - name: Register a `PluginComponentProvider`
-        status: '?'
+        status: '-'
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
@@ -570,9 +570,9 @@ sections:
           - name: Multi-destination spec compliance
             status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
-            status: '-'
+            status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
-            status: '-'
+            status: '+'
           - name: SchemaURL in ResourceLogs and ScopeLogs
             status: '-'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
