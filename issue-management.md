@@ -62,6 +62,38 @@ Rejected issues are issues that describe a problem that cannot or will not be so
 * `triage:rejected:out-of-scope`
 * `triage:rejected:scope-too-large`
 
+## Stale Issues
+
+Issues that receive no activity for a long time are closed automatically by the
+[stale workflow](.github/workflows/stale.yaml), which runs daily using
+[`actions/stale`](https://github.com/actions/stale). This keeps the issue
+tracker focused on work that is still relevant, without permanently discarding
+anything: closing an issue only changes its status, and closed issues remain
+searchable and can be reopened.
+
+The workflow follows a two-step process:
+
+1. **Marked stale after one year of inactivity.** When an issue has had no
+   activity for 365 days, it is labeled stale and a comment is posted asking
+   whether it should be kept open:
+
+   > This issue was marked stale due to lack of activity. Please leave a comment
+   > if you would like to keep this issue open.
+
+2. **Closed 14 days later.** If there is still no activity for 14 days after the
+   issue was marked stale, it is closed with a comment inviting you to reopen it.
+
+Any activity on the issue (for example, a comment) resets the clock and removes
+the stale label, so a single comment during the 14-day window is enough to keep
+an issue open. The 365-day and 14-day thresholds apply to issues; pull requests
+are governed by separate, shorter timers in the same workflow.
+
+If an issue was closed as stale but is still relevant, you can reopen it at any
+time. Comment `/reopen` on the closed issue, and the
+[reopen workflow](.github/workflows/reopen-issue.yaml) will reopen it for you.
+This works for the issue author as well as members, collaborators, and previous
+contributors; anyone else can ask a maintainer to reopen it.
+
 ## SIG Specific Issues
 
 Many SIGs track work in the specification repository that is outside of the triage process listed above.
