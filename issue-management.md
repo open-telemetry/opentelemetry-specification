@@ -66,10 +66,8 @@ Rejected issues are issues that describe a problem that cannot or will not be so
 
 Issues that receive no activity for a long time are closed automatically by the
 [stale workflow](.github/workflows/stale.yaml), which runs daily using
-[`actions/stale`](https://github.com/actions/stale). This keeps the issue
-tracker focused on work that is still relevant, without permanently discarding
-anything: closing an issue only changes its status, and closed issues remain
-searchable and can be reopened.
+[`actions/stale`](https://github.com/actions/stale). Closing an issue only changes
+its status, and closed issues remain searchable and can be reopened.
 
 The workflow follows a two-step process:
 
