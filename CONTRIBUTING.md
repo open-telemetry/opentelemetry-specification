@@ -76,6 +76,13 @@ You can often tell _why_ an issue was closed from its `triage:rejected:*` label
 (for example `duplicate`, `out-of-scope`, or `insufficient-info`). See
 [issue-management.md](./issue-management.md) for what each label means.
 
+Issues can also be closed automatically after a long period of inactivity. An
+issue that receives no activity for a year is marked stale, and if there is
+still no activity for another 14 days it is closed. A single comment during that
+window is enough to keep it open. See
+[Stale Issues](./issue-management.md#stale-issues) for the full process and how
+to reopen a stale-closed issue.
+
 ### A closed issue is not a deleted issue
 
 Closing an issue only changes its status. The discussion, the
