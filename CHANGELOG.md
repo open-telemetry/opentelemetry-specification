@@ -15,7 +15,7 @@ release.
 
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
-    ([5521](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
 
 ### Logs
 
