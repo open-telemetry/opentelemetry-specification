@@ -199,15 +199,20 @@ reserved for built-in resource detectors published with language SDKs:
 
 * `container`:
   Populates [container](https://opentelemetry.io/docs/specs/semconv/registry/entities/container/)
-  entity.
+  entity, or all relevant attributes of the entity, if entity support is not
+  included yet.
 * `host`:
   Populates [host](https://opentelemetry.io/docs/specs/semconv/registry/entities/host/) and [os](https://opentelemetry.io/docs/specs/semconv/registry/entities/os/)
-  entities.
+  entities, or all relevant attributes of the entities, if entity support is
+  not included yet.
 * `process`:
   Populates [process](https://opentelemetry.io/docs/specs/semconv/registry/entities/process/)
-  entities.
+  entities, or all relevant attributes of the entities, if entity support is
+  not included yet.
 * `service`: Populates `service` and `service.instance` entities described
-  [here](https://opentelemetry.io/docs/specs/semconv/registry/entities/service/).
+  [here](https://opentelemetry.io/docs/specs/semconv/registry/entities/service/),
+  or all relevant attributes of the entities, if entity support is not included
+  yet.
 * `env`: Populates entities based on [Entity Propagation](../entities/entity-propagation.md).
 
 #### Entity-aware resource detectors
