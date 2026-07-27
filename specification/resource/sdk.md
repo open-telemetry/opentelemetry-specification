@@ -170,58 +170,43 @@ the detectors use different non-empty Schema URL it MUST be an error since it is
 impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
 
-### Detecting entity information from the environment
+When entity support is enabled (see [Resource Provider](#resource-provider)),
+resource detector packages MAY also return [Entities](#entities) alongside
+resource attributes.
 
 **Status**: [Development](../document-status.md)
 
-Entity detectors are responsible for detecting entities that are associated with
-the current instance of the SDK. For example, an entity detector may detect a
-service entity for the current SDK, or the process or host it is running on.
-
-An entity detector MUST implement a `Detect` method. `Detect` accepts no
-arguments and returns one or more [Entities](#entities) with distinct types.
-
-Entity detectors SHOULD detect identifying attributes synchronously. Entity
-detectors MAY detect descriptive attributes asynchronously (e.g. via a future
-or promise that resolves after initialization). When identifying attributes
-are detected synchronously but descriptive attributes are detected
-asynchronously, the entity MUST be returned with its identifying attributes
-immediately, and the descriptive attributes MUST be merged into the Resource
-when they become available.
-
-Entity detectors SHOULD follow the same naming conventions as
-[resource detectors](#resource-detector-name).
-
-Entity detection logic is expected to complete quickly since this code will be
-run during application initialization. Errors should be handled as specified in
-the [Error Handling
-principles](../error-handling.md#basic-error-handling-principles). The failure
-to detect any entity information MUST NOT be considered an error, whereas an
-error that occurs during an attempt to detect entity information SHOULD be
-considered an error.
+Entity-aware resource detectors SHOULD detect entity identifying attributes
+synchronously. Entity-aware resource detectors MAY detect entity descriptive
+attributes asynchronously (e.g. via a future or promise that resolves after
+initialization). When identifying attributes are detected synchronously but
+descriptive attributes are detected asynchronously, the entity MUST be returned
+with its identifying attributes immediately, and the descriptive attributes MUST
+be merged into the Resource when they become available.
 
 ### Resource Provider
 
 **Status**: [Development](../document-status.md)
 
 The Resource Provider is a component responsible for running all configured
-resource detectors and entity detectors and constructing a `Resource` for the
-SDK.
+resource detectors and constructing a `Resource` for the SDK.
 
 The Resource Provider MUST:
 
-- Run all configured resource detectors and entity detectors.
-- Resolve conflicts when multiple entity detectors detect entities of the same
-  type, using a user-controlled priority order.
-- Construct a `Resource` from the detected entities and resource attributes.
+- Run all configured resource detectors.
+- When entity support is enabled, resolve conflicts when multiple entity-aware
+  resource detectors detect entities of the same type, using a user-controlled
+  priority order.
+- Construct a `Resource` from the detected resource attributes and any detected
+  entities.
 
-When using entity detectors and resource detectors together, entity merging MUST
-occur first, followed by resource detector merging using existing merge
-semantics. The entity merging algorithm is as follows:
+When entity support is enabled, entity merging MUST occur first, followed by
+resource attribute merging using existing merge semantics. The entity merging
+algorithm is as follows:
 
 - Construct a set of detected entities, `E`.
-- All entity detectors are sorted by priority (highest first).
-- For each entity detector, detect entities.
+- All entity-aware resource detectors are sorted by priority (highest first).
+- For each entity-aware resource detector, collect detected entities.
   - For each detected entity:
     - If an entity with the same type already exists in `E`:
       - If the entities [can be merged](../entities/data-model.md#merging-of-entities),
@@ -235,8 +220,8 @@ semantics. The entity merging algorithm is as follows:
   - Otherwise, leave the Resource `schema_url` empty.
 
 When descriptive attributes are detected asynchronously, the priority for
-merging MUST be determined by the configured order of the entity detectors, not
-by the order in which asynchronous results resolve. If a higher-priority
+merging MUST be determined by the configured order of the resource detectors,
+not by the order in which asynchronous results resolve. If a higher-priority
 detector's descriptive attributes resolve after a lower-priority detector's,
 the higher-priority detector's values MUST still take precedence.
 
