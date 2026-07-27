@@ -173,7 +173,9 @@ only understands `messaging.producer.send` handles an SQS span correctly; a
 consumer that also knows about SQS can use the extra attributes.
 
 Span refinements are not identifiable over OTLP. We expect to solve this within
-semantic conventions, without new OTLP properties.
+semantic conventions, without new OTLP properties, by pinning attribute values on
+refinements so a refinement can be recognized from the span's attributes
+([weaver#1643](https://github.com/open-telemetry/weaver/pull/1643)).
 
 ### This already matches the semantic conventions schema
 
@@ -227,21 +229,80 @@ message Span {
 
 Span type is supplied at span creation, next to `SpanKind`:
 
-- The span creation API accepts an optional span type. Default is unset.
+- The span creation API accepts an optional span type. Default is unset. It is
+  added as an optional parameter, so existing calls and existing `Tracer`
+  implementations keep working unchanged.
 - Span type is immutable after span creation. Like `SpanKind`, it determines what
   the span *is*; it cannot become something else halfway through.
 - The API does not validate the value.
 
+```diff
+ class Tracer:
+     def start_span(
+         self,
+         name: str,
+         context: Context | None = None,
+         kind: SpanKind = SpanKind.INTERNAL,
+         attributes: Attributes = None,
+         links: Links = None,
+         start_time: int | None = None,
+         record_exception: bool = True,
+         set_status_on_exception: bool = True,
++        span_type: str | None = None,
+     ) -> Span: ...
+```
+
 Instrumentations that follow a semantic convention SHOULD set the span type to
 the type of the definition they implement.
+
+```diff
+ with tracer.start_as_current_span(
+     f"chat {model}",
+     kind=SpanKind.CLIENT,
++    span_type="gen_ai.client.inference",
+     attributes={"gen_ai.operation.name": "chat"},
+ ) as span:
+     ...
+```
 
 ### SDK
 
 - Span type becomes a sampler input, next to name and `SpanKind`, so sampling
-  rules can match on it without matching on attributes.
+  rules can match on it without matching on attributes. It is added as an
+  optional parameter, so existing `Sampler` implementations keep working
+  unchanged.
 - Span processors and exporters read it through
   [readable span](../specification/trace/sdk.md#additional-span-interfaces),
   which already covers everything the Span API defines. There is no setter.
+
+```diff
+ class Sampler:
+     def should_sample(
+         self,
+         parent_context: Context | None,
+         trace_id: int,
+         name: str,
+         kind: SpanKind | None = None,
+         attributes: Attributes = None,
+         links: Sequence[Link] | None = None,
+         trace_state: TraceState | None = None,
++        span_type: str | None = None,
+     ) -> SamplingResult: ...
+```
+
+```diff
+ class ReadableSpan:
+     @property
+     def name(self) -> str: ...
+
+     @property
+     def kind(self) -> SpanKind: ...
+
++    # named `span_type` because `type` shadows a Python builtin;
++    # the property name is normative, the accessor name is per-language
++    @property
++    def span_type(self) -> str | None: ...
+```
 
 ### Semantic conventions
 
@@ -259,6 +320,9 @@ the type of the definition they implement.
 - Declarative configuration: sampler configuration that matches on span type.
 - Downstream, the Collector (pdata, OTTL paths, schema processor) needs the new
   field plumbed through.
+- Exporters for protocols that have no place for span type can map it to an
+  attribute. If needed, we can define `otel.span.type` for that, so all such
+  exporters use the same key.
 - Existing instrumentations should be updated to populate it.
 
 ## Trade-offs and mitigations
@@ -325,8 +389,9 @@ leaving every ecosystem to invent it.
 
 ## Open questions
 
-- **Identifying refinements.** Still in design; we don't know the exact mechanism
-  yet. Whatever it turns out to be, it should not be mixed into span type in
+- **Identifying refinements.** Still in design, see
+  [weaver#1643](https://github.com/open-telemetry/weaver/pull/1643). Whatever the
+  mechanism turns out to be, it should not be mixed into span type in
   OTLP: one definition can have tens of refinements (in theory, every HTTP client
   library could be documented as a refinement of `http.client.request`, each with
   its own caveats worth documenting). Span type is needed regardless of how
@@ -336,10 +401,12 @@ leaving every ecosystem to invent it.
 
 To be added:
 
-- Weaver code generation producing span type constants and setting the type in
-  generated instrumentation helpers.
 - One SDK prototype (creation-time parameter, readable span getter, sampler
   input) plus the corresponding proto change.
-- A live check run resolving spans to definitions by type instead of heuristics.
+- Weaver code generation producing span type constants and setting the type in
+  generated instrumentation helpers
+- A live check run resolving spans to definitions by type instead of heuristics
+  https://github.com/open-telemetry/weaver/pull/1648
+  vs hand-written https://github.com/open-telemetry/opentelemetry-python-genai/blob/main/policies/genai_span_validation.rego
 
 [live check]: https://github.com/open-telemetry/weaver/blob/main/docs/live-check.md
