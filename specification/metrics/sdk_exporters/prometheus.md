@@ -87,7 +87,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 
 ### Target
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
