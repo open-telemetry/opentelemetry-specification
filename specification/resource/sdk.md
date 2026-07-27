@@ -62,7 +62,7 @@ The SDK must support two ways to instantiate new resources. Those are:
 
 ### Create
 
-The interface MUST provide a way to create a new resource, from [`Attributes`](../common/README.md#attribute).
+The interface MUST provide a way to create a new resource.
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
