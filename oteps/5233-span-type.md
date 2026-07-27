@@ -332,7 +332,7 @@ the type of the definition they implement.
   more (a key and a value, subject to attribute limits and processing). Where it
   does not matter, span type is not set and costs nothing.
 - **Long migration.** SDKs, the Collector, and backends all need to add the field
-  before it is useful end to end. Mitigation: the field is optional and additive,
+  before it is useful end-to-end. Mitigation: the field is optional and additive,
   and the existing marker attributes stay in place, so nothing breaks in the
   meantime.
 
@@ -403,10 +403,12 @@ To be added:
 
 - One SDK prototype (creation-time parameter, readable span getter, sampler
   input) plus the corresponding proto change.
+- A [live check run][weaver-pr] resolving spans to definitions by type instead of
+  [hand-written heuristics][genai-rego].
 - Weaver code generation producing span type constants and setting the type in
   generated instrumentation helpers
-- A live check run resolving spans to definitions by type instead of heuristics
-  https://github.com/open-telemetry/weaver/pull/1648
-  vs hand-written https://github.com/open-telemetry/opentelemetry-python-genai/blob/main/policies/genai_span_validation.rego
+  TODO
 
-[live check]: https://github.com/open-telemetry/weaver/blob/main/docs/live-check.md
+[live check]: https://github.com/open-telemetry/weaver/blob/main/crates/weaver_live_check/README.md
+[weaver-pr]: https://github.com/open-telemetry/weaver/pull/1648
+[genai-rego]: https://github.com/open-telemetry/opentelemetry-python-genai/blob/main/policies/genai_span_validation.rego
