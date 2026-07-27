@@ -399,15 +399,12 @@ leaving every ecosystem to invent it.
 
 ## Prototypes
 
-To be added:
+- API/SDK prototype (creation-time parameter, readable span getter, sampler
+  input) plus the corresponding proto change: 
+  - Python - https://github.com/open-telemetry/opentelemetry-python/pull/5464
 
-- One SDK prototype (creation-time parameter, readable span getter, sampler
-  input) plus the corresponding proto change.
 - A [live check run][weaver-pr] resolving spans to definitions by type instead of
   [hand-written heuristics][genai-rego].
-- Weaver code generation producing span type constants and setting the type in
-  generated instrumentation helpers
-  TODO
 
 [live check]: https://github.com/open-telemetry/weaver/blob/main/crates/weaver_live_check/README.md
 [weaver-pr]: https://github.com/open-telemetry/weaver/pull/1648
