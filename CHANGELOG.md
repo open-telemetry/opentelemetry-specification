@@ -37,6 +37,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add max request / response size options to list of OTLP exporter configuration options.
+  ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
+
 ### Compatibility
 
 ### SDK Configuration
