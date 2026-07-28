@@ -69,7 +69,7 @@ long period of inactivity.
 
 Closing an issue does not delete it. The discussion stays on GitHub, and the
 issue can be reopened if circumstances change or new information comes up. See
-[issue-management.md](./issue-management.md) for the stale issue process,
+[issue-management.md](./issue-management.md#stale-issues) for the stale issue process,
 including how to reopen a stale-closed issue.
 
 If you think an issue was closed in error, comment on it or raise it in the
