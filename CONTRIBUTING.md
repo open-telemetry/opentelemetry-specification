@@ -74,7 +74,8 @@ including how to reopen a stale-closed issue.
 
 If you think an issue was closed in error, comment on it or raise it in the
 [#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
-channel on [CNCF Slack](https://slack.cncf.io).
+channel on CNCF Slack. If you are new to the CNCF Slack community, you can
+[create an account](https://slack.cncf.io/).
 
 ## Writing Specs
 
