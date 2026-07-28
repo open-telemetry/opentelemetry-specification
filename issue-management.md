@@ -64,33 +64,17 @@ Rejected issues are issues that describe a problem that cannot or will not be so
 
 ## Stale Issues
 
-Issues that receive no activity for a long time are closed automatically by the
-[stale workflow](.github/workflows/stale.yaml), which runs daily using
-[`actions/stale`](https://github.com/actions/stale). Closing an issue only changes
-its status, and closed issues remain searchable and can be reopened.
+An issue that receives no activity for a year is marked stale by the
+[stale workflow](.github/workflows/stale.yaml), and is closed if there is still
+no activity 14 days later. Any activity on the issue, such as a comment, removes
+the stale label and resets the timer, so a single comment during those 14 days is
+enough to keep the issue open.
 
-The workflow follows a two-step process:
-
-1. **Marked stale after one year of inactivity.** When an issue has had no
-   activity for 365 days, it is labeled stale and a comment is posted asking
-   whether it should be kept open:
-
-   > This issue was marked stale due to lack of activity. Please leave a comment
-   > if you would like to keep this issue open.
-
-2. **Closed 14 days later.** If there is still no activity for 14 days after the
-   issue was marked stale, it is closed with a comment inviting you to reopen it.
-
-Any activity on the issue (for example, a comment) resets the clock and removes
-the stale label, so a single comment during the 14-day window is enough to keep
-an issue open. The 365-day and 14-day thresholds apply to issues; pull requests
-are governed by separate, shorter timers in the same workflow.
-
-If an issue was closed as stale but is still relevant, you can reopen it at any
-time. Comment `/reopen` on the closed issue, and the
-[reopen workflow](.github/workflows/reopen-issue.yaml) will reopen it for you.
-This works for the issue author as well as members, collaborators, and previous
-contributors; anyone else can ask a maintainer to reopen it.
+Closing an issue only changes its status. Closed issues remain searchable and
+can be reopened. To reopen an issue that was closed as stale, comment `/reopen`
+on it and the [reopen workflow](.github/workflows/reopen-issue.yaml) will reopen
+it. This works for the issue author as well as members, collaborators, and
+previous contributors. Anyone else can ask a maintainer to reopen it.
 
 ## SIG Specific Issues
 
