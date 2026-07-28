@@ -4,7 +4,7 @@
     "cspell": "10.0.1",
     "doctoc": "2.5.0",
     "markdown-link-check": "3.14.2",
-    "markdownlint-cli": "0.49.0",
+    "markdownlint-cli": "0.49.1",
     "textlint": "15.7.1",
     "textlint-filter-rule-allowlist": "4.0.0",
     "textlint-filter-rule-comments": "1.3.0",

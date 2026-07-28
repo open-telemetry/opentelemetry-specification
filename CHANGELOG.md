@@ -9,6 +9,49 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+- Add Entity support to the Resource SDK specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
+### Entities
+
+- Add Entity specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+- Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
+  ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
+
+## v1.59.0 (2026-07-10)
+
+### Context
+
 - Clarify that environment variable propagation operational guidance is
   non-normative and should be documented by language implementations.
   ([#5165](https://github.com/open-telemetry/opentelemetry-specification/pull/5165))
@@ -24,35 +67,34 @@ release.
 
 ### Traces
 
-### Metrics
+- Amend the description of Composite/Composable samplers.
+  ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
 
 ### Logs
 
-### Baggage
+- Add ETW (Event Tracing for Windows) example mapping to the logs data
+  model appendix, including the ETW level to `SeverityNumber` mapping.
+  ([#5159](https://github.com/open-telemetry/opentelemetry-specification/pull/5159))
 
 ### Profiles
 
-### Resource
-
-### Entities
-
-### Common
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Add Profiles data model (data-model.md).
+  ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
 
 - Add ability to skip exporter server certificate check
   ([#4264](https://github.com/open-telemetry/opentelemetry-specification/issues/4264))
 
 ### Supplementary Guidelines
 
-- Add non-normative [supplementary guidelines for SDK self-observability](specification/self-observability-supplementary-guidelines.md).
-  ([#5128](https://github.com/open-telemetry/opentelemetry-specification/issues/5128))
+- Add non-normative supplementary guidelines for SDK self-observability.
+  ([#5135](https://github.com/open-telemetry/opentelemetry-specification/pull/5135))
 
 ### OTEPs
+
+- Add OTEP proposing a central OpenTelemetry benchmarks repository.
+  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
+- Introduce Policies into the specification.
+  ([#4738](https://github.com/open-telemetry/opentelemetry-specification/pull/4738))
 
 ## v1.58.0 (2025-06-22)
 
@@ -120,8 +162,6 @@ release.
 
 ### OTEPs
 
-- Add OTEP proposing a central OpenTelemetry benchmarks repository.
-  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
 - Context-scoped Attributes.
   ([#4931](https://github.com/open-telemetry/opentelemetry-specification/pull/4931))
 
@@ -537,8 +577,6 @@ release.
   ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
 
 ### OTEPs
-
-- Introduce Policies into the specification. ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
 
 - Extend attributes to support complex values.
   ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
