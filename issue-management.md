@@ -73,7 +73,7 @@ enough to keep the issue open.
 Closing an issue only changes its status. Closed issues remain searchable and
 can be reopened. To reopen an issue that was closed as stale, comment `/reopen`
 on it and the [reopen workflow](.github/workflows/reopen-issue.yaml) will reopen
-it. This works for the issue author as well as members, collaborators, and
+it. This works for the issue author as well as OpenTelemetry members, collaborators, and
 previous contributors. Anyone else can ask a maintainer to reopen it.
 
 ## SIG Specific Issues
