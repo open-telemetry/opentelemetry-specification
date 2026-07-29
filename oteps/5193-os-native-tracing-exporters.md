@@ -178,7 +178,7 @@ This differs from OTLP, which carries `Resource` and `InstrumentationScope` once
 
 Alternatives considered:
 
-- OTLP over a local IPC transport (UNIX domain socket, named pipe, or shared memory). This can make the local hop cheaper and is a reasonable option on its own, but it still delivers to a single listening endpoint, so it provides none of the out-of-band, consumer-controlled enablement, readability by standard OS tools, multi-consumer fan-out, kernel-backed durability, or content-based triggering that motivate this proposal. Those properties come from the OS facility, not merely from staying on-host.
+- OTLP over a local IPC transport (UNIX domain socket, named pipe, or shared memory). This can make the local hop cheaper and is a reasonable option on its own, but it still delivers to a single listening endpoint, so it provides none of the out-of-band, consumer-controlled enablement, readability by standard OS tools, multi-consumer fan-out, kernel-backed durability (a socket's buffer exists only while a receiver is connected, so the producer is back to handling connection lifecycle, retry, and buffering; the facility's buffer is owned by the kernel independent of any consumer), or content-based triggering that motivate this proposal. Those properties come from the OS facility, not merely from staying on-host.
 - Writing OTLP to a file or stdout and shipping it externally. Same reason: it provides neither out-of-band, near-zero-cost enablement nor kernel-backed durability, and the producer pays full cost regardless of whether anyone reads.
 
 ## Frequently asked questions
