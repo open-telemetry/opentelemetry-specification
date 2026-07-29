@@ -11,7 +11,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Design goals](#design-goals)
@@ -20,7 +20,7 @@ path_base_for_github_subdir:
 - [Specifications](#specifications)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

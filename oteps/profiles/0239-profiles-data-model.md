@@ -2,7 +2,8 @@
 
 Introduces Data Model for Profiles signal to OpenTelemetry.
 
-<!-- toc -->
+<!-- START DOCTOC -->
+
 * [Motivation](#motivation)
 * [Design Notes](#design-notes)
   * [Design Goals](#design-goals)
@@ -56,7 +57,8 @@ Introduces Data Model for Profiles signal to OpenTelemetry.
   * [Repetition of Attribute Keys](#repetition-of-attribute-keys)
   * [Locations Optimization](#locations-optimization)
 * [Future Possibilities](#future-possibilities)
-<!-- toc -->
+
+<!-- END DOCTOC -->
 
 ## Motivation
 

@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
@@ -90,9 +90,10 @@ weight: 3
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -1945,6 +1946,12 @@ and `Shutdown` MUST be safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Metrics SDK SHOULD support [SDK self-observability](../self-observability.md).
 
 ## References
 

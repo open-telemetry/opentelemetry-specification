@@ -52,6 +52,9 @@ Another example may be a metric exposed by a `SpanProcessor` that describes the 
 Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
 SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
 
+See [Self-Observability](self-observability.md) for guidance on telemetry SDKs
+emit about their own behavior, including SDK self-observability metrics.
+
 ## Configuring Error Handlers
 
 SDK implementations MUST allow end users to change the library's default error handling behavior for relevant errors.
