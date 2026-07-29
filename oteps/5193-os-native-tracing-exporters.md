@@ -217,6 +217,17 @@ These are expected to be resolved during the specification phase, not in this OT
 - The base event format on each platform (TraceLogging on ETW; plain `tracefs` fields or EventHeader on `user_events`), including the governance and stability implications of any externally maintained format the mapping builds on.
 - Mapping severity onto the facilities' native filtering dimensions (for example ETW level and keywords), which existing consumers use for coarse enablement.
 
+## Path forward if accepted
+
+The expected sequence of work, tracked as separate specification and implementation efforts:
+
+1. Specify the mapping from the OpenTelemetry data model onto `user_events` and ETW native fields, starting with logs, including the marker identifying the OpenTelemetry mapping and its version. This is the interoperability contract and the primary artifact.
+2. Specify the SDK component (the OS-native log processor first) and its emission semantics, together with a corresponding declarative-configuration schema proposal in [opentelemetry-configuration](https://github.com/open-telemetry/opentelemetry-configuration).
+3. Implement the specified mapping and component in at least two languages, Rust and .NET being the natural candidates, by evolving the existing contrib exporters from Microsoft Common Schema to the OpenTelemetry-defined mapping.
+4. Demonstrate the end-to-end path in the OpenTelemetry Demo (subject to its maintainers' acceptance): one service exporting logs via `user_events`, with the `df_engine` `user_events_receiver` as the same-host consumer forwarding into the existing demo pipeline.
+
+Spans and metrics follow the same sequence once the logs path is proven, per the phasing described in ["What this OTEP proposes"](#what-this-otep-proposes).
+
 ## Prototypes
 
 Feasibility is already demonstrated across producers, consumers, and the mapping itself:
@@ -230,7 +241,7 @@ Feasibility is already demonstrated across producers, consumers, and the mapping
 1. Higher-level diagnostic capabilities built on out-of-band enablement and kernel-backed buffering, pursued in separate proposals. A prime example is a flight recorder: because these facilities can maintain a bounded, always-on ring buffer of recent events in the kernel, a consumer can continuously record at low cost and snapshot the buffer only when a trigger fires (for example a `FATAL` log or a crash), capturing the events leading up to an incident without shipping everything all the time.
 2. A built-in SDK capability. Further out, an SDK could choose to ship with OS-native export readily available on platforms that support it. Because it costs effectively nothing until a consumer subscribes, such an SDK would always be ready to emit to the OS facility, so the OpenTelemetry data is simply there whenever an operator needs it, with no configuration and no redeploy. That would be a significant change in posture and would require its own proposal.
 3. Raw measurements as triggerable events. If OpenTelemetry introduces a `MeasurementProcessor`-style concept (access to individual measurements before aggregation), those raw measurements could be written to the OS facility like logs and spans, synchronously and in native event format, rather than as aggregated binary metrics. Modeled this way, a measurement becomes a triggerable event: for example, a histogram recording `req_size` could drive a trigger such as "if `req_size` > 3 MB, capture and dump the packet for analysis." This is explicitly out of scope for this OTEP (it depends on a concept that does not yet exist) but motivates keeping the per-signal model open.
-4. Reference blueprint and demo. A reference blueprint for the end-to-end pattern, and inclusion in the OpenTelemetry Demo so the model can be exercised and evaluated by the community.
+4. Reference blueprint. A reference blueprint for the end-to-end pattern, beyond the demo integration described in ["Path forward if accepted"](#path-forward-if-accepted), so the model can be exercised and evaluated by the community.
 5. Dynamic control via OpAMP. With telemetry flowing through OS-native facilities whose enablement is controlled out of band, a control plane such as OpAMP could enable and disable sources dynamically and remotely across a fleet (potentially down to individual events, since event identity is a first-class concept in these facilities), with the same-host consumer as the natural managed agent. This is a natural extension of the out-of-band enablement property, and is being pursued separately.
 
 ## Appendix: background on the OS-native facilities
