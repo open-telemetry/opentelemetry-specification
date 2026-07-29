@@ -50,7 +50,7 @@ A `Span` represents one operation in that path. It records the operation's
 identity, parent, timing, and descriptive data. Spans from the same trace share
 a `TraceId`; each span has its own `SpanId`. The parent-child relationships
 recorded on the spans describe causality and allow the collection to be
-assembled into a trace.
+assembled into a trace, while Links allow additional types of span relationships.
 
 The trace data model described in this document is logical. It is independent
 of the API used to create spans, the protocol used to transport them, and the
