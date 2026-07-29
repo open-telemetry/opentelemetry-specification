@@ -168,7 +168,7 @@ unbounded cardinality.
 - `SERVER` and `CLIENT` represent the receiving and sending sides of
   request-response communication.
 - `PRODUCER` and `CONSUMER` represent the initiating and processing sides of
-  asynchronous execution, such message processing via a broker.
+  asynchronous execution, such as message processing via a broker.
 - `INTERNAL` represents an operation internal to an application.
 
 The start and end timestamps measure the elapsed real time of the operation.
@@ -243,8 +243,8 @@ flowchart TB
 ```
 
 The five spans can be exported by different processes, in different batches,
-and can arrive to a consumer in any order. A consumer groups them by 
-`TraceId=T` and matches each non-empty `ParentSpanId` to a `SpanId` in the same trace. 
+and can arrive to a consumer in any order. A consumer groups them by
+`TraceId=T` and matches each non-empty `ParentSpanId` to a `SpanId` in the same trace.
 The edge from C to D crosses a process boundary, while the other edges represent
 execution flow within the same process (the same resource).
 
@@ -408,13 +408,13 @@ process without passing span identifiers directly.
 - `SpanContext` is the immutable tracing value that identifies a span and can
   be serialized for propagation.
 
-Note that [Baggage](../baggage/api.md) can also travel alongside trace context, but it 
+Note that [Baggage](../baggage/api.md) can also travel alongside trace context, but it
 is a separate concern and does not determine trace membership or span parentage.
 
 ### Propagation across process boundaries
 
 A [Propagator](../context/api-propagators.md) injects a `SpanContext` into a
-carrier alongside application payload and extracts it on the receiving side. A carrier 
+carrier alongside application payload and extracts it on the receiving side. A carrier
 can be HTTP headers, RPC metadata, message metadata, or another transport-specific medium.
 
 With W3C Trace Context, a `traceparent` field carries:
