@@ -49,13 +49,14 @@ after it is gone. Self-observability telemetry at the edges of the SDK lifecycle
 is therefore inherently best-effort; the strategy for handling it is left to the
 SDK.
 
-For self-observability events specifically, if the SDK already emits
-diagnostics through a non-OpenTelemetry path — the language's native logging
-facility, a commonly-used ecosystem logging library (e.g., Tokio's `tracing`
-crate in Rust), or in the simplest case direct writes to stdout/stderr — that
-path is a natural fit for events emitted before `LoggerProvider` is installed
-or after it has been shut down. It is typically available throughout the
-process lifetime and has few external dependencies that can fail.
+For self-observability [events](logs/data-model.md#events) specifically, if the
+SDK already emits diagnostics through a non-OpenTelemetry path — the language's
+native logging facility, a commonly-used ecosystem logging library (e.g.,
+Tokio's `tracing` crate in Rust), or in the simplest case direct writes to
+stdout/stderr — that path is a natural fit for events emitted before
+`LoggerProvider` is installed or after it has been shut down. It is typically
+available throughout the process lifetime and has few external dependencies
+that can fail.
 
 An OpenTelemetry Event is a `LogRecord` identified by its event name, so an
 event routed through such a path must still carry that name: use the
