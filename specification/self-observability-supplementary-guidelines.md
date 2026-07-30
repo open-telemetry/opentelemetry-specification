@@ -57,14 +57,13 @@ path is a natural fit for events emitted before `LoggerProvider` is installed
 or after it has been shut down. It is typically available throughout the
 process lifetime and has few external dependencies that can fail.
 
-When routing an event through such a path, set the event name using the
-mechanism's native field if it has one (.NET's `ILogger` and Rust's `tracing`
-do); otherwise carry it as the stable
+An OpenTelemetry Event is a `LogRecord` identified by its event name, so an
+event routed through such a path must still carry that name: use the
+mechanism's native event-name field if it has one (.NET's `ILogger` and Rust's
+`tracing` do); otherwise carry it as the stable
 [`otel.event.name`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-event-name)
-attribute, which a Collector or backend can map back to the LogRecord's
-`EventName`. This lets an SDK report lifecycle-edge events — such as a
-provider's own shutdown after `LoggerProvider` is gone — without depending on
-the OpenTelemetry logs pipeline.
+attribute, which a Collector or backend can map back to the `LogRecord`'s
+`EventName`.
 
 ## Obtaining the Meter / Logger for self-observability
 
