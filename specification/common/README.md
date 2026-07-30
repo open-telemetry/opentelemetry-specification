@@ -344,8 +344,6 @@ If an SDK provides a way to:
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
 - set an attribute value depth limit such that for each attribute value:
-  - if the limit is 0, the SDK MUST use the default attribute value depth
-    limit;
   - the SDK MUST start counting depth at 1 for the top-level attribute value,
     and increment depth when descending into arrays (both homogeneous and
     heterogeneous) or [maps](#mapstring-anyvalue);
