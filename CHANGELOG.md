@@ -35,6 +35,9 @@ release.
 
 ### Common
 
+- Mention the intermediate OTEP 0232 maturity levels in the signal lifecycle.
+  ([#5239](https://github.com/open-telemetry/opentelemetry-specification/pull/5239))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
