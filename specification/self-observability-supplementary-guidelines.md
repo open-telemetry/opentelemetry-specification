@@ -61,7 +61,7 @@ When routing an event through such a path, set the event name using the
 mechanism's native field if it has one (.NET's `ILogger` and Rust's `tracing`
 do); otherwise carry it as the stable
 [`otel.event.name`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-event-name)
-attribute, which a Collector or backend maps back to the LogRecord's
+attribute, which a Collector or backend can map back to the LogRecord's
 `EventName`. This lets an SDK report lifecycle-edge events — such as a
 provider's own shutdown after `LoggerProvider` is gone — without depending on
 the OpenTelemetry logs pipeline.
