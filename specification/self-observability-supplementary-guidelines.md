@@ -58,10 +58,9 @@ stdout/stderr — that path is a natural fit for events emitted before
 available throughout the process lifetime and has few external dependencies
 that can fail.
 
-An OpenTelemetry Event is a `LogRecord` identified by its event name, so an
-event routed through such a path must still carry that name: use the
-mechanism's native event-name field if it has one (.NET's `ILogger` and Rust's
-`tracing` do); otherwise carry it as the stable
+Such an event still needs its event name: use the mechanism's native event-name
+field if it has one (.NET's `ILogger` and Rust's `tracing` do); otherwise carry
+it as the stable
 [`otel.event.name`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-event-name)
 attribute, which a Collector or backend can map back to the `LogRecord`'s
 `EventName`.
