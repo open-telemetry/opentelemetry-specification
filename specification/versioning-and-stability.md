@@ -10,6 +10,7 @@
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
   * [Development](#development)
+  * [Other maturity levels](#other-maturity-levels)
   * [Stable](#stable)
     + [API Stability](#api-stability)
     + [SDK Stability](#sdk-stability)
@@ -91,6 +92,12 @@ Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or
 
 Note that "Development" status was previously called "Experimental" in this repository.
 Any uses of "Experimental" should be treated same as "Development".
+
+### Other maturity levels
+
+Between Development and Stable, a signal MAY transition through the
+intermediate maturity levels **Alpha**, **Beta**, and **Release Candidate**, as
+defined by [OTEP 0232](../oteps/0232-maturity-of-otel.md#explanation).
 
 ### Stable
 
