@@ -500,7 +500,7 @@ made with an Instrument:
     * For each resulting stream, apply the Views in its group in registration order.
       For all aspects of the [Stream configuration](#stream-configuration) other
       than `attribute_keys` (`name`, `description`, `aggregation`,
-      `exemplar_reservoir`, `aggregation_cardinality_limit`), the first matching
+      `exemplar_reservoir`, `aggregation_cardinality_limit`), the last matching
       View that specifies that aspect wins. Complex configurations like
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
@@ -509,8 +509,8 @@ made with an Instrument:
     * For each resulting stream:
       * If a setting selected for the stream would produce semantic errors, the
         implementation SHOULD emit a warning and use the next valid setting for
-        that aspect from a subsequent View in the same group, or the Instrument
-        default if no subsequent View specifies a valid setting.
+        that aspect from a preceding View in the same group, or the Instrument
+        default if no preceding View specifies a valid setting.
       * If both the matching Views and [Instrument advisory
         parameters](#instrument-advisory-parameters) specify the same aspect of
         the [Stream configuration](#stream-configuration), the setting defined
