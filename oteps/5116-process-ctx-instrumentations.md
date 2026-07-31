@@ -123,11 +123,24 @@ groups:
 ```
 
 The semantic conventions have no structured attribute type: an attribute's `type` may be a primitive, an array of
-primitives, a `template[...]`, an `enum`, or `any`. Structured values are therefore declared as `type: any` with the
-shape given by an accompanying JSON schema, the convention established by the GenAI conventions for
-`gen_ai.input.messages`, `gen_ai.output.messages`, `gen_ai.tool.definitions` and others. The pairing is enforced rather
-than conventional — a registry policy rejects any attribute declared `type: any` that does not carry a
-`annotations.type.json_schema` reference — so the schema below is a required companion to the group above, not
+primitives, a `template[...]`, an `enum`, or `any`. A structured value is therefore declared as `type: any`, and its
+shape is given by a JSON schema that the attribute definition points at.
+
+This is how the GenAI conventions declare their own structured attributes. For example
+[`gen_ai.input.messages`](https://github.com/open-telemetry/semantic-conventions-genai/blob/434c91dcc34ed038e3048c07720ddfed2c6bddfc/model/gen-ai/registry.yaml#L705-L711),
+an array of message objects, is declared as:
+
+```yaml
+  - key: gen_ai.input.messages
+    type: any
+    annotations:
+      type:
+        json_schema: model/gen-ai/gen-ai-input-messages.json
+```
+
+`gen_ai.output.messages` and `gen_ai.tool.definitions` follow the same pattern. The pairing is enforced rather than
+conventional: a registry policy rejects any attribute declared `type: any` that does not carry an
+`annotations.type.json_schema` reference. The schema below is therefore a required companion to the group above, not
 documentation.
 
 ```json
@@ -172,10 +185,6 @@ The resulting requirement levels are:
 Reusing `otel.scope.*` as the map keys means the identity of a published instrumentation is expressed with the same
 vocabulary as the corresponding OTLP `InstrumentationScope`, including `schema_url`, which is a sibling field of
 `InstrumentationScope` in OTLP and therefore not otherwise expressible.
-
-One map per instrumentation is preferred over index-suffixed keys or parallel arrays of names and versions: it keeps
-each instrumentation's fields together so entries cannot drift out of alignment, and a new per-instrumentation field is
-a new key in the map rather than another top-level attribute that must be kept consistent with the others.
 
 Instrumentation scope `attributes` are deliberately not part of this convention in v1; see "Privacy and security" and
 "Future possibilities".
