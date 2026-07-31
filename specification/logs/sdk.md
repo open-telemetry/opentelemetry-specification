@@ -245,7 +245,7 @@ unnecessary processing of large attribute values that would be truncated anyway.
 the implementation MUST apply the filtering rules defined by the
 [LoggerConfig](#loggerconfig):
 
-1. **Disabled**: If the `Logger` is disabled (i.e. `LoggerConfig.enabled` is
+1. **Enabled**: If the `Logger` is not enabled (i.e. `LoggerConfig.enabled` is
    `false`), the log record MUST be dropped.
 
 2. **Minimum severity**: If the log record's
