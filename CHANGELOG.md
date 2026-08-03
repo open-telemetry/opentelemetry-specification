@@ -35,11 +35,6 @@ release.
 
 ### Common
 
-- Editorial: move OTEP 0232 maturity levels to a dedicated page, referenced
-  from signal lifecycle and document statuses; remove outdated API lifecycle
-  infographic.
-  ([#5241](https://github.com/open-telemetry/opentelemetry-specification/pull/5241))
-
 ### OpenTelemetry Protocol
 
 ### Compatibility
