@@ -366,8 +366,8 @@ plus authentication, redirects, reading the response body, serialization, and
 validation. **These are different numbers, often by a lot, and an SLI is measured
 after all tries, not per request.**
 
-Metrics have the same problem: most of the span definition comes with a matching
-duration metric. Would a blended db and http instrumentation report both metrics,
+Metrics have the same problem: most span definitions come with a matching
+duration metric. Would a blended DB and HTTP instrumentation report both metrics,
 or a third blended one? Which would users pick for dashboards and alerts?
 
 A single value does not block anything. Blended operations can still be defined,
@@ -442,10 +442,12 @@ to invent it.
   definition can have tens of refinements (every HTTP client library could be
   documented as a refinement of `http.client.request`, each with its own
   caveats). Span type is needed regardless of how this is solved.
-- **Out-of-process instrumentation.** eBPF probes and proxies or gateways see 
-  requests and response on the wire. From their view, the database span has the same scope as HTTP client span, which is quite different from database span produced in-process
-  over a client library API: it excludes connection acquisition, retries,
-  deserialization errors and delays, and result iteration. Reusing
+- **Out-of-process instrumentation.** eBPF probes and proxies or gateways see
+  requests and responses on the wire. From their vantage point a database span
+  has the same scope as an HTTP client span, which is quite different from a
+  database span produced in-process over a client library API: it excludes
+  connection acquisition, retries, deserialization errors and delays, and result
+  iteration. Reusing
   `db.client.call` for both would put two different measurements under one type,
   so these instrumentation points likely need their own definitions for database,
   messaging, GenAI, and similar domains.
