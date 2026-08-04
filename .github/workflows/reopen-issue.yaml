@@ -1,0 +1,37 @@
+name: "Reopen issue on command"
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  reopen:
+    # Only run on issues (not PRs), on closed issues, when the comment is exactly "/reopen",
+    # and only if the commenter is the issue author or a member/collaborator/owner/contributor.
+    if: >
+      !github.event.issue.pull_request &&
+      github.event.issue.state == 'closed' &&
+      startsWith(github.event.comment.body, '/reopen') &&
+      (
+        github.event.comment.user.login == github.event.issue.user.login ||
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR", "CONTRIBUTOR"]'), github.event.comment.author_association)
+      )
+    permissions:
+      issues: write # required to reopen the issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reopen issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          # Require the comment to be exactly "/reopen" (ignoring trailing whitespace)
+          if [[ ! "$COMMENT_BODY" =~ ^/reopen[[:space:]]*$ ]]; then
+            echo "Comment is not an exact /reopen command; skipping."
+            exit 0
+          fi
+          gh issue reopen "$ISSUE_NUMBER" --repo "$REPO"

@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+
 ### Logs
 
 ### Baggage
@@ -21,7 +25,13 @@ release.
 
 ### Resource
 
+- Add Entity support to the Resource SDK specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
 ### Entities
+
+- Add Entity specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
 
 ### Common
 
@@ -37,6 +47,9 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+- Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
+  ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
 
 ## v1.59.0 (2026-07-10)
 

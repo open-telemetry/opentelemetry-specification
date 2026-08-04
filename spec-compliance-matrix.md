@@ -26,19 +26,19 @@ formats is required. Implementing more than one format is optional.
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
-| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | [Tracer](specification/trace/api.md#tracer-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Documentation defines adding attributes at span creation as preferred |  | + | - |  | + | + |  | + |  |  | + |  | + |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
-| Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [SpanContext](specification/trace/api.md#spancontext) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  |  |  |  |  |  |  |  |  | - |
+| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  |  |  |  |  |  |  | - |  | + |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -79,25 +79,25 @@ formats is required. Implementing more than one format is optional.
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | + |
 | RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | + |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | - |
+| Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
-| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  | - |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + | - |
-| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + | + |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + | + |
+| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + | + |
+| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + | - | + | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - | - | + | + |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  | + |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  | - |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  | - |  | + |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  | + |  | + |
-| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  | - |
-| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  |  |  | - |
-| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  |  |  | - |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | - |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | - |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  | - |  | + |
 
 ## Baggage
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| Basic support |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Use official header name `baggage` |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Basic support |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Use official header name `baggage` |  | + | + | + | + | + | + | + | + | + | + | + | + |
 
 ## Metrics
 
@@ -107,7 +107,7 @@ formats is required. Implementing more than one format is optional.
 | It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  | - |
 | `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  | - |
 | `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  | - |
-| `get_meter` accepts `attributes`. |  | + | - | - | + |  |  | + | + | + |  |  | - |
+| `get_meter` accepts `attributes`. |  | + | - | - | + |  |  | + | + | + | + |  | - |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  | - |
 | The fallback `Meter` `name` property keeps its original invalid value. | X | + | - | + | + | + | + |  | + | - | - |  | - |
 | Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + | + |  | - |
@@ -146,7 +146,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  | - |
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  | - |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  |  |  | - |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  | + |  | - |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
@@ -227,7 +227,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | + |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  | - |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | + |  | - |
 
 ## Context Propagation
 
@@ -239,19 +239,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Attach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
 | Detach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
 | Get current Context |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
-| Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | OT Propagator | X | + | + | + | + |  |  |  |  |  | - |  | - |
 | OpenCensus Binary Propagator |  | + | - |  |  |  |  |  |  |  |  |  | - |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + | + |  | - |
-| Fields |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
-| Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
-| Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
-| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + | + | + |  |  |  |  | + | + | + |  |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + | + |  | + |
+| Fields |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | + |
+| Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | + |
+| Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | + |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + | + | + |  |  |  |  | + | + | + | - |
 
 ## Environment Variables
 
@@ -288,7 +288,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
-| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + |  |  |  |
+| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  |  |
 
 ## Declarative configuration
 
@@ -298,19 +298,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| `Parse` a configuration file | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation performs environment variable substitution | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  | - |
-| `Create` SDK components | + | + |  |  |  |  | + |  | + |  |  | - |
-| The `Create` operation accepts configuration model | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `MeterProvider` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `LoggerProvider` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `Propagators` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + |  |  | - |
-| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + |  |  | - |
+| `Parse` a configuration file | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Parse` operation performs environment variable substitution | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + | - |  | - |
+| `Create` SDK components | + | + |  |  |  |  | + |  | + | - |  | - |
+| The `Create` operation accepts configuration model | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `MeterProvider` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `LoggerProvider` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `Propagators` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + | - |  | - |
+| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + | - |  | - |
 
 ## Exporters
 
@@ -330,12 +330,12 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |
 | Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
-| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | - |  |  |
-| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | - |  |  |
-| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  |  |
+| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
+| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
+| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  |  |  |  | + |  |  | + |  | + |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  |  |  |  |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  |  |  |  |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  |  |  | - |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  |  |  | + |
 | Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  | + |  | - |
 | Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  | + |  | - |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
