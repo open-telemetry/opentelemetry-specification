@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
@@ -93,7 +93,7 @@ weight: 3
 - [Self-observability](#self-observability)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

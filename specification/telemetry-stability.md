@@ -5,14 +5,14 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Unstable Instrumentations](#unstable-instrumentations)
 - [Stable Instrumentations](#stable-instrumentations)
   * [Fixed Schema Telemetry Producers](#fixed-schema-telemetry-producers)
   * [Schema-File Driven Telemetry Producers](#schema-file-driven-telemetry-producers)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

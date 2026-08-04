@@ -9,7 +9,7 @@ linkTitle: Entity Propagation
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Specifying entity information via an environment variable](#specifying-entity-information-via-an-environment-variable)
@@ -22,7 +22,7 @@ linkTitle: Entity Propagation
   * [Error Handling](#error-handling)
 - [EnvEntityDetector](#enventitydetector)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
