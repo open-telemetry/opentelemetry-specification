@@ -1,6 +1,6 @@
 # Semantic Convention Schema v2
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Semantic Convention Schema v2](#semantic-convention-schema-v2)
   - [Motivation](#motivation)
@@ -28,7 +28,7 @@
   - [Prototypes](#prototypes)
   - [Future possibilities](#future-possibilities)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 In this OTEP, we propose a new telemetry schema format that supports multiple convention registries
 and provides full access to metadata.

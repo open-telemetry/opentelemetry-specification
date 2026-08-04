@@ -9,7 +9,7 @@ linkTitle: Prometheus
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Prometheus Exporter Model](#prometheus-exporter-model)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -30,7 +30,7 @@ linkTitle: Prometheus
 - [Content Negotiation](#content-negotiation)
   * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
@@ -87,7 +87,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 
 ### Target
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.

@@ -14,7 +14,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Introduction](#introduction)
 - [Limitations of non-OpenTelemetry Solutions](#limitations-of-non-opentelemetry-solutions)
@@ -33,7 +33,7 @@ path_base_for_github_subdir:
 - [Specifications](#specifications)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

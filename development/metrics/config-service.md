@@ -1,5 +1,7 @@
 # Metric Configuration Service
 
+<!-- START DOCTOC -->
+
 - [Metric Configuration Service](#metric-configuration-service)
   * [Overview](#overview)
   * [Service Protocol](#service-protocol)
@@ -18,7 +20,7 @@
         * [Fingerprint Hashing](#fingerprint-hashing)
       - [Remote Backend](#remote-backend)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+<!-- END DOCTOC -->
 
 ## Overview
 

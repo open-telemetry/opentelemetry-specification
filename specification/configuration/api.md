@@ -7,7 +7,7 @@ weight: 1
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [ConfigProvider](#configprovider)
@@ -15,7 +15,7 @@ weight: 1
       - [Get instrumentation config](#get-instrumentation-config)
   * [ConfigProperties](#configproperties)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Overview
 

@@ -7,7 +7,7 @@ requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Guidelines for instrumentation library authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)
@@ -28,7 +28,7 @@ requirements to the existing specifications.
       - [Asynchronous example: attribute removal in a view](#asynchronous-example-attribute-removal-in-a-view)
   * [Memory management](#memory-management)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -7,7 +7,7 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
@@ -26,7 +26,7 @@ weight: 3
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Overview
 
@@ -133,20 +133,20 @@ configuration model interpretation.
 
 The following table lists the current status of all SDK plugin components in the configuration data model:
 
-| SDK plugin component                                                                        | Declarative config type                                                                                                                                |
-|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
-| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
-| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
-| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#idgenerator-)                                     |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
+| SDK plugin component                                                                        | Declarative config type                                                                                                    |
+|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel-config/types/#type-textmappropagator)                         |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)                                   |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanprocessor)                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://opentelemetry.io/docs/specs/otel-config/types/#type-sampler)                                             |
+| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://opentelemetry.io/docs/specs/otel-config/types/#type-idgenerator)                                     |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pullmetricexporter)                       |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pushmetricexporter)                       |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://opentelemetry.io/docs/specs/otel-config/types/#type-metricproducer)                               |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                         |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordexporter)                         |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordprocessor)                       |
 
 ##### PluginComponentProvider operations
 
@@ -269,10 +269,10 @@ are defined in the configuration data model.
 
 A few examples to illustrate:
 
-* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+* If configuring [`BatchSpanProcessor`](https://opentelemetry.io/docs/specs/otel-config/types/#type-batchspanprocessor)
   and `schedule_delay` is not present or present but null, the component is
   configured according to the `defaultBehavior` of `5000`.
-* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+* If configuring [`SpanExporter`](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)
   and `console` is present and null, the component is configured with a
   `console` exporter with default configuration since `console` is nullable.
 
@@ -281,7 +281,7 @@ The [configuration model](data-model.md) uses the JSON schema
 annotation to capture property semantics which cannot be encoded using standard
 JSON schema keywords. Create SHOULD return an error if it encounters a value
 which is invalid according to the property `description`. For example, if
-configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+configuring [`HttpTls`](https://opentelemetry.io/docs/specs/otel-config/types/#type-httptls)
 and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 

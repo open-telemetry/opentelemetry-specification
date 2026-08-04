@@ -142,6 +142,9 @@ and regenerate:
 make compliance-matrix
 ```
 
+Compliance matrix updates do not require a CHANGELOG entry. Use a `chore:`
+prefix in the PR title (e.g., `chore: Update .NET compliance matrix`).
+
 ## Pull Requests
 
 A PR is **ready to merge** when:

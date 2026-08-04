@@ -30,9 +30,9 @@ sections:
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
         features:
           - name: Get active Span
-            status: '-'
+            status: '+'
           - name: Set active Span
-            status: '-'
+            status: '+'
       - heading: '[Tracer](specification/trace/api.md#tracer-operations)'
         features:
           - name: Create a new Span
@@ -40,9 +40,9 @@ sections:
           - name: Documentation defines adding attributes at span creation as preferred
             status: '+'
           - name: Get active Span
-            status: '-'
+            status: '+'
           - name: Mark Span active
-            status: '-'
+            status: '+'
           - name: Safe for concurrent calls
             status: '+'
       - heading: '[SpanContext](specification/trace/api.md#spancontext)'
@@ -52,9 +52,9 @@ sections:
           - name: IsRemote
             status: '+'
           - name: Conforms to the W3C TraceContext spec
-            status: '-'
+            status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '-'
+            status: '+'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
@@ -136,13 +136,13 @@ sections:
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: Allow samplers to modify tracestate
-            status: '-'
+            status: '+'
           - name: ShouldSample gets full parent Context
             status: '+'
           - name: 'Sampler: JaegerRemoteSampler'
             status: '-'
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
-            status: '-'
+            status: '+'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
             status: '+'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
@@ -150,7 +150,7 @@ sections:
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '-'
+            status: '+'
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
@@ -158,13 +158,13 @@ sections:
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
             status: '-'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
-            status: '-'
+            status: '+'
   - name: Baggage
     features:
       - name: Basic support
-        status: '?'
+        status: '+'
       - name: Use official header name `baggage`
-        status: '?'
+        status: '+'
   - name: Metrics
     features:
       - name: The API provides a way to set and get a global default `MeterProvider`.
@@ -422,11 +422,11 @@ sections:
       - name: Get current Context
         status: '+'
       - name: Composite Propagator
-        status: '-'
+        status: '+'
       - name: Global Propagator
         status: '-'
       - name: TraceContext Propagator
-        status: '-'
+        status: '+'
       - name: B3 Propagator
         status: '-'
       - name: Jaeger Propagator
@@ -436,17 +436,17 @@ sections:
       - name: OpenCensus Binary Propagator
         status: '-'
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
-        status: '-'
+        status: '+'
       - name: Fields
-        status: '-'
+        status: '+'
       - name: Setter argument
-        status: '-'
+        status: '+'
       - name: Getter argument
-        status: '-'
+        status: '+'
       - name: Getter argument returning Keys
-        status: '-'
+        status: '+'
       - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
-        status: '?'
+        status: '-'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -568,21 +568,21 @@ sections:
           - name: Multi-destination spec compliance
             status: '?'
           - name: SchemaURL in ResourceSpans and ScopeSpans
-            status: '?'
+            status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
-            status: '?'
+            status: '+'
           - name: SchemaURL in ResourceLogs and ScopeLogs
-            status: '?'
+            status: '+'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
             status: '+'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
-            status: '?'
+            status: '-'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1)
               messages are handled and logged for OTLP/HTTP'
-            status: '?'
+            status: '+'
           - name: Metric Exporter configurable temporality preference
             status: '-'
           - name: Metric Exporter configurable default aggregation
