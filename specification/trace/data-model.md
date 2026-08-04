@@ -169,7 +169,7 @@ unbounded cardinality.
   request-response communication.
 - `PRODUCER` and `CONSUMER` represent the initiating and processing sides of
   asynchronous execution, such as message processing via a broker.
-- `INTERNAL` represents an operation internal to an application or when other kinds 
+- `INTERNAL` represents an operation internal to an application or when other kinds
   are not applicable.
 
 The start and end timestamps measure the elapsed real time of the operation.
@@ -190,9 +190,8 @@ A link references another span through its `SpanContext` and can have its own
 attributes. Links express causal relationships that do not fit the single-parent
 model.
 
-[Status](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#set-status)
-has a code of `Unset`, `Ok`, or `Error`, and can include a description
-for `Error`. Status is distinct from protocol-specific result codes, which are
+[Status](api.md#set-status) has a code of `Unset`, `Ok`, or `Error`, and can include a 
+description for `Error`. Status is distinct from protocol-specific result codes, which are
 represented according to semantic conventions.
 
 Exportable span representations also include counts of attributes, events,
@@ -303,7 +302,7 @@ reasons. Common causes of incomplete trace data include:
 - Configured span, queue, or backend limits.
 - Queries that intentionally select only part of a trace.
 - An operation that the trace describes has not yet completed, so it is possible
-  more span will be exported sometime in the future.
+  more spans will be exported sometime in the future.
 
 A non-root span whose referenced parent is absent proves that the available
 trace is incomplete. The converse is not true: the presence of every referenced
