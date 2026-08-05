@@ -929,7 +929,7 @@ As examples:
 - The smallest normal value `0x1p-1022` belongs to a bucket that
   includes subnormal values.
 - The largest bucket at any given scale will contain the value
-  `0x1p+1024`, which is unrepresentable.
+  `0x1p+1024`, an unrepresentable value.
 
 ##### Table lookup implementation
 
@@ -943,7 +943,7 @@ calculation.
 The use of a built-in logarithm function can lead to results that
 differ from the exactly-correct bucket index that would be computed
 with greater precision. As a result, ExponentialHistogram exemplars
-computed alongside the logrithm function could map into buckets with
+computed alongside the logarithm function could map into buckets with
 zero count. The table lookup method addresses this problem.
 
 #### ExponentialHistogram: Consumer Recommendations

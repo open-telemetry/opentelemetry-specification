@@ -164,12 +164,12 @@ Implementations control maximum table scale.
 
 ## References
 
-- **Dynatrace** — Otmar Ertl's [DynaHist
+- **Dynatrace** — [DynaHist
   library](https://github.com/dynatrace-oss/dynahist)
   ([ExponentialHistogramLargeInclusiveLayout](https://github.com/dynatrace-oss/dynahist/blob/main/src/main/java/com/dynatrace/dynahist/layout/ExponentialHistogramLargeInclusiveLayout.java))
   uses `N` linear buckets with 2 boundary corrections.
 
-- **NewRelic** — Yuke Zhuge's [NrSketch
+- **NewRelic** — [NrSketch
   library](https://github.com/newrelic-experimental/newrelic-sketch-java)
   ([SubBucketLookupIndexer](https://github.com/newrelic-experimental/newrelic-sketch-java/blob/main/src/main/java/com/newrelic/nrsketch/indexer/SubBucketLookupIndexer.java),
   [algorithm
