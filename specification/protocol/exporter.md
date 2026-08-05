@@ -38,7 +38,7 @@ Each configuration option MUST be overridable by a signal specific option.
   - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` [2]
   - Type: [Boolean][]
 
-- **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection.
+- **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. Using the `_insecure_skip_verify_` value for this option allows to bypass server certificate verification.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CERTIFICATE`
   - Type: [String][]
