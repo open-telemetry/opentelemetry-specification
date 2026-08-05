@@ -325,6 +325,8 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - | + |
 | OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
+| Enforces request size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Enforces response size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
 | Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - |  |
 | Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |

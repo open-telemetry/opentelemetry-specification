@@ -358,6 +358,8 @@ sections:
           - name: OTLP/HTTP JSON Protobuf Exporter
           - name: OTLP/HTTP gzip Content-Encoding support
             optional: true
+          - name: Enforces request size limit
+          - name: Enforces response size limit
           - name: Concurrent sending
           - name: Honors retryable responses with backoff
             optional: true
