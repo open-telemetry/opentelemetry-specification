@@ -37,7 +37,8 @@ weight: 2
       - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
       - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
-    + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
+      - [Extreme value handling](#extreme-value-handling)
+      - [Table lookup implementation](#table-lookup-implementation)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
     + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
@@ -200,7 +201,7 @@ in scope for key design decisions:
 
 OpenTelemetry fragments metrics into three interacting models:
 
-<!--- cSpell:ignore emetry --->
+<!-- cSpell:ignore emetry -->
 - An Event model, representing how instrumentation reports metric data.
 - A Timeseries model, representing how backends store metric data.
 - A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
