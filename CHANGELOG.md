@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
