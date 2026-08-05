@@ -10,13 +10,17 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Identity](#identity)
 - [Merging Resources](#merging-resources)
   * [Merging Entities into a Resource](#merging-entities-into-a-resource)
+    + [Examples](#examples)
+      - [Example 1: Entity replaces loose attribute](#example-1-entity-replaces-loose-attribute)
+      - [Example 2: Loose attribute replaces entity attribute](#example-2-loose-attribute-replaces-entity-attribute)
+      - [Example 3: Identity & Attribute Conflicts](#example-3-identity--attribute-conflicts)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
