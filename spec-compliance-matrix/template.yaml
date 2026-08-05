@@ -359,6 +359,8 @@ sections:
           - name: OTLP/HTTP JSON Protobuf Exporter
           - name: OTLP/HTTP gzip Content-Encoding support
             optional: true
+          - name: Enforces request size limit
+          - name: Enforces response size limit
           - name: Concurrent sending
           - name: Honors retryable responses with backoff
             optional: true
@@ -435,6 +437,33 @@ sections:
             optional: true
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             optional: true
+  - name: SDK Self-Observability
+    features:
+      - heading: '**Span metrics**'
+        features:
+          - name: '[`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted)'
+          - name: '[`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive)'
+          - name: '[`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize)'
+          - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
+          - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
+          - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
+          - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
+      - heading: '**Log metrics**'
+        features:
+          - name: '[`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated)'
+          - name: '[`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize)'
+          - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
+          - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
+          - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
+          - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'
+      - heading: '**Metric metrics**'
+        features:
+          - name: '[`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight)'
+          - name: '[`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported)'
+      - heading: '**Shared metrics**'
+        features:
+          - name: '[`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration)'
+          - name: '[`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration)'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
