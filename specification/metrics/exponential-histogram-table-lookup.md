@@ -141,11 +141,7 @@ requested scale.
 
 ## Correctness Proof
 
-The logarithm function is concave, steepest at small significand
-values.  By dividing the significand range `[1, 2)` into `2N` equal
-parts, each region can hold at most one exponential bucket boundary.
-
-TODO:
+The smallest of all `N` buckets of range `[1, 2)` is the one spanning `[1, 2^(1/N))`. Therefore, all buckets have at least a width of `2^(1/N) - 1`. Since `2^(1/N) - 1 = e^(ln(2) / N) - 1 > ln(2) / N > 1 / (2N)`, all buckets are wider than the width of the `2N` equal regions which can therefore hold at most one exponential bucket boundary.
 
 ## Table Size and Scale Selection
 
