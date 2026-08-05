@@ -131,8 +131,12 @@ Concurrency and lifecycle requirements:
 * If an SDK implementation does not document callback concurrency behavior,
   instrumentation and component authors MUST assume callbacks may be invoked
   concurrently.
+* SDK implementations MUST NOT hold internal synchronization locks while
+  invoking listener callbacks.
 * Callback implementations SHOULD avoid blocking operations.
 * Closing a registration handle MUST unregister the listener.
+* SDK implementations MUST allow a listener callback to close its own
+  registration handle during callback execution without deadlocking.
 * Close MUST be idempotent (subsequent calls have no effect).
 * After close returns, SDK implementations SHOULD stop new callback delivery for
   that registration. A callback already in progress MAY complete.
