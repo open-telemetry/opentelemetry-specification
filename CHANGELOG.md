@@ -13,6 +13,12 @@ release.
 
 ### Metrics
 
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
 - Exponential Histogram exact table lookup algorithm documented.
   ([#5230](https://github.com/open-telemetry/opentelemetry-specification/pull/5230))
 
@@ -24,11 +30,20 @@ release.
 
 ### Resource
 
+- Add Entity support to the Resource SDK specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
 ### Entities
+
+- Add Entity specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
 
 ### Common
 
 ### OpenTelemetry Protocol
+
+- Add max request / response size options to list of OTLP exporter configuration options.
+  ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
 
 ### Compatibility
 
