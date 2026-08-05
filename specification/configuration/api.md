@@ -85,6 +85,8 @@ Path requirements:
 * `path` matching is exact. Wildcards and prefix matching are not supported.
 * In this version, paths are defined only for named properties. Sequence/array
   indexing is not supported.
+* `path` MUST identify a mapping node when the watched path is set. Watching
+  scalar values or sequences is not supported.
 * Examples include `.instrumentation/development.general.http` and
   `.instrumentation/development.java.methods`.
 
@@ -92,8 +94,8 @@ The callback MUST accept the following parameters:
 
 * `path`: the changed watched path.
 * `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
-  path, or null/nil/None if the watched path is unset or cleared, according to
-  what is idiomatic for the language.
+  path, or null/nil/None if the watched path is unset, cleared, or no longer
+  resolves to a mapping node, according to what is idiomatic for the language.
 
 **Returns:** A registration handle. The handle MUST provide a close (or
 language-equivalent) operation that unregisters the listener.
