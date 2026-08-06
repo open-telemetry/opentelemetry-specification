@@ -11,8 +11,15 @@ release.
 
 ### Traces
 
+- Clarify that a disabled `Tracer` MAY still emit the SDK's own internal
+  telemetry, even though it behaves as a No-op `Tracer`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
+
 ### Metrics
 
+- Clarify that a disabled `Meter` MAY still emit the SDK's own internal
+  telemetry, even though it behaves as a No-op `Meter`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
 - Clarify the interaction between Prometheus content negotiation and translation
   strategy.
   ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
@@ -21,6 +28,10 @@ release.
     ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
 
 ### Logs
+
+- Clarify that a disabled `Logger` MAY still emit the SDK's own internal
+  telemetry, even though it behaves as a No-op `Logger`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
 
 ### Baggage
 
