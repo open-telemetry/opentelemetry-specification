@@ -195,7 +195,8 @@ It consists of the following parameters:
   i.e. `Logger`s are enabled by default).
 
   If a `Logger` is disabled, it MUST behave equivalently
-  to [No-op Logger](./noop.md#logger).
+  to [No-op Logger](./noop.md#logger). Even so, the SDK MAY still emit its own
+  internal telemetry related to the disabled `Logger`.
 
 * `minimum_severity`: A [SeverityNumber](./data-model.md#field-severitynumber)
   indicating the minimum severity level for log records to be processed.
