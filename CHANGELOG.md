@@ -29,6 +29,9 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Info metric transformation.
+  ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
