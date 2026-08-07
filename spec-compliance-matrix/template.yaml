@@ -186,6 +186,8 @@ sections:
         optional: true
       - name: The SDK allows more than one `View` to be specified per instrument.
         optional: true
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        optional: true
       - name: The `Drop` aggregation is available.
       - name: The `Default` aggregation is available.
       - name: The `Default` aggregation uses the specified aggregation by instrument.
