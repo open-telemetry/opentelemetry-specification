@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
@@ -31,7 +31,7 @@ weight: 3
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
     + [OnEmit](#onemit)
     + [Enabled](#enabled-1)
-    + [ShutDown](#shutdown)
+    + [ShutDown](#shutdown-1)
     + [ForceFlush](#forceflush-1)
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
@@ -41,11 +41,11 @@ weight: 3
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
-    + [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-2)
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

@@ -4,12 +4,12 @@
 
 This document defines the required attributes of [`Mapping`](./data-format.md#message-mapping) messages.
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Attributes](#attributes)
   * [Algorithm for `process.executable.build_id.htlhash`](#algorithm-for-processexecutablebuild_idhtlhash)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Attributes
 
