@@ -13,9 +13,35 @@ release.
 
 ### Metrics
 
-- Stabilize sections of Prometheus Metrics Exporter.
-  - Stabilize Target section.
-    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.60.0 (2026-08-07)
+
+### Context
+
+### Traces
+
+### Metrics
 
 ### Logs
 
@@ -40,7 +66,17 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add max request / response size options to list of OTLP exporter configuration options.
+  ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
+
 ### Compatibility
+
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
 
 ### SDK Configuration
 

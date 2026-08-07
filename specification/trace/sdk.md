@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
@@ -68,16 +68,16 @@ weight: 3
     + [OnStart](#onstart)
     + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
-    + [Shutdown()](#shutdown)
-    + [ForceFlush()](#forceflush)
+    + [Shutdown()](#shutdown-1)
+    + [ForceFlush()](#forceflush-1)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
 - [Span Exporter](#span-exporter)
-  * [Interface Definition](#interface-definition)
+  * [Interface Definition](#interface-definition-1)
     + [`Export(batch)`](#exportbatch)
-    + [`Shutdown()`](#shutdown)
-    + [`ForceFlush()`](#forceflush)
+    + [`Shutdown()`](#shutdown-2)
+    + [`ForceFlush()`](#forceflush-2)
   * [Further Language Specialization](#further-language-specialization)
     + [Examples](#examples)
       - [Go SpanExporter Interface](#go-spanexporter-interface)
@@ -85,7 +85,7 @@ weight: 3
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

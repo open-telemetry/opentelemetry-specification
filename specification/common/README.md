@@ -13,10 +13,10 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [AnyValue](#anyvalue)
-  * [map](#mapstring-anyvalue)
+  * [map<string, AnyValue>](#mapstring-anyvalue)
   * [AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols)
     + [Strings](#strings)
     + [Booleans](#booleans)
@@ -34,7 +34,7 @@ path_base_for_github_subdir:
   * [Configurable Parameters](#configurable-parameters)
   * [Exempt Entities](#exempt-entities)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

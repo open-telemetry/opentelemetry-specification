@@ -7,7 +7,7 @@ extra requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Usage](#usage)
   * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)
@@ -22,7 +22,7 @@ extra requirements to the existing specifications.
     + [Routing](#routing)
     + [Setup](#setup)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
