@@ -166,11 +166,15 @@ The option MAY be named `target_info_enabled`, and MUST be `true` by default.
 
 ## Content Negotiation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
+
+If no `Accept` header is provided and no fallback protocol is configured, the
+exporter MUST use Prometheus text format 0.0.4 (`text/plain; version=0.0.4`) and
+apply `underscores` escaping.
 
 ### Interaction with Translation Strategy
 
