@@ -19,6 +19,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+- Exponential Histogram exact table lookup algorithm documented.
+  ([#5230](https://github.com/open-telemetry/opentelemetry-specification/pull/5230))
 
 ### Logs
 
