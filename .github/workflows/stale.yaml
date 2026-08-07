@@ -35,5 +35,5 @@ jobs:
           days-before-issue-stale: 365
           days-before-issue-close: 14
           # TODO: remove or lower once we process through old issues backlog
-          # defaults to 30 new issues and PRs per run.
+          # defaults to 30 operations per run, empirically ~12 issues or PRs.
           operations-per-run: 100
