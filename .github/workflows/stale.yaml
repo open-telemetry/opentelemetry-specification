@@ -34,3 +34,6 @@ jobs:
           # applies only to issues
           days-before-issue-stale: 365
           days-before-issue-close: 14
+          # process oldest-created first so close-eligible issues are 
+          # prioritized over newer issues
+          ascending: true
