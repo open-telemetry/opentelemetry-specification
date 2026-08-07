@@ -164,7 +164,7 @@ A [Prometheus Info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specif
 
 ### StateSet
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus StateSet](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. A Prometheus StateSet metric can be thought of as a special-case of the Prometheus Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to an OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 

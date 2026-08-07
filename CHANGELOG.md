@@ -29,6 +29,9 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus StateSet metric transformation.
+  ([#5212](https://github.com/open-telemetry/opentelemetry-specification/pull/5212))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
