@@ -53,11 +53,15 @@ release.
 
 - Add Entity support to the Resource SDK specification.
   ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+- Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Entities
 
 - Add Entity specification.
   ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+- Remove `OTEL_ENTITIES` from general env var configuration spec and add `OTEL_EXPERIMENTAL_ENTITIES_ENABLED` flag.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Common
 
