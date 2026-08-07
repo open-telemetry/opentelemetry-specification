@@ -862,6 +862,8 @@ public final class SpanLimits {
 
   public int getAttributeCountLimit();
 
+  public int getAttributeValueDepthLimit();
+
   public int getAttributeCountPerEventLimit();
 
   public int getAttributeCountPerLinkLimit();
