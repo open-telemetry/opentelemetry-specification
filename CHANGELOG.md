@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
@@ -36,6 +39,9 @@ release.
 ### Common
 
 ### OpenTelemetry Protocol
+
+- Add max request / response size options to list of OTLP exporter configuration options.
+  ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
 
 ### Compatibility
 

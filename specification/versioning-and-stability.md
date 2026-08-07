@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
@@ -31,7 +31,7 @@
   * [Contrib Support](#contrib-support)
 - [OpenTelemetry GA](#opentelemetry-ga)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
