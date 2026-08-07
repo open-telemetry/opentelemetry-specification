@@ -9,7 +9,7 @@ linkTitle: Prometheus
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Prometheus Exporter Model](#prometheus-exporter-model)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -30,7 +30,7 @@ linkTitle: Prometheus
 - [Content Negotiation](#content-negotiation)
   * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
