@@ -130,6 +130,8 @@ release.
 
 ### OTEPs
 
+- Add OTEP for exporting OpenTelemetry to OS-native tracing facilities (Linux `user_events` and Windows ETW).
+  ([#5193](https://github.com/open-telemetry/opentelemetry-specification/pull/5193))
 - Add OTEP proposing a central OpenTelemetry benchmarks repository.
   ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
 - Introduce Policies into the specification.
