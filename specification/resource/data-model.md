@@ -90,7 +90,7 @@ resource.
     description or identity of an entity in `E`.
 - Solve for resource flattening issues (See
   [Attribute Referencing Model](../entities/data-model.md#attribute-referencing-model)).
-  - If, for all entities, there are now overlapping attribute keys, then nothing
+  - If, for all entities, there are no overlapping attribute keys, then nothing
     is needed.
   - If there is a conflict where two entities use the same attribute key then
     remove the lower priority entity from the Resource.
