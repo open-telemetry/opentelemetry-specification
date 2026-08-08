@@ -86,6 +86,8 @@ release.
 
 - Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
+- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
+  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.59.0 (2026-07-10)
 
