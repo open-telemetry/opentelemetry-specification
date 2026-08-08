@@ -607,39 +607,80 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
 
 **Status**: [Development](../document-status.md)
 
-An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram) with
-a cumulative aggregation temporality MUST be converted to a Prometheus Native
-Histogram as follows:
+An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
+with a cumulative aggregation temporality MUST be converted to a Prometheus
+Native Histogram with standard (exponential) schema as follows:
 
-- `Scale` is converted to the Native Histogram `Schema`. Currently,
-  [valid values](https://github.com/prometheus/prometheus/commit/d9d51c565c622cdc7d626d3e7569652bc28abe15#diff-bdaf80ebc5fa26365f45db53435b960ce623ea6f86747fb8870ad1abc355f64fR76-R83)
-  for `schema` are -4 <= n <= 8.
-  If `Scale` is > 8 then Exponential Histogram data points SHOULD be downscaled
-  to a scale accepted by Prometheus (in range [-4,8]). Any data point unable to
+- The [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+  of the Native Histogram MUST be of the integer and counter flavor.
+- The `ResetHint` (or `CounterResetHint`) in the Native Histogram MUST be set
+  to `UNKNOWN`. OpenTelemetry does not carry an explicit reset flag, so
+  `UNKNOWN` lets Prometheus auto-detect resets from the values and avoids any
+  semantic divergence with OpenTelemetry's reset model.
+- `Scale` is converted to the Native Histogram `Schema`. Valid values for
+  `Schema` are in the range [-4, 8]. If `Scale` is > 8 then Exponential
+  Histogram data points SHOULD be downscaled to a scale accepted by Prometheus.
+  If `Scale` is < -4, the data point MUST be dropped. Any data point unable to
   be rescaled to an acceptable range MUST be dropped.
-- `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
-  flag is set to `false`, otherwise, Native Histogram `Count` is set to the
-  Stale NaN value.
-- `Sum` is converted to the Native Histogram `Sum` if `Sum` is set and the
-  `NoRecordedValue` flag is set to `false`, otherwise, Native Histogram `Sum` is
-  set to the Stale NaN value.
 - `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
   converting nanoseconds to milliseconds.
-- `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
 - `ZeroThreshold`, if set, is converted to the Native Histogram `ZeroThreshold`.
   Otherwise, it is set to the default value `1e-128`.
-- The dense bucket layout represented by `Positive` bucket counts and `Offset` is
-  converted to the Native Histogram sparse layout represented by `PositiveSpans`
-  and `PositiveDeltas`. The same holds for the `Negative` bucket counts
-  and `Offset`. Note that Prometheus Native Histograms buckets are indexed by
-  upper boundary while Exponential Histograms are indexed by lower boundary, the
-  result being that the Offset fields are different-by-one.
+- All fields of the Native Histogram that are not explicitly referenced here
+  MUST be set to their zero value, such as custom values.
 - `Min` and `Max` are not used.
-- `StartTimeUnixNano` is not used.
-- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
+- `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
+  as described in the [Exemplar Conversion](#exemplar-conversion) section.
+- If the `NoRecordedValue` flag is set to `true`, the Native Histogram MUST be
+  marked as
+  [stale](https://prometheus.io/docs/specs/native_histograms/#staleness-markers):
+  - The Native Histogram `Sum` MUST be set to the Stale NaN value.
+  - The Native Histogram `Count` MUST be set to zero. `ZeroCount`,
+    `PositiveSpans`, `PositiveDeltas`, `NegativeSpans`, and `NegativeDeltas`
+    MUST be left empty.
+- If the `NoRecordedValue` flag is set to `false`:
+  - `Count` is converted to the Native Histogram `Count`.
+  - `Sum`, if set, is converted to the Native Histogram `Sum`.
+  - `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
+  - The dense bucket layout represented by `Positive` bucket counts and
+    `Offset` is converted into the Native Histogram
+    [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas`. The same conversion is applied
+    separately to `Negative` bucket counts and `Offset`, producing
+    `NegativeSpans` and `NegativeDeltas`. Note that Prometheus Native
+    Histogram buckets are indexed by their upper boundary while Exponential
+    Histogram buckets are indexed by their lower boundary, so the Native
+    Histogram bucket index of the Exponential Histogram bucket at array
+    position `i` (zero-based) is `Offset + i + 1`.
+    - Non-zero bucket counts MUST be converted into `PositiveDeltas` (or
+      `NegativeDeltas`). Zero-count buckets MAY also be included to extend
+      an enclosing span (rather than creating a gap between spans) and
+      reduce the number of `PositiveSpans` (or `NegativeSpans`).
+    - Bucket counts that need to be converted are converted into
+      `PositiveDeltas` (or `NegativeDeltas`), which is delta encoded. The
+      first converted value is written as is, the rest as delta to the
+      previous converted value. No cumulative summation across buckets is
+      required — OpenTelemetry and Native Histogram bucket counts are
+      already per-bucket.
+    - `PositiveSpans` (or `NegativeSpans`) encode where the converted
+      buckets sit in the Native Histogram bucket index. The first span's
+      `Offset` is the Native Histogram bucket index of the first converted
+      bucket. For subsequent spans, `Offset` is the number of buckets that
+      were not converted between the end of the previous span and the
+      start of this one. `Length` is the number of consecutive converted
+      buckets in the span.
+    - For example: if `Positive.Offset` is `3` and `Positive.BucketCounts`
+      is `10, 0, 0, 20, 5, 2`, those buckets sit at Native Histogram bucket
+      indexes `4, 5, 6, 7, 8, 9`. If only the non-zero bucket counts
+      `10, 20, 5, 2` are converted, then `PositiveSpans` will be
+      `{Offset: 4, Length: 1}, {Offset: 2, Length: 3}` and `PositiveDeltas`
+      will be `10, 10, -15, -3`.
 
-[OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
-metrics with the delta aggregation temporality are dropped.
+[OpenTelemetry Exponential Histograms](../metrics/data-model.md#exponentialhistogram)
+with a delta aggregation temporality MAY be aggregated into a cumulative
+aggregation temporality and follow the logic above, or MUST be dropped.
 
 ### Summaries
 
