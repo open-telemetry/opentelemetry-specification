@@ -539,12 +539,22 @@ to make sure that they are not invoked concurrently.
 
 #### Batching processor
 
-This is an implementation of the `LogRecordProcessor` which create batches
+This is an implementation of the `LogRecordProcessor` which creates batches
 of `LogRecord`s and passes the export-friendly `ReadableLogRecord`
 representations to the configured `LogRecordExporter`.
 
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
 to make sure that they are not invoked concurrently.
+
+A batch SHOULD be exported when any of the following conditions are met:
+
+- The scheduled delay (`scheduledDelayMillis`) elapses.
+- The queue contains at least `maxExportBatchSize` `LogRecord`s.
+- `ForceFlush` is called.
+- `Shutdown` is called.
+
+If the queue is empty when an export is triggered, the processor MAY export
+an empty batch OR skip the export and consider it to be completed immediately.
 
 **Configurable parameters:**
 
@@ -556,7 +566,10 @@ to make sure that they are not invoked concurrently.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+  smaller or equal to `maxQueueSize`. If the queue reaches
+  `maxExportBatchSize`, a batch will be exported even if
+  `scheduledDelayMillis` milliseconds have not elapsed. The default value is
+  `512`.
 
 #### Event to span event bridge
 
