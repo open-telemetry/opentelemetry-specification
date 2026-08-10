@@ -88,8 +88,8 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  | - |  | + |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  | + |  | + |
-| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | - |
-| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | - |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | + |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | + |
 | [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  | - |  | + |
 
 ## Baggage
@@ -207,7 +207,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Logger.Emit(LogRecord) with Exception parameter | X |  | + |  |  |  |  |  |  |  | - |  | + |
 | LogRecord.Set EventName |  | + | + |  |  | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
-| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  |  |
+| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
@@ -243,7 +243,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | OT Propagator | X | + | + | + | + |  |  |  |  |  | - |  | - |
 | OpenCensus Binary Propagator |  | + | - |  |  |  |  |  |  |  |  |  | - |
@@ -289,7 +289,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
-| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  |  |
+| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  | - |
 
 ## Declarative configuration
 
@@ -328,11 +328,11 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
 | Enforces request size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Enforces response size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - |  |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
-| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
+| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | + |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - | + |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - | + |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - | + |
+| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
