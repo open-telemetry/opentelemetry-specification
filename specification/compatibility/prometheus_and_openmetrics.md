@@ -642,7 +642,8 @@ Native Histogram with standard (exponential) schema as follows:
     MUST be left empty.
 - If the `NoRecordedValue` flag is set to `false`:
   - `Count` is converted to the Native Histogram `Count`.
-  - `Sum`, if set, is converted to the Native Histogram `Sum`.
+  - `Sum`, if set, is converted to the Native Histogram `Sum`; otherwise, the
+    metric point MUST be dropped.
   - `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
   - The dense bucket layout represented by `Positive` bucket counts and
     `Offset` is converted into the Native Histogram
