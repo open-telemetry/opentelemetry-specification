@@ -11,7 +11,7 @@ release.
 
 ### Traces
 
-- Link exception recording guidance to the trace API's Event definition.
+- Link exception recording guidance to the Event definition in the trace API.
   ([#5259](https://github.com/open-telemetry/opentelemetry-specification/pull/5259))
 
 ### Metrics
