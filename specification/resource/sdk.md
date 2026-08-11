@@ -96,7 +96,7 @@ Required parameters:
 - the updating resource whose attributes take precedence
 
 If either resource contains `Entities` then
-[merge behavior with Entiites](#merge-behavior-with-entities) MUST be used,
+[merge behavior with Entities](#merge-behavior-with-entities) MUST be used,
 otherwise [merge behavior without Entities](#merge-behavior-without-entities)
 MUST be used.
 
