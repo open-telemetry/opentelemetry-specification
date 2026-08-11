@@ -15,6 +15,10 @@ release.
 
 ### Logs
 
+- Clarify when the batching log record processor exports a batch and require
+  the previous export call to have returned.
+  ([#5261](https://github.com/open-telemetry/opentelemetry-specification/pull/5261))
+
 ### Baggage
 
 ### Profiles
