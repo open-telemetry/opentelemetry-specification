@@ -4,12 +4,12 @@
 
 This document defines how to record exceptions and their attributes.
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Recording an Exception](#recording-an-exception)
 - [Attributes](#attributes)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Recording an Exception
 
