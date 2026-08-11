@@ -78,8 +78,6 @@ sections:
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
-          - name: Set order preserved
-            optional: true
           - name: String type
           - name: Boolean type
           - name: Double floating-point type
@@ -185,6 +183,8 @@ sections:
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
         optional: true
       - name: The SDK allows more than one `View` to be specified per instrument.
+        optional: true
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
         optional: true
       - name: The `Drop` aggregation is available.
       - name: The `Default` aggregation is available.

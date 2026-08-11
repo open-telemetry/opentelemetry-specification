@@ -13,12 +13,35 @@ release.
 
 ### Metrics
 
-- Clarify the interaction between Prometheus content negotiation and translation
-  strategy.
-  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
-- Stabilize sections of Prometheus Metrics Exporter.
-  - Stabilize Target section.
-    ([5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.60.0 (2026-08-07)
+
+### Context
+
+### Traces
+
+### Metrics
 
 ### Logs
 
@@ -38,12 +61,22 @@ release.
 
 ### Common
 
+- Add `AttributeValueDepthLimit` for nested array and map attribute values.
+  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
+
 ### OpenTelemetry Protocol
 
 - Add max request / response size options to list of OTLP exporter configuration options.
   ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
 
 ### Compatibility
+
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
 
 ### SDK Configuration
 
@@ -75,6 +108,9 @@ release.
 
 - Amend the description of Composite/Composable samplers.
   ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
+
+- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
+  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
 
 ### Logs
 
@@ -116,7 +152,6 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
-
 
 ### Profiles
 

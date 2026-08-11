@@ -7,7 +7,7 @@ weight: 1
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
   * [ConfigProvider](#configprovider)
@@ -16,7 +16,7 @@ weight: 1
       - [Add change listener](#add-change-listener)
   * [ConfigProperties](#configproperties)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Overview
 

@@ -95,8 +95,6 @@ sections:
         features:
           - name: SetAttribute
             status: '+'
-          - name: Set order preserved
-            status: '+'
           - name: String type
             status: '+'
           - name: Boolean type
@@ -265,6 +263,8 @@ sections:
         status: '?'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '+'
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        status: '-'
       - name: The `Drop` aggregation is available.
         status: '+'
       - name: The `Default` aggregation is available.

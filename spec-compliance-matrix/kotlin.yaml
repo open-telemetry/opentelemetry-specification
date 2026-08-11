@@ -95,8 +95,6 @@ sections:
         features:
           - name: SetAttribute
             status: '+'
-          - name: Set order preserved
-            status: '-'
           - name: String type
             status: '+'
           - name: Boolean type
@@ -154,9 +152,9 @@ sections:
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '-'
+            status: '+'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '-'
+            status: '+'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
             status: '+'
   - name: Baggage
@@ -265,6 +263,8 @@ sections:
         status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '-'
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        status: '-'
       - name: The `Drop` aggregation is available.
         status: '-'
       - name: The `Default` aggregation is available.
@@ -371,6 +371,8 @@ sections:
         status: '+'
       - name: Logger.Enabled
         status: '+'
+      - name: Ergonomic API
+        status: '+'
       - name: SimpleLogRecordProcessor
         status: '+'
       - name: BatchLogRecordProcessor
@@ -428,7 +430,7 @@ sections:
       - name: TraceContext Propagator
         status: '+'
       - name: B3 Propagator
-        status: '-'
+        status: '+'
       - name: Jaeger Propagator
         status: '-'
       - name: OT Propagator
@@ -507,7 +509,7 @@ sections:
         status: '-'
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '-'
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
         status: '-'
   - name: Declarative configuration
     features:
@@ -562,15 +564,15 @@ sections:
           - name: Enforces response size limit
             status:
           - name: Concurrent sending
-            status: '?'
+            status: '+'
           - name: Honors retryable responses with backoff
-            status: '?'
+            status: '+'
           - name: Honors non-retryable responses
-            status: '?'
+            status: '+'
           - name: Honors throttling response
-            status: '?'
+            status: '+'
           - name: Multi-destination spec compliance
-            status: '?'
+            status: '+'
           - name: SchemaURL in ResourceSpans and ScopeSpans
             status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics

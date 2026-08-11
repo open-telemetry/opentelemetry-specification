@@ -95,8 +95,6 @@ sections:
         features:
           - name: SetAttribute
             status: '+'
-          - name: Set order preserved
-            status: '+'
           - name: String type
             status: '+'
           - name: Boolean type
@@ -265,6 +263,8 @@ sections:
         status: '+'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '+'
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        status: '-'
       - name: The `Drop` aggregation is available.
         status: '+'
       - name: The `Default` aggregation is available.
@@ -672,45 +672,45 @@ sections:
       - heading: '**Span metrics**'
         features:
           - name: '[`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
-            status: '-'
+            status: '+'
       - heading: '**Log metrics**'
         features:
           - name: '[`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'
-            status: '-'
+            status: '+'
       - heading: '**Metric metrics**'
         features:
           - name: '[`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported)'
-            status: '-'
+            status: '+'
       - heading: '**Shared metrics**'
         features:
           - name: '[`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration)'
-            status: '-'
+            status: '+'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
