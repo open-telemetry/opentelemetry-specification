@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Propagator Types](#propagator-types)
@@ -39,7 +39,7 @@
     + [Fields](#fields-1)
     + [Configuration](#configuration)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

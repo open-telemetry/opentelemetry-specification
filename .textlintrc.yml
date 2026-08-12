@@ -26,6 +26,7 @@ rules:
     skip: []
     exclude:
       - 'bug[- ]fix(es)?'
+      - 'Local[ -]?Storage'
       - 'readme(s)?'
       - 'to-?do(s)?(?=[ ,.])'
       - "indexes\\b"
