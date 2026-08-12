@@ -9,7 +9,7 @@ linkTitle: No-Op
 <details>
 <summary> Table of Contents </summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [MeterProvider](#meterprovider)
   * [Meter Creation](#meter-creation)
@@ -35,7 +35,7 @@ linkTitle: No-Op
   * [Asynchronous Gauge Observations](#asynchronous-gauge-observations)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 

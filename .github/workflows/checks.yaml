@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdownlint
       run: make markdownlint
@@ -27,9 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
 
     - name: install yamllint
       run: make install-yamllint
@@ -41,10 +41,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdown-link-check
       run: make markdown-link-check
@@ -56,22 +56,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run markdown-toc
-      run: make markdown-toc
-
-    - name: validate markdown-toc
-      run: git diff --exit-code ':*.md' || (echo 'Generated markdown Table of Contents is out of date, please run "make markdown-toc" and commit the changes in this PR.' && exit 1)
+      run: make markdown-toc-check
 
   compliance-matrix-check:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: run compliance-matrix
       run: make compliance-matrix
@@ -83,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - uses: streetsidesoftware/cspell-action@de2a73e963e7443969755b648a1008f77033c5b2 # v8.4.0
       with:
@@ -96,10 +93,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: install dependencies
-      run: npm install
+      run: npm ci --ignore-scripts
 
     - name: run textlint
       run: make textlint format=github
