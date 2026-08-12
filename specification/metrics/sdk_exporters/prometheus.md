@@ -178,7 +178,7 @@ apply `underscores` escaping.
 
 ### Interaction with Translation Strategy
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 Regardless of the configured `translation_strategy`, the final output format and
 character escaping MUST comply with the content negotiation's restrictions based
