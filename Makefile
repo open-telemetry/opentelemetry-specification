@@ -30,12 +30,12 @@ language-analysis: textlint cspell
  
 .PHONY: cspell
 cspell:
-	@if ! npm ls cspell; then npm install; fi
+	@if ! npm ls cspell; then npm ci --ignore-scripts; fi
 	npx cspell . --no-progress
 
 .PHONY: textlint
 textlint:
-	@if ! npm ls textlint; then npm install; fi
+	@if ! npm ls textlint; then npm ci --ignore-scripts; fi
 
 	@if [ "$(format)" = "github" ]; then \
 		npx textlint --format github .; \
@@ -45,7 +45,7 @@ textlint:
 
 .PHONY: textlint-correction
 textlint-correction:
-	@if ! npm ls textlint; then npm install; fi
+	@if ! npm ls textlint; then npm ci --ignore-scripts; fi
 	npx textlint --fix .
 
 .PHONY: markdown-link-check
@@ -74,17 +74,17 @@ markdown-link-check:
 
 .PHONY: markdown-toc
 markdown-toc:
-	@if ! npm ls doctoc; then npm ci; fi
+	@if ! npm ls doctoc; then npm ci --ignore-scripts; fi
 	npx --no -- doctoc . --update-only --mintocitems 1 --toc-pragma-style compact --notitle --entryprefix='-,*,+' || exit 1;
 
 .PHONY: markdown-toc-check
 markdown-toc-check:
-	@if ! npm ls doctoc; then npm ci; fi
+	@if ! npm ls doctoc; then npm ci --ignore-scripts; fi
 	npx --no -- doctoc . --update-only --mintocitems 1 --toc-pragma-style compact --notitle --entryprefix='-,*,+' --dryrun || exit 1;
 
 .PHONY: markdownlint
 markdownlint:
-	@if ! npm ls markdownlint; then npm install; fi
+	@if ! npm ls markdownlint; then npm ci --ignore-scripts; fi
 	@for f in $(ALL_DOCS); do \
 		echo $$f; \
 		npx --no -p markdownlint-cli markdownlint -c .markdownlint.yaml $$f \
@@ -119,5 +119,5 @@ compliance-matrix: check-python
 
 .PHONY: install-tools
 install-tools:
-	npm install
+	npm ci --ignore-scripts
 	@echo "All tools installed"

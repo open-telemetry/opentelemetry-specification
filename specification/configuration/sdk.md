@@ -1,5 +1,7 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: SDK
+aliases:
+  - /docs/reference/specification/sdk-configuration
 weight: 3
 --->
 
@@ -7,7 +9,7 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
@@ -26,7 +28,7 @@ weight: 3
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Overview
 

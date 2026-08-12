@@ -10,7 +10,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
@@ -21,7 +21,7 @@ weight: 2
 - [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
