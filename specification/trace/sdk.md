@@ -209,8 +209,8 @@ It consists of the following parameters:
 
   If a `Tracer` is disabled, it MUST behave equivalently
   to a [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
-  Even so, the SDK MAY still emit its own internal telemetry related to the
-  disabled `Tracer`.
+  Even so, the SDK MAY still generate its own internal telemetry (for example,
+  SDK self-observability metrics) about the disabled `Tracer`.
 
   The value of `enabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `enabled` is `false`, `Enabled`
