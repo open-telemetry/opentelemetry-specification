@@ -1607,8 +1607,8 @@ SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
 failed or timed out. If any [`Export(batch)`](#exportbatch) call fails or times
 out, or if the configured exporter's [`ForceFlush()`](#forceflush-2) fails or
 times out, `ForceFlush` SHOULD return some **ERROR** status. If all calls
-succeed, it should return some **NO ERROR** status. Language implementations
-MAY decide how to model **ERROR** and **NO ERROR**.
+succeed, `ForceFlush` SHOULD return some **NO ERROR** status. Language
+implementations MAY decide how to model **ERROR** and **NO ERROR**.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
