@@ -1133,7 +1133,7 @@ when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
   of the `Meter` used to create the instrument has parameter `enabled=false`.
-- All [resolved views](#measurement-processing) for the instrument are
+- All [resolved streams](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Otherwise, it SHOULD return `true`.
