@@ -503,7 +503,9 @@ made with an Instrument:
     * If both the View and [Instrument advisory
       parameters](#instrument-advisory-parameters) specify the same aspect of
       the [Stream configuration](#stream-configuration), the setting defined by
-      the View MUST take precedence over the advisory parameters.
+      the View MUST take precedence over the advisory parameters, except for the
+      [OptIn](#instrument-advisory-parameter-optin) advisory parameter which
+      requires `enabled` to be set to `true` to be overridden.
   * (**Development**) If `view_matching_mode` is `composable`, and the Instrument could match the instrument selection criteria of one or more Views:
     * Group the matching Views by their configured stream `name`.
       * A group contains Views that configure the same stream `name` and all
@@ -528,7 +530,9 @@ made with an Instrument:
       * If both the matching Views and [Instrument advisory
         parameters](#instrument-advisory-parameters) specify the same aspect of
         the [Stream configuration](#stream-configuration), the setting defined
-        by the Views MUST take precedence over the advisory parameters.
+        by the Views MUST take precedence over the advisory parameters, except
+        for the [OptIn](#instrument-advisory-parameter-optin) advisory parameter
+        which requires `enabled` to be set to `true` to be overridden.
 
 Users can configure match-all Views with `enabled=false` or with the
 [Drop aggregation](#drop-aggregation), to disable instruments by default.
