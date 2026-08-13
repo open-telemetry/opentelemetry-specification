@@ -557,8 +557,9 @@ the following happens AND the previous export call has returned:
 - `ForceFlush` is called.
 - `Shutdown` is called.
 
-If the queue is empty when an export is triggered, the processor MAY export
-an empty batch.
+If the queue is empty when an export is triggered, the processor SHOULD
+invoke the `LogRecordExporter`'s `Export` and provide an empty batch, so the
+exporter can decide how to handle it.
 
 **Configurable parameters:**
 
