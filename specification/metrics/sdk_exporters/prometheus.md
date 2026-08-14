@@ -129,12 +129,12 @@ the [default aggregation](../sdk.md#default-aggregation) by default.
 
 ### Resource Attributes as Metric Labels
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
 By default, it MUST NOT add any resource attributes as metric labels.
 The configuration SHOULD allow the user to select resource attributes to include or exclude. Copied Resource attributes MUST NOT be
-excluded from the `target_info` metric. The option SHOULD be named `resource_constant_labels`.
+excluded from the `target_info` metric. The option MAY be named `resource_constant_labels`.
 
 ### Translation Strategy
 
