@@ -29,6 +29,9 @@ release.
 
 ### Compatibility
 
+- Stabilize content negotiation section.
+  ([#5136](https://github.com/open-telemetry/opentelemetry-specification/pull/5136))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
@@ -77,8 +80,6 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
-  - Stabilize content negotiation section.
-    ([#5136](https://github.com/open-telemetry/opentelemetry-specification/pull/5136))
 
 ### SDK Configuration
 
