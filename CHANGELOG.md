@@ -31,6 +31,9 @@ release.
 
 - Stabilize content negotiation section.
   ([#5136](https://github.com/open-telemetry/opentelemetry-specification/pull/5136))
+- Update the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
 
 ### SDK Configuration
 
