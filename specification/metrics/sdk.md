@@ -16,6 +16,7 @@ weight: 3
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
   * [Configuration](#configuration)
+    + [View matching mode](#view-matching-mode)
     + [MeterConfigurator](#meterconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
