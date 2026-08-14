@@ -33,6 +33,11 @@ release.
 
 ### Supplementary Guidelines
 
+- Add to the library guidelines criteria for automatic injectability that are
+  the foundation of the technical contract for the OpenTelemetry Injector,
+  System Packages and the OpenTelemetry Operator.
+  ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
+
 ### OTEPs
 
 ## v1.60.0 (2026-08-07)
