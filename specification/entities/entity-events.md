@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [When to Use Entity Events](#when-to-use-entity-events)
@@ -24,9 +24,10 @@ weight: 3
   * [Relationship Lifecycle](#relationship-lifecycle)
 - [Examples](#examples)
   * [Kubernetes Pod Entity State](#kubernetes-pod-entity-state)
+  * [Service and Process Relationship](#service-and-process-relationship)
   * [Entity Delete](#entity-delete)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 

@@ -1,34 +1,33 @@
 # Semantic Convention Schema v2
 
-<!-- toc -->
+<!-- START doctoc -->
 
-- [Semantic Convention Schema v2](#semantic-convention-schema-v2)
-  - [Motivation](#motivation)
-  - [Details](#details)
-    - [Difference with `file_format: 1.1.0`](#difference-with-file_format-110)
-    - [Schema URL structure](#schema-url-structure)
-      - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
-      - [Listing available schema versions](#listing-available-schema-versions)
-    - [Definition and resolved schemas](#definition-and-resolved-schemas)
-      - [File format and versioning](#file-format-and-versioning)
-    - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
-      - [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
-    - [Dependency resolution mechanism](#dependency-resolution-mechanism)
-  - [Trade-offs and mitigations](#trade-offs-and-mitigations)
-    - [Schema Transformations](#schema-transformations)
-      - [Migration option 1: upgrades based on resolved registry only](#migration-option-1-upgrades-based-on-resolved-registry-only)
-      - [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
-      - [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
-    - [Documentation and code generation](#documentation-and-code-generation)
-  - [Prior art and alternatives](#prior-art-and-alternatives)
-  - [Open questions](#open-questions)
-    - [Schema transformations evolution](#schema-transformations-evolution)
-    - [Where should conventions belong?](#where-should-conventions-belong)
-    - [What's the granularity for Collector and instrumentation-specific conventions?](#whats-the-granularity-for-collector-and-instrumentation-specific-conventions)
-  - [Prototypes](#prototypes)
-  - [Future possibilities](#future-possibilities)
+- [Motivation](#motivation)
+- [Details](#details)
+  * [Difference with `file_format: 1.1.0`](#difference-with-file_format-110)
+  * [Schema URL structure](#schema-url-structure)
+    + [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+    + [Listing available schema versions](#listing-available-schema-versions)
+  * [Definition and resolved schemas](#definition-and-resolved-schemas)
+    + [File format and versioning](#file-format-and-versioning)
+  * [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
+    + [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
+  * [Dependency resolution mechanism](#dependency-resolution-mechanism)
+- [Trade-offs and mitigations](#trade-offs-and-mitigations)
+  * [Schema Transformations](#schema-transformations)
+    + [Migration option 1: upgrades based on resolved registry only](#migration-option-1-upgrades-based-on-resolved-registry-only)
+    + [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
+    + [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
+  * [Documentation and code generation](#documentation-and-code-generation)
+- [Prior art and alternatives](#prior-art-and-alternatives)
+- [Open questions](#open-questions)
+  * [Schema transformations evolution](#schema-transformations-evolution)
+  * [Where should conventions belong?](#where-should-conventions-belong)
+  * [What's the granularity for Collector and instrumentation-specific conventions?](#whats-the-granularity-for-collector-and-instrumentation-specific-conventions)
+- [Prototypes](#prototypes)
+- [Future possibilities](#future-possibilities)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 In this OTEP, we propose a new telemetry schema format that supports multiple convention registries
 and provides full access to metadata.

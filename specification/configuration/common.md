@@ -13,7 +13,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Type-specific guidance](#type-specific-guidance)
   * [Numeric](#numeric)
@@ -23,7 +23,7 @@ aliases:
   * [String](#string)
     + [Enum](#enum)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 

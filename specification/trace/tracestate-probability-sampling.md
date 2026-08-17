@@ -10,7 +10,7 @@ aliases: [tracestate-probability-sampling-experimental]
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Definitions](#definitions)
@@ -39,7 +39,7 @@ aliases: [tracestate-probability-sampling-experimental]
   * [Converting threshold to a sampling probability](#converting-threshold-to-a-sampling-probability)
   * [Converting threshold to an adjusted count (sampling rate)](#converting-threshold-to-an-adjusted-count-sampling-rate)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 
@@ -435,8 +435,8 @@ This package demonstrates how to directly calculate integer thresholds from prob
 OpenTelemetry SDKs are recommended to use 4 digits of precision by default.
 The following table shows values computed by the method above for 1-in-N probability sampling, with precision 3, 4, and 5.
 
-<!--- cSpell:disable --->
-<!--- Program at https://go.dev/play/p/7eLM6FkuoA5 (includes function above) generates the table below --->
+<!-- cSpell:disable -->
+<!-- Program at https://go.dev/play/p/7eLM6FkuoA5 (includes function above) generates the table below -->
 | 1-in-N  | Input probability  | Threshold (precision 3, 4, 5)      | Actual probability (precision 3, 4, 5)                                       | Exact Adjusted Count (precision 3, 4, 5)                              |
 | ------- | ------------------ | ---------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | 1       | 1                  | 0<br/>0<br/>0                      | 1<br/>1<br/>1                                                                | 1<br/>1<br/>1                                                         |
@@ -452,7 +452,7 @@ The following table shows values computed by the method above for 1-in-N probabi
 | 10000   | 0.0001             | fff972<br/>fff9724<br/>fff97247    | 0.00010001659393310547<br/>0.00010000169277191162<br/>0.00010000006295740604 | 9998.340882002383<br/>9999.830725674266<br/>9999.99370426336          |
 | 100000  | 0.00001            | ffff584<br/>ffff583a<br/>ffff583a5 | 9.998679161071777e-06<br/>1.00000761449337e-05<br/>1.0000003385357559e-05    | 100013.21013412817<br/>99999.238556461<br/>99999.96614643588          |
 | 1000000 | 0.000001           | ffffef4<br/>ffffef39<br/>ffffef391 | 9.98377799987793e-07<br/>1.00000761449337e-06<br/>9.999930625781417e-07      | 1.0016248358208955e+06<br/>999992.38556461<br/>1.0000069374699865e+06 |
-<!--- cSpell:enable --->
+<!-- cSpell:enable -->
 
 ### Converting integer threshold to a `T`-value
 

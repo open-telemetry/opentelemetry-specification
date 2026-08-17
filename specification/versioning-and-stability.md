@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
@@ -31,7 +31,7 @@
   * [Contrib Support](#contrib-support)
 - [OpenTelemetry GA](#opentelemetry-ga)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 
@@ -67,16 +67,14 @@ This means that an implementation wishing to release stable tracing today MUST e
 
 ## Signal lifecycle
 
-The development of each signal follows a lifecycle: development, stable, deprecated, removed.
-
-The infographic below shows an example of the lifecycle of an API component.
-
-![API Lifecycle](../internal/img/api-lifecycle.png)
+The development of each signal follows a lifecycle of
+[maturity levels](maturity-levels.md) including the signal-specific
+[Removed](#removed) level. The following subsections define signal-specific
+requirements.
 
 ### Development
 
-Signals start in **Development** status as defined by
-[OTEP 0232](../oteps/0232-maturity-of-otel.md#explanation).
+Signals start in [Development](maturity-levels.md#development) status.
 While signals are in development, breaking changes and performance issues MAY occur.
 Components SHOULD NOT be expected to be feature-complete.
 In some cases, the signal in Development MAY be discarded and removed entirely.
@@ -94,7 +92,7 @@ Any uses of "Experimental" should be treated same as "Development".
 
 ### Stable
 
-Once a signal in Development has gone through rigorous testing, it MAY transition to **Stable**.
+Once a signal in Development has gone through rigorous testing, it MAY transition to [Stable](maturity-levels.md#stable).
 Long-term dependencies MAY now be taken against this signal.
 
 All signal components MAY become stable together, or MAY transition to stability component-by-component. The API MUST become stable before the other components.
@@ -158,7 +156,7 @@ Stable APIs. Language implementations SHOULD have a mechanism to do so, such tha
 - Removing (or deprecating) a method that was in Development maturity level but did
   not graduate to Stable level is not a breaking change for users that never used the
   method.
-  
+
 There may be other ways to extend existing API/SDKs in non-breaking manner. Language
 maintainers SHOULD choose the idiomatic way for their language.
 

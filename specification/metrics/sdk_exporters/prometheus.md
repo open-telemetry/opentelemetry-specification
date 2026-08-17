@@ -9,7 +9,7 @@ linkTitle: Prometheus
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Prometheus Exporter Model](#prometheus-exporter-model)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -30,7 +30,7 @@ linkTitle: Prometheus
 - [Content Negotiation](#content-negotiation)
   * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 
@@ -87,7 +87,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 
 ### Target
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
@@ -166,19 +166,34 @@ The option MAY be named `target_info_enabled`, and MUST be `true` by default.
 
 ## Content Negotiation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
 
+If no `Accept` header is provided and no fallback protocol is configured, the
+exporter MUST use Prometheus text format 0.0.4 (`text/plain; version=0.0.4`) and
+apply `underscores` escaping.
+
 ### Interaction with Translation Strategy
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
+Regardless of the configured `translation_strategy`, the final output format and
+character escaping MUST comply with the content negotiation's restrictions based
+on the `Accept` header.
 
-Examples:
+First, `translation_strategy` MUST be applied to construct metric names. Then,
+the Prometheus Exporter MUST apply content negotiation, which may include a
+second translation of metric names using the requested
+[escaping scheme](https://prometheus.io/docs/instrumenting/escaping_schemes/).
 
-- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
-- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the exporter will continue to be compliant.
+For example, for a counter metric named `foo.bar` with unit `By`:
+
+| `translation_strategy` | No `escaping` parameter or `escaping=underscores` | `escaping=allow-utf-8` |
+| :--- | :--- | :--- |
+| `UnderscoreEscapingWithSuffixes` | `foo_bar_bytes_total` | `foo_bar_bytes_total` |
+| `UnderscoreEscapingWithoutSuffixes` | `foo_bar` | `foo_bar` |
+| `NoUTF8EscapingWithSuffixes` | `foo_bar_bytes_total` | `foo.bar_bytes_total` |
+| `NoTranslation` | `foo_bar` | `foo.bar` |
