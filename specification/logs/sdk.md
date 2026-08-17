@@ -609,8 +609,8 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-Each SDK implementation MUST document the concurrency characteristics it
-requires of the exporter, including any operations it invokes concurrently.
+Each implementation MUST document the concurrency characteristics the SDK
+requires of the exporter
 
 ### LogRecordExporter operations
 
