@@ -605,7 +605,7 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
 
 ### Exponential Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
 with a cumulative aggregation temporality MUST be converted to a Prometheus
