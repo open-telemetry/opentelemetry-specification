@@ -115,7 +115,7 @@ Callback requirements:
   [`ConfigProperties`](./api.md#configproperties) instance representing that
   mapping node, including an explicitly empty mapping node (`{}`).
 * If the watched path is unset, cleared, or no longer resolves to a mapping
-  node, `newConfig` MUST be null/nil/None, according to what is idiomatic for
+  node, `newConfig` MUST be null/nil/None/undefined, according to what is idiomatic for
   the language.
 * SDK implementations MAY coalesce rapid successive updates for the same watched
   path. If coalescing is performed, callback delivery MUST use the latest
