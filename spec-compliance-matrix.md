@@ -59,7 +59,6 @@ formats is required. Implementing more than one format is optional.
 | [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | N/A | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
 | String type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Boolean type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + | + |
@@ -88,8 +87,8 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  | - |  | + |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  | + |  | + |
-| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | - |
-| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | - |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | + |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | + |
 | [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  | - |  | + |
 
 ## Baggage
@@ -207,7 +206,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Logger.Emit(LogRecord) with Exception parameter | X |  | + |  |  |  |  |  |  |  | - |  | + |
 | LogRecord.Set EventName |  | + | + |  |  | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
-| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  |  |
+| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
@@ -243,7 +242,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | OT Propagator | X | + | + | + | + |  |  |  |  |  | - |  | - |
 | OpenCensus Binary Propagator |  | + | - |  |  |  |  |  |  |  |  |  | - |
@@ -289,7 +288,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
-| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  |  |
+| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  | - |
 
 ## Declarative configuration
 
@@ -328,11 +327,11 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
 | Enforces request size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Enforces response size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - |  |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
-| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
+| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | + |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - | + |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - | + |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - | + |
+| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
@@ -390,26 +389,26 @@ and values are defined in the
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | **Span metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported) |  | - | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Log metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported) |  | - | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Metric metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported) |  | - | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Shared metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration) |  | - | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration) |  | - | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 
 ## OpenCensus Compatibility
 
