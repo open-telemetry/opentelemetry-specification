@@ -610,7 +610,7 @@ protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
 Each implementation MUST document the concurrency characteristics the SDK
-requires of the exporter
+requires of the exporter.
 
 ### LogRecordExporter operations
 
