@@ -626,9 +626,7 @@ transmit the data to the destination.
 
 `Export` MUST NOT be invoked concurrently with other `Export` calls for the
 same exporter instance unless the exporter supports concurrent calls. How an
-exporter indicates support for concurrent calls is language specific. An
-exporter that does not indicate support MUST be treated as not supporting
-concurrent calls.
+exporter indicates support for concurrent calls is language specific.
 
 Depending on the implementation the result of the export may be returned to the
 Processor not in the return value of the call to `Export` but in a language
