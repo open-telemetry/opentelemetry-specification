@@ -17,6 +17,7 @@ release.
 
 - Allow concurrent `LogRecordExporter.Export` calls when supported by the
   exporter and recommend concurrency-safe exporter methods.
+  ([#5279](https://github.com/open-telemetry/opentelemetry-specification/pull/5279))
 
 ### Baggage
 
