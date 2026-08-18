@@ -530,8 +530,9 @@ passes the export-friendly `ReadableLogRecord` representation to the
 configured [LogRecordExporter](#logrecordexporter), as soon as they are
 finished.
 
-The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
-to make sure that they are not invoked concurrently.
+When the configured `LogRecordExporter` does not support concurrent calls to
+`Export`, the processor MUST synchronize calls to make sure that they are not
+invoked concurrently.
 
 **Configurable parameters:**
 
@@ -543,8 +544,9 @@ This is an implementation of the `LogRecordProcessor` which create batches
 of `LogRecord`s and passes the export-friendly `ReadableLogRecord`
 representations to the configured `LogRecordExporter`.
 
-The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
-to make sure that they are not invoked concurrently.
+When the configured `LogRecordExporter` does not support concurrent calls to
+`Export`, the processor MUST synchronize calls to make sure that they are not
+invoked concurrently.
 
 **Configurable parameters:**
 
@@ -622,14 +624,17 @@ Exports a batch of [ReadableLogRecords](#readablelogrecord). Protocol exporters
 that will implement this function are typically expected to serialize and
 transmit the data to the destination.
 
-`Export` should not be called concurrently with other `Export` calls for the
-same exporter instance.
+`Export` MUST NOT be invoked concurrently with other `Export` calls for the
+same exporter instance unless the exporter supports concurrent calls. How an
+exporter indicates support for concurrent calls is language specific. An
+exporter that does not indicate support MUST be treated as not supporting
+concurrent calls.
 
 Depending on the implementation the result of the export may be returned to the
 Processor not in the return value of the call to `Export` but in a language
-specific way for signaling completion of an asynchronous task. This means that
-while an instance of an exporter should never have it `Export` called concurrently
-it does not mean that the task of exporting can not be done concurrently. How
+specific way for signaling completion of an asynchronous task. Support for
+concurrent calls to `Export` concerns invocation of the method and does not
+restrict an exporter from performing accepted export tasks concurrently. How
 this is done is outside the scope of this specification.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
@@ -709,8 +714,8 @@ to be called concurrently.
 
 **Logger** - all methods MUST be safe to be called concurrently.
 
-**LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
-concurrently.
+**LogRecordExporter** - all methods SHOULD be safe to be called concurrently.
+`ForceFlush` and `Shutdown` MUST be safe to be called concurrently.
 
 ## Self-observability
 

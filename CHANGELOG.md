@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Allow concurrent `LogRecordExporter.Export` calls when supported by the
+  exporter and recommend concurrency-safe exporter methods.
+
 ### Baggage
 
 ### Profiles
