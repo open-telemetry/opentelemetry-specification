@@ -285,8 +285,7 @@ the recommended set of attribute keys to be used for the resulting metrics.
 Applies to all instrument types.
 
 `OptIn` (bool) if true, indicates that the instrument MUST NOT
-produce metric data and that functions on the instrument SHOULD be no-ops
-unless the user has explicitly enabled the metric.
+produce metric data unless the user has explicitly enabled the metric.
 
 #### Synchronous and Asynchronous instruments
 
