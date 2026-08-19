@@ -284,8 +284,9 @@ the recommended set of attribute keys to be used for the resulting metrics.
 
 Applies to all instrument types.
 
-`OptIn` (bool) if true, indicates that the instrument MUST NOT
-produce metric data unless the user has explicitly enabled the metric.
+`OptIn` (bool) indicates that the instrument is disabled unless the user
+explicitly enables it. If true, OpenTelemetry SDKs produce no metric data for
+the instrument by default.
 
 #### Synchronous and Asynchronous instruments
 
