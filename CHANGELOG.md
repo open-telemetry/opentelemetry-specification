@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add systemd-journald example mapping to the logs data model appendix.
+  ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
+
 ### Baggage
 
 ### Profiles
