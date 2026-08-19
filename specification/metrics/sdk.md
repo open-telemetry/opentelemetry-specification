@@ -459,13 +459,23 @@ The SDK MUST accept the following stream configuration parameters:
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
-* **Status**: [Development](../document-status.md) - `enabled` (optional): A
-  boolean denoting whether the instrument should be enabled. When `enabled` is
-  `false`, the View uses the `DropAggregation`, regardless of the `aggregation`
-  provided. When `enabled` is `true` for an instrument with `OptIn` set to
-  `true`, the SDK treats the instrument as-if `OptIn` was set to false. The
-  SDK must allow `enabled` to be unset (neither true nor false). If unset,
-  `enabled` has no effect.
+* **Status**: [Development](../document-status.md) - `enabled`: A boolean
+  denoting whether the instrument produces metric data.
+
+  Users can provide an `enabled` value, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept an `enabled` value, but MUST NOT obligate a user to provide one.
+  The parameter MUST distinguish an unset value from `false`.
+
+  * If `enabled` is `true`, the `MeterProvider` MUST aggregate the instrument
+    as if its [`OptIn`](#instrument-advisory-parameter-optin) advisory
+    parameter were `false`.
+  * If `enabled` is `false`, the `MeterProvider` MUST use the
+    [Drop Aggregation](#drop-aggregation), regardless of the `aggregation`
+    provided.
+  * If `enabled` is unset, the
+    [`OptIn`](#instrument-advisory-parameter-optin) advisory parameter
+    determines whether the instrument is enabled.
 
 #### Measurement processing
 
