@@ -488,10 +488,10 @@ made with an Instrument:
 * If the `MeterProvider` has no `View` registered, or if the Instrument does
   not match any View's instrument selection criteria:
   * **Status**: [Development](../document-status.md) - If the instrument's
-    [OptIn advisory parameter](#instrument-advisory-parameter-optin)
-    is set to true, use the [Drop Aggregation](#drop-aggregation).
-  * If OptIn is false, take the Instrument and apply the default
-    Aggregation on the basis of instrument kind according to the
+    [`OptIn` advisory parameter](#instrument-advisory-parameter-optin)
+    is set to `true`, use the [Drop Aggregation](#drop-aggregation).
+  * If `OptIn` is unset or set to `false`, take the Instrument and apply the
+    default Aggregation on the basis of instrument kind according to the
     [MetricReader](#metricreader) instance's `aggregation` property.
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
