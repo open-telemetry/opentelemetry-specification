@@ -34,6 +34,9 @@ release.
 - Update the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
+- Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
+  Histogram transformation.
+  ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
 
 ### SDK Configuration
 
