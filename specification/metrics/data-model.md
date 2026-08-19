@@ -498,7 +498,7 @@ Histograms consist of the following:
     - The `start` timestamp best represents the first possible moment a
       measurement for this timeseries could have been recorded.
   - A count (`count`) of the total population of points in the histogram.
-  - A sum (`sum`) of all the values in the histogram.
+  - (optional) A sum (`sum`) of all the values in the histogram.
   - (optional) The min (`min`) of all values in the histogram.
   - (optional) The max (`max`) of all values in the histogram.
   - (optional) A series of buckets with:

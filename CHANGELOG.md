@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Fix Histogram `sum` lacking optional marker.
+  ([5273](https://github.com/open-telemetry/opentelemetry-specification/pull/5273))
+
 ### Logs
 
 ### Baggage
