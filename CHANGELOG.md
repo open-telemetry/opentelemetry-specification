@@ -92,6 +92,8 @@ release.
 
 - Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
+- Process Context: Sharing Registered Instrumentations with External Readers.
+  ([#5116](https://github.com/open-telemetry/opentelemetry-specification/pull/5116))
 
 ## v1.59.0 (2026-07-10)
 
