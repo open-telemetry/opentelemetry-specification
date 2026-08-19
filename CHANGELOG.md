@@ -15,6 +15,10 @@ release.
 
 ### Logs
 
+- Relax `LogRecordExporter` lifecycle concurrency requirements to allow SDKs to
+  synchronize exporter calls.
+  ([#5275](https://github.com/open-telemetry/opentelemetry-specification/pull/5275))
+
 ### Baggage
 
 ### Profiles
