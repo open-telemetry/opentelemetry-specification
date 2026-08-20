@@ -21,6 +21,10 @@ release.
 
 ### Resource
 
+- Allow the `service` resource detector to fall back to language- or
+  platform-specific sources when `OTEL_SERVICE_NAME` is not set.
+  ([#5280](https://github.com/open-telemetry/opentelemetry-specification/pull/5280))
+
 ### Entities
 
 ### Common
