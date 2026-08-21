@@ -100,7 +100,6 @@ formats is required. Implementing more than one format is optional.
 
 ## Metrics
 
-<<<<<<< HEAD
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | The API provides a way to set and get a global default `MeterProvider`. | X | + | + | + | + | + | + | + | + | + | - |  | - |
@@ -192,94 +191,6 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  | - |
 | Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  |  |  |  |  |  |  |  |  | - |
 | The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | - | + | - | - | - | - | - | - | - | - | - | - |
-=======
-| Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| The API provides a way to set and get a global default `MeterProvider`. | X | + | + | + | + | + | + | + | + | + | - |  |
-| It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  |
-| `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  |
-| `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  |
-| `get_meter` accepts `attributes`. |  | + |  | - | + |  |  | + | + | + |  |  |
-| When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  |
-| The fallback `Meter` `name` property keeps its original invalid value. | X | + | - | + | + | + | + |  | + | - | - |  |
-| Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + |  |  |
-| `Counter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `Gauge` instrument is supported. |  | + | - | + | + | + | - | + | + | - | - |  |
-| `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  |
-| Instruments have kind. |  | + | + | + | + | + | + | + | + | + | + |  |
-| Instruments have an optional unit of measure. |  | + | + | + | + | + | + | + | + | + | + |  |
-| Instruments have an optional description. |  | + | + | + | + | + | + | + | + | + | + |  |
-| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  | + | + | + | + | + | + |  |  |  |  |  |
-| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  |  |  |  |
-| It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  |
-| Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + |  |  |
-| Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  |
-| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  |
-| Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  |
-| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  |
-| Instrument supports the advisory OptIn parameter. |  | - | - | - | - | - | - | - | - | - | - | - |
-| All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
-| All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
-| All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
-| `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  |
-| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  | + |  | + | + | - |  |
-| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  | + | + | + | + |  | + | + | + | + |  |  |
-| Configuration is managed solely by the `MeterProvider`. |  | + | + | + | + |  | + | + | + | + | + |  |
-| The `MeterProvider` provides methods to update the configuration | X | - | - | - | + |  | - |  |  | - | + |  |
-| The updated configuration applies to all already returned `Meter`s. | if above | - | - | - | - |  | - |  |  | - | + |  |
-| There is a way to register `View`s with a `MeterProvider`. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `View` instrument selection criteria is as specified. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  |
-| The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  |
-| The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
-| The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  | - |  |  |  |  |  |
-| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
-| The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
-| The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
-| The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
-| The `Default` aggregation uses the specified aggregation by instrument. |  | + | + | + | + | + | + |  | + | + | + |  |
-| The `Sum` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `LastValue` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `ExplicitBucketHistogram` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `ExponentialBucketHistogram` aggregation is available. |  | + |  | + | + | + |  |  |  |  | + |  |
-| The metrics Reader implementation supports registering metric Exporters |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | - |  |
-| The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + |  |  |
-| The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  |
-| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - | + | + |  |  | + | + |  |
-| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | - | + | + |  |  | + | + |  |
-| The metrics Exporter `export` function receives a batch of metrics. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Exporter `export` function returns `Success` or `Failure`. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Exporter provides a `ForceFlush` function. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  | + | + | + | + | + | + | + |  | + | + |  |
-| The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  |
-| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - |  | + |  |  |  | + |  |
-| Exemplar sampling can be disabled. |  | + | - | - | - |  | + |  |  |  | + |  |
-| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - |  | + |  |  |  | + |  |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
-| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - |  | + | + |  |  | - |  |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - |  | + | + |  |  | - |  |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - |  | + | + |  |  | - |  |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - |  | + |  |  |  | - |  |
-| A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
-| The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  |
-| The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
-| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  |
-| Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
-| Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
 
 ## Logs
 
