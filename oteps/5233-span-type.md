@@ -102,7 +102,7 @@ property:
 | Signal | Identity |
 | --- | --- |
 | Metric | metric name |
-| Event | event name (top-level `event_name` field) |
+| Log | top-level `event_name` field |
 | Entity | entity type |
 | Span | *(missing)* |
 
@@ -145,6 +145,25 @@ so that a prefix can be used for coarse grouping by area and kind.
 Spans without a type are valid and MUST be accepted. A missing type means "this
 span does not follow a known definition", which is true for all existing spans.
 
+### Span type syntax
+
+Span type values are restricted to a small character set, defined below using the
+[Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
+
+```abnf
+span-type = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
+
+ALPHA = %x41-5A / %x61-7A; A-Z / a-z
+DIGIT = %x30-39 ; 0-9
+```
+
+* Case-insensitive ASCII strings.
+* The first character is alphabetic.
+* Maximum length of 255 characters.
+
+This is the same as the
+[instrument name syntax](../specification/metrics/api.md#instrument-name-syntax).
+
 ### One span, one type
 
 A span has exactly one type. There is no mixing of identities.
@@ -177,7 +196,7 @@ It may:
 - specify a more precise span name format,
 
 but it MUST NOT change the identity in an incompatible way (for example,
-downgrade required attributes, or change stability or span kind). A consumer that
+downgrade required attributes, change stability or span kind). A consumer that
 only understands `messaging.producer.send` handles an SQS span correctly; one
 that also knows SQS can use the extra attributes.
 
@@ -243,7 +262,8 @@ Span type is supplied at span creation, next to `SpanKind`:
   implementations keep working unchanged.
 - Span type is immutable after creation. Like `SpanKind`, it determines what the
   span *is*; it cannot become something else halfway through.
-- The API does not validate the value.
+- The API SHOULD NOT validate the value, following the precedent set for
+  [instrument names](../specification/metrics/api.md#instrument-name-syntax).
 
 ```diff
  class Tracer:
@@ -283,6 +303,10 @@ the type of the definition they implement.
 - Span processors and exporters read it through
   [readable span](../specification/trace/sdk.md#additional-span-interfaces),
   which already covers everything the Span API defines. There is no setter.
+- The `Tracer` SHOULD validate that the span type conforms to the
+  [span type syntax](#span-type-syntax) and SHOULD emit an error if it does not,
+  the same way a `Meter`
+  [validates instrument names](../specification/metrics/sdk.md#instrument-name).
 
 ```diff
  class Sampler:
@@ -298,6 +322,11 @@ the type of the definition they implement.
          trace_state: TraceState | None = None,
      ) -> SamplingResult: ...
 ```
+
+> [!NOTE]
+>
+> Consider bundling this change in the spec and in the implementations together
+> with [making InstrumentationScope and Resource available to samplers](https://github.com/open-telemetry/opentelemetry-specification/issues/1588)
 
 ```diff
  class ReadableSpan:
@@ -373,8 +402,12 @@ or a third blended one? Which would users pick for dashboards and alerts?
 A single value does not block anything. Blended operations can still be defined,
 they just have to be explicit: which scope is traced, which attributes come from
 which side, how the span name is built, and which duration metrics are reported.
-Span type is also optional, so an application that does not care can encode
-comma-separated types in the string, or set no type at all.
+Span type is also optional, so an application that does not care can set no type
+at all.
+
+The [span type syntax](#span-type-syntax) excludes `,`, keeping it available as a
+list separator. If multiple types turn out to be necessary, a future change can
+define comma-separated values without breaking any conforming span type.
 
 [Appendix A](#appendix-a-overlapping-definitions-in-practice) walks through the
 usual candidates: the AWS SDK, Elasticsearch, and a function invoked over HTTP.
