@@ -207,9 +207,9 @@ reserved for built-in resource detectors published with language SDKs:
   Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
   attributes.
 * `service`: Populates `service.name` from the [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
-  environment variable and MAY fall back to language- or platform-specific
+  environment variable and SHOULD fall back to language- or platform-specific
   sources (for example `spring.application.name`, a JAR manifest, or a
-  Composer/package manifest); populates `service.instance.id`
+  Composer/package manifest, at the discretion of the specific SDK); populates `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
 
 ### Specifying resource information via an environment variable
