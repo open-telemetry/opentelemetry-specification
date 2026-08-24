@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add `OTEL_EXPORTER_PROMETHEUS_DEFAULT_HISTOGRAM_AGGREGATION` environment variable for Prometheus exporter.
+  ([#4904](https://github.com/open-telemetry/opentelemetry-specification/issues/4904))
+
 ### Logs
 
 ### Baggage

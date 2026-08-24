@@ -127,6 +127,8 @@ the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
 the [default aggregation](../sdk.md#default-aggregation) by default.
 
+The Prometheus exporter MUST support configuration of the default aggregation for Histogram via the `OTEL_EXPORTER_PROMETHEUS_DEFAULT_HISTOGRAM_AGGREGATION` environment variable as described in the [environment variable specification](../../configuration/sdk-environment-variables.md#prometheus-exporter). The recognized (case-insensitive) values are `explicit_bucket_histogram` and `base2_exponential_bucket_histogram`.
+
 ### Resource Attributes as Metric Labels
 
 **Status**: [Development](../../document-status.md)
