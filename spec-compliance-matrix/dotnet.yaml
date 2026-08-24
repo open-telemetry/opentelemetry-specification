@@ -560,9 +560,9 @@ sections:
           - name: OTLP/HTTP gzip Content-Encoding support
             status: '+'
           - name: Enforces request size limit
-            status:
+            status: '+'
           - name: Enforces response size limit
-            status:
+            status: '+'
           - name: Concurrent sending
             status: '-'
           - name: Honors retryable responses with backoff
