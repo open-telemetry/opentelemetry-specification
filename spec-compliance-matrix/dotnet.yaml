@@ -566,11 +566,11 @@ sections:
           - name: Concurrent sending
             status: '-'
           - name: Honors retryable responses with backoff
-            status: '-'
+            status: '+'
           - name: Honors non-retryable responses
-            status: '-'
+            status: '+'
           - name: Honors throttling response
-            status: '-'
+            status: '+'
           - name: Multi-destination spec compliance
             status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
@@ -584,11 +584,11 @@ sections:
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
-            status: '?'
+            status: '-'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1)
               messages are handled and logged for OTLP/HTTP'
-            status: '?'
+            status: '-'
           - name: Metric Exporter configurable temporality preference
             status: '+'
           - name: Metric Exporter configurable default aggregation
