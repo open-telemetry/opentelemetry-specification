@@ -1139,15 +1139,16 @@ when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
   of the `Meter` used to create the instrument has parameter `enabled=false`.
-- All [resolved streams](#measurement-processing) for the instrument are
+- All [resulting streams](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
-Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.enabled=true` and instruments use the default
-aggregation when no matching views match the instrument.
+Note: If a user makes no configuration changes, `Enabled` returns `true` for
+instruments with `OptIn=false` (or unset), since by default
+`MeterConfig.enabled=true` and instruments use the default aggregation when no
+matching views match the instrument.
 
 ### Instrument bind
 
