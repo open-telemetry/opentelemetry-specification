@@ -1565,9 +1565,7 @@ points that belong to the same metric into different batches. The reader MUST
 ensure all batches produced from a single `Collect()` are provided to `Export`
 serially and in-order before metric data points from a subsequent `Collect()`
 are provided. The reader MUST NOT combine metrics from different `Collect()`
-calls into the same batch provided to `Export`. Batches produced by splitting
-SHOULD NOT contain empty metric structures (metrics containing zero metric data
-points).
+calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently. If an export is still in
