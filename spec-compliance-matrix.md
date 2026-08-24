@@ -325,19 +325,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - | + |
 | OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
-| Enforces request size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Enforces response size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Enforces request size limit |  |  |  |  |  |  |  |  |  |  | + |  |  |
+| Enforces response size limit |  |  |  |  |  |  |  |  |  |  | + |  |  |
 | Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | + |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - | + |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - | + |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - | + |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | + | - | + |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | + | - | + |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | + | - | + |
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  |  |  |  | + |  |  | + |  | + |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  |  |  | - |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  |  |  | + |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  | - |  | - |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  | - |  | + |
 | Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  | + |  | - |
 | Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  | + |  | - |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
