@@ -460,22 +460,22 @@ The SDK MUST accept the following stream configuration parameters:
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
 * **Status**: [Development](../document-status.md) - `enabled`: A boolean
-  denoting whether the instrument produces metric data.
+  denoting whether the resulting stream produces metric data.
 
   Users can provide an `enabled` value, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
   accept an `enabled` value, but MUST NOT obligate a user to provide one.
   The parameter MUST distinguish an unset value from `false`.
 
-  * If `enabled` is `true`, the `MeterProvider` MUST aggregate the instrument
-    as if its [`OptIn`](#instrument-advisory-parameter-optin) advisory
+  * If `enabled` is `true`, the `MeterProvider` MUST aggregate the stream as if
+    the instrument's [`OptIn`](#instrument-advisory-parameter-optin) advisory
     parameter were `false`.
   * If `enabled` is `false`, the `MeterProvider` MUST use the
     [Drop Aggregation](#drop-aggregation), regardless of the `aggregation`
     provided.
   * If `enabled` is unset, the
     [`OptIn`](#instrument-advisory-parameter-optin) advisory parameter
-    determines whether the instrument is enabled.
+    determines whether the stream is enabled.
 
 #### Measurement processing
 
@@ -526,7 +526,7 @@ made with an Instrument:
     * For each resulting stream, apply the Views in its group in registration order.
       For all aspects of the [Stream configuration](#stream-configuration) other
       than `attribute_keys` (`name`, `description`, `aggregation`,
-      `exemplar_reservoir`, `aggregation_cardinality_limit`), the last matching
+      `exemplar_reservoir`, `aggregation_cardinality_limit`, `enabled`), the last matching
       View that specifies that aspect wins. Complex configurations like
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
