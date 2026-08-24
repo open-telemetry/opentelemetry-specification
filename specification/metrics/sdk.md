@@ -1548,7 +1548,10 @@ Configurable parameters:
 * `exportIntervalMillis` - the time interval in milliseconds between two
   consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
-  The default value is 30000 (milliseconds).
+  The default value is 30000 (milliseconds). When `maxExportBatchSize` is
+  configured and results in splitting the collected metric data into multiple
+  batches, `exportTimeoutMillis` applies to each individual `Export(batch)`
+  invocation.
 * **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
   maximum number of metric data points in a batch that are provided to a single
   export.
@@ -1559,13 +1562,16 @@ configured, the reader MUST ensure no batch provided to `Export` exceeds the
 batches. The initial batch of metric data MUST be split into as many "full"
 batches of size `maxExportBatchSize` as possible -- even if this splits up data
 points that belong to the same metric into different batches. The reader MUST
-ensure all metric data points from a single `Collect()` are provided to
-`Export` before metric data points from a subsequent `Collect()` so that metric
-points are sent in-order. The reader MUST NOT combine metrics from different
-`Collect()` calls into the same batch provided to `Export`.
+ensure all batches produced from a single `Collect()` are provided to `Export`
+serially and in-order before metric data points from a subsequent `Collect()`
+are provided. The reader MUST NOT combine metrics from different `Collect()`
+calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
-to make sure that they are not invoked concurrently.
+to make sure that they are not invoked concurrently. If an export is still in
+progress when the next scheduled interval occurs, the reader MUST either delay
+the subsequent collection and export until the in-progress export finishes, or
+skip the scheduled collection for that interval.
 
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
@@ -1588,7 +1594,7 @@ This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
 `ForceFlush` SHOULD collect metrics, split into batches if necessary, call
-[`Export(batch)`](#exportbatch) on each batch and
+[`Export(batch)`](#exportbatch) on each batch serially, and call
 [`ForceFlush()`](#forceflush-2) on the configured
 [Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
 [`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
@@ -1596,10 +1602,11 @@ SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
 [Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
-is an error condition; and if there is no error condition, it should return some
-**NO ERROR** status, language implementations MAY decide how to model **ERROR**
-and **NO ERROR**.
+failed or timed out. If any [`Export(batch)`](#exportbatch) call fails or times
+out, or if the configured exporter's [`ForceFlush()`](#forceflush-2) fails or
+times out, `ForceFlush` SHOULD return some **ERROR** status. If all calls
+succeed, `ForceFlush` SHOULD return some **NO ERROR** status. Language
+implementations MAY decide how to model **ERROR** and **NO ERROR**.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
