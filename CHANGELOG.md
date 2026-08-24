@@ -11,9 +11,21 @@ release.
 
 ### Traces
 
+- Clarify that a disabled `Tracer` MAY still generate the SDK's own internal
+  telemetry, even though it behaves as a No-op `Tracer`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
+
 ### Metrics
 
+- Clarify that a disabled `Meter` MAY still generate the SDK's own internal
+  telemetry, even though it behaves as a No-op `Meter`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
+
 ### Logs
+
+- Clarify that a disabled `Logger` MAY still generate the SDK's own internal
+  telemetry, even though it behaves as a No-op `Logger`.
+  ([#5253](https://github.com/open-telemetry/opentelemetry-specification/pull/5253))
 
 ### Baggage
 

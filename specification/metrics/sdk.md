@@ -964,6 +964,8 @@ It consists of the following parameters:
 
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
+  Even so, the SDK MAY still generate its own internal telemetry (for example,
+  SDK self-observability metrics) about the disabled `Meter`.
 
   The value of `enabled` MUST be used to resolve whether an instrument
   is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
