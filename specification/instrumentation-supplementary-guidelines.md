@@ -61,6 +61,10 @@ it.
   qualified package or module name. For example, an HTTP client instrumentation
   uses the instrumentation package name (such as
   `io.opentelemetry.instrumentation.okhttp`), not the HTTP client it instruments.
+  For [natively instrumented](glossary.md#natively-instrumented) libraries the
+  instrumentation and the instrumented library are the same, so the scope `name`
+  identifies the library itself. For example, .NET's built-in `HttpClient`
+  instrumentation emits telemetry under the scope name `System.Net.Http`.
 * The scope `version` should be the version of the instrumentation library.
 * When the instrumentation targets a particular version of the OpenTelemetry
   Semantic Conventions, it should set the scope `schema_url` to the
