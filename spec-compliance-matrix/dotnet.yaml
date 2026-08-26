@@ -54,7 +54,7 @@ sections:
           - name: Conforms to the W3C TraceContext spec
             status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '?'
+            status: '-'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
@@ -94,8 +94,6 @@ sections:
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
-            status: '+'
-          - name: Set order preserved
             status: '+'
           - name: String type
             status: '+'
@@ -140,25 +138,25 @@ sections:
           - name: ShouldSample gets full parent Context
             status: '-'
           - name: 'Sampler: JaegerRemoteSampler'
-            status: '?'
+            status: '-'
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
             status: '-'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
-            status: '?'
+            status: '-'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
-            status: '?'
+            status: '-'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '?'
+            status: '-'
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '?'
+            status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '?'
+            status: '-'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
-            status: '?'
+            status: '-'
   - name: Baggage
     features:
       - name: Basic support
@@ -176,7 +174,7 @@ sections:
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
         status: '-'
       - name: '`get_meter` accepts `attributes`.'
-        status: '?'
+        status: '+'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
         status: '-'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
@@ -260,11 +258,13 @@ sections:
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '-'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
-        status: '?'
+        status: '+'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
         status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '+'
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        status: '-'
       - name: The `Drop` aggregation is available.
         status: '+'
       - name: The `Default` aggregation is available.
@@ -408,7 +408,7 @@ sections:
       - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
         status: '+'
       - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
-        status: '-'
+        status: '+'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -510,35 +510,35 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '+'
       - name: OTEL_CONFIG_FILE
-        status: '?'
+        status: '-'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
-        status: '?'
+        status: '-'
       - name: The `Parse` operation accepts the configuration YAML file format
-        status: '?'
+        status: '-'
       - name: The `Parse` operation performs environment variable substitution
-        status: '?'
+        status: '-'
       - name: The `Parse` operation returns configuration model
-        status: '?'
+        status: '-'
       - name: The `Parse` operation resolves plugin component configuration to `properties`
-        status: '?'
+        status: '-'
       - name: '`Create` SDK components'
-        status: '?'
+        status: '-'
       - name: The `Create` operation accepts configuration model
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `TracerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `MeterProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `LoggerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `Propagators`
-        status: '?'
+        status: '-'
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
-        status: '?'
+        status: '-'
       - name: Register a `PluginComponentProvider`
-        status: '?'
+        status: '-'
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
@@ -559,20 +559,24 @@ sections:
             status: '-'
           - name: OTLP/HTTP gzip Content-Encoding support
             status: '+'
+          - name: Enforces request size limit
+            status: '+'
+          - name: Enforces response size limit
+            status: '+'
           - name: Concurrent sending
             status: '-'
           - name: Honors retryable responses with backoff
-            status: '-'
+            status: '+'
           - name: Honors non-retryable responses
-            status: '-'
+            status: '+'
           - name: Honors throttling response
-            status: '-'
+            status: '+'
           - name: Multi-destination spec compliance
             status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
-            status: '-'
+            status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
-            status: '-'
+            status: '+'
           - name: SchemaURL in ResourceLogs and ScopeLogs
             status: '-'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
@@ -580,11 +584,11 @@ sections:
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
-            status: '?'
+            status: '-'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1)
               messages are handled and logged for OTLP/HTTP'
-            status: '?'
+            status: '-'
           - name: Metric Exporter configurable temporality preference
             status: '+'
           - name: Metric Exporter configurable default aggregation
@@ -630,7 +634,7 @@ sections:
           - name: '[Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
             status: '+'
           - name: '[Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '-'
+            status: '+'
           - name: '[HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
             status: '+'
           - name: '[TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
@@ -640,7 +644,7 @@ sections:
           - name: '[otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
             status: '+'
           - name: '[otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '-'
+            status: '+'
           - name: '[Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)'
             status: '+'
           - name: '[Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
@@ -665,6 +669,50 @@ sections:
             status: '+'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             status: '+'
+  - name: SDK Self-Observability
+    features:
+      - heading: '**Span metrics**'
+        features:
+          - name: '[`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted)'
+            status: '-'
+          - name: '[`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive)'
+            status: '-'
+          - name: '[`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize)'
+            status: '-'
+          - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
+            status: '-'
+          - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
+            status: '-'
+      - heading: '**Log metrics**'
+        features:
+          - name: '[`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated)'
+            status: '-'
+          - name: '[`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize)'
+            status: '-'
+          - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
+            status: '-'
+          - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'
+            status: '-'
+      - heading: '**Metric metrics**'
+        features:
+          - name: '[`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported)'
+            status: '-'
+      - heading: '**Shared metrics**'
+        features:
+          - name: '[`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration)'
+            status: '-'
+          - name: '[`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration)'
+            status: '-'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
