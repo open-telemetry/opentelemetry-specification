@@ -38,46 +38,71 @@ multiples of N.
 ### Boundaries
 
 The `BOUNDARIES` array consists of `2^S` exact logarithm significand
-values and two sentinel values.
+values, one leading sentinel, and two identical trailing sentinels.
 
 ```
 // Base-2 logarithm significand boundary values
 BOUNDARIES = {
-  0,                             // Exact power-of-two
-  1,                             // Smallest value of the first bucket
+  0,                             // Leading sentinel
+  1,                             // Exact power-of-two adjustment
   significand_bits(2^(1/N)),     // Smallest value of the second bucket
   significand_bits(2^(2/N)),
   ...                            // 
   significand_bits(2^((N-2)/N)),
   significand_bits(2^((N-1)/N)), // Smallest value of the last bucket
   2^52,                          // Sentinel value
+  2^52,                          // Sentinel value
 }
 ```
 
-Each of the non-sentinel values are the 52-bit significand of the
-smallest IEEE 754 double whose value is greater than or equal to
-`2^(k/N)`. Note:
+Except for the upper-inclusive adjustment at `k = 0`, each
+non-sentinel value is the 52-bit significand of the smallest IEEE 754
+double whose value is greater than or equal to `2^(k/N)`. Note:
 
 - `BOUNDARIES[0] = 0`: This captures exact powers of two
 - `BOUNDARIES[1] = 1`: This excludes exact powers of two
-- The trailing sentinel value simplifies bounds checking.
+- The trailing sentinel values simplify bounds checking.
 
-To compute this table requires a "bignum" library. To express the
-necessary `2^(k/N)` calculation for significand bits, compute the
-exact power `2^k` and then repeatedly square-root N times.
+The boundaries can be computed using integer arithmetic. Before
+masking off the implicit leading bit, the boundary at position `k` is
 
 ```
-for k in 0..N:
-  x = 2^k
+B[k] = ceiling(2^(52 + k/N))
+     = ceiling((2^(52*N + k))^(1/N)).
+```
+
+Because `N = 2^S`, apply a ceiling integer square root `S` times to
+the exact integer `2^(52*N + k)`. The result is the least integer
+greater than or equal to `2^(52 + k/N)`. Masking off its leading bit
+produces the 52-bit significand:
+
+```
+for k where 1 <= k < N:
+  x = 2^(52*N + k)
 
   for _ in 0..S:
-    x = sqrt(x)
+    root = integer_sqrt(x)
+    x = root if root * root == x else root + 1
 
-  BOUNDARIES[k+1] = significand(ceiling(x))
+  BOUNDARIES[k+1] = x & (2^52 - 1)
 ```
 
-Note that boundary positions are shifted by one, to account for the
-additional sentinel. This will be corrected during lookup.
+The boundary at `k = 0` is handled separately. Its mathematical
+significand is zero, but `BOUNDARIES[1]` is set to `1` so exact powers
+of two remain in the preceding bucket under upper-inclusive bucket
+semantics. Boundary positions are shifted by one to account for the
+leading sentinel; this is corrected during lookup.
+
+Complete table generators using [Go] and [Python] produce the same
+output for a given scale. For example:
+
+```sh
+go run ./examples/exponential-histogram-table-lookup/main.go --scale 8
+python ./examples/exponential-histogram-table-lookup/main.py --scale 8
+```
+
+[Go]: ../../examples/exponential-histogram-table-lookup/main.go
+[Python]: ../../examples/exponential-histogram-table-lookup/main.py
 
 ### Index Table
 
