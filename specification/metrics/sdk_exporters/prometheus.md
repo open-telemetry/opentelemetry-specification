@@ -133,8 +133,10 @@ the [default aggregation](../sdk.md#default-aggregation) by default.
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
 By default, it MUST NOT add any resource attributes as metric labels.
-The configuration SHOULD allow the user to select resource attributes to include or exclude. Copied Resource attributes MUST NOT be
-excluded from the `target_info` metric. The option MAY be named `resource_constant_labels`.
+The configuration SHOULD allow the user to select resource attributes to
+[include or exclude](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalprometheusmetricexporter).
+Copied Resource attributes MUST NOT be excluded from the `target_info` metric.
+The option MAY be named `resource_constant_labels`.
 
 ### Translation Strategy
 
