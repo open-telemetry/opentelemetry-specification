@@ -393,14 +393,14 @@ and values are defined in the
 | [`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | - | - | - | - | + | - | + | - | - |
 | [`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Log metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | - | - | - | - | + | - | - | - | - |
 | [`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | - | - | - | - | + | - | - | - | - |
+| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | - | - | - | - | + | - | + | - | - |
 | [`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Metric metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
