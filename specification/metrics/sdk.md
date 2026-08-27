@@ -869,9 +869,9 @@ intervals.
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
 For asynchronous instrument, the start timestamp SHOULD be:
-  - The creation time of the instrument, if the first series measurement
+- The creation time of the instrument, if the first series measurement
     occurred in the first collection interval,
-  - Otherwise, the timestamp of the collection interval prior to the first
+- Otherwise, the timestamp of the collection interval prior to the first
     series measurement.
 
 ### Cardinality limits
