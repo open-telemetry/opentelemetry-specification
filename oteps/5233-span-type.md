@@ -423,17 +423,27 @@ span_types:
 Prefix/wildcard matching is a natural follow-up that can be added in the future
 and is out of scope.
 
-Disabling spans by type, in addition to the existing
-[`TracerConfig`](../specification/trace/sdk.md#tracerconfig) scope-based
-mechanism, is a future possibility and is not detailed here.
+Disabling spans by type, similarly to the existing [tracer scope-level config](../specification/trace/sdk.md#tracerconfig), is a future possibility and is not detailed here.
 
 ### Other updates
 
+- [Telemetry stability](../specification/versioning-and-stability.md#telemetry-stability)
+  lists the fields semantic conventions guarantee (span name, span kind,
+  attribute keys, well-known attribute values). Span type needs to be added to
+  that list: changing the type of an existing span definition is a breaking
+  change.
+
+- Built-in samplers that match on span name and kind need to accept span type as
+  a match condition. Third-party samplers, such as the
+  [Jaeger remote sampler](../specification/trace/sdk.md#jaegerremotesampler),
+  can be updated if and when the protocols behind them support span type.
+
+- [Mapping to non-OTLP formats](../specification/common/mapping-to-non-otlp.md)
+  needs a rule for protocols that have no place for span type. They can map it
+  to an `otel.span.type` attribute.
+
 - Downstream, the Collector (pdata, OTTL paths, schema processor) needs the new
   field plumbed through.
-- Exporters for protocols that have no place for span type can map it to an
-  attribute. If needed, we can define `otel.span.type` for that, so all such
-  exporters use the same key.
 - Existing instrumentations need to be updated to populate it.
 
 ## Trade-offs and mitigations
