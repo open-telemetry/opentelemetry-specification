@@ -357,9 +357,33 @@ the type of the definition they implement.
 - Marker attributes such as `messaging.operation.type` can be retired once span
   type is broadly available.
 
+### Declarative configuration
+
+Sampling by span type is expressed through the existing rule-based sampler:
+[`ExperimentalComposableRuleBasedSamplerRule`](https://github.com/open-telemetry/opentelemetry-configuration/blob/b20c9d6399c19a1b2e7bd16f18ff6f589d3317a6/schema/tracer_provider.yaml#L304), whose
+match conditions are `attribute_values`, `attribute_patterns`, `span_kinds`,
+and `parent`.
+
+It gains one more condition:
+
+```yaml
+span_types:
+  type: array
+  minItems: 1
+  items: { type: string }
+  description: The span types to match exactly (any of).
+  defaultBehavior: ignore
+```
+
+Prefix/wildcard matching is a natural follow-up that can be added in the future
+and is out of scope. 
+
+Disabling spans by type, in addition to the existing
+[`TracerConfig`](../specification/trace/sdk.md#tracerconfig) scope-based
+mechanism, is a future possibility and is not detailed here.
+
 ### Other updates
 
-- Declarative configuration: sampler configuration that matches on span type.
 - Downstream, the Collector (pdata, OTTL paths, schema processor) needs the new
   field plumbed through.
 - Exporters for protocols that have no place for span type can map it to an
