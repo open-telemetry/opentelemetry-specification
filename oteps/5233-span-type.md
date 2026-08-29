@@ -13,7 +13,7 @@ that a future update will not break it.
 
 This limits the ability to query, generate, transform, aggregate, or visualize
 spans, and it blocks validation: it is not possible to map a span received over
-OTLP to the semantic convention it should follow.
+OTLP to the semantic convention that defines it.
 
 Weaver [live check], collector schema transformation, and backend-side
 conformance checking all need to resolve an observed span to its definition
@@ -85,8 +85,8 @@ attributes:
   `gen_ai.inference.client` span definition, and more values keep arriving (for
   example
   [semconv-genai#353](https://github.com/open-telemetry/semantic-conventions-genai/pull/353)
-  adds `fetch_response`, which is a non-inference operation that must *not* be
-  mapped onto the inference span).
+  adds `fetch_response`, which is a non-inference operation and is not an
+  inference span).
 - Outside OpenTelemetry, [OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md#span-kinds)
   (Arize) requires an `openinference.span.kind` attribute on every span, with
   values `LLM`, `EMBEDDING`, `CHAIN`, `RETRIEVER`, `RERANKER`, `TOOL`, `AGENT`,
@@ -142,6 +142,10 @@ conventions, or a third party. They SHOULD follow
 `gen_ai.client.inference`, `http.server.request`, so that they do not collide and
 so that a prefix can be used for coarse grouping by area and kind.
 
+Span types are unique within the scope of a Schema URL
+(including the dependency tree), following the same
+identity model as other semantic convention definitions.
+
 Spans without a type are valid and MUST be accepted. A missing type means "this
 span does not follow a known definition", which is true for all existing spans.
 
@@ -188,7 +192,7 @@ Carrying several types on one span is rejected in
 
 Semantic conventions specialize definitions for specific technologies through
 refinements. A refinement **shares the span type of the definition it refines**.
-It may:
+It MAY:
 
 - narrow requirement levels,
 - add non-required attributes,
@@ -361,7 +365,7 @@ the type of the definition they implement.
 - Exporters for protocols that have no place for span type can map it to an
   attribute. If needed, we can define `otel.span.type` for that, so all such
   exporters use the same key.
-- Existing instrumentations should be updated to populate it.
+- Existing instrumentations need to be updated to populate it.
 
 ## Trade-offs and mitigations
 
@@ -471,7 +475,7 @@ to invent it.
 
 - **Identifying refinements.** Still in design, see
   [weaver#1643](https://github.com/open-telemetry/weaver/pull/1643). Whatever the
-  mechanism turns out to be, it should not be mixed into span type in OTLP: one
+  mechanism turns out to be, it SHOULD NOT be mixed into span type in OTLP: one
   definition can have tens of refinements (every HTTP client library could be
   documented as a refinement of `http.client.request`, each with its own
   caveats). Span type is needed regardless of how this is solved.
