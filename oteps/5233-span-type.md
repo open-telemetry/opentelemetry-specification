@@ -264,6 +264,9 @@ Span type is supplied at span creation, next to `SpanKind`:
 - The span creation API accepts an optional span type. Default is unset. It is
   added as an optional parameter, so existing calls and existing `Tracer`
   implementations keep working unchanged.
+
+  Backward compatibile ([Extending API/SDK abstractions](../specification/versioning-and-stability.md#extending-apisdk-abstractions))
+
 - Span type is immutable after creation. Like `SpanKind`, it determines what the
   span *is*; it cannot become something else halfway through.
 - The API SHOULD NOT validate the value, following the precedent set for
@@ -301,12 +304,34 @@ the type of the definition they implement.
 ### SDK
 
 - Span type becomes a sampler input, next to name and `SpanKind`, so sampling
-  rules can match on it without matching on attributes. It is added as an
-  optional parameter, so existing `Sampler` implementations keep working
-  unchanged.
-- Span processors and exporters read it through
+  rules can match on it without matching on attributes. `Sampler` is a stable
+  plugin interface implemented by end users, so this addition follows
+  [Extending API/SDK abstractions](../specification/versioning-and-stability.md#extending-apisdk-abstractions).
+
+  How disruptive it is depends on how the language models the sampler inputs:
+  - Languages that already pass a single sampling parameters object (such as
+    [Go](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/trace/sampling.go#L33)
+    and
+    [.NET](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry/Trace/Sampler/SamplingParameters.cs))
+    add a new property to it. Existing samplers keep compiling and
+    ignore the new property.
+
+  - Languages that pass sampling parameters as individual arguments cannot extend 
+    the existing method without breaking end-user implementations of it. 
+    They introduce a new method (for example `ShouldSampleSpan`) with a default implementation that
+    delegates to the existing one, so existing samplers keep working. 
+    
+    The new method SHOULD be shaped so that further inputs can be added without
+    repeating this migration, either by taking a sampling parameters object or
+    by using a language-specific extensible mechanism such as arbitrary keyword
+    arguments (Python's **kwargs, Ruby's **opts).
+
+- Span processors and exporters read span type through
   [readable span](../specification/trace/sdk.md#additional-span-interfaces),
   which already covers everything the Span API defines. There is no setter.
+
+  Backward compatibility: a new property on the `ReadableSpan` - source and
+  binary compatible.
 - The `Tracer` SHOULD validate that the span type conforms to the
   [span type syntax](#span-type-syntax) and SHOULD emit an error if it does not,
   the same way a `Meter`
@@ -320,11 +345,31 @@ the type of the definition they implement.
          trace_id: int,
          name: str,
          kind: SpanKind | None = None,
-+        type: str | None = None,
          attributes: Attributes = None,
          links: Sequence[Link] | None = None,
          trace_state: TraceState | None = None,
      ) -> SamplingResult: ...
+
++    # new method; existing samplers that only override should_sample keep
++    # working through the default implementation below
++    def should_sample_span(
++        self,
++        parent_context: Context | None,
++        trace_id: int,
++        name: str,
++        kind: SpanKind | None = None,
++        type: str | None = None,
++        attributes: Attributes = None,
++        links: Sequence[Link] | None = None,
++        trace_state: TraceState | None = None,
++        # scope: InstrumentationScope | None = None,   # see https://github.com/open-telemetry/opentelemetry-specification/issues/1588
++        # resource: Resource | None = None,            # same
++        **kwargs,  # extensibility point for the future needs, so we don't need to define new method name
++    ) -> SamplingResult:
++        # default: ignore the new inputs and fall back to should_sample
++        return self.should_sample(
++            parent_context, trace_id, name, kind, attributes, links, trace_state
++        )
 ```
 
 > [!NOTE]
@@ -376,7 +421,7 @@ span_types:
 ```
 
 Prefix/wildcard matching is a natural follow-up that can be added in the future
-and is out of scope. 
+and is out of scope.
 
 Disabling spans by type, in addition to the existing
 [`TracerConfig`](../specification/trace/sdk.md#tracerconfig) scope-based
