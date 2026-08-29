@@ -34,7 +34,7 @@ Related issues:
 
 ### Identity today
 
-Historically we tried to solve the problem by defining a required attribute per
+Historically, we tried to solve the problem by defining a required attribute per
 convention area and using its presence as the signal that the span follows that
 convention: `db.system.name`, `http.request.method`, `messaging.system`,
 `rpc.system`, `gen_ai.provider.name`, `faas.trigger`,
@@ -63,9 +63,9 @@ The scale of the problem is not hypothetical. At the time of writing:
 | [semantic-conventions](https://github.com/open-telemetry/semantic-conventions) | 64 |
 | [semantic-conventions-genai](https://github.com/open-telemetry/semantic-conventions-genai) | 12 |
 
-76 span definitions today, and both registries keep growing. A consumer that
-wants to classify them has to reimplement the full heuristic tree, and keep it in
-sync.
+That is 76 span definitions today, and both registries keep growing. A consumer
+that wants to classify them has to reimplement the full heuristic tree and keep
+it in sync.
 
 ### Conventions are already inventing span types, inconsistently
 
@@ -83,16 +83,16 @@ attributes:
 - GenAI uses `gen_ai.operation.name` for the same purpose, but the mapping is not
   1:1: `chat`, `generate_content`, and `text_completion` all describe the same
   `gen_ai.inference.client` span definition, and more values keep arriving (for
-  example
+  example,
   [semconv-genai#353](https://github.com/open-telemetry/semantic-conventions-genai/pull/353)
   adds `fetch_response`, which is a non-inference operation and is not an
   inference span).
 - Outside OpenTelemetry, [OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md#span-kinds)
   (Arize) requires an `openinference.span.kind` attribute on every span, with
   values `LLM`, `EMBEDDING`, `CHAIN`, `RETRIEVER`, `RERANKER`, `TOOL`, `AGENT`,
-  `GUARDRAIL`, `EVALUATOR`, `PROMPT`. It is named after OTel's `SpanKind` but it
-  is not a span kind at all. A convention had to shadow a core span property to
-  get an identity, because OTLP does not offer one.
+  `GUARDRAIL`, `EVALUATOR`, and `PROMPT`. It is named after OTel's `SpanKind`,
+  but it is not a span kind at all. A convention had to shadow a core span
+  property to get an identity, because OTLP does not offer one.
 
 ### Consistency across signals
 
@@ -139,12 +139,12 @@ Examples:
 Values are owned by whoever defines the convention: OpenTelemetry semantic
 conventions, or a third party. They SHOULD follow
 `{area}.{kind}.{domain-specific-name}`, for example `messaging.producer.send`,
-`gen_ai.client.inference`, `http.server.request`, so that they do not collide and
-so that a prefix can be used for coarse grouping by area and kind.
+`gen_ai.client.inference`, or `http.server.request`, so that they do not collide
+and so that a prefix can be used for coarse grouping by area and kind.
 
-Span types are unique within the scope of a Schema URL
-(including the dependency tree), following the same
-identity model as other semantic convention definitions.
+Span types are unique within the scope of a Schema URL (including its dependency
+tree), following the same identity model as other semantic convention
+definitions.
 
 Spans without a type are valid and MUST be accepted. A missing type means "this
 span does not follow a known definition", which is true for all existing spans.
@@ -172,9 +172,9 @@ This is the same as the
 
 A span has exactly one type. There is no mixing of identities.
 
-If an operation legitimately matches two definitions at the same time, for
-example a serverless function invoked by an HTTP trigger, which is both a FaaS
-invocation and an HTTP server request, the answer is to **define a new type for
+If an operation legitimately matches two definitions at the same time (for
+example, a serverless function invoked by an HTTP trigger, which is both a FaaS
+invocation and an HTTP server request), the answer is to **define a new type for
 it**, specifying:
 
 - which attributes to take from each definition and how to populate them at this
@@ -265,7 +265,7 @@ Span type is supplied at span creation, next to `SpanKind`:
   added as an optional parameter, so existing calls and existing `Tracer`
   implementations keep working unchanged.
 
-  Backward compatibile ([Extending API/SDK abstractions](../specification/versioning-and-stability.md#extending-apisdk-abstractions))
+  Backward compatible ([Extending API/SDK abstractions](../specification/versioning-and-stability.md#extending-apisdk-abstractions))
 
 - Span type is immutable after creation. Like `SpanKind`, it determines what the
   span *is*; it cannot become something else halfway through.
@@ -316,22 +316,23 @@ the type of the definition they implement.
     add a new property to it. Existing samplers keep compiling and
     ignore the new property.
 
-  - Languages that pass sampling parameters as individual arguments cannot extend 
-    the existing method without breaking end-user implementations of it. 
-    They introduce a new method (for example `ShouldSampleSpan`) with a default implementation that
-    delegates to the existing one, so existing samplers keep working. 
-    
+  - Languages that pass sampling parameters as individual arguments cannot extend
+    the existing method without breaking end-user implementations of it. They
+    introduce a new method (for example, `ShouldSampleSpan`) with a default
+    implementation that delegates to the existing one, so existing samplers keep
+    working.
+
     The new method SHOULD be shaped so that further inputs can be added without
     repeating this migration, either by taking a sampling parameters object or
     by using a language-specific extensible mechanism such as arbitrary keyword
-    arguments (Python's **kwargs, Ruby's **opts).
+    arguments (Python's `**kwargs`, Ruby's `**opts`).
 
 - Span processors and exporters read span type through
   [readable span](../specification/trace/sdk.md#additional-span-interfaces),
   which already covers everything the Span API defines. There is no setter.
 
-  Backward compatibility: a new property on the `ReadableSpan` - source and
-  binary compatible.
+  Backward compatibility: a new property on `ReadableSpan`, source and binary
+  compatible.
 - The `Tracer` SHOULD validate that the span type conforms to the
   [span type syntax](#span-type-syntax) and SHOULD emit an error if it does not,
   the same way a `Meter`
@@ -364,7 +365,7 @@ the type of the definition they implement.
 +        trace_state: TraceState | None = None,
 +        # scope: InstrumentationScope | None = None,   # see https://github.com/open-telemetry/opentelemetry-specification/issues/1588
 +        # resource: Resource | None = None,            # same
-+        **kwargs,  # extensibility point for the future needs, so we don't need to define new method name
++        **kwargs,  # extensibility point for future needs, so we don't need another new method
 +    ) -> SamplingResult:
 +        # default: ignore the new inputs and fall back to should_sample
 +        return self.should_sample(
@@ -420,10 +421,9 @@ span_types:
   defaultBehavior: ignore
 ```
 
-Prefix/wildcard matching is a natural follow-up that can be added in the future
-and is out of scope.
+Prefix/wildcard matching is a natural follow-up and is out of scope here.
 
-Disabling spans by type, similarly to the existing [tracer scope-level config](../specification/trace/sdk.md#tracerconfig), is a future possibility and is not detailed here.
+Disabling spans by type, similar to the existing [tracer scope-level config](../specification/trace/sdk.md#tracerconfig), is a future possibility and is not detailed here.
 
 ### Other updates
 
@@ -454,7 +454,7 @@ Disabling spans by type, similarly to the existing [tracer scope-level config](.
   matter, span type is unset and costs nothing.
 - **Long migration.** SDKs, the Collector, and backends all need the field before
   it is useful end-to-end. Mitigation: it is optional and additive, and the
-  existing marker attributes stay in place, so nothing breaks meanwhile.
+  existing marker attributes stay in place, so nothing breaks in the meantime.
 
 ## Alternatives
 
@@ -472,17 +472,17 @@ Rejected. A span definition is not just a bag of attributes. It defines:
 - **the scope**: what the duration measures, what nests under the span, and
   whether a failure means one attempt failed or all of them did.
 
-Scope matters most. An alert on HTTP client latency measures one attempt. An
+Scope matters most. An alert on HTTP client latency measures one attempt. A
 metric on an [AWS SDK operation](#aws-sdk-and-http-client) measures all attempts,
 plus authentication, redirects, reading the response body, serialization, and
 validation. **These are different numbers, often by a lot, and an SLI is measured
-after all tries, not per request.**
+after all retries, not per request.**
 
 Metrics have the same problem: most span definitions come with a matching
 duration metric. Would a blended DB and HTTP instrumentation report both metrics,
 or a third blended one? Which would users pick for dashboards and alerts?
 
-A single value does not block anything. Blended operations can still be defined,
+A single value does not block anything. Blended operations can still be defined;
 they just have to be explicit: which scope is traced, which attributes come from
 which side, how the span name is built, and which duration metrics are reported.
 Span type is also optional, so an application that does not care can set no type
@@ -497,8 +497,8 @@ usual candidates: the AWS SDK, Elasticsearch, and a function invoked over HTTP.
 
 ### Alternative 2: Attribute instead of a top-level field
 
-Span type could be a regular attribute (for example `otel.span.type`), needing no
-protocol change and working with today's SDKs.
+Span type could be a regular attribute (for example, `otel.span.type`), needing
+no protocol change and working with today's SDKs.
 
 Rejected for the same reasons event name stopped being an attribute:
 
@@ -534,7 +534,7 @@ derived from the span type namespace later, and is out of scope here.
 
 ## Prior art
 
-Elastic APM has `span.type` and `span.subtype` and uses them for span icons and
+Elastic APM has `span.type` and `span.subtype`, which it uses for span icons and
 breakdown charts.
 
 Dash0 defines [`dash0.span.type`][dash0-semconv] in its own semantic
@@ -558,10 +558,10 @@ to invent it.
   definition can have tens of refinements (every HTTP client library could be
   documented as a refinement of `http.client.request`, each with its own
   caveats). Span type is needed regardless of how this is solved.
-- **Out-of-process instrumentation.** eBPF probes and proxies or gateways see
-  requests and responses on the wire. From their vantage point a database span
+- **Out-of-process instrumentation.** eBPF probes, proxies, and gateways see
+  requests and responses on the wire. From their vantage point, a database span
   has the same scope as an HTTP client span, which is quite different from a
-  database span produced in-process over a client library API: it excludes
+  database span produced in-process through a client library API: it excludes
   connection acquisition, retries, deserialization errors and delays, and result
   iteration. Reusing
   `db.client.call` for both would put two different measurements under one type,
@@ -571,7 +571,7 @@ to invent it.
 ## Prototypes
 
 - API/SDK prototype (creation-time parameter, readable span getter, sampler
-  input) plus the corresponding proto change:
+  input, declarative config):
   - [Python](https://github.com/open-telemetry/opentelemetry-python/pull/5464)
 
 - A [live check run][weaver-pr] resolving spans to definitions by type instead of
@@ -595,7 +595,7 @@ blended identity:
 | Failure means | the operation failed after all attempts | this request failed |
 
 Scope is the important difference. One SDK call can produce several HTTP
-requests: credential lookups, redirects, retries, and for parallel downloads,
+requests: credential lookups, redirects, retries, and, for parallel downloads,
 several at once.
 
 ```text
@@ -637,12 +637,12 @@ underneath, which is what makes node round-robin and retries visible:
 
 ### FaaS and HTTP server
 
-This one is the good case for a merge. A function with an HTTP trigger and the
-HTTP server request around it measure close enough to the same thing, and only
-one needs to report, since HTTP server auto-instrumentation can be suppressed or
+This is the best case for a merge. A function with an HTTP trigger and the HTTP
+server request around it measure close enough to the same thing, and only one
+needs to report, since HTTP server auto-instrumentation can be suppressed or
 turned off inside the function app.
 
-It still is not a union of two definitions. The Lambda conventions already spell
+It is still not a union of two definitions. The Lambda conventions already spell
 out how to reconcile them ([aws-lambda.md][faas-lambda]): where the span name and
 `http.route` come from, that `faas.trigger` is `http`, and which HTTP attributes
 come from the proxy request event. That is a new definition with its own rules,
