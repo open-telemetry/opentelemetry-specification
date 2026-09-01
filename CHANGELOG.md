@@ -40,6 +40,8 @@ release.
   ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
 - Stabilize Prometheus Unknown-typed metric transformation.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
+- Stabilize `resource_constant_labels` configuration.
+  ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
 
 ### SDK Configuration
 
