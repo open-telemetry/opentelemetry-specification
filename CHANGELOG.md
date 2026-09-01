@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Make global propagators optional.
+  []()
+
 ### Traces
 
 ### Metrics
