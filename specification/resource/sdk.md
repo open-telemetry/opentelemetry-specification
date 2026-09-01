@@ -9,7 +9,7 @@ weight: 3
 
 A [Resource](../overview.md#resources) is an immutable representation of the
 observed entity for which telemetry is being produced. A Resource is composed of
-a collection of [Entities](#entities) and a set of
+a collection of (**Development**)[Entities](#entities) and a set of
 [Attributes](../common/README.md#attribute).
 For example, a process running in a container on Kubernetes has a Pod name, it
 is in a namespace and possibly is part of a Deployment which also has a name.
@@ -41,6 +41,7 @@ a resource can be associated with a `LoggerProvider`.
 When associated with a [`LoggerProvider`](../logs/api.md#loggerprovider),
 all log records produced by any `Logger` from the provider will be
 associated with this `Resource`.
+
 ## Entities
 
 **Status**: [Development](../document-status.md)
@@ -201,7 +202,7 @@ impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
 
 When entity support is enabled (see [Resource Provider](#resource-provider)),
-resource detector packages MAY also return [Entities](#entities) alongside
+resource detector packages MAY also return (**Development**)[Entities](#entities) alongside
 resource attributes.
 
 **Status**: [Development](../document-status.md)
@@ -230,7 +231,7 @@ The Resource Provider MUST:
 - Construct a `Resource` from the detected resource attributes and any detected
   entities.
 
-When entity support is enabled, entity merging MUST occur first, followed by
+Entity merging MUST occur first, followed by
 resource attribute merging using existing merge semantics. The entity merging
 algorithm is as follows:
 
