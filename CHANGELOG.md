@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
+  Periodic exporting MetricReader.
+  ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
+
 ### Logs
 
 ### Baggage
@@ -36,6 +40,8 @@ release.
   ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+- Stabilize `resource_constant_labels` configuration.
+  ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
 
 ### SDK Configuration
 
