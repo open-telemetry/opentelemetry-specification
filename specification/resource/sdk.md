@@ -83,7 +83,7 @@ does not have all or any of the SDK-provided attributes present. However, that
 does not happen by default. If a user wants to combine custom attributes with
 the default resource, they can use [`Merge`](#merge) with their custom resource
 or specify their attributes by implementing
-[Custom resource detectors](#detecting-resource-information-from-the-environment)
+[Custom resource detectors](#resource-detector)
 instead of explicitly associating a resource.
 
 ## Resource creation
@@ -168,7 +168,7 @@ algorithm.
 It is recommended, but not required, to provide a way to quickly create an empty
 resource.
 
-### Detecting resource information from the environment
+### Resource Detector
 
 Custom resource detectors related to generic platforms (e.g. Docker, Kubernetes)
 or vendor specific environments (e.g. EKS, AKS, GKE) MUST be implemented as
@@ -215,6 +215,46 @@ descriptive attributes are detected asynchronously, the entity MUST be returned
 with its identifying attributes immediately, and the descriptive attributes MUST
 be merged into the Resource when they become available.
 
+#### Resource detector name
+
+**Status**: [Development](../document-status.md)
+
+Resource detectors SHOULD have a unique name for reference in configuration. For
+example, users list and configure individual resource detectors by name
+in [declarative configuration](../configuration/README.md#declarative-configuration).
+Names SHOULD be [snake case](https://en.wikipedia.org/wiki/Snake_case) and
+consist of lowercase alphanumeric and `_` characters, which ensures they conform
+to declarative
+configuration [property name requirements](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#property-name-case).
+
+Resource detector names SHOULD reflect
+the [root namespace](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#general-naming-considerations)
+of attributes they populate. For example, a resource detector named `os`
+populates `os.*` attributes. Resource detectors which populate attributes from
+multiple root namespaces SHOULD choose a name which appropriately conveys their
+purpose.
+
+An SDK which identifies multiple resource detectors with the same name SHOULD
+report an error. In order to limit collisions, resource detectors SHOULD
+document their name in a manner which is easily discoverable. Authors of
+resource detectors should check existing resource detectors to ensure their
+target name isn't already in use. Additionally, the following detector names are
+reserved for built-in resource detectors published with language SDKs:
+
+* `container`:
+  Populates [container.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
+  attributes.
+* `host`:
+  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
+  attributes.
+* `process`:
+  Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
+  attributes.
+* `service`: Populates `service.name` based
+  on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
+  environment variable; populates `service.instance.id`
+  as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
+
 ### Resource Provider
 
 **Status**: [Development](../document-status.md)
@@ -255,46 +295,6 @@ merging MUST be determined by the configured order of the resource detectors,
 not by the order in which asynchronous results resolve. If a higher-priority
 detector's descriptive attributes resolve after a lower-priority detector's,
 the higher-priority detector's values MUST still take precedence.
-
-#### Resource detector name
-
-**Status**: [Development](../document-status.md)
-
-Resource detectors SHOULD have a unique name for reference in configuration. For
-example, users list and configure individual resource detectors by name
-in [declarative configuration](../configuration/README.md#declarative-configuration).
-Names SHOULD be [snake case](https://en.wikipedia.org/wiki/Snake_case) and
-consist of lowercase alphanumeric and `_` characters, which ensures they conform
-to declarative
-configuration [property name requirements](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#property-name-case).
-
-Resource detector names SHOULD reflect
-the [root namespace](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#general-naming-considerations)
-of attributes they populate. For example, a resource detector named `os`
-populates `os.*` attributes. Resource detectors which populate attributes from
-multiple root namespaces SHOULD choose a name which appropriately conveys their
-purpose.
-
-An SDK which identifies multiple resource detectors with the same name SHOULD
-report an error. In order to limit collisions, resource detectors SHOULD
-document their name in a manner which is easily discoverable. Authors of
-resource detectors should check existing resource detectors to ensure their
-target name isn't already in use. Additionally, the following detector names are
-reserved for built-in resource detectors published with language SDKs:
-
-* `container`:
-  Populates [container.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
-  attributes.
-* `host`:
-  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
-  attributes.
-* `process`:
-  Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
-  attributes.
-* `service`: Populates `service.name` based
-  on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
-  environment variable; populates `service.instance.id`
-  as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
 
 ### Specifying resource information via an environment variable
 
