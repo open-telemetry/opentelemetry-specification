@@ -325,19 +325,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - | + |
 | OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
-| Enforces request size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Enforces response size limit |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Enforces request size limit |  |  |  |  |  |  |  |  |  |  | + |  |  |
+| Enforces response size limit |  |  |  |  |  |  |  |  |  |  | + |  |  |
 | Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | + |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - | + |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - | + |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - | + |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | + | - | + |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | + | - | + |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | + | - | + |
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  |  |  |  | + |  |  | + |  | + |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  |  |  | - |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  |  |  | + |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  | - |  | - |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  | - |  | + |
 | Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  | + |  | - |
 | Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  | + |  | - |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
@@ -393,14 +393,14 @@ and values are defined in the
 | [`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | - | - | - | - | + | - | + | - | - |
 | [`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Log metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | - | - | - | - | + | - | - | - | - |
 | [`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | - | - | - | - | - | - | - | - | - |
-| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | - | - | - | - | + | - | - | - | - |
+| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | - | - | - | - | + | - | + | - | - |
 | [`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported) |  | + | - | - | - | - | - | - | - | - | - | - | - |
 | **Metric metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
