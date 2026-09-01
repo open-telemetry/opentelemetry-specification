@@ -403,9 +403,9 @@ sections:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
         status: '+'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
         status: '+'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
         status: '-'
   - name: Context Propagation
     features:
