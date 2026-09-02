@@ -709,8 +709,10 @@ to be called concurrently.
 
 **Logger** - all methods MUST be safe to be called concurrently.
 
-**LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
-concurrently.
+Note that the synchronization can be provided by the `LoggerProvider` together
+with its registered `LogRecordProcessor`s. For example, they can coordinate
+shutdown so that after `LoggerProvider.Shutdown` successfully completes, no
+registered processor or associated exporter is invoked again.
 
 ## Self-observability
 
