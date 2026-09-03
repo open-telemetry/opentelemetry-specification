@@ -10,7 +10,7 @@ release.
 ### Context
 
 - Make global propagators optional.
-  []()
+  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
 
 ### Traces
 
