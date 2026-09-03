@@ -1,6 +1,7 @@
 # Profiles Data Format
 
-> **Note:** This OTEP is obsolete and is kept here as part of the
+> [!WARNING]
+> This OTEP is obsolete and is kept here as part of the
 > historical record. The current specification of the profiles data
 > format is in [Profiles Data Format](../../specification/profiles/data-format.md).
 
