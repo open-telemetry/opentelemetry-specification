@@ -21,7 +21,7 @@ release.
 
 ### Resource
 
-- Allow the `service` resource detector to fall back to language- or
+- Allow the named `service` resource detector (used via declarative config or explicit detector configuration) to fall back to
   platform-specific sources when `OTEL_SERVICE_NAME` is not set.
   ([#5280](https://github.com/open-telemetry/opentelemetry-specification/pull/5280))
 
