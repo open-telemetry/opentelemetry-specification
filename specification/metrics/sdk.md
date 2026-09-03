@@ -54,6 +54,7 @@ weight: 3
   * [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
+    + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
   * [Instrument enabled](#instrument-enabled)
   * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
@@ -458,6 +459,23 @@ The SDK MUST accept the following stream configuration parameters:
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
+* **Status**: [Development](../document-status.md) - `enabled`: A boolean
+  denoting whether the resulting stream produces metric data.
+
+  Users can provide an `enabled` value, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept an `enabled` value, but MUST NOT obligate a user to provide one.
+  The parameter MUST distinguish an unset value from `false`.
+
+  * If `enabled` is `true`, the `MeterProvider` MUST aggregate the stream as if
+    the instrument's [`OptIn`](#instrument-advisory-parameter-optin) advisory
+    parameter were `false`.
+  * If `enabled` is `false`, the `MeterProvider` MUST use the
+    [Drop Aggregation](#drop-aggregation), regardless of the `aggregation`
+    provided.
+  * If `enabled` is unset, the
+    [`OptIn`](#instrument-advisory-parameter-optin) advisory parameter
+    determines whether the stream is enabled.
 
 #### Measurement processing
 
@@ -467,9 +485,14 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default Aggregation on the basis of instrument kind according
-    to the [MetricReader](#metricreader) instance's `aggregation` property.
+* If the `MeterProvider` has no `View` registered, or if the Instrument does
+  not match any View's instrument selection criteria:
+  * **Status**: [Development](../document-status.md) - If the instrument's
+    [`OptIn` advisory parameter](#instrument-advisory-parameter-optin)
+    is set to `true`, use the [Drop Aggregation](#drop-aggregation).
+  * If `OptIn` is unset or set to `false`, take the Instrument and apply the
+    default Aggregation on the basis of instrument kind according to the
+    [MetricReader](#metricreader) instance's `aggregation` property.
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
@@ -501,7 +524,7 @@ made with an Instrument:
     * For each resulting stream, apply the Views in its group in registration order.
       For all aspects of the [Stream configuration](#stream-configuration) other
       than `attribute_keys` (`name`, `description`, `aggregation`,
-      `exemplar_reservoir`, `aggregation_cardinality_limit`), the last matching
+      `exemplar_reservoir`, `aggregation_cardinality_limit`, `enabled`), the last matching
       View that specifies that aspect wins. Complex configurations like
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
@@ -516,10 +539,9 @@ made with an Instrument:
         parameters](#instrument-advisory-parameters) specify the same aspect of
         the [Stream configuration](#stream-configuration), the setting defined
         by the Views MUST take precedence over the advisory parameters.
-  * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD enable the instrument using the default aggregation and temporality.
-    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
-    to disable instruments by default.
+
+Users can configure match-all Views with `enabled=false` or with the
+[Drop aggregation](#drop-aggregation), to disable instruments by default.
 
 #### View examples
 
@@ -1096,6 +1118,20 @@ If no View is configured, or if a matching view does not specify attribute keys,
 the advisory parameter should be used. If neither is provided, all attributes
 must be retained.
 
+#### Instrument advisory parameter: `OptIn`
+
+**Status**: [Development](../document-status.md)
+
+This advisory parameter applies to all aggregations.
+
+When an instrument has `OptIn=true`, the SDK MUST use the
+[Drop Aggregation](#drop-aggregation). If the user sets `enabled=true` on a
+View's [Stream configuration](#stream-configuration), this "enables" the
+instrument with the same behavior as-if the instrument was `OptIn=false`,
+including respecting other advisory parameters. Setting fields other than
+`enabled` on the View, including setting the `aggregation`, does not enable
+the instrument.
+
 ### Instrument enabled
 
 The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
@@ -1103,15 +1139,16 @@ when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
   of the `Meter` used to create the instrument has parameter `enabled=false`.
-- All [resolved views](#measurement-processing) for the instrument are
+- All [resulting streams](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
-Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.enabled=true` and instruments use the default
-aggregation when no matching views match the instrument.
+Note: If a user makes no configuration changes, `Enabled` returns `true` for
+instruments with `OptIn=false` (or unset), since by default
+`MeterConfig.enabled=true` and instruments use the default aggregation when no
+matching views match the instrument.
 
 ### Instrument bind
 
