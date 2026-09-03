@@ -8,12 +8,13 @@ weight: 3
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
 A [Resource](../overview.md#resources) is an immutable representation of the
-observed entity for which telemetry is being produced, expressed as
+observed entity for which telemetry is being produced. A Resource is composed of
+a collection of (**Development**)[Entities](#entities) and a set of
 [Attributes](../common/README.md#attribute).
 For example, a process running in a container on Kubernetes has a Pod name, it
 is in a namespace and possibly is part of a Deployment which also has a name.
-All three of these attributes can be included in the `Resource`. Note that there
-are certain
+Each of these may be represented as an `Entity` within the `Resource`, and all of
+their attributes are included in the `Resource`. Note that there are certain
 [attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md)
 that have prescribed meanings.
 
@@ -41,6 +42,35 @@ When associated with a [`LoggerProvider`](../logs/api.md#loggerprovider),
 all log records produced by any `Logger` from the provider will be
 associated with this `Resource`.
 
+## Entities
+
+**Status**: [Development](../document-status.md)
+
+An Entity represents an object of interest associated with produced telemetry.
+For example, a service, a host, a container, or a Kubernetes pod are all
+entities. An Entity has:
+
+- **Type**: A string that defines the type of the entity (e.g. `"service"`,
+  `"host"`). MUST NOT change during the lifetime of the entity.
+- **Identifying attributes**: Attributes that uniquely identify the entity.
+  MUST NOT change during the lifetime of the entity. MUST contain at least one
+  attribute. SHOULD be detected synchronously during
+  SDK initialization.
+- **Descriptive attributes**: Non-identifying attributes of the entity. MAY
+  change over the lifetime of the entity. MAY be empty.
+
+A Resource MAY contain zero or more entities. The identifying and descriptive
+attributes of all entities in a Resource MUST be included in the Resource's
+attributes. When entities are present, Resource identity is determined by the
+collection of all attributes whose keys are NOT found in any entity's
+descriptive attribute keys. When no entities are present, Resource identity is
+the collection of all attributes (both keys and values), preserving backwards
+compatibility.
+
+See [Entity Data Model](../entities/data-model.md) and
+[OTEP 264: Resource and Entities](../../oteps/entities/0264-resource-and-entities.md)
+for more details.
+
 ## SDK-provided resource attributes
 
 The SDK MUST provide access to a Resource with at least the attributes listed at
@@ -53,7 +83,7 @@ does not have all or any of the SDK-provided attributes present. However, that
 does not happen by default. If a user wants to combine custom attributes with
 the default resource, they can use [`Merge`](#merge) with their custom resource
 or specify their attributes by implementing
-[Custom resource detectors](#detecting-resource-information-from-the-environment)
+[Custom resource detectors](#resource-detector)
 instead of explicitly associating a resource.
 
 ## Resource creation
@@ -138,7 +168,7 @@ algorithm.
 It is recommended, but not required, to provide a way to quickly create an empty
 resource.
 
-### Detecting resource information from the environment
+### Resource Detector
 
 Custom resource detectors related to generic platforms (e.g. Docker, Kubernetes)
 or vendor specific environments (e.g. EKS, AKS, GKE) MUST be implemented as
@@ -170,6 +200,20 @@ will not know what Schema URL to use). If multiple detectors are combined and
 the detectors use different non-empty Schema URL it MUST be an error since it is
 impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
+
+When entity support is enabled (see [Resource Provider](#resource-provider)),
+resource detector packages MAY also return (**Development**)[Entities](#entities) alongside
+resource attributes.
+
+**Status**: [Development](../document-status.md)
+
+Entity-aware resource detectors SHOULD detect entity identifying attributes
+synchronously. Entity-aware resource detectors MAY detect entity descriptive
+attributes asynchronously (e.g. via a future or promise that resolves after
+initialization). When identifying attributes are detected synchronously but
+descriptive attributes are detected asynchronously, the entity MUST be returned
+with its identifying attributes immediately, and the descriptive attributes MUST
+be merged into the Resource when they become available.
 
 #### Resource detector name
 
@@ -210,6 +254,47 @@ reserved for built-in resource detectors published with language SDKs:
   on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
   environment variable; populates `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
+
+### Resource Provider
+
+**Status**: [Development](../document-status.md)
+
+The Resource Provider is a component responsible for running all configured
+resource detectors and constructing a `Resource` for the SDK.
+
+The Resource Provider MUST:
+
+- Run all configured resource detectors.
+- When entity support is enabled, resolve conflicts when multiple entity-aware
+  resource detectors detect entities of the same type, using a user-controlled
+  priority order.
+- Construct a `Resource` from the detected resource attributes and any detected
+  entities.
+
+Entity merging MUST occur first, followed by
+resource attribute merging using existing merge semantics. The entity merging
+algorithm is as follows:
+
+- Construct a set of detected entities, `E`.
+- All entity-aware resource detectors are sorted by priority (highest first).
+- For each entity-aware resource detector, collect detected entities.
+  - For each detected entity:
+    - If an entity with the same type already exists in `E`:
+      - If the entities [can be merged](../entities/data-model.md#merging-of-entities),
+        [merge](../entities/data-model.md#merging-of-entities) the descriptive
+        attributes (existing values take precedence).
+      - Otherwise, drop the new entity.
+    - Otherwise, add the entity to `E`.
+- Construct a `Resource` from the set `E`.
+  - If all entities within `E` have the same `schema_url`, set the Resource's
+    `schema_url` to match.
+  - Otherwise, leave the Resource `schema_url` empty.
+
+When descriptive attributes are detected asynchronously, the priority for
+merging MUST be determined by the configured order of the resource detectors,
+not by the order in which asynchronous results resolve. If a higher-priority
+detector's descriptive attributes resolve after a lower-priority detector's,
+the higher-priority detector's values MUST still take precedence.
 
 ### Specifying resource information via an environment variable
 
