@@ -44,6 +44,7 @@ path_base_for_github_subdir:
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
   - [Protocol](protocol/README.md)
+    - [Traces](trace/data-model.md)
     - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
     - [Profiles](profiles/mappings.md)
