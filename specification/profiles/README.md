@@ -17,6 +17,12 @@ path_base_for_github_subdir:
 - [Design goals](#design-goals)
 - [Data Format](#data-format)
 - [Known values](#known-values)
+  * [CPU profiles](#cpu-profiles)
+  * [Wall-clock profiles](#wall-clock-profiles)
+  * [Off-CPU profiles](#off-cpu-profiles)
+  * [Heap profiles](#heap-profiles)
+  * [Block contention profiles](#block-contention-profiles)
+  * [Mutex profiles](#mutex-profiles)
 - [Specifications](#specifications)
 - [References](#references)
 
@@ -87,7 +93,62 @@ tools, known values are utilized.
 
 | Profile field | Known values |
 | ------------- | ------------ |
-| original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
+| Profile.original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
+| Profile.sample_type | [cpu](#cpu-profiles), [wall](#wall-clock-profiles), [off_cpu](#off-cpu-profiles), [heap](#heap-profiles), [block](#block-contention-profiles), [mutex](#mutex-profiles) |
+
+### CPU profiles
+
+CPU profiles measure CPU time consumed by the application. Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| cpu | nanoseconds | CPU time samples |
+
+### Wall-clock profiles
+
+Wall-clock (wall time) profiles measure elapsed time. Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| wall | nanoseconds | Wall clock time in nanoseconds |
+
+### Off-CPU profiles
+
+Off-CPU profiles measure time spent not running on the CPU (e.g., waiting for I/O or locks). Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| off_cpu | nanoseconds | Off-CPU time |
+
+### Heap profiles
+
+Heap profiles measure memory allocation and usage. Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| inuse_space | bytes | In-use memory at the time of profile collection |
+| inuse_objects | count | Number of in-use allocations |
+| alloc_space | bytes | Total allocated memory (including freed) |
+| alloc_objects | count | Total number of allocations (including freed) |
+| allocated_space | bytes | Allocated memory |
+| allocated_objects | count | Number of allocated objects |
+| space | bytes | Generic memory measurement |
+
+### Block contention profiles
+
+Block (contention) profiles measure time spent blocked on synchronization primitives. Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| block | nanoseconds | Block wait time |
+
+### Mutex profiles
+
+Mutex profiles measure lock contention and time spent waiting on mutexes. Common values:
+
+| Type | Unit | Description |
+| ---- | ---- | ----------- |
+| mutex | nanoseconds | Time spent in mutex contention |
 
 ## Specifications
 
