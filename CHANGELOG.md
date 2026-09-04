@@ -29,9 +29,8 @@ release.
 
 ### Common
 
-- Allow applications to configure names for SDK components that emit
-  self-observability telemetry.
-  ([#5298](https://github.com/open-telemetry/opentelemetry-specification/issues/5298))
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 
 ### OpenTelemetry Protocol
 
