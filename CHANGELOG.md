@@ -29,6 +29,9 @@ release.
 
 ### Common
 
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
