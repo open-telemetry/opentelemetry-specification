@@ -17,11 +17,10 @@ SDK components that emit self-observability telemetry identified by
 [`otel.component.name`][otel-component-name] SHOULD allow users to configure an
 optional name.
 
-When a name is configured, the component MUST use it as `otel.component.name`
-for its self-observability telemetry. When no name is configured, the component
-MUST assign a name according to the semantic conventions.
-The resulting name MUST satisfy the uniqueness and cardinality requirements of
-`otel.component.name`.
+When an application-provided name is configured, the component MUST use it as
+`otel.component.name` for its self-observability telemetry. Otherwise, the
+component MUST automatically assign a name. In either case, the resulting name
+MUST satisfy the requirements of the `otel.component.name` semantic convention.
 
 [otel-component-name]: https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-component-name
 
