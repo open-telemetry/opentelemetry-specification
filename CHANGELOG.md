@@ -135,6 +135,9 @@ release.
 - Add Profiles data model (data-model.md).
   ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
 
+- Add ability to skip exporter server certificate check
+  ([#4264](https://github.com/open-telemetry/opentelemetry-specification/issues/4264))
+
 ### Supplementary Guidelines
 
 - Add non-normative supplementary guidelines for SDK self-observability.
