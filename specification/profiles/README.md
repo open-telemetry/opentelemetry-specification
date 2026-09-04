@@ -20,7 +20,7 @@ path_base_for_github_subdir:
   * [CPU profiles](#cpu-profiles)
   * [Wall-clock profiles](#wall-clock-profiles)
   * [Off-CPU profiles](#off-cpu-profiles)
-  * [Heap profiles](#heap-profiles)
+  * [Memory profiles](#memory-profiles)
   * [Block contention profiles](#block-contention-profiles)
   * [Mutex profiles](#mutex-profiles)
 - [Specifications](#specifications)
@@ -94,7 +94,7 @@ tools, known values are utilized.
 | Profile field | Known values |
 | ------------- | ------------ |
 | Profile.original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
-| Profile.sample_type | [cpu](#cpu-profiles), [wall](#wall-clock-profiles), [off_cpu](#off-cpu-profiles), [heap](#heap-profiles), [block](#block-contention-profiles), [mutex](#mutex-profiles) |
+| Profile.sample_type | [cpu](#cpu-profiles), [wall](#wall-clock-profiles), [off_cpu](#off-cpu-profiles), [memory](#memory-profiles), [block](#block-contention-profiles), [mutex](#mutex-profiles) |
 
 ### CPU profiles
 
@@ -120,9 +120,9 @@ Off-CPU profiles measure time spent not running on the CPU (e.g., waiting for I/
 | ---- | ---- | ----------- |
 | off_cpu | nanoseconds | Off-CPU time |
 
-### Heap profiles
+### Memory profiles
 
-Heap profiles measure memory allocation and usage. Common values:
+Memory profiles measure memory allocation and usage. Common values:
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
@@ -130,9 +130,6 @@ Heap profiles measure memory allocation and usage. Common values:
 | inuse_objects | count | Number of in-use allocations |
 | alloc_space | bytes | Total allocated memory (including freed) |
 | alloc_objects | count | Total number of allocations (including freed) |
-| allocated_space | bytes | Allocated memory |
-| allocated_objects | count | Number of allocated objects |
-| space | bytes | Generic memory measurement |
 
 ### Block contention profiles
 
