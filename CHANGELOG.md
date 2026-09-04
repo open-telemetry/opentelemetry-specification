@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.
+  ([#5184](https://github.com/open-telemetry/opentelemetry-specification/issues/5184))
 - Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
   Periodic exporting MetricReader.
   ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
