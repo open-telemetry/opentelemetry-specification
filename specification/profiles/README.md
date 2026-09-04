@@ -102,7 +102,7 @@ CPU profiles measure CPU time consumed by the application. Common values:
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `cpu` | nanoseconds | CPU time samples |
+| `cpu` | `nanoseconds` | CPU time samples |
 
 ### Wall-clock profiles
 
@@ -110,7 +110,7 @@ Wall-clock (wall time) profiles measure elapsed time. Common values:
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `wall` | nanoseconds | Wall clock time in nanoseconds |
+| `wall` | `nanoseconds` | Wall clock time in nanoseconds |
 
 ### Off-CPU profiles
 
@@ -118,7 +118,7 @@ Off-CPU profiles measure time spent not running on the CPU (e.g., waiting for I/
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `off_cpu` | nanoseconds | Off-CPU time |
+| `off_cpu` | `nanoseconds` | Off-CPU time |
 
 ### Memory profiles
 
@@ -126,10 +126,10 @@ Memory profiles measure memory allocation and usage. Common values:
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `inuse_space` | bytes | In-use memory at the time of profile collection |
-| `inuse_objects` | count | Number of in-use allocations |
-| `alloc_space` | bytes | Total allocated memory (including freed) |
-| `alloc_objects` | count | Total number of allocations (including freed) |
+| `inuse_space` | `bytes` | In-use memory at the time of profile collection |
+| `inuse_objects` | `count` | Number of in-use allocations |
+| `alloc_space` | `bytes` | Total allocated memory (including freed) |
+| `alloc_objects` | `count` | Total number of allocations (including freed) |
 
 ### Block contention profiles
 
@@ -137,7 +137,7 @@ Block (contention) profiles measure time spent blocked on synchronization primit
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `block` | nanoseconds | Block wait time |
+| `block` | `nanoseconds` | Block wait time |
 
 ### Mutex profiles
 
@@ -145,7 +145,7 @@ Mutex profiles measure lock contention and time spent waiting on mutexes. Common
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `mutex` | nanoseconds | Time spent in mutex contention |
+| `mutex` | `nanoseconds` | Time spent in mutex contention |
 
 ## Specifications
 
