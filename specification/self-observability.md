@@ -11,6 +11,20 @@ This is closely related to the
 [self-diagnostics](error-handling.md#self-diagnostics) guidance in the error
 handling document.
 
+## SDK component names
+
+SDK components that emit self-observability telemetry identified by
+[`otel.component.name`][otel-component-name] SHOULD allow users to configure an
+optional name.
+
+When a name is configured, the component MUST use it as `otel.component.name`
+for its self-observability telemetry. When no name is configured, the component
+MUST assign a name according to the semantic conventions.
+The resulting name MUST satisfy the uniqueness and cardinality requirements of
+`otel.component.name`.
+
+[otel-component-name]: https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-component-name
+
 ## SDK Self-Observability Metrics
 
 The names, attributes, and values used for SDK self-observability metrics are
