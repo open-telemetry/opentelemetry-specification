@@ -94,7 +94,7 @@ tools, known values are utilized.
 | Profile field | Known values |
 | ------------- | ------------ |
 | Profile.original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
-| Profile.sample_type | [cpu](#cpu-profiles), [wall](#wall-clock-profiles), [off_cpu](#off-cpu-profiles), [memory](#memory-profiles), [block](#block-contention-profiles), [mutex](#mutex-profiles) |
+| Profile.sample_type | See [CPU](#cpu-profiles), [Wall-clock](#wall-clock-profiles), [Off-CPU](#off-cpu-profiles), [Memory](#memory-profiles), [Block contention](#block-contention-profiles), and [Mutex](#mutex-profiles) sections for known (type, unit) pairs. |
 
 ### CPU profiles
 
