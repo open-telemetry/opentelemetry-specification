@@ -1553,7 +1553,8 @@ Configurable parameters:
   batches, `exportTimeoutMillis` applies to each individual `Export(batch)`
   invocation.
 * `maxExportBatchSize` - the maximum number of metric data points in a batch
-  that are provided to a single export.
+  that are provided to a single export. The default is that the batch size is not
+  limited.
 
 When `maxExportBatchSize` is configured, the reader MUST ensure no batch
 provided to `Export` exceeds the `maxExportBatchSize` by splitting the batch of
