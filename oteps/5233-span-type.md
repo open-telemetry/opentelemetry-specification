@@ -146,6 +146,9 @@ Span types are unique within the scope of a Schema URL (including its dependency
 tree), following the same identity model as other semantic convention
 definitions.
 
+Similarly to other signals, uniqueness is not guaranteed when SchemaURL is not 
+provided.
+
 Spans without a type are valid and MUST be accepted. A missing type means "this
 span does not follow a known definition", which is true for all existing spans.
 
@@ -317,10 +320,11 @@ the type of the definition they implement.
     ignore the new property.
 
   - Languages that pass sampling parameters as individual arguments cannot extend
-    the existing method without breaking end-user implementations of it. They
+    the existing method without breaking end user implementations of it. They
     introduce a new method (for example, `ShouldSampleSpan`) with a default
-    implementation that delegates to the existing one, so existing samplers keep
-    working.
+    implementation that delegates to the existing one. The SDK calls the new
+    method, so a sampler that only implements the old one keeps working through
+    that default.
 
     The new method SHOULD be shaped so that further inputs can be added without
     repeating this migration, either by taking a sampling parameters object or
@@ -340,6 +344,7 @@ the type of the definition they implement.
 
 ```diff
  class Sampler:
++    # deprecated: implement and call should_sample_span instead
      def should_sample(
          self,
          parent_context: Context | None,
@@ -402,29 +407,6 @@ the type of the definition they implement.
   and namespaced consistently.
 - Marker attributes such as `messaging.operation.type` can be retired once span
   type is broadly available.
-
-### Declarative configuration
-
-Sampling by span type is expressed through the existing rule-based sampler:
-[`ExperimentalComposableRuleBasedSamplerRule`](https://github.com/open-telemetry/opentelemetry-configuration/blob/b20c9d6399c19a1b2e7bd16f18ff6f589d3317a6/schema/tracer_provider.yaml#L304), whose
-match conditions are `attribute_values`, `attribute_patterns`, `span_kinds`,
-and `parent`.
-
-It gains one more condition:
-
-```yaml
-span_types:
-  type: array
-  minItems: 1
-  items: { type: string }
-  description: The span types to match exactly (any of).
-  defaultBehavior: ignore
-```
-
-Prefix/wildcard matching is a natural follow-up and is out of scope here.
-
-Disabling spans by type, similar to the existing [tracer scope-level config](../specification/trace/sdk.md#tracerconfig), is a future possibility and is not detailed here.
-
 ### Other updates
 
 - [Telemetry stability](../specification/versioning-and-stability.md#telemetry-stability)
@@ -573,6 +555,7 @@ to invent it.
 - API/SDK prototype (creation-time parameter, readable span getter, sampler
   input, declarative config):
   - [Python](https://github.com/open-telemetry/opentelemetry-python/pull/5464)
+  - [Go](https://github.com/open-telemetry/opentelemetry-go/pull/8914)
 
 - A [live check run][weaver-pr] resolving spans to definitions by type instead of
   [hand-written heuristics][genai-rego].
