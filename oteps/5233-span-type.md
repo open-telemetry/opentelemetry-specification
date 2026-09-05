@@ -146,7 +146,7 @@ Span types are unique within the scope of a Schema URL (including its dependency
 tree), following the same identity model as other semantic convention
 definitions.
 
-Similarly to other signals, uniqueness is not guaranteed when SchemaURL is not 
+As with other signals, uniqueness is not guaranteed when the Schema URL is not 
 provided.
 
 Spans without a type are valid and MUST be accepted. A missing type means "this
