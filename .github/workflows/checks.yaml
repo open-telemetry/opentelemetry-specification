@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: install dependencies
       run: npm ci --ignore-scripts
@@ -28,6 +30,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
 
@@ -42,6 +46,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: install dependencies
       run: npm ci --ignore-scripts
@@ -57,6 +63,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: install dependencies
       run: npm ci --ignore-scripts
@@ -69,6 +77,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: run compliance-matrix
       run: make compliance-matrix
@@ -81,6 +91,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - uses: streetsidesoftware/cspell-action@e0668cf020899e887ee8ad4d173c31738a79eae8 # v9.0.1
       with:
@@ -94,6 +106,8 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: install dependencies
       run: npm ci --ignore-scripts

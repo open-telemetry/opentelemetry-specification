@@ -560,17 +560,17 @@ sections:
           - name: OTLP/HTTP gzip Content-Encoding support
             status: '+'
           - name: Enforces request size limit
-            status:
+            status: '+'
           - name: Enforces response size limit
-            status:
+            status: '+'
           - name: Concurrent sending
             status: '-'
           - name: Honors retryable responses with backoff
-            status: '-'
+            status: '+'
           - name: Honors non-retryable responses
-            status: '-'
+            status: '+'
           - name: Honors throttling response
-            status: '-'
+            status: '+'
           - name: Multi-destination spec compliance
             status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
@@ -584,11 +584,11 @@ sections:
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
-            status: '?'
+            status: '-'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1)
               messages are handled and logged for OTLP/HTTP'
-            status: '?'
+            status: '-'
           - name: Metric Exporter configurable temporality preference
             status: '+'
           - name: Metric Exporter configurable default aggregation
@@ -682,7 +682,7 @@ sections:
           - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
             status: '-'
           - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
             status: '-'
           - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
@@ -696,7 +696,7 @@ sections:
           - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
             status: '-'
           - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
             status: '-'
           - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'
