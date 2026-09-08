@@ -1615,8 +1615,7 @@ via a callback or an event.
 
 #### Shutdown
 
-In addition to the generic [`MetricReader.Shutdown()`](#shutdown-1) behavior,
-`Shutdown` MUST include the effects of [`ForceFlush()`](#forceflush-1).
+`Shutdown` MUST include the effects of [`ForceFlush`](#forceflush-1).
 
 ## MetricExporter
 
