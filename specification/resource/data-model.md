@@ -10,13 +10,17 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Identity](#identity)
 - [Merging Resources](#merging-resources)
   * [Merging Entities into a Resource](#merging-entities-into-a-resource)
+    + [Examples](#examples)
+      - [Example 1: Entity replaces loose attribute](#example-1-entity-replaces-loose-attribute)
+      - [Example 2: Loose attribute replaces entity attribute](#example-2-loose-attribute-replaces-entity-attribute)
+      - [Example 3: Identity & Attribute Conflicts](#example-3-identity--attribute-conflicts)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -86,7 +90,7 @@ resource.
     description or identity of an entity in `E`.
 - Solve for resource flattening issues (See
   [Attribute Referencing Model](../entities/data-model.md#attribute-referencing-model)).
-  - If, for all entities, there are now overlapping attribute keys, then nothing
+  - If, for all entities, there are no overlapping attribute keys, then nothing
     is needed.
   - If there is a conflict where two entities use the same attribute key then
     remove the lower priority entity from the Resource.

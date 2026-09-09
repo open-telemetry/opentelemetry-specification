@@ -12,7 +12,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Create a key](#create-a-key)
@@ -23,7 +23,7 @@ path_base_for_github_subdir:
   * [Attach Context](#attach-context)
   * [Detach Context](#detach-context)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

@@ -10,7 +10,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Operations](#operations)
@@ -23,7 +23,7 @@ weight: 1
 - [Propagation](#propagation)
 - [Conflict Resolution](#conflict-resolution)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

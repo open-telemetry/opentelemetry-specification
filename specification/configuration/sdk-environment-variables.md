@@ -13,7 +13,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)
@@ -39,7 +39,7 @@ aliases:
 - [Declarative configuration](#declarative-configuration)
 - [Language Specific Environment Variables](#language-specific-environment-variables)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

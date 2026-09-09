@@ -9,7 +9,7 @@ linkTitle: Mapping to AnyValue
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Converting to AnyValue](#converting-to-anyvalue)
   * [Primitive Values](#primitive-values)
@@ -26,7 +26,7 @@ linkTitle: Mapping to AnyValue
   * [Other Values](#other-values)
   * [Empty Values](#empty-values)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

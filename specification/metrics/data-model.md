@@ -11,7 +11,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
@@ -60,7 +60,7 @@ weight: 2
 - [References](#references)
 - [Footnotes](#footnotes)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -200,7 +200,7 @@ in scope for key design decisions:
 
 OpenTelemetry fragments metrics into three interacting models:
 
-<!--- cSpell:ignore emetry --->
+<!-- cSpell:ignore emetry -->
 - An Event model, representing how instrumentation reports metric data.
 - A Timeseries model, representing how backends store metric data.
 - A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)

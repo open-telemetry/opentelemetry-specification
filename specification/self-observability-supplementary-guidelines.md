@@ -49,13 +49,21 @@ after it is gone. Self-observability telemetry at the edges of the SDK lifecycle
 is therefore inherently best-effort; the strategy for handling it is left to the
 SDK.
 
-For self-observability events specifically, if the SDK already emits
-diagnostics through a non-OpenTelemetry path — the language's native logging
-facility, a commonly-used ecosystem logging library (e.g., Tokio's `tracing`
-crate in Rust), or in the simplest case direct writes to stdout/stderr — that
-path is a natural fit for events emitted before `LoggerProvider` is installed
-or after it has been shut down. It is typically available throughout the
-process lifetime and has few external dependencies that can fail.
+For self-observability [events](logs/data-model.md#events) specifically, if the
+SDK already emits diagnostics through a non-OpenTelemetry path — the language's
+native logging facility, a commonly-used ecosystem logging library (e.g.,
+Tokio's `tracing` crate in Rust), or in the simplest case direct writes to
+stdout/stderr — that path is a natural fit for events emitted before
+`LoggerProvider` is installed or after it has been shut down. It is typically
+available throughout the process lifetime and has few external dependencies
+that can fail.
+
+Such an event still needs its event name: use the mechanism's native event-name
+field if it has one (.NET's `ILogger` and Rust's `tracing` do); otherwise carry
+it as the stable
+[`otel.event.name`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-event-name)
+attribute, which a Collector or backend can map back to the `LogRecord`'s
+`EventName`.
 
 ## Obtaining the Meter / Logger for self-observability
 

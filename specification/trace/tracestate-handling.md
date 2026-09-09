@@ -9,7 +9,7 @@ linkTitle: TraceState
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Key](#key)
 - [Value](#value)
@@ -18,7 +18,7 @@ linkTitle: TraceState
   * [Sampling threshold value `th`](#sampling-threshold-value-th)
   * [Explicit randomness value `rv`](#explicit-randomness-value-rv)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
