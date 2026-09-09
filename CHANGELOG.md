@@ -13,6 +13,38 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.61.0 (2026-09-11)
+
+### Context
+
+### Traces
+
+### Metrics
+
+- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
+  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
 - Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
   Periodic exporting MetricReader.
   ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
@@ -33,16 +65,21 @@ release.
 
 ### Common
 
+- Add `AttributeValueDepthLimit` for nested array and map attribute values.
+  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
+- Remove requirement for attribute ordering from compliance matrix.
+  ([#5205](https://github.com/open-telemetry/opentelemetry-specification/pull/5205))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
 
-- Stabilize content negotiation section.
+- Stabilize content negotiation section for the Prometheus exporter.
   ([#5136](https://github.com/open-telemetry/opentelemetry-specification/pull/5136))
 - Update the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
-  ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
-- Stabilize `resource_constant_labels` configuration.
+  ([#5125](https://github.com/open-telemetry/opentelemetry-specification/pull/5125))
+- Stabilize `resource_constant_labels` configuration for the Prometheus exporter.
   ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
 
 ### SDK Configuration
@@ -53,18 +90,6 @@ release.
 
 ## v1.60.0 (2026-08-07)
 
-### Context
-
-### Traces
-
-### Metrics
-
-### Logs
-
-### Baggage
-
-### Profiles
-
 ### Resource
 
 - Add Entity support to the Resource SDK specification.
@@ -74,11 +99,6 @@ release.
 
 - Add Entity specification.
   ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
-
-### Common
-
-- Add `AttributeValueDepthLimit` for nested array and map attribute values.
-  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
 
 ### OpenTelemetry Protocol
 
@@ -93,10 +113,6 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
-
-### SDK Configuration
-
-### Supplementary Guidelines
 
 ### OTEPs
 
@@ -124,9 +140,6 @@ release.
 
 - Amend the description of Composite/Composable samplers.
   ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
-
-- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
-  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
 
 ### Logs
 
