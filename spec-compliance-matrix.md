@@ -240,7 +240,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Detach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
 | Get current Context |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Global Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
