@@ -109,7 +109,7 @@ We introduce a single thread-local - `otel_thread_ctx_v1`. This is a pointer to 
 
 This is the attached thread record itself. SDK-side implementations may choose to hold multiple instances of this for active spans, and attach/detach them by setting the TLS to point to the appropriate entry. We err on the side of simplicity and support string (utf-8 bytes) attributes only.
 
-The record layout is byte-packed exactly as shown, with no implicit compiler padding between fields. Multi-byte fields are in native machine (host) endianness.
+The record layout is byte-packed exactly as shown, with no implicit compiler padding between fields. Types longer than uint8 are in native machine (host) endianness. uint8 arrays do not imply an endianness.
 
 | Name            |            | Data type                          | Notes                                                                                                                                                    |
 | :-------------- | :--------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -117,7 +117,7 @@ The record layout is byte-packed exactly as shown, with no implicit compiler pad
 | span-id         |            | uint8[8]                           | In W3C Trace Context format.                                                                                                                             |
 | valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set  when they read. All other values are reserved and treated as invalid. |
 | trace-flags     |            | uint8                              | W3C Trace Context trace-flags byte associated with trace-id/span-id above, including the sampled and random-trace-id bits. Zero if trace-id/span-id are unset. Also serves to align attrs-data-size at a two byte boundary.                          |
-| attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer. The total record is recommended to stay at or under 640 bytes. |
+| attrs-data-size |            | uint16                             | Size of `attrs-data` (native endianness). This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer. The total record is recommended to stay at or under 640 bytes. |
 | attrs-data      |            | uint8[]                            | A byte buffer containing the attributes themselves. Its total length is given by `attrs-data-size`.                                                      |
 |                 | [x].key    | uint8 (*See below for alternative) | Index into the key table. Readers MUST ignore entries whose key index is outside `threadlocal.attribute_key_map`.                                        |
 |                 | [x].length | uint8 (*See below for alternative) | Length of val string                                                                                                                                     |
