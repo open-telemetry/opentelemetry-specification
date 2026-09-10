@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Recommend instead of require global propagators.
+  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
+
 ### Traces
 
 ### Metrics
