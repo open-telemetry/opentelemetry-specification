@@ -14,6 +14,8 @@ release.
 
 ### Traces
 
+- Add the traces data model.
+
 ### Metrics
 
 - Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.

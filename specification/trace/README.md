@@ -5,3 +5,12 @@ path_base_for_github_subdir:
 --->
 
 # Trace
+
+## Specifications
+
+- [Traces Data Model](./data-model.md)
+- [Tracing API](./api.md)
+- [Tracing SDK](./sdk.md)
+- [TraceState Handling](./tracestate-handling.md)
+- [TraceState Probability Sampling](./tracestate-probability-sampling.md)
+- [Trace Exporters](./sdk_exporters/README.md)
