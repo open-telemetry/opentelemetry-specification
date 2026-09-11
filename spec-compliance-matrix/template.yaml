@@ -278,6 +278,7 @@ sections:
       - name: Get current Context
       - name: Composite Propagator
       - name: Global Propagator
+        optional: true
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator

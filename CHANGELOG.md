@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Recommend instead of require global propagators.
+  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
+
 ### Traces
 
 ### Metrics
@@ -26,6 +29,10 @@ release.
 ### Profiles
 
 ### Resource
+
+- Allow the named `service` resource detector (used via declarative config or explicit detector configuration) to fall back to
+  platform-specific sources when `OTEL_SERVICE_NAME` is not set.
+  ([#5280](https://github.com/open-telemetry/opentelemetry-specification/pull/5280))
 
 ### Entities
 
