@@ -160,6 +160,7 @@ Denotes the library that provides the instrumentation for a given [Instrumented 
 if it has built-in OpenTelemetry instrumentation.
 
 See [Overview](overview.md#instrumentation-libraries) for a more detailed definition and naming guidelines.
+See [Instrumentation Supplementary Guidelines](instrumentation-supplementary-guidelines.md) for cross-language authoring guidance.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 

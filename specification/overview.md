@@ -413,3 +413,6 @@ project name:
 * @{company}/opentelemetry-instrumentation-{component} (JavaScript)
 
 See [Instrumentation Library](glossary.md#instrumentation-library) for more information.
+
+For cross-language guidance on authoring instrumentation, see
+[Instrumentation Supplementary Guidelines](instrumentation-supplementary-guidelines.md).
