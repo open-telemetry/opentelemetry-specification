@@ -9,9 +9,6 @@ release.
 
 ### Context
 
-- Recommend instead of require global propagators.
-  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
-
 ### Traces
 
 ### Metrics
@@ -42,6 +39,9 @@ release.
 
 ### Context
 
+- Recommend instead of require global propagators.
+  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
+
 ### Traces
 
 ### Metrics
@@ -51,6 +51,8 @@ release.
 - Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
   Periodic exporting MetricReader.
   ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
+- Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.
+  ([#5291](https://github.com/open-telemetry/opentelemetry-specification/pull/5291))
 
 ### Logs
 

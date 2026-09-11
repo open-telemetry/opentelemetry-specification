@@ -352,7 +352,7 @@ sections:
       - name: Metric SDK supports per-timeseries cumulative start timestamps
         status: '?'
       - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
-        status: '-'
+        status: '+'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
