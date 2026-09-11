@@ -14,6 +14,9 @@ release.
 
 ### Traces
 
+- Add `ComposableAlwaysRecord` sampler.
+  ([#5266](https://github.com/open-telemetry/opentelemetry-specification/issues/5266))
+
 ### Metrics
 
 - Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.
