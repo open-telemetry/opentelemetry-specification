@@ -21,6 +21,9 @@ release.
 - Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
   Periodic exporting MetricReader.
   ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
+- Specify that `Shutdown` of the periodic exporting MetricReader MUST include
+  the effects of `ForceFlush`.
+  ([#5305](https://github.com/open-telemetry/opentelemetry-specification/pull/5305))
 
 ### Logs
 

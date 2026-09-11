@@ -73,12 +73,13 @@ weight: 3
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
     + [ForceFlush](#forceflush-1)
+    + [Shutdown](#shutdown-2)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
       - [ForceFlush](#forceflush-2)
-      - [Shutdown](#shutdown-2)
+      - [Shutdown](#shutdown-3)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -1610,6 +1611,10 @@ implementations MAY decide how to model **ERROR** and **NO ERROR**.
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event.
+
+#### Shutdown
+
+`Shutdown` MUST include the effects of [`ForceFlush`](#forceflush-1).
 
 ## MetricExporter
 
