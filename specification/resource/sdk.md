@@ -9,7 +9,7 @@ weight: 3
 
 A [Resource](../overview.md#resources) is an immutable representation of the
 observed entity for which telemetry is being produced. A Resource is composed of
-a collection of (**Development**)[Entities](#entities) and a set of
+a collection of (**Development**) [Entities](#entities) and a set of
 [Attributes](../common/README.md#attribute).
 For example, a process running in a container on Kubernetes has a Pod name, it
 is in a namespace and possibly is part of a Deployment which also has a name.
@@ -52,12 +52,17 @@ entities. An Entity has:
 
 - **Type**: A string that defines the type of the entity (e.g. `"service"`,
   `"host"`). MUST NOT change during the lifetime of the entity.
+- **Schema URL**: Identifies the schema version for the entity's attributes.
+  Used to determine entity merge compatibility.
 - **Identifying attributes**: Attributes that uniquely identify the entity.
   MUST NOT change during the lifetime of the entity. MUST contain at least one
   attribute. SHOULD be detected synchronously during
   SDK initialization.
 - **Descriptive attributes**: Non-identifying attributes of the entity. MAY
   change over the lifetime of the entity. MAY be empty.
+  <!-- TODO: The mechanism by which descriptive attributes change over the
+  lifetime of the entity (e.g. how changes are communicated to the SDK and
+  how the SDK propagates them) is not yet specified. -->
 
 A Resource MAY contain zero or more entities. The identifying and descriptive
 attributes of all entities in a Resource MUST be included in the Resource's
@@ -201,19 +206,18 @@ the detectors use different non-empty Schema URL it MUST be an error since it is
 impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
 
-When entity support is enabled (see [Resource Provider](#resource-provider)),
-resource detector packages MAY also return (**Development**)[Entities](#entities) alongside
+Resource detector packages MAY also return (**Development**) [Entities](#entities) alongside
 resource attributes.
 
 **Status**: [Development](../document-status.md)
 
-Entity-aware resource detectors SHOULD detect entity identifying attributes
-synchronously. Entity-aware resource detectors MAY detect entity descriptive
-attributes asynchronously (e.g. via a future or promise that resolves after
-initialization). When identifying attributes are detected synchronously but
-descriptive attributes are detected asynchronously, the entity MUST be returned
-with its identifying attributes immediately, and the descriptive attributes MUST
-be merged into the Resource when they become available.
+Entity-aware resource detectors SHOULD detect entity attributes synchronously.
+Entity attributes MAY be detected asynchronously (e.g. via a future or promise
+that resolves after initialization). The entity MUST be included in the Resource
+immediately with any already-resolved attributes. Unresolved attributes MAY be
+represented as asynchronous values. As attributes resolve, the Resource Provider
+MUST construct a new Resource reflecting the resolved values. Identifying
+attributes MUST all be resolved before the first export.
 
 #### Resource detector name
 
@@ -265,9 +269,8 @@ resource detectors and constructing a `Resource` for the SDK.
 The Resource Provider MUST:
 
 - Run all configured resource detectors.
-- When entity support is enabled, resolve conflicts when multiple entity-aware
-  resource detectors detect entities of the same type, using a user-controlled
-  priority order.
+- Resolve conflicts when multiple entity-aware resource detectors detect
+  entities of the same type, using a user-controlled priority order.
 - Construct a `Resource` from the detected resource attributes and any detected
   entities.
 
@@ -326,7 +329,7 @@ associated with a resource.
 
 There is no need to guarantee the order of the attributes.
 
-When entities are enabled and present for the Resource, this list MUST
+When entities are present for the Resource, this list MUST
 include all attributes, including those associated with entities.
 
 The most common operation when retrieving attributes is to enumerate over them. As
