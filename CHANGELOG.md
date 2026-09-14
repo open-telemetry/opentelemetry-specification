@@ -35,14 +35,12 @@ release.
 
 ### OTEPs
 
-## v1.61.0 (2026-09-11)
+## v1.61.0 (2026-09-14)
 
 ### Context
 
 - Recommend instead of require global propagators.
   ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
-
-### Traces
 
 ### Metrics
 
@@ -54,19 +52,11 @@ release.
 - Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.
   ([#5291](https://github.com/open-telemetry/opentelemetry-specification/pull/5291))
 
-### Logs
-
-### Baggage
-
-### Profiles
-
 ### Resource
 
 - Allow the named `service` resource detector (used via declarative config or explicit detector configuration) to fall back to
   platform-specific sources when `OTEL_SERVICE_NAME` is not set.
   ([#5280](https://github.com/open-telemetry/opentelemetry-specification/pull/5280))
-
-### Entities
 
 ### Common
 
@@ -74,8 +64,6 @@ release.
   ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
 - Remove requirement for attribute ordering from compliance matrix.
   ([#5205](https://github.com/open-telemetry/opentelemetry-specification/pull/5205))
-
-### OpenTelemetry Protocol
 
 ### Compatibility
 
@@ -86,12 +74,6 @@ release.
   ([#5125](https://github.com/open-telemetry/opentelemetry-specification/pull/5125))
 - Stabilize `resource_constant_labels` configuration for the Prometheus exporter.
   ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
-
-### SDK Configuration
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.60.0 (2026-08-07)
 
