@@ -255,16 +255,17 @@ resource detectors should check existing resource detectors to ensure their
 target name isn't already in use. Additionally, the following detector names are
 reserved for built-in resource detectors published with language SDKs:
 
-- `container`:
+* `container`:
   Populates [container.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
   attributes.
-- `host`:
+* `host`:
   Populates [host.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
   attributes.
-- `process`:
+* `process`:
   Populates [process.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
   attributes.
-- `service`: Populates `service.name` from the [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
+* `service`: Populates [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-name)
+  from the [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
   environment variable and SHOULD fall back to language- or platform-specific
   sources (for example `spring.application.name`, a JAR manifest, or a
   Composer/package manifest, at the discretion of the specific SDK); populates `service.instance.id`
