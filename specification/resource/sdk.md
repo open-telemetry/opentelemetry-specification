@@ -160,6 +160,16 @@ The resulting resource will have the Schema URL calculated as follows:
 When either Resource contains entities, the merge operation MUST follow the
 [resource data model's merge algorithm](./data-model.md#merging-resources).
 
+When invoking the [Merging An Entity into a Resource](./data-model.md#merging-an-entity-into-a-resource)
+algorithm, the old resource's entities MUST be used as the initial entity
+set `E`, and the updating resource's entities MUST be processed as the
+incoming merge list. This ensures the updating resource's entities take
+precedence when identity conflicts require entity replacement.
+
+For raw attribute merging, the updating resource's raw attributes MUST be
+processed as the higher-priority source in the algorithm's raw-attribute merge
+step.
+
 The resulting `SchemaURL` MUST match the behavior defined in the merge
 algorithm.
 
@@ -245,16 +255,16 @@ resource detectors should check existing resource detectors to ensure their
 target name isn't already in use. Additionally, the following detector names are
 reserved for built-in resource detectors published with language SDKs:
 
-* `container`:
-  Populates [container.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
+- `container`:
+  Populates [container.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
   attributes.
-* `host`:
-  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
+- `host`:
+  Populates [host.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
   attributes.
-* `process`:
-  Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
+- `process`:
+  Populates [process.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
   attributes.
-* `service`: Populates `service.name` based
+- `service`: Populates `service.name` based
   on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
   environment variable; populates `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
@@ -268,36 +278,12 @@ resource detectors and constructing a `Resource` for the SDK.
 
 The Resource Provider MUST:
 
-- Run all configured resource detectors.
-- Resolve conflicts when multiple entity-aware resource detectors detect
-  entities of the same type, using a user-controlled priority order.
-- Construct a `Resource` from the detected resource attributes and any detected
-  entities.
-
-Entity merging MUST occur first, followed by
-resource attribute merging using existing merge semantics. The entity merging
-algorithm is as follows:
-
-- Construct a set of detected entities, `E`.
-- All entity-aware resource detectors are sorted by priority (highest first).
-- For each entity-aware resource detector, collect detected entities.
-  - For each detected entity:
-    - If an entity with the same type already exists in `E`:
-      - If the entities [can be merged](../entities/data-model.md#merging-of-entities),
-        [merge](../entities/data-model.md#merging-of-entities) the descriptive
-        attributes (existing values take precedence).
-      - Otherwise, drop the new entity.
-    - Otherwise, add the entity to `E`.
-- Construct a `Resource` from the set `E`.
-  - If all entities within `E` have the same `schema_url`, set the Resource's
-    `schema_url` to match.
-  - Otherwise, leave the Resource `schema_url` empty.
+- Run all configured resource detectors. Detectors MAY run concurrently.
+- Merge detector results in the order they are configured according to [Merging an Entity Into a Resource](./data-model.md#merging-an-entity-into-a-resource)
 
 When descriptive attributes are detected asynchronously, the priority for
 merging MUST be determined by the configured order of the resource detectors,
-not by the order in which asynchronous results resolve. If a higher-priority
-detector's descriptive attributes resolve after a lower-priority detector's,
-the higher-priority detector's values MUST still take precedence.
+not by the order in which asynchronous results resolve.
 
 ### Specifying resource information via an environment variable
 
