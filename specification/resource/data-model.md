@@ -15,6 +15,7 @@ weight: 2
 - [Identity](#identity)
 - [Merging Resources](#merging-resources)
   * [Merging An Entity into a Resource](#merging-an-entity-into-a-resource)
+  * [Merging Resource Attributes into a Resource](#merging-resource-attributes-into-a-resource)
     + [Examples](#examples)
       - [Example 1: Entity replaces loose attribute](#example-1-entity-replaces-loose-attribute)
       - [Example 2: Loose attribute replaces entity attribute](#example-2-loose-attribute-replaces-entity-attribute)
