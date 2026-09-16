@@ -171,8 +171,8 @@ can_merge(current_entity, new_entity) {
 ```
 
 When merging entities, all attributes in description are merged together, with
-the current entity acting as "primary" where any conflicting attribute values
-will be chosen from the current entity.
+Conflicting descriptive attributes values from the new entity overwrite descriptive
+attribute values from the current entity.
 
 Here's an example algorithm that will merge:
 
@@ -180,10 +180,8 @@ Here's an example algorithm that will merge:
 merge(current_entity, new_entity) {
   if can_merge(current_entity, new_entity) {
     for attribute in new_entity.description {
-      // Current entity descriptions take precedence.
-      if attribute.key not in current_entity.description {
-        current_entity.description.insert(attribute)
-      }
+      // new_entity descriptions take precedence.
+      current_entity.description.insert(attribute)
     }
   }
 }
