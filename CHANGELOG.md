@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Add the Development `OnEnding` callback to the list of `SpanProcessor`
+  methods that cannot be called after `Shutdown`.
+  ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
+
 ### Metrics
 
 ### Logs
