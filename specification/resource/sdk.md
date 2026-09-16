@@ -236,7 +236,7 @@ attributes MUST all be resolved before the first export.
 Resource detectors SHOULD have a unique name for reference in configuration. For
 example, users list and configure individual resource detectors by name
 in [declarative configuration](../configuration/README.md#declarative-configuration).
-Names SHOULD be [snake case](https://en.wikipedia.org/wiki/Snake_case) and
+Names SHOULD be [snake_case](https://en.wikipedia.org/wiki/Snake_case) and
 consist of lowercase alphanumeric and `_` characters, which ensures they conform
 to declarative
 configuration [property name requirements](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#property-name-case).
@@ -295,7 +295,7 @@ information provided by the user, i.e. the user provided resource information
 has higher priority.
 
 The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
-key value pairs, represented as `key1=value1,key2=value2`.
+key-value pairs, represented as `key1=value1,key2=value2`.
 All attribute values MUST be considered strings. The `,` and `=` characters
 in keys and values MUST be percent encoded. Other characters MAY be
 [percent-encoded](https://datatracker.ietf.org/doc/html/rfc3986#section-2.1),
