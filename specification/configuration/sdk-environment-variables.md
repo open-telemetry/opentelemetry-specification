@@ -233,6 +233,7 @@ _is no specified default, or configuration via environment variables_.
 |-------------------------------|--------------------------------------|-------------|-------------|
 | OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost" | [String][]  |
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464        | [Integer][] |
+| OTEL_EXPORTER_PROMETHEUS_DEFAULT_HISTOGRAM_AGGREGATION | Configure the exporter's `default_aggregation` option (see above) for Histogram instrument kind. | `explicit_bucket_histogram` | [Enum][] |
 
 ## Exporter Selection
 
