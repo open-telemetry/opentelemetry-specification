@@ -52,6 +52,7 @@ weight: 3
         * [ComposableParentThreshold](#composableparentthreshold)
         * [ComposableRuleBased](#composablerulebased)
         * [ComposableAnnotating](#composableannotating)
+        * [ComposableAlwaysRecord](#composablealwaysrecord)
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
@@ -743,6 +744,37 @@ a `Composite(ComposableProbability(ratio))` configuration.
 
 * `attributes` - Attributes to add to sampled spans
 * `delegate` - The underlying sampler that makes the actual sampling decision
+
+###### ComposableAlwaysRecord
+
+`ComposableAlwaysRecord` is a sampler decorator that ensures every span is passed
+to the `SpanProcessor`, even those that would normally be dropped, at the
+composable layer. It mirrors the plain `AlwaysRecord` sampler but is usable
+inside a `CompositeSampler` where only `ComposableSampler` delegates are allowed.
+
+Based on the `SamplingIntent` from the wrapped delegate, `ComposableAlwaysRecord`
+MUST behave as follows:
+
+* If the delegate returns a `SamplingIntent` with no threshold (indicating `DROP`),
+  the wrapper MUST return a `SamplingIntent` that results in `RECORD_ONLY`.
+* Otherwise the wrapper MUST return the delegate's `SamplingIntent` unchanged.
+
+This ensures processors can observe all spans (for span-to-metrics pipelines)
+without requiring sampled export, while preserving the delegate's sampling
+threshold and `adjusted_count_reliable` semantics when a threshold is present.
+
+**Required parameters:**
+
+* `delegate` - The `ComposableSampler` being wrapped; it provides the original
+  sampling intent that `ComposableAlwaysRecord` modifies.
+* `delegate` MAY be any built-in or custom `ComposableSampler`.
+
+Note: When the delegate's intent indicates `DROP`, the resulting `RECORD_ONLY`
+intent MUST set `adjusted_count_reliable` to `false` and MUST NOT add attributes
+or modify the `TraceState` beyond ensuring the span is recorded. When the
+delegate indicates a sampling threshold, `ComposableAlwaysRecord` MUST NOT alter
+that threshold, `adjusted_count_reliable`, `attributes_provider`, or
+`trace_state_provider`.
 
 **Example configuration:**
 
