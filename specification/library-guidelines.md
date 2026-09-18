@@ -145,20 +145,22 @@ as the [OpenTelemetry Injector], [OpenTelemetry System Packages], and the
 [OpenTelemetry Operator] rely on this capability, a form of
 [automatic instrumentation](glossary.md#automatic-instrumentation).
 
-For its SDK and instrumentations to be injectable, an implementation:
+In order to be injectable, an SDK and related instrumentations (collectively referred
+to as "injectable implementation" in the remainder):
 
-* MUST provide a documented mechanism to activate the SDK and instrumentations
-  at process startup without modifying application code or build (e.g. by using an
-  environment variable, runtime flag, or attached agent instead). When it ships multiple
-  builds of a component for the same runtime (e.g. per CPU architecture or C
-  library flavor), it MUST document a deterministic logic to select the
-  right build of the component at runtime. The mechanism MUST be a no-op when
-  OpenTelemetry is already active in the process.
-* SHOULD declare the runtimes and runtime versions it supports and detect at
-  startup whether the current runtime is supported. On an unsupported or
-  incompatible runtime it MUST fail safe: it MUST NOT crash or prevent the
-  application from starting, MAY disable itself and, if it disables, SHOULD emit
-  diagnostics explaining why.
+* MUST provide a documented mechanism to activate SDK and instrumentations at
+  process startup without modifying application code or build (e.g. by using an
+  environment variable, runtime flag, or attached agent instead). When injectable
+  implementation ships multiple builds of a component for the same runtime
+  (e.g. per CPU architecture or C library flavor), they MUST document a
+  deterministic logic to select the right build of the components at runtime. The
+  injectable implementation MUST act as a no-op when an OpenTelemetry SDK is already
+  active in the process.
+* SHOULD document the runtimes and runtime versions it supports and detect at
+  startup whether the current runtime is supported. The injectable implementation
+  SHOULD fail safe: it SHOULD NOT crash or prevent the application from starting,
+  MAY disable itself and, if it disables itself, SHOULD emit actionable diagnostics
+  explaining why.
 * SHOULD isolate the SDK, instrumentations, and their non-OpenTelemetry
   dependencies from the application (e.g. via shading or a dedicated
   classloader), so injection does not change the versions or resolution of the
