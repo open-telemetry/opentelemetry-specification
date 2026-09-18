@@ -151,7 +151,7 @@ For its SDK and instrumentations to be injectable, an implementation:
   at process startup without modifying application code or build (e.g. by using an
   environment variable, runtime flag, or attached agent instead). When it ships multiple
   builds of a component for the same runtime (e.g. per CPU architecture or C
-  library flavor), it MUST documents a deterministic logic to select the
+  library flavor), it MUST document a deterministic logic to select the
   right build of the component at runtime. The mechanism MUST be a no-op when
   OpenTelemetry is already active in the process.
 * SHOULD declare the runtimes and runtime versions it supports and detect at
