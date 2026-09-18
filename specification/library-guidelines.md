@@ -148,8 +148,8 @@ as the [OpenTelemetry Injector], [OpenTelemetry System Packages], and the
 For its SDK and instrumentations to be injectable, an implementation:
 
 * MUST provide a documented mechanism to activate the SDK and instrumentations
-  at process startup without modifying application code or build (e.g. an
-  environment variable, runtime flag, or attached agent). When it ships multiple
+  at process startup without modifying application code or build (e.g. by using an
+  environment variable, runtime flag, or attached agent instead). When it ships multiple
   builds of a component for the same runtime (e.g. per CPU architecture or C
   library flavor), it MUST documents a deterministic logic to select the
   right build of the component at runtime. The mechanism MUST be a no-op when
