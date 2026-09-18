@@ -134,3 +134,48 @@ safeties should API implementations provide and how they should be documented:
 * [Metrics API](./metrics/api.md#concurrency-requirements)
 * [Metrics SDK](./metrics/sdk.md#concurrency-requirements)
 * [Tracing API](./trace/api.md#concurrency-requirements)
+
+### Automatic Injection
+
+**Status**: [Development](document-status.md)
+
+Injection is the automatic activation of the SDK and instrumentations in a
+process **without changing the application's source code or build**. Tools such
+as the [OpenTelemetry Injector], [OpenTelemetry System Packages], and the
+[OpenTelemetry Operator] rely on this capability, a form of
+[automatic instrumentation](glossary.md#automatic-instrumentation).
+
+In order to be injectable, an SDK and related instrumentations (collectively referred
+to as "injectable implementation" in the remainder):
+
+* MUST provide a documented mechanism to activate SDK and instrumentations at
+  process startup without modifying application code or build (e.g. by using an
+  environment variable, runtime flag, or attached agent instead). When injectable
+  implementation ships multiple builds of a component for the same runtime
+  (e.g. per CPU architecture or C library flavor), they MUST document a
+  deterministic logic to select the right build of the components at runtime. The
+  injectable implementation MUST act as a no-op when an OpenTelemetry SDK is already
+  active in the process.
+* SHOULD document the runtimes and runtime versions it supports and detect at
+  startup whether the current runtime is supported. The injectable implementation
+  SHOULD fail safe: it SHOULD NOT crash or prevent the application from starting,
+  MAY disable itself and, if it disables itself, SHOULD emit actionable diagnostics
+  explaining why.
+* SHOULD isolate the SDK, instrumentations, and their non-OpenTelemetry
+  dependencies from the application (e.g. via shading or a dedicated
+  classloader), so injection does not change the versions or resolution of the
+  application's own dependencies. When that is not possible, for example due to
+  limitations of the runtime, it SHOULD avoid whenever possible non-vendored
+  dependencies (e.g., by using shading in Java).
+* SHOULD support
+  [declarative configuration](configuration/README.md#declarative-configuration),
+  including [language-specific
+  instrumentation configurations](https://github.com/open-telemetry/opentelemetry-configuration/blob/v1.1.0/schema/instrumentation.yaml),
+  so injectors can configure it and other SDKs in other languages through a
+  single file.
+* SHOULD exercise its injection contract in CI, so that changes which break
+  injectability are caught before release.
+
+[OpenTelemetry Injector]: https://github.com/open-telemetry/opentelemetry-injector
+[OpenTelemetry Operator]: https://github.com/open-telemetry/opentelemetry-operator
+[OpenTelemetry System Packages]: https://github.com/open-telemetry/opentelemetry-packaging
