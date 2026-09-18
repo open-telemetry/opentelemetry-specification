@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add the traces data model.
+
 ### Metrics
 
 - Specify that `Shutdown` of the periodic exporting MetricReader MUST include
