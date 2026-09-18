@@ -44,6 +44,10 @@ release.
 
 ### Supplementary Guidelines
 
+- Add non-normative "Instrumentation Supplementary Guidelines" consolidating
+  cross-language guidance for instrumentation library authors.
+  ([#5148](https://github.com/open-telemetry/opentelemetry-specification/issues/5148))
+
 ### OTEPs
 
 ## v1.61.0 (2026-09-14)
