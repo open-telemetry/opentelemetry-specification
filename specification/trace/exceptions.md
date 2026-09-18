@@ -1,6 +1,8 @@
 # Exceptions
 
-**Status**: [Stable](../document-status.md), Unless otherwise specified.
+**Status**: [Deprecated](../document-status.md), follow the
+[semantic conventions for recording exceptions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md#recording-exceptions)
+instead.
 
 This document defines how to record exceptions and their attributes.
 
@@ -18,8 +20,6 @@ if and only if it remains unhandled when the span ends and causes the span statu
 to be set to ERROR.
 
 The name of the event MUST be `"exception"`.
-
-**Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md) document for the details on how to report errors across signals.
 
 A typical template for an auto-instrumentation implementing this semantic convention
 using an [API-provided `recordException` method](api.md#record-exception)
