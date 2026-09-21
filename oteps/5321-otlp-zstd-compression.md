@@ -54,8 +54,8 @@ force every minimal/vendor receiver to take on a new dependency to stay complian
 - **Receiver conformance**: gRPC receivers SHOULD register a `zstd` compressor the same way they
   do `gzip`. HTTP receivers SHOULD accept `Content-Encoding: zstd` and MUST return `415` for any
   encoding they don't support.
-- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` (HTTP) on an unsupporting receiver. No new
-  client-side error modes.
+- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` (HTTP) on a receiver that doesn't support `zstd`.
+  No new client-side error modes.
 - **Reference implementation** (non-normative): [otel-go#8985][otel-go-pr], blocked pending this
   OTEP — pooled `zstd.Encoder`/`Decoder` via `klauspost/compress/zstd`, registered as a
   `grpc/encoding.Compressor`. Concurrency pinned to 1: OTLP batches are too small to benefit from
@@ -107,7 +107,7 @@ force every minimal/vendor receiver to take on a new dependency to stay complian
 
 ## Prototypes
 
-- [otel-go#8985][otel-go-pr] — full implementation for otlptracegrpc/otlpmetricgrpc, with
+- [otel-go#8985][otel-go-pr] — full implementation for `otlptracegrpc`/`otlpmetricgrpc`, with
   wire-level tests asserting the negotiated codec. Blocked pending this OTEP.
 
 ## Future possibilities
