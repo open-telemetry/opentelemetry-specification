@@ -97,7 +97,7 @@ For example:
 
 #### Resource Detection
 
-Cloud vendors are encouraged to provide packages to detect resource information from the environment. These MUST be implemented outside of the SDK. See [Resource SDK](./resource/sdk.md#detecting-resource-information-from-the-environment) for more details.
+Cloud vendors are encouraged to provide packages to detect resource information from the environment. These MUST be implemented outside of the SDK. See [Resource SDK](./resource/sdk.md#resource-detector) for more details.
 
 ### Alternative Implementations
 
