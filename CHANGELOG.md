@@ -11,7 +11,15 @@ release.
 
 ### Traces
 
+- Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
+  allowed after `Shutdown`.
+  ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
+
 ### Metrics
+
+- Specify that `Shutdown` of the periodic exporting MetricReader MUST include
+  the effects of `ForceFlush`.
+  ([#5305](https://github.com/open-telemetry/opentelemetry-specification/pull/5305))
 
 ### Logs
 
@@ -31,6 +39,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Stabilize Prometheus Info metric transformation.
+  ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
 
 ### SDK Configuration
 
@@ -194,6 +205,8 @@ release.
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute collection in non-OTLP protocols.
   ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
+- Stabilize Attribute and Attribute Collection representation for non-OTLP.
+  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
 ### Compatibility
 
