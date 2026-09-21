@@ -137,7 +137,7 @@ The following table lists the current status of all SDK plugin components in the
 
 | SDK plugin component                                                                        | Declarative config type                                                                                                    |
 |---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) |
+| [resource detector](../resource/sdk.md#resource-detector) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) |
 | [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel-config/types/#type-textmappropagator)                         |
 | [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)                                   |
 | [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanprocessor)                                 |
