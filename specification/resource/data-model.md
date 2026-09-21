@@ -82,7 +82,7 @@ We define the following algorithm for merging an Entity into an existing Resourc
 
 ### Merging Resource Attributes into a Resource
 
-When merging a set of attributes into a Resource, the incoming attributes overwrite existing attributes. If any attribute being overwritten is a part of an Entity, drop that Entity's `EntityRef`, retaining its other attributes as unassociated attributes.
+When merging a set of attributes into a Resource, the incoming attributes overwrite existing attributes. If any attribute being overwritten is a part of an Entity, the Entity is removed and all non-conflicting attributes of that entity are added to the Resource as unassociated attributes.
 
 #### Examples
 
