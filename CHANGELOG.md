@@ -47,6 +47,10 @@ release.
 
 ### SDK Configuration
 
+- Declarative config should gracefully degrade when encountering unrecognized
+  resource detectors.
+  ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
+
 ### Supplementary Guidelines
 
 ### OTEPs
