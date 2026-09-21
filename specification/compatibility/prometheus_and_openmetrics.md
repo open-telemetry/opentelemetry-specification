@@ -170,7 +170,7 @@ A [Prometheus StateSet](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/sp
 
 ### Unknown-typed
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 
