@@ -135,20 +135,22 @@ configuration model interpretation.
 
 The following table lists the current status of all SDK plugin components in the configuration data model:
 
-| SDK plugin component                                                                        | Declarative config type                                                                                                    |
-|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel-config/types/#type-textmappropagator)                         |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)                                   |
-| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanprocessor)                                 |
-| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://opentelemetry.io/docs/specs/otel-config/types/#type-sampler)                                             |
-| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://opentelemetry.io/docs/specs/otel-config/types/#type-idgenerator)                                     |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pullmetricexporter)                       |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pushmetricexporter)                       |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://opentelemetry.io/docs/specs/otel-config/types/#type-metricproducer)                               |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                         |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordexporter)                         |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordprocessor)                       |
+| SDK plugin component                                                                        | Declarative config type                                                                                                    | Missing provider behavior **[1]** |
+|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) | warn and skip                         |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel-config/types/#type-textmappropagator)                         | error                                 |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)                                   | error                                 |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanprocessor)                                 | error                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://opentelemetry.io/docs/specs/otel-config/types/#type-sampler)                                             | error                                 |
+| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://opentelemetry.io/docs/specs/otel-config/types/#type-idgenerator)                                     | error                                 |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pullmetricexporter)                       | error                                 |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pushmetricexporter)                       | error                                 |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://opentelemetry.io/docs/specs/otel-config/types/#type-metricproducer)                               | error                                 |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                         | error                                 |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordexporter)                         | error                                 |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordprocessor)                       | error                                 |
+
+**[1]**: Behavior when no `PluginComponentProvider` is registered for a name referenced in the configuration model. See [Create](#create) for details.
 
 ##### PluginComponentProvider operations
 
@@ -293,7 +295,17 @@ the SDK, Create MUST resolve the component using [Create Component](#create-comp
 of the [`PluginComponentProvider`](#plugincomponentprovider) of the corresponding `type`
 and `name` used to [register](#register-plugincomponentprovider), including the
 configuration `properties` as an argument. If no `PluginComponentProvider` is
-registered with the `type` and `name`, Create SHOULD return an error.
+registered with the `type` and `name`, Create's behavior is determined by the
+component's `Missing provider behavior` in
+the [Supported SDK plugin components](#supported-sdk-plugin-components) table:
+
+* `error`: Create SHOULD return an error.
+* `warn and skip`: Create SHOULD generate a warning identifying the unrecognized
+  name and gracefully ignore the reference. This allows a portable configuration
+  to reference language-specific components (e.g. resource detectors beyond the
+  reserved names in [Resource detector name](../resource/sdk.md#resource-detector-name))
+  without causing startup failures in SDKs that don't recognize them.
+
 If [Create Component](#create-component) returns an error, Create SHOULD propagate the
 error.
 
