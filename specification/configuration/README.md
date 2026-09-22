@@ -17,9 +17,12 @@ choose a name that uniquely identifies the component within its containing SDK
 instance.
 
 Component names may be used by configuration and management mechanisms to refer
-to individual component instances. Their use in self-observability telemetry is
-defined by the [SDK component name
-requirements](../self-observability.md#sdk-component-names).
+to individual component instances. When a component with a configured name
+emits self-observability telemetry containing
+[`otel.component.name`][otel-component-name], the attribute MUST use the
+configured name.
+
+[otel-component-name]: https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-component-name
 
 ## Configuration Interfaces
 
