@@ -146,8 +146,8 @@ as the [OpenTelemetry Injector], [OpenTelemetry System Packages], and the
 [automatic instrumentation](glossary.md#automatic-instrumentation).
 
 The support for injection by an SDK and related instrumentations (collectively
-referred to as "injectable implementation") is optional. An injectable
-implementation:
+referred to as "injectable implementation") is optional. If injection is supported, the following requirements apply to the
+injectable implementation:
 
 * MUST provide a documented mechanism to activate SDK and instrumentations at
   process startup without modifying application code or build (e.g. by using an
