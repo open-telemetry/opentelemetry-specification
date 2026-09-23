@@ -10,6 +10,20 @@ OpenTelemetry SDK components are highly configurable. This specification
 outlines the mechanisms by which OpenTelemetry components can be configured. It
 does not attempt to specify the details of what can be configured.
 
+## SDK component names
+
+SDK components MAY allow users to configure an optional name. Users SHOULD
+choose a name that uniquely identifies the component within its containing SDK
+instance.
+
+Component names may be used by configuration and management mechanisms to refer
+to individual component instances. When a component with a configured name
+emits self-observability telemetry containing
+[`otel.component.name`][otel-component-name], the attribute MUST use the
+configured name.
+
+[otel-component-name]: https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/#otel-component-name
+
 ## Configuration Interfaces
 
 ### Programmatic
