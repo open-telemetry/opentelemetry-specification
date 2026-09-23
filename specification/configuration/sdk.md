@@ -289,11 +289,12 @@ configuring [`HttpTls`](https://opentelemetry.io/docs/specs/otel-config/types/#t
 and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
-When encountering a reference to
+If encountering a reference to
 an [SDK plugin component](#sdk-extension-components) which is not built-in to
-the SDK, Create MUST resolve the component using [Create Component](#create-component)
-of the [`PluginComponentProvider`](#plugincomponentprovider) of the corresponding `type`
-and `name` used to [register](#register-plugincomponentprovider), including the
+the SDK, and a `PluginComponentProvider` is registered with the corresponding
+`type` and `name` used to [register](#register-plugincomponentprovider), Create
+MUST resolve the component using [Create Component](#create-component) of the
+[`PluginComponentProvider`](#plugincomponentprovider), including the
 configuration `properties` as an argument. If no `PluginComponentProvider` is
 registered with the `type` and `name`, Create's behavior is determined by the
 component's `Missing provider behavior` in
