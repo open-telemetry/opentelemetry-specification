@@ -128,9 +128,9 @@ sections:
       - heading: '[Span exceptions](specification/trace/api.md#record-exception)'
         features:
           - name: RecordException
-            status: '+'
+            status: '-'
           - name: RecordException with extra parameters
-            status: '+'
+            status: '-'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: Allow samplers to modify tracestate
@@ -152,7 +152,7 @@ sections:
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '+'
+            status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
             status: '+'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
@@ -168,19 +168,19 @@ sections:
       - name: The API provides a way to set and get a global default `MeterProvider`.
         status: '-'
       - name: It is possible to create any number of `MeterProvider`s.
-        status: '-'
+        status: '+'
       - name: '`MeterProvider` provides a way to get a `Meter`.'
-        status: '-'
+        status: '+'
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
-        status: '-'
+        status: '+'
       - name: '`get_meter` accepts `attributes`.'
-        status: '-'
+        status: '+'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
-        status: '-'
+        status: '+'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
         status: '-'
       - name: Associate `Meter` with `InstrumentationScope`.
-        status: '-'
+        status: '+'
       - name: '`Counter` instrument is supported.'
         status: '-'
       - name: '`AsynchronousCounter` instrument is supported.'
@@ -192,17 +192,17 @@ sections:
       - name: '`Gauge` instrument is supported.'
         status: '-'
       - name: '`UpDownCounter` instrument is supported.'
-        status: '-'
+        status: '+'
       - name: '`AsynchronousUpDownCounter` instrument is supported.'
         status: '-'
       - name: Instruments have `name`
-        status: '-'
+        status: '+'
       - name: Instruments have kind.
         status: '-'
       - name: Instruments have an optional unit of measure.
-        status: '-'
+        status: '+'
       - name: Instruments have an optional description.
-        status: '-'
+        status: '+'
       - name:
           A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under
           the same `Meter` using the same `name`.
@@ -212,11 +212,11 @@ sections:
       - name: It is possible to register two instruments with same `name` under different `Meter`s.
         status: '-'
       - name: Instrument names conform to the specified syntax.
-        status: '-'
+        status: '+'
       - name: Instrument units conform to the specified syntax.
-        status: '-'
+        status: '+'
       - name: Instrument descriptions conform to the specified syntax.
-        status: '-'
+        status: '+'
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
         status: '-'
       - name: Instrument supports the advisory Attributes parameter.
@@ -230,7 +230,7 @@ sections:
       - name: All methods of any instrument are safe to be called concurrently.
         status: '-'
       - name: '`MeterProvider` allows a `Resource` to be specified.'
-        status: '-'
+        status: '+'
       - name: A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.
         status: '-'
       - name:
@@ -240,7 +240,7 @@ sections:
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope`
           instance stored in the `Meter`.
-        status: '-'
+        status: '+'
       - name: Configuration is managed solely by the `MeterProvider`.
         status: '-'
       - name: The `MeterProvider` provides methods to update the configuration
@@ -405,10 +405,10 @@ sections:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
         status: '+'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
-        status: '-'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
-        status: '-'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
+        status: '+'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
+        status: '+'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -470,35 +470,35 @@ sections:
       - name: OTEL_EXPORTER_ZIPKIN_*
         status: '-'
       - name: OTEL_TRACES_EXPORTER
-        status: '-'
+        status: '+'
       - name: OTEL_METRICS_EXPORTER
         status: '-'
       - name: OTEL_LOGS_EXPORTER
-        status: '-'
+        status: '+'
       - name: OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_SPAN_EVENT_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_SPAN_LINK_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_LINK_ATTRIBUTE_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_TRACES_SAMPLER
-        status: '-'
+        status: '+'
       - name: OTEL_TRACES_SAMPLER_ARG
         status: '-'
       - name: OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
-        status: '-'
+        status: '+'
       - name: OTEL_METRIC_EXPORT_INTERVAL
         status: '-'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
@@ -510,17 +510,17 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '-'
       - name: OTEL_CONFIG_FILE
-        status: '-'
+        status: '+'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
-        status: '-'
+        status: '+'
       - name: The `Parse` operation accepts the configuration YAML file format
-        status: '-'
+        status: '+'
       - name: The `Parse` operation performs environment variable substitution
         status: '-'
       - name: The `Parse` operation returns configuration model
-        status: '-'
+        status: '+'
       - name: The `Parse` operation resolves plugin component configuration to `properties`
         status: '-'
       - name: '`Create` SDK components'
@@ -560,9 +560,9 @@ sections:
           - name: OTLP/HTTP gzip Content-Encoding support
             status: '+'
           - name: Enforces request size limit
-            status:
+            status: '-'
           - name: Enforces response size limit
-            status:
+            status: '+'
           - name: Concurrent sending
             status: '+'
           - name: Honors retryable responses with backoff

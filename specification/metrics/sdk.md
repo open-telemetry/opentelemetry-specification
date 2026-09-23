@@ -73,12 +73,13 @@ weight: 3
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
     + [ForceFlush](#forceflush-1)
+    + [Shutdown](#shutdown-2)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
       - [ForceFlush](#forceflush-2)
-      - [Shutdown](#shutdown-2)
+      - [Shutdown](#shutdown-3)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -869,9 +870,9 @@ intervals.
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
 For asynchronous instrument, the start timestamp SHOULD be:
-  - The creation time of the instrument, if the first series measurement
+- The creation time of the instrument, if the first series measurement
     occurred in the first collection interval,
-  - Otherwise, the timestamp of the collection interval prior to the first
+- Otherwise, the timestamp of the collection interval prior to the first
     series measurement.
 
 ### Cardinality limits
@@ -1552,20 +1553,19 @@ Configurable parameters:
   configured and results in splitting the collected metric data into multiple
   batches, `exportTimeoutMillis` applies to each individual `Export(batch)`
   invocation.
-* **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
-  maximum number of metric data points in a batch that are provided to a single
-  export.
+* `maxExportBatchSize` - the maximum number of metric data points in a batch
+  that are provided to a single export. The default is that the batch size is not
+  limited.
 
-**Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
-configured, the reader MUST ensure no batch provided to `Export` exceeds the
-`maxExportBatchSize` by splitting the batch of metric data points into smaller
-batches. The initial batch of metric data MUST be split into as many "full"
-batches of size `maxExportBatchSize` as possible -- even if this splits up data
-points that belong to the same metric into different batches. The reader MUST
-ensure all batches produced from a single `Collect()` are provided to `Export`
-serially and in-order before metric data points from a subsequent `Collect()`
-are provided. The reader MUST NOT combine metrics from different `Collect()`
-calls into the same batch provided to `Export`.
+When `maxExportBatchSize` is configured, the reader MUST ensure no batch
+provided to `Export` exceeds the `maxExportBatchSize` by splitting the batch of
+metric data points into smaller batches. The initial batch of metric data MUST
+be split into as many "full" batches of size `maxExportBatchSize` as possible --
+even if this splits up data points that belong to the same metric into different
+batches. The reader MUST ensure all batches produced from a single `Collect()`
+are provided to `Export` serially and in-order before metric data points from a
+subsequent `Collect()` are provided. The reader MUST NOT combine metrics from
+different `Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently. If an export is still in
@@ -1611,6 +1611,10 @@ implementations MAY decide how to model **ERROR** and **NO ERROR**.
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event.
+
+#### Shutdown
+
+`Shutdown` MUST include the effects of [`ForceFlush`](#forceflush-1).
 
 ## MetricExporter
 
