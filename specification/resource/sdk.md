@@ -243,10 +243,10 @@ configuration [property name requirements](https://github.com/open-telemetry/ope
 
 Resource detector names SHOULD reflect
 the [root namespace](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#general-naming-considerations)
-of attributes they populate. For example, a resource detector named `os`
-populates `os.*` attributes. Resource detectors which populate attributes from
-multiple root namespaces SHOULD choose a name which appropriately conveys their
-purpose.
+of attributes and entities they populate. For example, a resource detector named
+`os` populates an `os` entity with `os.*` attributes. Resource detectors which
+populate attributes from multiple root namespaces SHOULD choose a name which
+appropriately conveys their purpose.
 
 An SDK which identifies multiple resource detectors with the same name SHOULD
 report an error. In order to limit collisions, resource detectors SHOULD
@@ -256,20 +256,34 @@ target name isn't already in use. Additionally, the following detector names are
 reserved for built-in resource detectors published with language SDKs:
 
 * `container`:
-  Populates [container.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
-  attributes.
+  Populates [container](https://opentelemetry.io/docs/specs/semconv/registry/entities/container/)
+  entity, or all relevant attributes of the entity, if entity support is not
+  included yet.
 * `host`:
-  Populates [host.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
-  attributes.
+  Populates [host](https://opentelemetry.io/docs/specs/semconv/registry/entities/host/) and [os](https://opentelemetry.io/docs/specs/semconv/registry/entities/os/)
+  entities, or all relevant attributes of the entities, if entity support is
+  not included yet.
 * `process`:
-  Populates [process.\*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
-  attributes.
-* `service`: Populates [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-name)
+  Populates [process](https://opentelemetry.io/docs/specs/semconv/registry/entities/process/)
+  entities, or all relevant attributes of the entities, if entity support is
+  not included yet.
+* `service`: Populates `service` and `service.instance` entities described
+  [here](https://opentelemetry.io/docs/specs/semconv/registry/entities/service/),
+  or all relevant attributes of the entities, if entity support is not included
+  yet. Populates [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-name)
   from the [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
   environment variable and SHOULD fall back to language- or platform-specific
   sources (for example `spring.application.name`, a JAR manifest, or a
   Composer/package manifest, at the discretion of the specific SDK); populates `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
+* `env`: Populates entities based on [Entity Propagation](../entities/entity-propagation.md).
+
+#### Entity-aware resource detectors
+
+**Status**: [Development](../document-status.md)
+
+Resource detectors SHOULD produce resources with [entities](../entities/data-model.md)
+attached.
 
 ### Resource Provider
 

@@ -29,10 +29,15 @@ release.
 
 ### Resource
 
+- Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
+
 ### Entities
 
 - Add in-development entity-resource startup specification.
   ([#5057](https://github.com/open-telemetry/opentelemetry-specification/pull/5057))
+- Remove `OTEL_ENTITIES` from general env var configuration spec.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Common
 
