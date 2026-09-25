@@ -166,6 +166,48 @@ libraries.
   also flagged that otel-go silently falls back to no compression on an unrecognized
   `WithCompressor` value instead of erroring — a real bug, but a separate, SDK-specific one.
 
+## Compliance gaps in existing implementations
+
+The prior art above shipped before this OTEP's frame profile and fallback requirement existed, so
+none of it is automatically compliant once this lands — including the Collector's own native
+support, cited above as the strongest example of "the ecosystem is already ahead of the spec."
+Concretely, checked against the profile in [Internal details](#internal-details):
+
+- **Decoders need no changes.** Single-segment framing is purely an encoder-side choice; any
+  RFC 8878-compliant decoder — every implementation checked here included — already decodes a
+  single-segment frame correctly with no code change. The gaps below are all encoder-side.
+- **`opentelemetry-rust`**:
+  - gRPC (`zstd-tonic`): delegates entirely to `tonic::codec::CompressionEncoding::Zstd`. Framing
+    is tonic's implementation detail, not something `opentelemetry-rust` configures or asserts —
+    unverified against this profile one way or the other without checking tonic itself.
+  - HTTP (`zstd-http`): calls [`zstd::bulk::compress(&body, 0)`][rust-http-zstd] — a one-shot API,
+    unlike a streaming writer, but `opentelemetry-rust` doesn't explicitly request single-segment
+    framing; whether the underlying library's size-based heuristic happens to choose it isn't
+    asserted or tested.
+  - No dictionary use (default), and `zstd` is confirmed not defaulted (`resolve_compression`
+    returns `None` when nothing is configured). No gzip-fallback-on-rejection exists in
+    `process_body` — same gap as pre-OTEP otel-go.
+  - Cargo feature gating (`zstd-tonic`/`zstd-http`, opt-in, off by default) already exceeds this
+    OTEP's opt-in bar — the otel-go prototype only matches this now, via the `nozstd` build tag
+    added in this revision.
+- **`opentelemetry-java-contrib` `compressor-zstd`**: [wraps `ZstdOutputStream`][java-zstd] — a
+  streaming writer, architecturally identical to otel-go's pre-OTEP implementation. Not
+  single-segment, no window-size bound, no gzip-fallback. Would need the same rework this revision
+  gave otel-go.
+- **Collector `configgrpc`**: [also a streaming `zstd.NewWriter`][collector-configgrpc-zstd], with
+  a fixed 512 KB window (explicitly chosen to bound memory, per the code comment) rather than
+  single-segment framing. Not compliant with this OTEP's profile as written today, despite being
+  cited in Motivation as prior art the spec is catching up to — that framing was true for "zstd
+  exists as an option" but not for "zstd exists in the exact shape this OTEP specifies." `confighttp`
+  is receiver-side decode only ([`availableDecoders["zstd"]`][collector-confighttp-zstd]) and needs
+  no change per the point above.
+
+None of this blocks the OTEP — it means an implementation note (`gzip`'s spec compliance didn't
+require every existing ad hoc implementation to already match it either), not a prerequisite. But
+reviewers citing "it's already shipped elsewhere" as evidence of interoperability should read that
+claim narrowly: shipped as a codec choice, yes; interoperable per this specific profile, not yet
+verified for any of them except the otel-go prototype this revision rewrote.
+
 ## Open questions
 
 - Does this need to say anything about the profiles signal specifically, or is transport-level,
@@ -205,3 +247,7 @@ libraries.
 [grpc-compression-spec]: https://github.com/grpc/grpc/blob/master/doc/compression.md
 [otel-go-issue]: https://github.com/open-telemetry/opentelemetry-go/issues/8984
 [otel-go-pr]: https://github.com/open-telemetry/opentelemetry-go/pull/8985
+[rust-http-zstd]: https://github.com/open-telemetry/opentelemetry-rust/blob/main/opentelemetry-otlp/src/exporter/http/mod.rs
+[java-zstd]: https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/compressors/compressor-zstd/src/main/java/io/opentelemetry/contrib/compressor/zstd/ZstdCompressor.java
+[collector-configgrpc-zstd]: https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/configgrpc/internal/grpccompression/zstd/zstd.go
+[collector-confighttp-zstd]: https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/compression.go
