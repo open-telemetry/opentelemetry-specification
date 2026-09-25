@@ -39,14 +39,19 @@ If the configured receiver doesn't support `zstd`:
 
 - **gRPC**: per the [gRPC compression spec][grpc-compression-spec], the server returns
   `UNIMPLEMENTED` with its supported encodings in `grpc-accept-encoding`. Existing gRPC behavior.
-- **HTTP**: a receiver that doesn't support the request's `Content-Encoding` MUST reject it
-  (`415 Unsupported Media Type`) rather than silently treating the body as uncompressed. This MUST
-  is new normative text — HTTP has no built-in equivalent of gRPC's `UNIMPLEMENTED`.
+- **HTTP**: a receiver that doesn't support the request's `Content-Encoding` MUST reject it rather
+  than silently treating the body as uncompressed. It SHOULD do so with `415 Unsupported Media
+  Type`; `400 Bad Request` is also conformant. (The reference Collector implementation already
+  returns `400` for an unrecognized `Content-Encoding` — see
+  [`confighttp/compression.go`][collector-confighttp] — so this OTEP recognizes existing practice
+  rather than requiring every deployed receiver to change.) HTTP has no built-in equivalent of
+  gRPC's `UNIMPLEMENTED`, so senders MUST treat both statuses as the rejection signal below.
 
 Both statuses are non-retryable under OTLP's existing retry semantics — so "fail loud instead of
 silently dropping data" isn't actually true as stated: a compliant `zstd` sender talking to a
 compliant SHOULD-level non-supporting receiver drops every batch, both sides in spec. To close
-that gap: on receiving `UNIMPLEMENTED` or `415` for a `zstd`-compressed export, the exporter MUST
+that gap: on receiving `UNIMPLEMENTED` (gRPC) or a non-2xx compression-rejection status (`415` or
+`400`, HTTP) for a `zstd`-compressed export, the exporter MUST
 retry that batch once with `gzip` before treating the export as failed, and SHOULD log a warning
 when this fallback fires. This is one hardcoded fallback rung, not general negotiation or
 capability probing — an exporter may keep trying `zstd` on every subsequent batch (simplest to
@@ -107,12 +112,12 @@ libraries.
   already behaves on an unrecognized `Compression` value — this OTEP doesn't change that, it only
   adds one more value implementations need to recognize going forward.
 - **Receiver conformance**: gRPC receivers SHOULD register a `zstd` compressor the same way they
-  do `gzip`. HTTP receivers SHOULD accept `Content-Encoding: zstd` and MUST return `415` for any
-  encoding they don't support.
+  do `gzip`. HTTP receivers SHOULD accept `Content-Encoding: zstd`, and MUST reject any encoding
+  they don't support with `415` (SHOULD) or `400` (MAY, matching existing Collector behavior).
 - **Exporter conformance**: SHOULD, not MUST — see Explanation.
-- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` (HTTP) on a receiver that doesn't support
-  `zstd`, followed by the mandatory gzip-retry described in Explanation. No other new client-side
-  error modes.
+- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` or `400` (HTTP) on a receiver that doesn't
+  support `zstd`, followed by the mandatory gzip-retry described in Explanation. No other new
+  client-side error modes.
 - **Reference implementation** (non-normative, gRPC only — see Prototypes): [otel-go#8985][otel-go-pr].
   Pooled `zstd.Encoder`/`Decoder` via `klauspost/compress/zstd`, registered as a
   `grpc/encoding.Compressor`. Concurrency pinned to 1: OTLP batches are too small to benefit from
@@ -166,7 +171,6 @@ libraries.
 - Does this need to say anything about the profiles signal specifically, or is transport-level,
   signal-agnostic wording sufficient? (Profiles dropped a *mandatory* gzip requirement for its
   on-disk format — a different axis from the transport compression here.)
-- Is `415` the right required HTTP status, or should `400` also be conformant?
 - Compression level: TC discussion (2026-09-23) raised that configurable zstd level matters
   because it drives memory consumption. This OTEP doesn't propose a level knob — doing so adds
   more config surface, compounding the `opentelemetry-configuration` schema work already required
@@ -193,6 +197,7 @@ libraries.
 - Revisiting SHOULD vs. MUST for `zstd` receiver/exporter support once adoption data exists.
 
 [exporter-spec]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md
+[collector-confighttp]: https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/compression.go
 [proto-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md
 [java-contrib-zstd]: https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/compressors/compressor-zstd/README.md
 [proto-629]: https://github.com/open-telemetry/opentelemetry-proto/issues/629
