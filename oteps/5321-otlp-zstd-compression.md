@@ -191,8 +191,10 @@ than not.
   `configcompression.Type.ValidateParams` validates it against `zlib`'s range for
   gzip/zlib/deflate, while for zstd "supports arbitrary levels: zstd will map any given level to
   the nearest internally supported level." No such knob exists on the SDK/exporter side today —
-  every exporter checked (this OTEP's own otel-go prototype, `opentelemetry-rust`) hardcodes the
-  library default rather than exposing one, so this would be new surface for exporters even though
+  checked `opentelemetry-go` (this OTEP's own prototype), `opentelemetry-rust`, and
+  `opentelemetry-java`, none of which expose one; all hardcode the compression library's default
+  rather than exposing a level parameter. Not an exhaustive survey of every language SDK, but this
+  would be new surface for exporters even though
   the Collector's config side already has it.
 - Is there appetite to eventually raise `zstd` receiver or exporter support from SHOULD to MUST,
   and what adoption bar would justify that?
