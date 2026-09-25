@@ -38,7 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  |  |  |  |  |  |  |  |  | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  | + |  |  |  |  |  | - |  | + |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -59,7 +59,6 @@ formats is required. Implementing more than one format is optional.
 | [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | N/A | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
 | String type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Boolean type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + | + |
@@ -76,21 +75,21 @@ formats is required. Implementing more than one format is optional.
 | Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span exceptions](specification/trace/api.md#record-exception) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| RecordException |  | + | + | + | + | + | + | + | - | - | + | - | + |
-| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | + |
+| RecordException |  | + | + | + | + | + | + | + | - | - | + | - | - |
+| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
-| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  | - |
+| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + | + |
-| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + | + |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + | + |
+| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + | - | + | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - | - | + | + |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  | + |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  | + |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  | - |  | + |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  | + |  | + |
-| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  | - |
-| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  |  |  | - |
-| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  |  |  | + |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  | - |  | - |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - | + |  |  |  |  |  |  |  | - |  | + |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - | + |  |  |  |  |  |  |  | + |  | + |
 
 ## Baggage
 
@@ -104,40 +103,40 @@ formats is required. Implementing more than one format is optional.
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | The API provides a way to set and get a global default `MeterProvider`. | X | + | + | + | + | + | + | + | + | + | - |  | - |
-| It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  | - |
-| `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  | - |
-| `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  | - |
-| `get_meter` accepts `attributes`. |  | + | - | - | + |  |  | + | + | + |  |  | - |
-| When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  | - |
+| It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  | + |
+| `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  | + |
+| `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  | + |
+| `get_meter` accepts `attributes`. |  | + | - | - | + |  |  | + | + | + | + |  | + |
+| When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  | + |
 | The fallback `Meter` `name` property keeps its original invalid value. | X | + | - | + | + | + | + |  | + | - | - |  | - |
-| Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + | + |  | - |
+| Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + | + |  | + |
 | `Counter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `Gauge` instrument is supported. |  | + | + | + | + | + | - | + | + | + | + |  | - |
-| `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
+| `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  | - |
+| Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | Instruments have kind. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| Instruments have an optional unit of measure. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| Instruments have an optional description. |  | + | + | + | + | + | + | + | + | + | + |  | - |
+| Instruments have an optional unit of measure. |  | + | + | + | + | + | + | + | + | + | + |  | + |
+| Instruments have an optional description. |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  | + | + | + | + | + | + |  |  | + | + |  | - |
-| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  | + | + |  | - |
+| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  | + | - | + |  |  | + | + |  | - |
 | It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  | - |
-| Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + | + |  | - |
-| Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  | - |
-| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  | - |
-| Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  | + |  | - |
+| Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + | + |  | + |
+| Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  | + |
+| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  | + |
+| Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  | + |  | + |  |  |  | + |  | - |
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  | - |  | - |
 | Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | + | + | - | - | - |
-| All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
-| All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
-| All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
-| `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  | - |
+| All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
+| All methods of `Meter` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
+| All methods of any instrument are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
+| `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  | + |  | + | + | - |  | - |
-| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  | + | + | + | + |  | + | + | + | + | + |  | - |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  | + | + | + | + |  | + | + | + | + | + |  | + |
 | Configuration is managed solely by the `MeterProvider`. |  | + | + | + | + |  | + | + | + | + | + |  | - |
 | The `MeterProvider` provides methods to update the configuration | X | - | + | - | + |  | - |  |  | - | + |  | - |
 | The updated configuration applies to all already returned `Meter`s. | if above | - | + | - | - |  | - |  |  | - | + |  | - |
@@ -146,9 +145,10 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  | - |
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  | - |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  |  |  | - |
-| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  | + |  | - |
+| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | + |  | - |  |  |  | - |  | - |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  | - |
+| The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching. | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Default` aggregation uses the specified aggregation by instrument. |  | + | + | + | + | + | + |  | + | + | + |  | - |
@@ -160,36 +160,36 @@ formats is required. Implementing more than one format is optional.
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | + |  | - |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  | - |
-| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - | + | + |  |  | + | + |  | - |
-| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | - | + | + |  |  | + | + |  | - |
+| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | + | + | + |  |  | + | + |  | - |
+| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | + | + | + |  |  | + | + |  | - |
 | The metrics Exporter `export` function receives a batch of metrics. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter `export` function returns `Success` or `Failure`. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter provides a `ForceFlush` function. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  | + | + | + | + | + | + | + |  | + | + |  | - |
 | The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  | - |
-| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| Exemplar sampling can be disabled. |  | + | - | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | + |  | + |  |  | + | + |  | - |
+| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| Exemplar sampling can be disabled. |  | + | - | - | + | + | + |  |  |  | + |  | - |
+| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | + | + | + |  |  |  | + |  | - |
 | Documentation notes that View-filtered attributes may still appear on Exemplars. |  | - | - | - | - | - | - | - | - | - | + | - | - |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - | + | + | + |  |  | - |  | - |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - | + | + | + |  |  | - |  | - |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - | + | + | + |  |  | + |  | - |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | + | + | + |  |  |  | + |  | - |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | + | + | + | + |  |  | - |  | - |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | + | + | + | + |  |  | - |  | - |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | + | + | + | + |  |  | + |  | - |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | + | + | + |  |  |  | + |  | - |
 | A metric Producer accepts an optional metric Filter |  | - | - |  |  |  | - |  |  |  |  |  | - |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - | - |  |  |  | - |  |  |  |  |  | - |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - | - |  |  |  | - |  |  |  |  |  | - |
 | Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  | - |
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  | - |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  | - |
-| Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  |  |  |  |  |  |  |  |  | - |
-| The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | - | + | - | - | - | - | - | - | - | - | - | - |
+| Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  | + |  |  |  |  |  |  |  | - |
+| The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | + | + | + | - | - | - | - | - | - | - | - | - |
 
 ## Logs
 
@@ -203,17 +203,17 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| Logger.Emit(LogRecord) with Exception parameter | X |  | + |  |  |  |  |  |  |  | - |  | + |
-| LogRecord.Set EventName |  | + | + |  |  | + |  |  | + | + |  |  | + |
+| Logger.Emit(LogRecord) with Exception parameter | X |  | + |  | + |  |  |  |  |  | - |  | + |
+| LogRecord.Set EventName |  | + | + |  | + | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
-| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  |  |
+| Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | LogRecordProcessor.Enabled | X | + | - |  |  |  |  |  | + |  | - |  | + |
 | OTLP/gRPC exporter |  | + | + | + | + |  |  | + | + | + | + |  | - |
 | OTLP/HTTP exporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| OTLP File exporter |  | - | + |  | - |  |  |  | - | + | - |  | - |
+| OTLP File exporter |  | - | + |  | + |  |  |  | - | + | - |  | - |
 | Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  | + |
 
@@ -226,8 +226,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  | + |
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | + |
-| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  | - |
+| [Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector) |  | + | + |  |  |  | - | + | + |  | + |  | + |
 
 ## Context Propagation
 
@@ -240,9 +240,9 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Detach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
 | Get current Context |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Global Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | + | + | - |
 | OT Propagator | X | + | + | + | + |  |  |  |  |  | - |  | - |
 | OpenCensus Binary Propagator |  | + | - |  |  |  |  |  |  |  |  |  | - |
@@ -265,30 +265,30 @@ Note: Support for environment variables is optional.
 | OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | - | - | - |
 | OTEL_PROPAGATORS | - | + |  | + | + | + | + | - | - | - | - | - |
 | OTEL_BSP_* | + | + | + | + | + | + | + | + | + | + | - | - |
-| OTEL_BLRP_* | + | + |  |  | + |  | + | + | + | + |  | - |
+| OTEL_BLRP_* | + | + |  | + | + |  | + | + | + | + |  | - |
 | OTEL_EXPORTER_OTLP_* | + | + |  | + | + | + | + | + | + | + | - | - |
 | OTEL_EXPORTER_ZIPKIN_* | + | + |  | + | + | - | + | - | - | + | - | - |
-| OTEL_TRACES_EXPORTER | - | + | + | + | + | + | + | - | - | - |  | - |
+| OTEL_TRACES_EXPORTER | - | + | + | + | + | + | + | - | - | - |  | + |
 | OTEL_METRICS_EXPORTER | - | + |  | + | + | - | + | - | - | - | - | - |
-| OTEL_LOGS_EXPORTER | - | + |  | + | + |  | + | - | - | - |  | - |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | - |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | + | + |  | - | + |  | - |
-| OTEL_SPAN_EVENT_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | - |
-| OTEL_SPAN_LINK_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | - |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  | - |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  | - |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + | - |  |  | + |  | + | - | - | + |  | - |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | - |  |  | + |  | + | - | - | + |  | - |
-| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | + | - | + |  | - |
+| OTEL_LOGS_EXPORTER | - | + |  | + | + |  | + | - | - | - |  | + |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | + |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | + | + |  | - | + |  | + |
+| OTEL_SPAN_EVENT_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | + |
+| OTEL_SPAN_LINK_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  | + |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  | + |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  | + |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + | - |  |  | + |  | + | - | - | + |  | + |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | - |  |  | + |  | + | - | - | + |  | + |
+| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | + | - | + |  | + |
 | OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | + | - | + |  | - |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  | - |
-| OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | - |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  | + |
+| OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | + |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | + | + |  | - |
 | OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | + | + |  | - |
-| OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  | - |
+| OTEL_METRICS_EXEMPLAR_FILTER | + | + |  | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
-| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + |  |  |  |
+| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  | + |
 
 ## Declarative configuration
 
@@ -298,19 +298,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| `Parse` a configuration file | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation performs environment variable substitution | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  | - |
-| `Create` SDK components | + | + |  |  |  |  | + |  | + |  |  | - |
-| The `Create` operation accepts configuration model | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `MeterProvider` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `LoggerProvider` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation returns `Propagators` | + | + | + |  |  |  | + |  | + |  |  | - |
-| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + |  |  | - |
-| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + |  |  | - |
+| `Parse` a configuration file | + | + | + |  |  |  | + |  | + | - |  | + |
+| The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + | - |  | + |
+| The `Parse` operation performs environment variable substitution | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + | - |  | + |
+| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + | - |  | - |
+| `Create` SDK components | + | + |  |  |  |  | + |  | + | - |  | - |
+| The `Create` operation accepts configuration model | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `MeterProvider` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `LoggerProvider` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation returns `Propagators` | + | + | + |  |  |  | + |  | + | - |  | - |
+| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + | - |  | - |
+| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + | - |  | - |
 
 ## Exporters
 
@@ -325,17 +325,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - | + |
 | OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
-| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - |  |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
-| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
-| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | - |  | + |
-| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | - |  | + |
+| Enforces request size limit |  |  |  |  |  |  |  |  |  |  | + |  | - |
+| Enforces response size limit |  |  |  |  |  |  |  |  |  |  | + |  | + |
+| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | + |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | + | - | + |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | + | - | + |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | + | - | + |
+| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
+| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
+| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
-| Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  |  |  |  | + |  |  | + |  | + |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  |  |  | - |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  |  |  | + |
+| Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  | + |  |  | + |  |  | + |  | + |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  | - |  | - |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  | - |  | + |
 | Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  | + |  | - |
 | Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  | + |  | - |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
@@ -346,7 +348,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Service name mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | SpanKind mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | InstrumentationLibrary mapping |  | + | + | - | + | + | - | + | + | + | + | + | - |
-| InstrumentationScope mapping |  |  | + |  |  |  |  |  |  |  | + |  | - |
+| InstrumentationScope mapping |  |  | + |  | + |  |  |  |  |  | + |  | - |
 | Boolean attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | Array attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | Status mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
@@ -354,16 +356,16 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Event attributes mapping to Annotations |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | Integer microseconds in timestamps |  | N/A | + |  | + | + | - | + | + | + | + | + | - |
 | **Prometheus** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | - | - | - | - | - | + | - | + | - | - |
+| [Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | - | + | - | - | - | + | - | + | - | - |
 | [Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | - | + | + | + | - | - | - | - | - | + | - | - |
 | [Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | + | - | - | - | + | + | + | - | - |
-| [Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | - | - | - | - | + | - | + | - | - |
+| [Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | + | - | - | - | + | - | + | - | - |
 | [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
-| [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | + | - | - | - | - | - | + | - | + | - | - |
-| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | - | - | - | - | - | - | - | - | + | - | - |
-| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) | X | + | + | - | - | - | - | - | + | - | + | - | - |
+| [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | + | - | + | - | - | - | + | - | + | - | - |
+| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | - | - | + | - | - | - | - | - | + | - | - |
+| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) | X | + | + | - | + | - | - | - | + | - | + | - | - |
 | [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1) |  | + | + | + | + | - | - | - | + | + | + | - | - |
 | [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | - | + | - | - |
@@ -376,6 +378,37 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | + | - | - |
 | [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion) | X | + | + | - | - | - | - | - | - | - | + | - | - |
 | [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | + | - | - |
+
+## SDK Self-Observability
+
+SDKs SHOULD emit [self-observability](specification/self-observability.md)
+("internal") telemetry about their own behavior. The metric names, attributes,
+and values are defined in the
+[semantic conventions for SDK metrics](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
+
+| Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
+| **Span metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed) |  | + | - | - | + | - | - | - | + | - | + | - | - |
+| [`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| **Log metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated) |  | + | - | - | + | - | - | - | + | - | - | - | - |
+| [`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity) |  | + | - | - | + | - | - | - | + | - | - | - | - |
+| [`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed) |  | + | - | - | + | - | - | - | + | - | + | - | - |
+| [`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| **Metric metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| **Shared metrics** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration) |  | + | - | - | + | - | - | - | - | - | - | - | - |
+| [`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration) |  | + | - | - | + | - | - | - | - | - | - | - | - |
 
 ## OpenCensus Compatibility
 
@@ -392,13 +425,13 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 
 | Feature | Go | Java | JS | Python | Ruby | PHP | Rust | C++ | .NET | Swift |
 | ------- | -- | ---- | -- | ------ | ---- | --- | ---- | --- | ---- | ----- |
-| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |  |  |  |  |  | + |  |  | + |  |
-| [Tracer](specification/compatibility/opentracing.md#tracer-shim) |  |  |  |  |  | + |  |  | + |  |
-| [Span](specification/compatibility/opentracing.md#span-shim) |  |  |  |  |  | + |  |  | + |  |
-| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim) |  |  |  |  |  | + |  |  | + |  |
-| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim) |  |  |  |  |  | + |  |  | + |  |
-| Error mapping for attributes/events |  |  |  |  |  | + |  |  | + |  |
-| Migration to OpenTelemetry guide |  |  |  |  |  |  |  |  |  |  |
+| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |  |  |  | + |  | + |  |  | + |  |
+| [Tracer](specification/compatibility/opentracing.md#tracer-shim) |  |  |  | + |  | + |  |  | + |  |
+| [Span](specification/compatibility/opentracing.md#span-shim) |  |  |  | + |  | + |  |  | + |  |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim) |  |  |  | + |  | + |  |  | + |  |
+| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim) |  |  |  | + |  | + |  |  | + |  |
+| Error mapping for attributes/events |  |  |  | + |  | + |  |  | + |  |
+| Migration to OpenTelemetry guide |  |  |  | + |  |  |  |  |  |  |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059

@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
@@ -68,16 +68,16 @@ weight: 3
     + [OnStart](#onstart)
     + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
-    + [Shutdown()](#shutdown)
-    + [ForceFlush()](#forceflush)
+    + [Shutdown()](#shutdown-1)
+    + [ForceFlush()](#forceflush-1)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
 - [Span Exporter](#span-exporter)
-  * [Interface Definition](#interface-definition)
+  * [Interface Definition](#interface-definition-1)
     + [`Export(batch)`](#exportbatch)
-    + [`Shutdown()`](#shutdown)
-    + [`ForceFlush()`](#forceflush)
+    + [`Shutdown()`](#shutdown-2)
+    + [`ForceFlush()`](#forceflush-2)
   * [Further Language Specialization](#further-language-specialization)
     + [Examples](#examples)
       - [Go SpanExporter Interface](#go-spanexporter-interface)
@@ -85,7 +85,7 @@ weight: 3
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -862,6 +862,8 @@ public final class SpanLimits {
 
   public int getAttributeCountLimit();
 
+  public int getAttributeValueDepthLimit();
+
   public int getAttributeCountPerEventLimit();
 
   public int getAttributeCountPerLinkLimit();
@@ -1032,8 +1034,9 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 `Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
-the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
-are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
+the call to `Shutdown`, subsequent calls to `OnStart`, (**Development**)
+`OnEnding`, `OnEnd`, or `ForceFlush` are not allowed. SDKs SHOULD ignore these
+calls gracefully, if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.

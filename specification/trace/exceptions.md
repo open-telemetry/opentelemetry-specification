@@ -4,16 +4,16 @@
 
 This document defines how to record exceptions and their attributes.
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Recording an Exception](#recording-an-exception)
 - [Attributes](#attributes)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Recording an Exception
 
-An exception SHOULD be recorded as an `Event` on the span during which it occurred
+An exception SHOULD be recorded as an [`Event`](api.md#add-events) on the span during which it occurred
 if and only if it remains unhandled when the span ends and causes the span status
 to be set to ERROR.
 

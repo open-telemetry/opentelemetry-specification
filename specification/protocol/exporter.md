@@ -68,6 +68,14 @@ Each configuration option MUST be overridable by a signal specific option.
   - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
   - Type: [Timeout][]
 
+- **Max Request Size**: Maximum size, in bytes, of a request message the exporter will send, as defined in the OTLP specification for [OTLP/gRPC][otlp-grpc-request] and [OTLP/HTTP][otlp-http-request].
+  - Default: 67108864 (64 MiB = 64*1024*1024)
+  - Type: [Integer][]
+
+- **Max Response Size**: Maximum size, in bytes, of a response message the exporter will accept, as defined in the OTLP specification for [OTLP/gRPC][otlp-grpc-response] and [OTLP/HTTP][otlp-http-response].
+  - Default: 4194304 (4 MiB = 4*1024*1024)
+  - Type: [Integer][]
+
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
   - Default: `http/protobuf` [4]
@@ -220,6 +228,7 @@ MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 [Timeout]: ../configuration/common.md#timeout
 [String]: ../configuration/common.md#string
 [Enum]: ../configuration/common.md#enum
+[Integer]: ../configuration/common.md#integer
 
 [resource-semconv]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
@@ -227,6 +236,10 @@ MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 [protocol-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md
 [otlp-grpc]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlpgrpc
 [otlp-http]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp
+[otlp-grpc-request]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlpgrpc-request
+[otlp-grpc-response]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlpgrpc-response
+[otlp-http-request]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
+[otlp-http-response]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-response
 [retryable-grpc-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures
 [retryable-http-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1
 [opentelemetry-distribution]: https://opentelemetry.io/docs/concepts/distributions/

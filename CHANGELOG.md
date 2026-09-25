@@ -11,7 +11,15 @@ release.
 
 ### Traces
 
+- Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
+  allowed after `Shutdown`.
+  ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
+
 ### Metrics
+
+- Specify that `Shutdown` of the periodic exporting MetricReader MUST include
+  the effects of `ForceFlush`.
+  ([#5305](https://github.com/open-telemetry/opentelemetry-specification/pull/5305))
 
 ### Logs
 
@@ -21,16 +29,14 @@ release.
 
 ### Resource
 
-- Add Entity support to the Resource SDK specification.
-  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
 - Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Entities
 
-- Add Entity specification.
-  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
-- Remove `OTEL_ENTITIES` from general env var configuration spec and add `OTEL_EXPERIMENTAL_ENTITIES_ENABLED` flag.
+- Add in-development entity-resource startup specification.
+  ([#5057](https://github.com/open-telemetry/opentelemetry-specification/pull/5057))
+- Remove `OTEL_ENTITIES` from general env var configuration spec.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Common
@@ -39,14 +45,89 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Unknown-typed metric transformation.
+  ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
+- Stabilize Prometheus Info metric transformation.
+  ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
 
 ### OTEPs
 
+## v1.61.0 (2026-09-14)
+
+### Context
+
+- Recommend instead of require global propagators.
+  ([#5294](https://github.com/open-telemetry/opentelemetry-specification/pull/5294))
+
+### Metrics
+
+- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
+  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
+- Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
+  Periodic exporting MetricReader.
+  ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
+- Mark `maxExportBatchSize` on Periodic exporting MetricReader as stable.
+  ([#5291](https://github.com/open-telemetry/opentelemetry-specification/pull/5291))
+
+### Resource
+
+- Allow the named `service` resource detector (used via declarative config or explicit detector configuration) to fall back to
+  platform-specific sources when `OTEL_SERVICE_NAME` is not set.
+  ([#5280](https://github.com/open-telemetry/opentelemetry-specification/pull/5280))
+
+### Common
+
+- Add `AttributeValueDepthLimit` for nested array and map attribute values.
+  ([#5186](https://github.com/open-telemetry/opentelemetry-specification/pull/5186))
+- Remove requirement for attribute ordering from compliance matrix.
+  ([#5205](https://github.com/open-telemetry/opentelemetry-specification/pull/5205))
+
+### Compatibility
+
+- Stabilize content negotiation section for the Prometheus exporter.
+  ([#5136](https://github.com/open-telemetry/opentelemetry-specification/pull/5136))
+- Update the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#5125](https://github.com/open-telemetry/opentelemetry-specification/pull/5125))
+- Stabilize `resource_constant_labels` configuration for the Prometheus exporter.
+  ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
+
+## v1.60.0 (2026-08-07)
+
+### Resource
+
+- Add Entity support to the Resource SDK specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
+### Entities
+
+- Add Entity specification.
+  ([#5201](https://github.com/open-telemetry/opentelemetry-specification/pull/5201))
+
+### OpenTelemetry Protocol
+
+- Add max request / response size options to list of OTLP exporter configuration options.
+  ([#5235](https://github.com/open-telemetry/opentelemetry-specification/pull/5235))
+
+### Compatibility
+
+- Clarify the interaction between Prometheus content negotiation and translation
+  strategy.
+  ([#5134](https://github.com/open-telemetry/opentelemetry-specification/pull/5134))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize Target section.
+    ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+
+### OTEPs
+
 - Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
+- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
+  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.59.0 (2026-07-10)
 
@@ -107,7 +188,6 @@ release.
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
 
-
 ### Profiles
 
 - Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
@@ -132,6 +212,8 @@ release.
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute collection in non-OTLP protocols.
   ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
+- Stabilize Attribute and Attribute Collection representation for non-OTLP.
+  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
 ### Compatibility
 

@@ -60,6 +60,23 @@ Significant changes should go through the [OpenTelemetry Enhancement
 Proposal](./oteps/README.md) process. See the OTEP README for guidance on what
 changes require an OTEP.
 
+### Closed Issues
+
+Not every issue can be accepted. Proposals may conflict with each other, pull
+the specification in a direction it cannot take at the moment, or fail to reach
+consensus among the maintainers. Issues are also closed automatically after a
+long period of inactivity.
+
+Closing an issue does not delete it. The discussion stays on GitHub, and the
+issue can be reopened if circumstances change or new information comes up. See
+[issue-management.md](./issue-management.md#stale-issues) for the stale issue process,
+including how to reopen a stale-closed issue.
+
+If you think an issue was closed in error, comment on it or raise it in the
+[#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
+channel on CNCF Slack. If you are new to the CNCF Slack community, you can
+[create an account](https://slack.cncf.io/).
+
 ## Writing Specs
 
 Specification is written in Markdown. Please make sure files render correctly
