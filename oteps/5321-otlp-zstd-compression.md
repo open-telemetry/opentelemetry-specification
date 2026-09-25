@@ -185,7 +185,15 @@ than not.
 - Compression level: TC discussion (2026-09-23) raised that configurable zstd level matters
   because it drives memory consumption. This OTEP doesn't propose a level knob — doing so adds
   more config surface, compounding the `opentelemetry-configuration` schema work already required.
-  Fold a level option into this OTEP now, or leave it to a fast-follow?
+  Fold a level option into this OTEP now, or leave it to a fast-follow? If so, there's already
+  prior art for a single cross-algorithm surface: the Collector's `confighttp.ClientConfig`
+  exposes one generic `compression_params.level` field regardless of codec —
+  `configcompression.Type.ValidateParams` validates it against `zlib`'s range for
+  gzip/zlib/deflate, while for zstd "supports arbitrary levels: zstd will map any given level to
+  the nearest internally supported level." No such knob exists on the SDK/exporter side today —
+  every exporter checked (this OTEP's own otel-go prototype, `opentelemetry-rust`) hardcodes the
+  library default rather than exposing one, so this would be new surface for exporters even though
+  the Collector's config side already has it.
 - Is there appetite to eventually raise `zstd` receiver or exporter support from SHOULD to MUST,
   and what adoption bar would justify that?
 
