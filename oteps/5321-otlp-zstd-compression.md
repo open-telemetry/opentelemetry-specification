@@ -69,14 +69,31 @@ libraries.
 - **[`opentelemetry-proto`][proto-spec]**: the actual normative home for receiver behavior and
   wire format is here, not `exporter.md` alone — that document currently requires server support
   for `none`/`gzip` and defines only `Content-Encoding: gzip` for HTTP. This OTEP needs a
-  corresponding proto-spec change, not just an SDK-spec one. That change should:
-  - Identify [RFC 8878](https://www.rfc-editor.org/rfc/rfc8878) as the zstd frame format.
-  - Forbid compression dictionaries (RFC 8878 §6): dictionary use requires out-of-band agreement,
-    which is exactly the negotiation surface this OTEP avoids opening. OTLP `zstd` frames are
-    always independent, dictionary-free frames.
-  - Cap window size at 8 MB per [RFC 9659 §3](https://www.rfc-editor.org/rfc/rfc9659#section-3)'s
-    HTTP interoperability limit — encoders MUST NOT exceed an 8 MB window, so any RFC 8878
-    decoder can decode OTLP `zstd` payloads without pre-negotiating window size.
+  corresponding proto-spec change, not just an SDK-spec one. That change should define a precise
+  OTLP zstd frame profile, not just cite [RFC 8878](https://www.rfc-editor.org/rfc/rfc8878) —
+  RFC 8878 leaves enough knobs open (segment mode, window size, dictionaries, checksums, frame
+  concatenation) that "RFC 8878-compliant" alone doesn't guarantee two implementations interop:
+  - **Single-segment framing.** `Single_Segment_Flag` MUST be set. OTLP request/response bodies
+    are already fully-buffered, bounded-size messages, not streams, so there's no need for the
+    windowed mode gzip-style streaming would use. This also means `Frame_Content_Size` is present
+    by construction (RFC 8878 §3.1.1.1.1 makes it mandatory whenever `Single_Segment_Flag` is
+    set) — but that field is self-reported by the sender and unverified until decompression
+    actually happens, so it's not a safety boundary on its own: a malicious sender can declare any
+    value regardless of what the frame really decompresses to. This OTEP doesn't add a new
+    decompression-bomb defense here; bounding actual decompressed output during the streaming
+    decode is each implementation's existing responsibility, same as it already is for `gzip`.
+  - **One frame per payload.** No concatenated frames (RFC 8878 §3.1.1 permits concatenation
+    generally, but nothing about a single OTLP request/response body needs more than one).
+  - **Standard frame format only.** Magic number `0xFD2FB528` (RFC 8878 §3.1.1); no legacy
+    pre-standardization zstd frame formats, no skippable frames (§3.1.2) — keeps the profile
+    minimal and avoids exercising legacy decoder code paths that aren't otherwise needed.
+  - **No compression dictionaries.** `Dictionary_ID_Flag` MUST be `0` (absent). RFC 8878 §6:
+    dictionary use needs out-of-band agreement ("the exception to this requirement might be a
+    private dictionary negotiation"), which is exactly the negotiation surface this OTEP avoids
+    opening.
+  - **`Content_Checksum_Flag` is unconstrained** — encoders MAY set it or not; RFC 8878 already
+    makes the field self-describing via the flag, so no prior agreement is needed either way and
+    no OTLP-specific rule is required here.
 - **`opentelemetry-configuration`**: adding `zstd` to `Compression` is a config-surface change;
   per `CONTRIBUTING.md`, a corresponding schema PR (today's schema documents only `gzip`/`none`)
   is required and must merge together with this OTEP. **Not yet written — this is a hard blocker
