@@ -76,17 +76,18 @@ libraries.
   for `none`/`gzip` and defines only `Content-Encoding: gzip` for HTTP. This OTEP needs a
   corresponding proto-spec change, not just an SDK-spec one. That change should define a precise
   OTLP zstd frame profile, not just cite [RFC 8878](https://www.rfc-editor.org/rfc/rfc8878) —
-  RFC 8878 leaves enough knobs open (segment mode, window size, dictionaries, checksums, frame
-  concatenation) that "RFC 8878-compliant" alone doesn't guarantee two implementations interop:
-  - **Single-segment framing.** `Single_Segment_Flag` MUST be set. OTLP request/response bodies
-    are already fully-buffered, bounded-size messages, not streams, so there's no need for the
-    windowed mode gzip-style streaming would use. This also means `Frame_Content_Size` is present
-    by construction (RFC 8878 §3.1.1.1.1 makes it mandatory whenever `Single_Segment_Flag` is
-    set) — but that field is self-reported by the sender and unverified until decompression
-    actually happens, so it's not a safety boundary on its own: a malicious sender can declare any
-    value regardless of what the frame really decompresses to. This OTEP doesn't add a new
-    decompression-bomb defense here; bounding actual decompressed output during the streaming
-    decode is each implementation's existing responsibility, same as it already is for `gzip`.
+  RFC 8878 leaves enough knobs open (window size, dictionaries, checksums, frame concatenation)
+  that "RFC 8878-compliant" alone doesn't guarantee two implementations interop. This mirrors
+  `gzip`'s existing streaming shape (`Compress(io.Writer)` / `Decompress(io.Reader)`) rather than
+  introducing a different one just for `zstd`:
+  - **Window size capped at 8 MB.** Per
+    [RFC 9659 §3](https://www.rfc-editor.org/rfc/rfc9659#section-3)'s HTTP interoperability
+    recommendation: encoders SHOULD NOT exceed an 8 MB window, so any RFC 8878 decoder can decode
+    OTLP `zstd` payloads without a larger allocation. `Frame_Content_Size`/single-segment framing
+    is deliberately *not* required — it doesn't add a real safety property (that field is
+    sender-reported and unverified until decompression actually happens, so it's not a
+    decompression-bomb defense) and would depart from the streaming shape every other codec here
+    uses, making the implementation harder to reason about for no compensating benefit.
   - **One frame per payload.** No concatenated frames (RFC 8878 §3.1.1 permits concatenation
     generally, but nothing about a single OTLP request/response body needs more than one).
   - **Standard frame format only.** Magic number `0xFD2FB528` (RFC 8878 §3.1.1); no legacy
@@ -120,10 +121,10 @@ libraries.
   client-side error modes.
 - **Reference implementation** (non-normative, gRPC only — see Prototypes): [otel-go#8985][otel-go-pr].
   Pooled `zstd.Encoder`/`Decoder` via `klauspost/compress/zstd`, registered as a
-  `grpc/encoding.Compressor`. Concurrency pinned to 1: OTLP batches are too small to benefit from
-  zstd's parallel workers, and it bounds leaked goroutines if a pooled decoder is dropped without
-  `Close`. The gzip-retry-on-rejection behavior above isn't implemented there yet — that prototype
-  predates this revision.
+  `grpc/encoding.Compressor` — the same streaming shape gzip already uses in this codebase, with
+  `zstd.WithWindowSize` pinned to the 8 MB cap above. Concurrency pinned to 1: OTLP batches are too
+  small to benefit from zstd's parallel workers, and it bounds leaked goroutines if a pooled
+  decoder is dropped without `Close`.
 
 ## Trade-offs and mitigations
 
@@ -168,45 +169,44 @@ libraries.
 
 ## Compliance gaps in existing implementations
 
-The prior art above shipped before this OTEP's frame profile and fallback requirement existed, so
-none of it is automatically compliant once this lands — including the Collector's own native
-support, cited above as the strongest example of "the ecosystem is already ahead of the spec."
-Concretely, checked against the profile in [Internal details](#internal-details):
+The prior art above mostly shipped before this OTEP's fallback requirement existed, so it isn't
+automatically compliant just by having a `zstd` option — checked against the profile in
+[Internal details](#internal-details):
 
-- **Decoders need no changes.** Single-segment framing is purely an encoder-side choice; any
-  RFC 8878-compliant decoder — every implementation checked here included — already decodes a
-  single-segment frame correctly with no code change. The gaps below are all encoder-side.
+- **Decoders need no changes.** Every implementation checked here already decodes a windowed
+  RFC 8878 frame correctly with no code change; the window-size cap is purely an encoder-side
+  choice. The gaps below are all encoder-side.
+- **Collector `configgrpc`**: [a streaming `zstd.NewWriter`][collector-configgrpc-zstd] with a
+  fixed 512 KB window — already well under this OTEP's 8 MB cap, and no dictionary use. On framing
+  alone, this is already compliant; it's the strongest piece of prior art here for exactly that
+  reason. The remaining gap is the same one everyone has: no gzip-fallback-on-rejection, since
+  that requirement didn't exist before this OTEP. `confighttp` is receiver-side decode only
+  ([`availableDecoders["zstd"]`][collector-confighttp-zstd]) and needs no change at all.
 - **`opentelemetry-rust`**:
-  - gRPC (`zstd-tonic`): delegates entirely to `tonic::codec::CompressionEncoding::Zstd`. Framing
-    is tonic's implementation detail, not something `opentelemetry-rust` configures or asserts —
-    unverified against this profile one way or the other without checking tonic itself.
-  - HTTP (`zstd-http`): calls [`zstd::bulk::compress(&body, 0)`][rust-http-zstd] — a one-shot API,
-    unlike a streaming writer, but `opentelemetry-rust` doesn't explicitly request single-segment
-    framing; whether the underlying library's size-based heuristic happens to choose it isn't
-    asserted or tested.
+  - gRPC (`zstd-tonic`): delegates entirely to `tonic::codec::CompressionEncoding::Zstd`. Window
+    size is tonic's implementation detail, not something `opentelemetry-rust` configures or
+    asserts — unverified against the 8 MB cap without checking tonic itself.
+  - HTTP (`zstd-http`): calls [`zstd::bulk::compress(&body, 0)`][rust-http-zstd]. zstd's own
+    size-based window heuristics make it likely this already stays under 8 MB for typical OTLP
+    payload sizes, but `opentelemetry-rust` doesn't explicitly pin a window size, so it isn't
+    asserted or tested the way the otel-go prototype's wire-level test now does.
   - No dictionary use (default), and `zstd` is confirmed not defaulted (`resolve_compression`
     returns `None` when nothing is configured). No gzip-fallback-on-rejection exists in
-    `process_body` — same gap as pre-OTEP otel-go.
+    `process_body` — same gap as everyone else.
   - Cargo feature gating (`zstd-tonic`/`zstd-http`, opt-in, off by default) already exceeds this
     OTEP's opt-in bar — the otel-go prototype only matches this now, via the `nozstd` build tag
     added in this revision.
-- **`opentelemetry-java-contrib` `compressor-zstd`**: [wraps `ZstdOutputStream`][java-zstd] — a
-  streaming writer, architecturally identical to otel-go's pre-OTEP implementation. Not
-  single-segment, no window-size bound, no gzip-fallback. Would need the same rework this revision
-  gave otel-go.
-- **Collector `configgrpc`**: [also a streaming `zstd.NewWriter`][collector-configgrpc-zstd], with
-  a fixed 512 KB window (explicitly chosen to bound memory, per the code comment) rather than
-  single-segment framing. Not compliant with this OTEP's profile as written today, despite being
-  cited in Motivation as prior art the spec is catching up to — that framing was true for "zstd
-  exists as an option" but not for "zstd exists in the exact shape this OTEP specifies." `confighttp`
-  is receiver-side decode only ([`availableDecoders["zstd"]`][collector-confighttp-zstd]) and needs
-  no change per the point above.
+- **`opentelemetry-java-contrib` `compressor-zstd`**: [wraps `ZstdOutputStream`][java-zstd] — the
+  same streaming shape this OTEP settled on, but doesn't appear to pin an explicit window-size
+  bound the way the otel-go prototype now does; would need one added (or confirmation the
+  underlying `zstd-jni` default is already ≤8 MB) to assert compliance. No gzip-fallback.
 
 None of this blocks the OTEP — it means an implementation note (`gzip`'s spec compliance didn't
-require every existing ad hoc implementation to already match it either), not a prerequisite. But
-reviewers citing "it's already shipped elsewhere" as evidence of interoperability should read that
-claim narrowly: shipped as a codec choice, yes; interoperable per this specific profile, not yet
-verified for any of them except the otel-go prototype this revision rewrote.
+require every existing ad hoc implementation to already match it either), not a prerequisite. The
+gzip-fallback-on-rejection requirement is new to every implementation, full stop; the framing
+requirement (8 MB window, no dictionary) turns out to already match existing practice more often
+than not, which is exactly what choosing the streaming shape over a novel one was meant to
+achieve.
 
 ## Open questions
 
