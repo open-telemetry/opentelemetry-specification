@@ -265,7 +265,7 @@ reserved for built-in resource detectors published with language SDKs:
   not included yet.
 * `process`:
   Populates [process](https://opentelemetry.io/docs/specs/semconv/registry/entities/process/)
-  entities, or all relevant attributes of the entities, if entity support is
+  entity, or all relevant attributes of the entity, if entity support is
   not included yet.
 * `service`: Populates `service` and `service.instance` entities described
   [here](https://opentelemetry.io/docs/specs/semconv/registry/entities/service/),
