@@ -36,9 +36,11 @@ upgraded. Scope behavior must first be inventoried so the opt-in phase does
 not inadvertently remove a limit an SDK already applies. Existing span,
 span event, span link, and log record limits are outside this plan.
 
-This OTEP approves a process, not the controls or their semantics. Follow-up
-behavior OTEPs must settle each domain's enforcement point, identity handling,
-and configuration before normative specification changes are integrated.
+This OTEP approves a process, not the controls or their semantics. Separate
+regular issues under #4911 will track and resolve each domain's enforcement
+point, identity handling, and configuration. Their agreed outcomes will be
+added to this OTEP for review before normative specification changes are
+proposed. This reuses the same OTEP rather than opening another one.
 
 The common limit values are candidate defaults for a later phase, rather than
 new defaults established by this OTEP. In particular, the default value
@@ -56,7 +58,7 @@ does not authorize a default change or waive existing stability guarantees.
 
 ### Configuration and enforcement
 
-The follow-up OTEPs must define programmatic and applicable SDK configuration
+The design issues must define programmatic and applicable SDK configuration
 controls, with a corresponding proposal to the
 [declarative configuration schema](https://github.com/open-telemetry/opentelemetry-configuration).
 They must distinguish an unset limit, zero where permitted, a finite limit,
@@ -66,7 +68,7 @@ precedence between domain-specific controls and existing `OTEL_ATTRIBUTE_*`
 settings, including the distinction between an absent setting and a default
 value.
 
-The follow-up OTEPs must choose enforcement points and define diagnostics
+The design issues must choose enforcement points and define diagnostics
 that cannot grow without bound. They must address repeated attributes and
 collections shared by providers or instruments. For resources, they must
 reconcile stable `Create` and `Merge` behavior, immutable resources created
@@ -77,14 +79,14 @@ preserving only a subset cannot satisfy a finite count limit without changing
 identity. Rejection or another explicit outcome needs review, including any
 new runtime error during initialization.
 
-Scope attributes also participate in scope identity. The follow-up scope
-design must define whether an oversized scope is rejected or handled in
+Scope attributes also participate in scope identity. The scope design issue
+must define whether an oversized scope is rejected or handled in
 another identity-safe way, and how this affects obtaining tracers, meters,
 and loggers. None of these outcomes is approved by this OTEP.
 
 Metric attributes identify a time series. Dropping an attribute or truncating
-a value can merge distinct series. A follow-up OTEP must compare routing an
-over-limit measurement to
+a value can merge distinct series. The metric design issue must compare
+routing an over-limit measurement to
 [`otel.metric.overflow`](../specification/metrics/sdk.md#overflow-attribute)
 with other explicit outcomes. Reusing that series would conflict with the
 current guarantee that cardinality overflow does not occur below the
@@ -140,6 +142,8 @@ considered.
 1. **Track and measure impact.** Create separate tracking issues for
    resource, scope, and metric attributes under
    [#4911](https://github.com/open-telemetry/opentelemetry-specification/issues/4911).
+   Use each issue to record alternatives, decisions, prototype links, and
+   acceptance criteria as the work progresses.
    Inventory language SDK behavior and configuration support. Collect
    implementation tests, representative workload measurements, and user
    reports for attribute counts and value sizes, especially cases exceeding
@@ -151,16 +155,21 @@ considered.
    Committee, and affected language SIGs. Resolve the release classification,
    stable telemetry, and required resource attribute questions before deciding
    on defaults.
-3. **Design and prototype opt-in limits.** Prepare focused follow-up OTEPs for
-   resource, scope, and metric behavior. Prototype the difficult paths in
+3. **Design and prototype opt-in limits.** Resolve the resource, scope, and
+   metric design questions in their linked issues. Prototype difficult paths in
    three language styles: typed object-oriented, dynamically typed, and
    structural. Include resource creation and merging, scope creation, metric
    Views and exemplars, and zero or low limits. Resolve conflicts with stable
    Resource and Metrics SDK requirements before approving behavior.
-4. **Integrate approved behavior.** Make focused specification and companion
-   declarative configuration schema PRs, with prototype links, after the
-   follow-up OTEPs are approved. Add implementation tracking issues after
-   integration. Preserve each SDK's existing default behavior in this phase.
+4. **Approve and specify behavior.** For each domain, once its design issue
+   records an agreed resolution and its open questions are settled, update
+   this OTEP with that domain's proposed behavior and prototype links for
+   review. Issue acceptance alone does not approve a solution. After that
+   amendment is approved, make focused specification and companion
+   declarative configuration schema PRs that link the issue and prototypes.
+   Add implementation tracking issues after the specification changes merge.
+   Each domain can proceed independently while preserving existing SDK
+   default behavior in this phase.
 5. **Review default behavior separately.** After opt-in releases have been
    used in practice, present the impact data and proposed behavior to the
    Specification SIG and affected language SIGs. Apply the approved stability
@@ -222,8 +231,9 @@ SDK attribute limits.
 
 ## Prototypes
 
-None yet. This planning OTEP does not approve an SDK feature. The follow-up
-behavior OTEPs must link to working prototypes before approval.
+None yet. This planning OTEP does not approve an SDK feature. The design
+issues and the later behavior amendment to this OTEP must link to working
+prototypes before the behavior is approved.
 
 ## Future possibilities
 
