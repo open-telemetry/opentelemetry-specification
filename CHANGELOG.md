@@ -56,6 +56,10 @@ release.
 
 ### OTEPs
 
+- Propose a staged plan for attribute limits on resources, instrumentation
+  scopes, and metrics.
+  ([#5333](https://github.com/open-telemetry/opentelemetry-specification/pull/5333))
+
 ## v1.61.0 (2026-09-14)
 
 ### Context
