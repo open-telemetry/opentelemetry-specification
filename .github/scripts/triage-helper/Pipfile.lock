@@ -390,11 +390,11 @@
                 "crypto"
             ],
             "hashes": [
-                "sha256:77283c83fb56ecf566a886c757a714bc83668e38156de2cce8263302f42e0b86",
-                "sha256:ad0cef71c756a56e74863c2919cf0985f72decbcfcb550ee2f422e7c62b5eedc"
+                "sha256:42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+                "sha256:4f259e80cdfb6b3fc18a7de51fd1ef9ec79652f25019bae68975ca2468a34df8"
             ],
             "markers": "python_version >= '3.9'",
-            "version": "==2.14.0"
+            "version": "==2.15.1"
         },
         "pynacl": {
             "hashes": [
@@ -429,11 +429,11 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:2211d3fcf9a797d3405cac96ac7f61d80e6a644f72a3309607282fe8a2010c5d",
-                "sha256:dd95840dd199baea12d9cc096a1d452caa6596a1c1e4b5f3dbd1541855d5e815"
+                "sha256:464303645bafafd72418898368b2429458f709cf1eb6a15372fbcc396b64da63",
+                "sha256:9d514388fbc89ca0833203464272ac485b8828568ab73532f5020f17e892a0ff"
             ],
             "index": "pypi",
-            "version": "==2026.3.post1"
+            "version": "==2026.4"
         },
         "requests": {
             "hashes": [
