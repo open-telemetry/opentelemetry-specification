@@ -43,9 +43,8 @@ telemetry fields have finite bounds is outside this proposal.
 
 Changing the default can alter exported telemetry. Regardless of whether an
 individual exemption is considered a bug, a default change is treated as a
-compatibility-impacting behavior change and follows the
-[client stability requirements](../specification/versioning-and-stability.md#sdk-stability).
-It is not implied by accepting the opt-in phase.
+compatibility-impacting behavior change. Accepting the opt-in phase does not
+authorize a default change or waive existing stability guarantees.
 
 ## Internal details
 
@@ -86,6 +85,37 @@ cardinality limit, synchronous and asynchronous instruments, and exemplars.
 It must preserve the rule that a measurement is neither counted twice nor
 silently assigned to a different ordinary series.
 
+### Versioning and stability policy
+
+Before deciding on any default change, refine the
+[client versioning and stability specification](../specification/versioning-and-stability.md)
+and, if necessary, the
+[telemetry stability specification](../specification/telemetry-stability.md).
+The current SDK stability section focuses on public interfaces and
+constructors, while the telemetry stability rules focus on output from
+instrumentations. Neither clearly classifies a change in exported telemetry
+caused solely by a new SDK default. The semantic convention stability section
+also protects resource, scope, and metric attribute keys. These rules must be
+reconciled before limits can remove or alter such attributes by default.
+
+The policy work should explicitly determine:
+
+- whether a default limit that drops, truncates, or reroutes telemetry is a
+  breaking change even when the SDK API and ABI remain compatible;
+- which release version, if any, can carry such a change for stable signals,
+  and how this interacts with each language's versioning policy;
+- how a change affecting required resource attributes or stable telemetry
+  from instrumentation can be made without violating existing guarantees;
+- what compatibility option, notice period, and migration documentation are
+  required; and
+- whether this class of default change is permitted at all. If the answer is
+  no, the new limits remain opt-in.
+
+Long lead time and low measured impact are inputs to that decision. They do
+not, on their own, override the stability specification. A separate
+specification PR must establish the policy before a PR changing defaults is
+considered.
+
 ### Execution plan
 
 1. **Track and measure impact.** Create separate tracking issues for
@@ -96,26 +126,31 @@ silently assigned to a different ordinary series.
    reports for attribute counts and value sizes, especially cases exceeding
    the candidate defaults. Record which attributes affect identity. Do not
    collect application attribute values in project telemetry.
-2. **Specify and prototype opt-in limits.** Define configuration, enforcement,
+2. **Clarify stability policy.** Open a tracking issue and propose explicit
+   changes to the versioning and stability specifications for SDK default
+   changes that alter exported telemetry. Review them with the Specification
+   SIG, Technical Committee, and affected language SIGs. Resolve the release
+   classification and stable telemetry questions before deciding on defaults.
+3. **Specify and prototype opt-in limits.** Define configuration, enforcement,
    diagnostics, and identity-safe behavior for each domain in focused spec
    changes. Prototype the difficult paths in more than one language SDK,
    including resource detection, scope creation, metric overflow, and low
    limits. Add implementation tracking issues after the specification is
    integrated. Keep the default behavior unchanged in this phase.
-3. **Review default behavior separately.** After opt-in releases have been
+4. **Review default behavior separately.** After opt-in releases have been
    used in practice, present the impact data and proposed behavior to the
-   Specification SIG and affected language SIGs. Decide separately for each
-   domain and limit dimension whether a default should change. If a default
-   change cannot be justified or an identity-safe rule is missing, keep that
-   limit opt-in.
-4. **Communicate before any default change.** If approved, publish a migration
+   Specification SIG and affected language SIGs. Apply the approved stability
+   policy and decide separately for each domain and limit dimension whether a
+   default should change. If the policy does not allow it, the impact cannot
+   be justified, or an identity-safe rule is missing, keep that limit opt-in.
+5. **Communicate before any default change.** If approved, publish a migration
    guide, release notes, and an OpenTelemetry blog post explaining affected
    telemetry, diagnostics, configuration, and the way to retain the previous
    behavior. Announce the planned change with substantial lead time, targeting
    6–12 months before it takes effect, and solicit feedback. Coordinate
    release timing with language SDK maintainers and follow each language's
    stability policy.
-5. **Roll out and monitor.** Land the approved default change through separate
+6. **Roll out and monitor.** Land the approved default change through separate
    spec and implementation PRs. Verify conformance and monitor reports of
    missing resource or scope identity and changed metric series. Revisit the
    default if the observed impact differs materially from the assessment.
@@ -157,6 +192,8 @@ different stage of the pipeline and cannot replace SDK attribute limits.
   settings and a future explicit unlimited setting?
 - What evidence would justify changing each default, and should those
   decisions differ across the three domains?
+- What versioning and telemetry stability rules should govern SDK defaults
+  that change exported telemetry without changing a public interface?
 
 ## Prototypes
 
