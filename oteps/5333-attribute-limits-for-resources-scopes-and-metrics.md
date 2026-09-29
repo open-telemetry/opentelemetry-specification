@@ -1,38 +1,44 @@
 # Attribute limits for resources, instrumentation scopes, and metrics
 
-Plan a staged path to configurable attribute limits for resources,
-instrumentation scopes, and metric data points, with a separate decision on
-whether to change their defaults.
+Define the research, design, stability, and rollout gates for considering
+attribute limits on resources, instrumentation scopes, and metric data points.
+This planning OTEP does not approve SDK limit behavior or a change to defaults.
 
 ## Motivation
 
 The [common attribute limits](../specification/common/README.md#attribute-limits)
 define a default count limit of 128, a default value length limit of infinity,
-and a default value depth limit of 64. However, the specification
-[exempts resource and metric attributes](../specification/common/README.md#exempt-entities).
-It does not clearly say how limits apply to instrumentation scope attributes.
-Consequently, the existing general limit configuration cannot reliably bound
-these collections. An unexpectedly large collection or value can increase SDK
-memory use and the cost of processing telemetry downstream.
+and a default value depth limit of 64. The specification says resource
+attributes [SHOULD be exempt](../specification/common/README.md#exempt-entities)
+and metric attributes are exempt. It does not explicitly exempt
+instrumentation scope attributes or clearly define where their limits are
+enforced. SDKs may therefore have different behavior for scopes. There is no
+uniform way to bound all three collections. An unexpectedly large collection
+or value can increase SDK memory use and downstream processing cost.
 
 The [OTLP message size limits](https://github.com/open-telemetry/opentelemetry-proto/pull/782)
 provide a separate transport safeguard. They do not bound the attributes held
 by an SDK before export or identify which attributes can be safely removed.
 
-Removing the exemptions without a transition could change resource identity,
-instrumentation scope identity, and metric time series identity. The
+Introducing limits for these collections without a transition could change
+resource identity, instrumentation scope identity, and metric time series
+identity. The
 [discussion in #4911](https://github.com/open-telemetry/opentelemetry-specification/issues/4911#issuecomment-5669985533)
 raises this concern, particularly for metrics. We need to establish the
 behavior and assess user impact before changing defaults.
 
 ## Explanation
 
-SDK users can opt in to limits on resource, instrumentation scope, and metric
-attributes. Each collection has independently configurable count, value
-length, and value depth limits. When a collection has no explicit limit
-configuration, it retains its current behavior during the first rollout
-phase. Existing span, span event, span link, and log record limits are
-unaffected.
+The intended first phase is to offer explicit, independent opt-in controls
+for resource, instrumentation scope, and metric attribute count, value length,
+and value depth. No new limits would take effect solely because an SDK is
+upgraded. Scope behavior must first be inventoried so the opt-in phase does
+not inadvertently remove a limit an SDK already applies. Existing span,
+span event, span link, and log record limits are outside this plan.
+
+This OTEP approves a process, not the controls or their semantics. Follow-up
+behavior OTEPs must settle each domain's enforcement point, identity handling,
+and configuration before normative specification changes are integrated.
 
 The common limit values are candidate defaults for a later phase, rather than
 new defaults established by this OTEP. In particular, the default value
@@ -41,71 +47,84 @@ proposal is about giving users control over these collections and deciding
 whether to apply the existing common defaults to them. A guarantee that all
 telemetry fields have finite bounds is outside this proposal.
 
-Changing the default can alter exported telemetry. Regardless of whether an
-individual exemption is considered a bug, a default change is treated as a
-compatibility-impacting behavior change. Accepting the opt-in phase does not
-authorize a default change or waive existing stability guarantees.
+Applying new defaults to conforming implementations changes specified
+behavior; it is not a fix for SDK nonconformance. A default change can alter
+exported telemetry and must be treated as compatibility-impacting. This OTEP
+does not authorize a default change or waive existing stability guarantees.
 
 ## Internal details
 
 ### Configuration and enforcement
 
-The specification will define explicit controls for resource,
-instrumentation scope, and metric attribute limits. These controls should be
-available programmatically and through the applicable SDK configuration
-mechanisms. A domain-specific setting takes precedence over a general setting
-when that domain participates in general limits. An unset domain-specific
-setting preserves the current behavior in the opt-in phase; a way to
-explicitly retain unlimited behavior will be needed before any default
-change. Exact option names and the interaction with existing
-`OTEL_ATTRIBUTE_*` settings belong in the integration PRs.
+The follow-up OTEPs must define programmatic and applicable SDK configuration
+controls, with a corresponding proposal to the
+[declarative configuration schema](https://github.com/open-telemetry/opentelemetry-configuration).
+They must distinguish an unset limit, zero where permitted, a finite limit,
+and an explicit unlimited setting. Opting in to one dimension must not
+accidentally activate other limit dimensions. The designs must also settle
+precedence between domain-specific controls and existing `OTEL_ATTRIBUTE_*`
+settings, including the distinction between an absent setting and a default
+value.
 
-Enforcement must happen before the SDK retains or exports the affected
-collection. The specification must define how an implementation reports a
-limit violation without producing unbounded diagnostics. It must also define
-the behavior for a zero limit, repeated attributes, and a collection that is
-shared by multiple providers or instruments.
+The follow-up OTEPs must choose enforcement points and define diagnostics
+that cannot grow without bound. They must address repeated attributes and
+collections shared by providers or instruments. For resources, they must
+reconcile stable `Create` and `Merge` behavior, immutable resources created
+before provider configuration, required SDK-provided attributes, detector
+merges, and entity identifying attributes. In a resource without Entities,
+[all attributes determine identity](../specification/resource/sdk.md#entities);
+preserving only a subset cannot satisfy a finite count limit without changing
+identity. Rejection or another explicit outcome needs review, including any
+new runtime error during initialization.
 
-Resource and scope attributes can participate in identity, so silently
-discarding an arbitrary attribute is unsafe. The specification work should
-evaluate rejecting an oversized resource or scope, preserving identifying
-attributes, and other deterministic behaviors. It must address resource
-detectors and the case where an entity's identifying attributes would exceed
-the limit. No behavior that silently changes identity is approved by this
-OTEP.
+Scope attributes also participate in scope identity. The follow-up scope
+design must define whether an oversized scope is rejected or handled in
+another identity-safe way, and how this affects obtaining tracers, meters,
+and loggers. None of these outcomes is approved by this OTEP.
 
-Metric attributes identify a time series. Applying the ordinary attribute
-count rule by dropping an attribute, or truncating a value, can merge distinct
-series. The specification work should prototype routing an over-limit
-measurement to the existing
-[`otel.metric.overflow` series](../specification/metrics/sdk.md#overflow-attribute)
-and compare that with rejecting the measurement or an alternative explicit
-signal. The chosen behavior must specify interaction with Views, the existing
-cardinality limit, synchronous and asynchronous instruments, and exemplars.
-It must preserve the rule that a measurement is neither counted twice nor
-silently assigned to a different ordinary series.
+Metric attributes identify a time series. Dropping an attribute or truncating
+a value can merge distinct series. A follow-up OTEP must compare routing an
+over-limit measurement to
+[`otel.metric.overflow`](../specification/metrics/sdk.md#overflow-attribute)
+with other explicit outcomes. Reusing that series would conflict with the
+current guarantee that cardinality overflow does not occur below the
+cardinality limit, so the normative rule would need reconciliation. A count
+limit of zero also conflicts with the overflow marker's single attribute.
+The design must cover filtering by each View, multiple Views, synchronous and
+asynchronous instruments, and exemplar attributes. Prototypes should include
+a measurement over the raw limit that falls below it after View filtering.
+The outcome must not silently merge distinct ordinary series or count a
+measurement twice; any proposed measurement loss needs explicit review.
 
 ### Versioning and stability policy
 
-Before deciding on any default change, refine the
+Before deciding on any default change, propose amendments to both the
 [client versioning and stability specification](../specification/versioning-and-stability.md)
-and, if necessary, the
-[telemetry stability specification](../specification/telemetry-stability.md).
-The current SDK stability section focuses on public interfaces and
-constructors, while the telemetry stability rules focus on output from
-instrumentations. Neither clearly classifies a change in exported telemetry
-caused solely by a new SDK default. The semantic convention stability section
-also protects resource, scope, and metric attribute keys. These rules must be
-reconciled before limits can remove or alter such attributes by default.
+and the [telemetry stability specification](../specification/telemetry-stability.md),
+or conclude that the new limits must remain opt-in.
+The current SDK stability section protects public interfaces, constructors,
+configuration objects, and environment variables. The telemetry stability
+rules prohibit changes to output from stable fixed-schema instrumentations
+and, during the schema transformation moratorium, stable schema-file driven
+instrumentations. A new SDK default that changes their output would conflict
+with those rules. The client versioning policy also needs to classify the
+release impact of an SDK default change. The semantic convention stability
+section protects resource, scope, and metric attribute keys; some
+SDK-provided `service.*` resource attributes must never change. These rules
+must be reconciled before limits can remove or alter attributes by default.
+Any allowed design must preserve the required resource attributes.
 
 The policy work should explicitly determine:
 
 - whether a default limit that drops, truncates, or reroutes telemetry is a
   breaking change even when the SDK API and ABI remain compatible;
+- how changed constructor and configuration behavior, including possible new
+  runtime errors, fits the SDK's existing compatibility guarantees;
 - which release version, if any, can carry such a change for stable signals,
   and how this interacts with each language's versioning policy;
-- how a change affecting required resource attributes or stable telemetry
-  from instrumentation can be made without violating existing guarantees;
+- whether an exception to the prohibition on changing stable instrumentation
+  output can be justified for fixed-schema producers and schema-file driven
+  producers, including during the transformation moratorium;
 - what compatibility option, notice period, and migration documentation are
   required; and
 - whether this class of default change is permitted at all. If the answer is
@@ -126,31 +145,36 @@ considered.
    reports for attribute counts and value sizes, especially cases exceeding
    the candidate defaults. Record which attributes affect identity. Do not
    collect application attribute values in project telemetry.
-2. **Clarify stability policy.** Open a tracking issue and propose explicit
-   changes to the versioning and stability specifications for SDK default
-   changes that alter exported telemetry. Review them with the Specification
-   SIG, Technical Committee, and affected language SIGs. Resolve the release
-   classification and stable telemetry questions before deciding on defaults.
-3. **Specify and prototype opt-in limits.** Define configuration, enforcement,
-   diagnostics, and identity-safe behavior for each domain in focused spec
-   changes. Prototype the difficult paths in more than one language SDK,
-   including resource detection, scope creation, metric overflow, and low
-   limits. Add implementation tracking issues after the specification is
-   integrated. Keep the default behavior unchanged in this phase.
-4. **Review default behavior separately.** After opt-in releases have been
+2. **Clarify stability policy.** Open a tracking issue and propose amendments
+   to both versioning and telemetry stability for SDK default changes that
+   alter exported telemetry. Review them with the Specification SIG, Technical
+   Committee, and affected language SIGs. Resolve the release classification,
+   stable telemetry, and required resource attribute questions before deciding
+   on defaults.
+3. **Design and prototype opt-in limits.** Prepare focused follow-up OTEPs for
+   resource, scope, and metric behavior. Prototype the difficult paths in
+   three language styles: typed object-oriented, dynamically typed, and
+   structural. Include resource creation and merging, scope creation, metric
+   Views and exemplars, and zero or low limits. Resolve conflicts with stable
+   Resource and Metrics SDK requirements before approving behavior.
+4. **Integrate approved behavior.** Make focused specification and companion
+   declarative configuration schema PRs, with prototype links, after the
+   follow-up OTEPs are approved. Add implementation tracking issues after
+   integration. Preserve each SDK's existing default behavior in this phase.
+5. **Review default behavior separately.** After opt-in releases have been
    used in practice, present the impact data and proposed behavior to the
    Specification SIG and affected language SIGs. Apply the approved stability
    policy and decide separately for each domain and limit dimension whether a
    default should change. If the policy does not allow it, the impact cannot
    be justified, or an identity-safe rule is missing, keep that limit opt-in.
-5. **Communicate before any default change.** If approved, publish a migration
+6. **Communicate before any default change.** If approved, publish a migration
    guide, release notes, and an OpenTelemetry blog post explaining affected
    telemetry, diagnostics, configuration, and the way to retain the previous
    behavior. Announce the planned change with substantial lead time, targeting
    6–12 months before it takes effect, and solicit feedback. Coordinate
    release timing with language SDK maintainers and follow each language's
    stability policy.
-6. **Roll out and monitor.** Land the approved default change through separate
+7. **Roll out and monitor.** Land the approved default change through separate
    spec and implementation PRs. Verify conformance and monitor reports of
    missing resource or scope identity and changed metric series. Revisit the
    default if the observed impact differs materially from the assessment.
@@ -176,10 +200,11 @@ Metrics SDK has a [cardinality overflow mechanism](../specification/metrics/sdk.
 Neither directly defines safe behavior for these three collections.
 
 Applying the count limit of 128 immediately everywhere would be simpler to
-specify but risks changing identities without warning. Permanently keeping
-all three collections exempt leaves users without a standard way to bound
-them. OTLP message size limits and downstream receiver limits protect a
-different stage of the pipeline and cannot replace SDK attribute limits.
+specify but risks changing identities without warning. Keeping the resource
+and metric exemptions while leaving scope behavior unclear prevents a
+consistent way to bound them. OTLP message size limits and downstream
+receiver limits protect a different stage of the pipeline and cannot replace
+SDK attribute limits.
 
 ## Open questions
 
@@ -197,8 +222,8 @@ different stage of the pipeline and cannot replace SDK attribute limits.
 
 ## Prototypes
 
-None yet. Metric overflow and resource or scope identity behavior should be
-prototyped before the corresponding specification changes are finalized.
+None yet. This planning OTEP does not approve an SDK feature. The follow-up
+behavior OTEPs must link to working prototypes before approval.
 
 ## Future possibilities
 
