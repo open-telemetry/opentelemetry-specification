@@ -546,6 +546,13 @@ representations to the configured `LogRecordExporter`.
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
 to make sure that they are not invoked concurrently.
 
+When `scheduledDelayMillis` is `0`, a queued batch can be exported promptly
+once any previous `Export` call has returned.
+When the queue is empty, including before the first `LogRecord` is received and
+after a batch drains, the zero delay alone MUST NOT cause repeated wakeups or
+export attempts. A new `LogRecord` or a call to `ForceFlush` or `Shutdown` can
+still trigger an export under the existing requirements.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the `LogRecord`s are pushed.
