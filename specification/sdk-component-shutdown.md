@@ -8,12 +8,12 @@ linkTitle: SDK component shutdown
 
 The tracing, metrics, and logs SDKs already require shutdown of specified
 components, such as processors, readers, and exporters. Other user-provided
-components can also own resources. Examples include a `Sampler`, a
-`MetricProducer`, and a stateful configurator or `View` where the language
-represents one as an object. State captured only by a function closure is not
-visible to this mechanism. Here, a user-provided component is an
-application-supplied value that performs an SDK extension role, rather than a
-passive configuration value.
+components can also own resources. Examples among components supplied during
+construction include a `Sampler`, a `MetricProducer`, and a stateful
+configurator or `View` where the language represents one as an object. State
+captured only by a function closure is not visible to this mechanism. Here, a
+user-provided component is an application-supplied value that performs an SDK
+extension role, rather than a passive configuration value.
 
 A user-provided component MAY opt in to SDK-managed cleanup by exposing a
 language-idiomatic shutdown operation in addition to its existing component
@@ -71,4 +71,5 @@ application cannot rely on the SDK to discover shared ownership. The same
 instance may be accepted in multiple roles and receive multiple shutdown calls;
 its optional operation SHOULD be idempotent in that case. This mechanism covers
 components supplied during programmatic construction; it does not specify
-declarative configuration or later component replacement.
+declarative configuration, later configuration updates, or component
+replacement.
