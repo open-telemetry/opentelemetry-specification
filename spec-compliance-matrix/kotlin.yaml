@@ -25,6 +25,8 @@ sections:
             status: '+'
           - name: Shutdown (SDK only required)
             status: '+'
+          - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+            status: '?'
           - name: ForceFlush (SDK only required)
             status: '+'
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
@@ -225,6 +227,8 @@ sections:
         status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '-'
+      - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+        status: '?'
       - name: All methods of `Meter` are safe to be called concurrently.
         status: '-'
       - name: All methods of any instrument are safe to be called concurrently.
@@ -361,6 +365,8 @@ sections:
         status: '+'
       - name: LoggerProvider.Shutdown
         status: '+'
+      - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+        status: '?'
       - name: LoggerProvider.ForceFlush
         status: '+'
       - name: Logger.Emit(LogRecord)

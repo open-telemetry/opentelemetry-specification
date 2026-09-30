@@ -230,6 +230,10 @@ decide if they want to make the shutdown timeout configurable.
 `Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
 [MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances.
 
+**Status**: [Development](../document-status.md) - The `MeterProvider`
+MUST support [registration of shutdown actions](../sdk-component-shutdown.md)
+for user-provided components.
+
 ### ForceFlush
 
 This method provides a way for provider to notify the registered

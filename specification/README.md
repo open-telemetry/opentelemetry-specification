@@ -39,6 +39,7 @@ path_base_for_github_subdir:
   - [Tracing](trace/sdk.md)
   - [Metrics](metrics/sdk.md)
   - [Logs](logs/sdk.md)
+  - [Shutdown of user-provided SDK components](sdk-component-shutdown.md)
   - [Resource](resource/sdk.md)
   - [Configuration](configuration/README.md)
 - Data Specification

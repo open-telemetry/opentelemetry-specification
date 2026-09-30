@@ -41,6 +41,10 @@ release.
 
 ### Common
 
+- Add Development support for registering provider shutdown actions for
+  user-provided SDK components.
+  ([#5339](https://github.com/open-telemetry/opentelemetry-specification/pull/5339))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
