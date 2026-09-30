@@ -12,7 +12,7 @@ release.
 ### Traces
 
 - Clarify zero-delay idle behavior for batching span processors.
-  ([#5336](https://github.com/open-telemetry/opentelemetry-specification/issues/5336))
+  ([#5338](https://github.com/open-telemetry/opentelemetry-specification/pull/5338))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
@@ -26,7 +26,7 @@ release.
 ### Logs
 
 - Clarify zero-delay idle behavior for batching log record processors.
-  ([#5336](https://github.com/open-telemetry/opentelemetry-specification/issues/5336))
+  ([#5338](https://github.com/open-telemetry/opentelemetry-specification/pull/5338))
 
 ### Baggage
 
