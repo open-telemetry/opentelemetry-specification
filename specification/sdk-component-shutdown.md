@@ -51,10 +51,11 @@ shutdown has been canceled or its deadline has expired. The same instance
 configured in multiple roles or slots can therefore receive multiple calls. An
 owner MUST NOT start an operation after shutdown is canceled or its deadline
 expires. A failure in one operation MUST NOT prevent attempts of others, subject
-to cancellation and deadline. Where `Shutdown` provides an outcome, it MUST NOT
-report success if an operation fails, times out, or remains unattempted due to
-cancellation or deadline expiration. If the outcome can report only one reason,
-a timeout SHOULD take precedence over failure when both occur.
+to cancellation and deadline. Where `Shutdown` provides an outcome, its first
+call MUST NOT report success if an operation fails, times out, or remains
+unattempted due to cancellation or deadline expiration. If the outcome can
+report only one reason, a timeout SHOULD take precedence over failure when both
+occur.
 
 The owner MUST wait for an asynchronous optional shutdown operation to complete
 before reporting successful `Shutdown`, subject to its deadline. An operation
