@@ -231,8 +231,9 @@ decide if they want to make the shutdown timeout configurable.
 [MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances.
 
 **Status**: [Development](../document-status.md) - The `MeterProvider`
-MUST support [registration of shutdown actions](../sdk-component-shutdown.md)
-for user-provided components.
+MUST support [shutdown of opt-in components](../sdk-component-shutdown.md)
+supplied to it. An SDK-provided `MetricReader` owns the shutdown of
+`MetricProducer` implementations that it accepts.
 
 ### ForceFlush
 
@@ -1541,6 +1542,10 @@ failed or timed out.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
+
+**Status**: [Development](../document-status.md) - An SDK-provided
+`MetricReader` MUST [shut down opt-in `MetricProducer`
+implementations](../sdk-component-shutdown.md) that it accepts.
 
 ### Periodic exporting MetricReader
 

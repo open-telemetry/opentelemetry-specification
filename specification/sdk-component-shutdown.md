@@ -2,65 +2,72 @@
 linkTitle: SDK component shutdown
 --->
 
-# Shutdown of user-provided SDK components
+# Shutdown of opt-in SDK components
 
 **Status**: [Development](document-status.md)
 
-The tracing, metrics, and logs SDKs already require providers to shut down
-specified child components, such as processors, readers, and exporters. Other
-user-provided components can also own resources. Examples include a custom
-`Sampler`, a `MetricProducer`, state captured by a `TracerConfigurator`,
-`MeterConfigurator`, or `LoggerConfigurator`, and custom state used when
-configuring a metrics `View`. A `View` itself is configuration; an action for
-View-related state only closes resources tracked by the application.
+The tracing, metrics, and logs SDKs already require shutdown of specified
+components, such as processors, readers, and exporters. Other user-provided
+components can also own resources. Examples include a `Sampler`, a
+`MetricProducer`, and a stateful configurator or `View` where the language
+represents one as an object. State captured only by a function closure is not
+visible to this mechanism. Here, a user-provided component is an
+application-supplied value that performs an SDK extension role, rather than a
+passive configuration value.
 
-Each SDK signal provider MUST provide a programmatic way to register one or
-more shutdown actions during provider construction. A shutdown action releases
-resources associated with a user-provided component. Registration MAY use a
-callback, an explicitly registered lifecycle object, or another
-language-idiomatic form. It MUST NOT require adding a method to an existing
-component interface. It MUST preserve existing provider construction calls and
-plugin implementations, following the [SDK compatibility
-rules](versioning-and-stability.md#extending-apisdk-abstractions). Supplying a
-component to the SDK does not, by itself, register an action for it. Existing
-specified shutdown paths remain in effect.
+A user-provided component MAY opt in to SDK-managed cleanup by exposing a
+language-idiomatic shutdown operation in addition to its existing component
+operations. An SDK can preserve this opt-in signal through a separate optional
+interface such as `Shutdowner`, an optional method with a default implementation
+on an existing interface, or a wrapper that forwards the operation. SDKs MUST
+NOT make the operation a new requirement of existing component interfaces.
+Exposing an operation matching the SDK's optional shutdown contract constitutes
+opt-in, including for existing implementations. When an SDK-provided object
+accepts a user-provided component during its programmatic construction, it MUST
+invoke the component's optional shutdown operation as part of its own
+`Shutdown`, without a separate registration call. Components without the
+optional operation are unaffected. Existing required shutdown paths remain in
+effect and MUST NOT be duplicated for the same ownership relationship.
 
-Registration takes effect only after provider construction succeeds. If
-construction fails, the SDK MUST NOT invoke the registered actions; the
-application remains responsible for its user-provided resources.
+The SDK-provided object that accepts the component owns this shutdown call. A
+provider MUST wait for its existing required child `Shutdown` operations to
+complete or abort before shutting down optional components it directly owns. An
+SDK-provided composite component MUST apply the same rule to its directly held
+delegates. A user-provided composite component is responsible for its own
+delegates. A required child shutdown failure MUST NOT prevent attempts to shut
+down optional components, subject to cancellation or deadline. Before invoking
+an optional shutdown operation, the owner MUST stop admitting new operations
+under its control that use the component. An SDK-provided composite MAY rely on
+its owning SDK object to stop admitting such operations. Operations already in
+flight can remain and may reach the component after its shutdown operation
+returns. The component MUST tolerate such calls or coordinate their completion
+before releasing resources.
 
-When a provider's `Shutdown` is called, the provider MUST invoke its existing
-required child `Shutdown` operations. It MUST NOT start registered actions
-until those operations have completed or aborted. An asynchronous provider
-`Shutdown` can chain the actions after child operations finish. The provider
-MUST attempt each registered action once unless its shutdown deadline has
-expired. It MUST NOT start an action more than once per registration or after
-the deadline, if one exists. A failure in one action MUST NOT prevent attempts
-of other actions, subject to the shutdown deadline.
+If construction of the SDK-provided object accepting a component fails, the SDK
+MUST NOT invoke that component's optional shutdown operation; the application
+retains cleanup responsibility. An owner MUST attempt an optional shutdown
+operation once per configured role or delegate slot that it owns, unless
+shutdown has been canceled or its deadline has expired. The same instance
+configured in multiple roles or slots can therefore receive multiple calls. An
+owner MUST NOT start an operation after shutdown is canceled or its deadline
+expires. A failure in one operation MUST NOT prevent attempts of others, subject
+to cancellation and deadline. Where `Shutdown` provides an outcome, it MUST NOT
+report success if an operation fails, times out, or remains unattempted due to
+cancellation or deadline expiration. If the outcome can report only one reason,
+a timeout SHOULD take precedence over failure when both occur.
 
-The provider MUST wait for an asynchronous action to complete before reporting
-a successful `Shutdown`, subject to the same timeout. Where `Shutdown`
-provides an outcome, it MUST NOT report success if an action fails, times out,
-or remains unattempted when the deadline expires. If the outcome distinguishes
-timeout from failure, a timeout SHOULD take precedence when both occur. The SDK
-cannot necessarily stop a user action that continues running after the timeout.
-The application remains responsible for resources whose registered actions did
-not complete during `Shutdown`. Fallback cleanup MUST be safe if an action is
-still running, through coordination or idempotence.
+The owner MUST wait for an asynchronous optional shutdown operation to complete
+before reporting successful `Shutdown`, subject to its deadline. An operation
+that times out may continue running. The application remains responsible for
+resources whose shutdown did not complete; fallback cleanup MUST coordinate with
+any still-running operation or be idempotent.
 
-An application registering an action MUST ensure it is safe to invoke while
-SDK operations using its resources remain in flight, or coordinate with those
-operations before releasing the resources. For example, a `MetricProducer`
-action may need to coordinate with an in-flight `Produce` call after a
-`MetricReader` shutdown fails or times out. A resource shared across providers
-MUST remain alive until all providers using it have stopped. An application can
-register cleanup with an owner that shuts down after all other users, or
-coordinate last-user cleanup across providers. If an existing specified
-shutdown path already closes a component, registering an additional action for
-it can close the component twice.
-
-The order among registered actions is unspecified. An application requiring
-ordered cleanup can register one action that coordinates its components.
-This mechanism specifies registration during programmatic provider
-construction. It does not specify later registration or registration through
-declarative configuration.
+Supplying an opt-in component transfers shutdown responsibility to each SDK
+object that accepts it. An application sharing one component across separately
+shut down SDK objects MUST ensure that shutdown by one owner leaves the resource
+usable by the others, for example through reference-counted ownership. An
+application cannot rely on the SDK to discover shared ownership. The same
+instance may be accepted in multiple roles and receive multiple shutdown calls;
+its optional operation SHOULD be idempotent in that case. This mechanism covers
+components supplied during programmatic construction; it does not specify
+declarative configuration or later component replacement.

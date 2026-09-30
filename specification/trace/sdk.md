@@ -174,8 +174,8 @@ make the shutdown timeout configurable.
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
 **Status**: [Development](../document-status.md) - The `TracerProvider`
-MUST support [registration of shutdown actions](../sdk-component-shutdown.md)
-for user-provided components.
+MUST support [shutdown of opt-in components](../sdk-component-shutdown.md)
+supplied to it, including `Sampler` implementations.
 
 ### ForceFlush
 

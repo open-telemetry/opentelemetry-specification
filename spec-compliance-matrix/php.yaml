@@ -25,7 +25,7 @@ sections:
             status: '+'
           - name: Shutdown (SDK only required)
             status: '+'
-          - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+          - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
             status: '?'
           - name: ForceFlush (SDK only required)
             status: '+'
@@ -227,7 +227,7 @@ sections:
         status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '?'
-      - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+      - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
         status: '?'
       - name: All methods of `Meter` are safe to be called concurrently.
         status: '?'
@@ -365,7 +365,7 @@ sections:
         status: '+'
       - name: LoggerProvider.Shutdown
         status: '+'
-      - name: '[Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md)'
+      - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
         status: '?'
       - name: LoggerProvider.ForceFlush
         status: '+'

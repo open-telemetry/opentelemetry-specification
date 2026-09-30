@@ -24,7 +24,7 @@ formats is required. Implementing more than one format is optional.
 | Associate Tracer with InstrumentationScope |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| [Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| [Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -132,7 +132,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  | - |  | - |
 | Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | + | + | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
-| [Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| [Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
 | `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  | + |
@@ -203,7 +203,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | LoggerProvider.Get Logger accepts attributes |  | + | - |  | + |  |  | + | + | + | - |  | + |
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| [Register provider shutdown actions (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| [Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md) |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | Logger.Emit(LogRecord) with Exception parameter | X |  | + |  | + |  |  |  |  |  | - |  | + |
