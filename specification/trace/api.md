@@ -10,7 +10,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Data types](#data-types)
   * [Time](#time)
@@ -50,7 +50,7 @@ weight: 1
 - [Included Propagators](#included-propagators)
 - [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -99,8 +99,8 @@ a global default `TracerProvider`.
 Notwithstanding any global `TracerProvider`, some applications may want to or
 have to use multiple `TracerProvider` instances,
 e.g. to have different configuration (like `SpanProcessor`s) for each
-(and consequently for the `Tracer`s obtained from them),
-or because it's easier with dependency injection frameworks.
+`TracerProvider` instance (and consequently for the `Tracer`s obtained from
+them), or because it's easier with dependency injection frameworks.
 Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
 number of `TracerProvider` instances.
 

@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Propagator Mechanisms](#propagator-mechanisms)
@@ -16,7 +16,7 @@
     + [Security](#security)
 - [Implementation Guidelines](#implementation-guidelines)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

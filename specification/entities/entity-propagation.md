@@ -9,7 +9,7 @@ linkTitle: Entity Propagation
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Specifying entity information via an environment variable](#specifying-entity-information-via-an-environment-variable)
@@ -22,7 +22,7 @@ linkTitle: Entity Propagation
   * [Error Handling](#error-handling)
 - [EnvEntityDetector](#enventitydetector)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -118,11 +118,11 @@ OTEL_ENTITIES=";service{service.name=app1};;host{host.id=host-123};"
 
 1. Split the input string by semicolons (`;`) to get individual entity definitions
 2. For each entity definition:
-   a. Skip if the entity definition is empty (allows consecutive semicolons and leading/trailing semicolons)
-   b. Extract the entity type (everything before the first `{`)
-   c. Extract identifying attributes from `{...}` block
-   d. Extract descriptive attributes from `[...]` block (if present)
-   e. Extract schema URL from `@...` portion (if present)
+   1. Skip if the entity definition is empty (allows consecutive semicolons and leading/trailing semicolons)
+   2. Extract the entity type (everything before the first `{`)
+   3. Extract identifying attributes from `{...}` block
+   4. Extract descriptive attributes from `[...]` block (if present)
+   5. Extract schema URL from `@...` portion (if present)
 3. Parse key-value lists using comma (`,`) as separator and equals (`=`) for assignment
 4. Validate that each entity has a non-empty type and at least one identifying attribute
 5. Create entity objects and associate them with the resource

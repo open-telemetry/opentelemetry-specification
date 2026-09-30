@@ -9,7 +9,7 @@ linkTitle: No-Op
 <details>
 <summary> Table of Contents </summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [LoggerProvider](#loggerprovider)
   * [Logger Creation](#logger-creation)
@@ -17,7 +17,7 @@ linkTitle: No-Op
   * [Emit LogRecord](#emit-logrecord)
   * [Enabled](#enabled)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
