@@ -154,11 +154,6 @@ decide if they want to make the shutdown timeout configurable.
 `Shutdown` MUST be implemented by invoking `Shutdown` on all
 registered [LogRecordProcessors](#logrecordprocessor).
 
-**Status**: [Development](../document-status.md) - The `LoggerProvider`
-MUST support [shutdown of opt-in components](../sdk-component-shutdown.md)
-supplied to it. An SDK-provided processor MUST apply the same rule to components
-it accepts; a user-provided processor is responsible for its own delegates.
-
 ### ForceFlush
 
 This method provides a way for provider to notify the

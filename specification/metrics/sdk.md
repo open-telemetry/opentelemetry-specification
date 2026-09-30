@@ -230,11 +230,6 @@ decide if they want to make the shutdown timeout configurable.
 `Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
 [MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances.
 
-**Status**: [Development](../document-status.md) - The `MeterProvider`
-MUST support [shutdown of opt-in components](../sdk-component-shutdown.md)
-supplied to it. An SDK-provided `MetricReader` owns the shutdown of
-`MetricProducer` implementations that it accepts.
-
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
@@ -1544,8 +1539,8 @@ via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
 **Status**: [Development](../document-status.md) - An SDK-provided
-`MetricReader` MUST [shut down opt-in `MetricProducer`
-implementations](../sdk-component-shutdown.md) that it accepts.
+`MetricReader` SHOULD [shut down opt-in `MetricProducer`
+implementations](../sdk-component-shutdown.md) supplied during construction.
 
 ### Periodic exporting MetricReader
 

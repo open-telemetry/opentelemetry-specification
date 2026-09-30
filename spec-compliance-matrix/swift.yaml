@@ -25,7 +25,7 @@ sections:
             status: '+'
           - name: Shutdown (SDK only required)
             status: '+'
-          - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
+          - name: '[Optional shutdown of Samplers (SDK only required)](specification/sdk-component-shutdown.md)'
             status: '?'
           - name: ForceFlush (SDK only required)
             status: '+'
@@ -227,8 +227,6 @@ sections:
         status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '?'
-      - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
-        status: '?'
       - name: All methods of `Meter` are safe to be called concurrently.
         status: '?'
       - name: All methods of any instrument are safe to be called concurrently.
@@ -284,6 +282,8 @@ sections:
       - name: The `ExponentialBucketHistogram` aggregation is available.
         status: '?'
       - name: The metrics Reader implementation supports registering metric Exporters
+        status: '?'
+      - name: '[Optional shutdown of MetricProducers](specification/sdk-component-shutdown.md)'
         status: '?'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
         status: '?'
@@ -364,8 +364,6 @@ sections:
       - name: LoggerProvider.Get Logger accepts attributes
         status: '?'
       - name: LoggerProvider.Shutdown
-        status: '?'
-      - name: '[Shutdown of opt-in SDK components (SDK only required)](specification/sdk-component-shutdown.md)'
         status: '?'
       - name: LoggerProvider.ForceFlush
         status: '?'

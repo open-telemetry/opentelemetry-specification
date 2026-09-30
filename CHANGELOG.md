@@ -41,8 +41,8 @@ release.
 
 ### Common
 
-- Add Development support for automatic shutdown of user-provided SDK
-  components that opt in through a separate shutdown operation.
+- Add Development guidance for optional automatic shutdown of user-provided
+  SDK components that expose a shutdown operation.
   ([#5339](https://github.com/open-telemetry/opentelemetry-specification/pull/5339))
 
 ### OpenTelemetry Protocol
