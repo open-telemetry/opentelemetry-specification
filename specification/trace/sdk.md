@@ -29,6 +29,7 @@ weight: 3
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
+    + [Shutdown](#shutdown-1)
   * [Built-in samplers](#built-in-samplers)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
@@ -68,7 +69,7 @@ weight: 3
     + [OnStart](#onstart)
     + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
-    + [Shutdown()](#shutdown-1)
+    + [Shutdown()](#shutdown-2)
     + [ForceFlush()](#forceflush-1)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
@@ -76,7 +77,7 @@ weight: 3
 - [Span Exporter](#span-exporter)
   * [Interface Definition](#interface-definition-1)
     + [`Export(batch)`](#exportbatch)
-    + [`Shutdown()`](#shutdown-2)
+    + [`Shutdown()`](#shutdown-3)
     + [`ForceFlush()`](#forceflush-2)
   * [Further Language Specialization](#further-language-specialization)
     + [Examples](#examples)
@@ -172,6 +173,8 @@ via a callback or an event. OpenTelemetry client authors can decide if they want
 make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
+
+`Shutdown` SHOULD also invoke [Shutdown](#shutdown-1) on the configured `Sampler`, if supported.
 
 ### ForceFlush
 
@@ -413,6 +416,28 @@ be displayed on debug pages or in the logs. Example:
 Description MAY change over time, for example, if the sampler supports dynamic
 configuration or otherwise adjusts its parameters.
 Callers SHOULD NOT cache the returned value.
+
+#### Shutdown
+
+The `Sampler` interface SHOULD provide a `Shutdown` method.
+
+Shuts down the sampler. Called when SDK is shut down. This is an opportunity for
+sampler to do any cleanup required.
+
+Samplers that delegate to other samplers, such as `ParentBased` and
+`AlwaysRecord`, SHOULD invoke `Shutdown` on each delegate that supports it.
+
+`Shutdown` SHOULD be called only once for each `Sampler` instance. After the
+call to `Shutdown`, subsequent calls to `ShouldSample` are not allowed. SDKs
+SHOULD ignore these calls gracefully, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. It can be implemented
+as a blocking API or an asynchronous API which notifies the caller via a
+callback or an event. OpenTelemetry client authors can decide if they want to
+make the shutdown timeout configurable.
 
 ### Built-in samplers
 
@@ -965,7 +990,7 @@ The `SpanProcessor` interface MUST declare the following methods:
 
 * [OnStart](#onstart)
 * [OnEnd](#onendspan)
-* [Shutdown](#shutdown-1)
+* [Shutdown](#shutdown-2)
 * [ForceFlush](#forceflush-1)
 
 The `SpanProcessor` interface SHOULD declare the following methods:
@@ -1295,7 +1320,8 @@ specific guarantees and safeties.
 to be called concurrently.
 
 **Sampler** -  `ShouldSample` and `GetDescription` MUST be safe to be called
-concurrently.
+concurrently. `Shutdown` MUST be safe to be called concurrently with itself
+and the other `Sampler` methods.
 
 **Span processor** - all methods MUST be safe to be called concurrently.
 

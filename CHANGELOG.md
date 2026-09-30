@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add `Sampler.Shutdown` and recommend invoking it during `TracerProvider.Shutdown` to release sampler resources.
+  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/issues/TODO))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
