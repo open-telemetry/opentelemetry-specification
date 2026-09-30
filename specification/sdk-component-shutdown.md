@@ -29,9 +29,9 @@ coordinate their completion before releasing resources. An application sharing
 a component among SDK objects is responsible for coordinating its lifetime
 across their shutdown calls.
 
-An SDK can also support object-valued configurators or `View`s, where the
-language allows them to expose an optional shutdown operation. A function
-value can opt in only if the SDK can observe that operation; state hidden solely
-in its closure cannot be detected. This mechanism covers components
-supplied during programmatic construction; it does not specify
-later configuration updates or declarative configuration.
+An SDK can also apply optional shutdown to an object-valued configurator or
+`View` that exposes the operation. A function value can opt in only if the
+SDK can observe that operation; state hidden solely in its closure cannot be
+detected. This mechanism covers components supplied during programmatic
+construction; it does not specify later configuration updates or declarative
+configuration.
