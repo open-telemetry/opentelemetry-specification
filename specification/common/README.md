@@ -8,15 +8,15 @@ path_base_for_github_subdir:
 
 # Common specification concepts
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [AnyValue](#anyvalue)
-  * [map](#mapstring-anyvalue)
+  * [map<string, AnyValue>](#mapstring-anyvalue)
   * [AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols)
     + [Strings](#strings)
     + [Booleans](#booleans)
@@ -34,7 +34,7 @@ path_base_for_github_subdir:
   * [Configurable Parameters](#configurable-parameters)
   * [Exempt Entities](#exempt-entities)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -208,8 +208,6 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 
 ### Attribute representation for non-OTLP
 
-**Status**: [Development](../document-status.md)
-
 For non-OTLP protocols that need to
 represent a single `Attribute` as a string, the RECOMMENDED form is a
 [JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4)
@@ -287,8 +285,6 @@ irrespective of the order in which those elements appear
 
 ### Attribute Collection representation for non-OTLP
 
-**Status**: [Development](../document-status.md)
-
 For non-OTLP protocols that need to represent an Attribute Collection as a
 string, the RECOMMENDED form is a
 [JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
@@ -343,10 +339,18 @@ If an SDK provides a way to:
   - the count limit applies only to top-level attributes, not to nested key-value
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
+- set an attribute value depth limit such that for each attribute value:
+  - the SDK MUST start counting depth at 1 for the top-level attribute value,
+    and increment depth when descending into arrays (both homogeneous and
+    heterogeneous) or [maps](#mapstring-anyvalue);
+  - arrays or map at a depth greater than the limit MUST be replaced with an
+    empty value;
+  - otherwise a value MUST NOT be changed due to the depth limit.
 
 There MAY be a log emitted to indicate to the user that an attribute was
-truncated or discarded. To prevent excessive logging, the log MUST NOT be
-emitted more than once per record on which an attribute is set.
+truncated, discarded, or replaced due to a limit. To prevent excessive logging,
+the log MUST NOT be emitted more than once per record on which an attribute is
+set.
 
 If the SDK implements the limits above, it MUST provide a way to change these
 limits programmatically. Names of the configuration options SHOULD be the same as
@@ -359,14 +363,16 @@ use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
 the general limit. If neither are defined, then the SDK MUST try to use the
 model-specific limit default value, followed by the global limit default value.
 
-Note that the limits apply only to attribute collections.
-Therefore, they do not apply to values within other data structures such as
+Note that the limits apply only to attribute collections. Attribute value length
+and depth limits apply recursively to attribute values, but they do not apply to
+values within other data structures such as
 [`LogRecord.Body`](../logs/data-model.md#field-body).
 
 ### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length (applies to string values and byte arrays);
+* `AttributeValueDepthLimit` (Default=64) - Maximum allowed attribute value depth (applies to arrays and maps);
 
 ### Exempt Entities
 

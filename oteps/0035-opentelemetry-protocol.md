@@ -1,4 +1,4 @@
-<!--- cspell:ignore rfcnnnn --->
+<!-- cspell:ignore rfcnnnn -->
 # OpenTelemetry Protocol Specification
 
 **Author**: Tigran Najaryan, Omnition Inc.

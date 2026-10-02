@@ -78,8 +78,6 @@ sections:
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
-          - name: Set order preserved
-            optional: true
           - name: String type
           - name: Boolean type
           - name: Double floating-point type
@@ -186,6 +184,8 @@ sections:
         optional: true
       - name: The SDK allows more than one `View` to be specified per instrument.
         optional: true
+      - name: The `MeterProvider` supports configuring `view_matching_mode` to enable composable View matching.
+        optional: true
       - name: The `Drop` aggregation is available.
       - name: The `Default` aggregation is available.
       - name: The `Default` aggregation uses the specified aggregation by instrument.
@@ -266,8 +266,8 @@ sections:
       - name:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -278,6 +278,7 @@ sections:
       - name: Get current Context
       - name: Composite Propagator
       - name: Global Propagator
+        optional: true
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator

@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Propagator Types](#propagator-types)
@@ -39,7 +39,7 @@
     + [Fields](#fields-1)
     + [Configuration](#configuration)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 
@@ -333,13 +333,13 @@ These platforms MUST also allow pre-configured propagators to be disabled or ove
 
 ### Get Global Propagator
 
-This method MUST exist for each supported `Propagator` type.
+This method SHOULD exist for each supported `Propagator` type.
 
 Returns a global `Propagator`. This usually will be composite instance.
 
 ### Set Global Propagator
 
-This method MUST exist for each supported `Propagator` type.
+This method SHOULD exist for each supported `Propagator` type.
 
 Sets the global `Propagator` instance.
 

@@ -1,26 +1,25 @@
 # Metric Configuration Service
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
-- [Metric Configuration Service](#metric-configuration-service)
-  * [Overview](#overview)
-  * [Service Protocol](#service-protocol)
-    + [Metric Config Request](#metric-config-request)
-    + [Metric Config Response](#metric-config-response)
-      - [Schedules](#schedules)
-      - [Fingerprint](#fingerprint)
-      - [Wait Time](#wait-time)
-    + [Push vs Pull Metric Model](#push-vs-pull-metric-model)
-  * [Implementation Details](#implementation-details)
-    + [Collection Periods](#collection-periods)
-    + [Go SDK](#go-sdk)
-    + [Collector Extension](#collector-extension)
-      - [Local File](#local-file)
-        * [Matching Behavior](#matching-behavior)
-        * [Fingerprint Hashing](#fingerprint-hashing)
-      - [Remote Backend](#remote-backend)
+- [Overview](#overview)
+- [Service Protocol](#service-protocol)
+  * [Metric Config Request](#metric-config-request)
+  * [Metric Config Response](#metric-config-response)
+    + [Schedules](#schedules)
+    + [Fingerprint](#fingerprint)
+    + [Wait Time](#wait-time)
+  * [Push vs Pull Metric Model](#push-vs-pull-metric-model)
+- [Implementation Details](#implementation-details)
+  * [Collection Periods](#collection-periods)
+  * [Go SDK](#go-sdk)
+  * [Collector Extension](#collector-extension)
+    + [Local File](#local-file)
+      - [Matching Behavior](#matching-behavior)
+      - [Fingerprint Hashing](#fingerprint-hashing)
+    + [Remote Backend](#remote-backend)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Overview
 

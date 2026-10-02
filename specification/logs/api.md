@@ -11,7 +11,7 @@ aliases: [bridge-api]
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider operations](#loggerprovider-operations)
@@ -24,7 +24,7 @@ aliases: [bridge-api]
 - [Ergonomic API](#ergonomic-api)
 - [References](#references)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

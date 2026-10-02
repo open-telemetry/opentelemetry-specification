@@ -11,7 +11,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
@@ -61,7 +61,7 @@ weight: 2
 - [References](#references)
 - [Footnotes](#footnotes)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

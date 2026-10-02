@@ -2,11 +2,11 @@
 
 **Status**: [Alpha](../document-status.md)
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Compatibility](#compatibility)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 ## Compatibility
 

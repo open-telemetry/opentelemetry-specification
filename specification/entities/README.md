@@ -9,12 +9,12 @@ path_base_for_github_subdir:
  <details>
  <summary>Table of Contents</summary>
 
-<!-- START DOCTOC -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [Specifications](#specifications)
 
-<!-- END DOCTOC -->
+<!-- END doctoc -->
 
 </details>
 

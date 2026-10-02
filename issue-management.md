@@ -62,6 +62,22 @@ Rejected issues are issues that describe a problem that cannot or will not be so
 * `triage:rejected:out-of-scope`
 * `triage:rejected:scope-too-large`
 
+## Stale Issues
+
+An issue that receives no activity for a year is marked stale by the
+[stale workflow](.github/workflows/stale.yaml), and is closed if there is still
+no activity 14 days later. Any activity on the issue, such as a comment, removes
+the stale label and resets the timer, so a single comment during those 14 days is
+enough to keep the issue open.
+
+Closing an issue only changes its status. Closed issues remain searchable and
+can be reopened. To reopen an issue that was closed as stale, comment `/reopen`
+on it and the [reopen workflow](.github/workflows/reopen-issue.yaml) will reopen
+it. This works for the issue author as well as
+[OpenTelemetry members](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md),
+collaborators, and previous contributors. Anyone else can ask a
+[maintainer](README.md#maintainers) to reopen it.
+
 ## SIG Specific Issues
 
 Many SIGs track work in the specification repository that is outside of the triage process listed above.
