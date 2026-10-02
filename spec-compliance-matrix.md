@@ -24,6 +24,7 @@ formats is required. Implementing more than one format is optional.
 | Associate Tracer with InstrumentationScope |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Optional shutdown of Samplers (SDK only required)](specification/sdk-component-shutdown.md) | X |  |  |  |  |  |  |  |  |  |  |  |  |
 | ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -157,6 +158,7 @@ formats is required. Implementing more than one format is optional.
 | The `ExplicitBucketHistogram` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `ExponentialBucketHistogram` aggregation is available. |  | + | + | + | + | + |  |  |  | + | + |  | - |
 | The metrics Reader implementation supports registering metric Exporters |  | + | + | + | + | + | + | + | + | + | + |  | - |
+| [Optional shutdown of MetricProducers](specification/sdk-component-shutdown.md) | X |  |  |  |  |  |  |  |  |  |  |  |  |
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | + |  | - |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  | - |

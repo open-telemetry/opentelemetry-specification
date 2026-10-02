@@ -25,6 +25,8 @@ sections:
             status: '+'
           - name: Shutdown (SDK only required)
             status: '+'
+          - name: '[Optional shutdown of Samplers (SDK only required)](specification/sdk-component-shutdown.md)'
+            status: '?'
           - name: ForceFlush (SDK only required)
             status: '+'
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
@@ -281,6 +283,8 @@ sections:
         status: '+'
       - name: The metrics Reader implementation supports registering metric Exporters
         status: '+'
+      - name: '[Optional shutdown of MetricProducers](specification/sdk-component-shutdown.md)'
+        status: '?'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
         status: '+'
       - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.

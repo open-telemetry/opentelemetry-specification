@@ -1538,6 +1538,10 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
+**Status**: [Development](../document-status.md) - An SDK-provided
+`MetricReader` SHOULD [shut down opt-in `MetricProducer`
+implementations](../sdk-component-shutdown.md) supplied during construction.
+
 ### Periodic exporting MetricReader
 
 This is an implementation of the `MetricReader` which collects metrics based on
