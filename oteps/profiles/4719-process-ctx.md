@@ -147,7 +147,7 @@ Finally, if both `memfd_create` fails (step 2, thus requiring falling back to st
 
 The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
 
-In a situation where multiple resources exist as per https://github.com/open-telemetry/opentelemetry-specification/pull/4665, the process context should contain the default SDK resource.
+In a situation where multiple resources exist as per https://github.com/open-telemetry/opentelemetry-specification/pull/4665, the process context should contain the `Resource` produced by the SDK's Resource Provider (see [SDK Implementation](#sdk-implementation)).
 We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](https://github.com/open-telemetry/opentelemetry-specification/pull/4947)
 will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
 
@@ -218,6 +218,12 @@ This mechanism is additive and does not modify existing OpenTelemetry SDK behavi
 - The mapping is process-scoped and does not affect thread-local context propagation
 
 SDKs that do not implement this feature continue to function normally; external readers simply will not have access to their runtime-generated resource attributes.
+
+## SDK Implementation
+
+SDKs MUST provide a way to enable and disable publication, RECOMMENDED as an environment variable `OTEL_EXPERIMENTAL_PROCESS_CONTEXT_ENABLED` (a [boolean](../../specification/configuration/sdk-environment-variables.md#boolean)). While at Development status it SHOULD default to disabled (opt-in); the intent is to default to enabled once the feature stabilizes, via a later explicit spec change. Where publication is unsupported (e.g. non-Linux), the SDK MUST treat it as a no-op.
+
+By default the published `ProcessContext.resource` MUST be the `Resource` produced by the SDK's [Resource Provider](../../specification/resource/sdk.md#resource-provider), unless the user overrides it. SDKs SHOULD provide a way to override the resource used for publication.
 
 ## Trade-offs and mitigations
 
@@ -413,9 +419,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 1. **Protobuf vs. msgpack vs. other**: Should the payload use protobuf or msgpack, or something else entirely (such as [Type, Length, Value](https://docs.google.com/document/d/1Ij6SYfv0lHOhTNsXNGVFpra3ZCfz-WC7QBXdB_OaoYc/edit?tab=t.0#heading=h.llbgke6lmlbd))? In our experiments, they all work well, the choice is primarily about ease of implementation in the ecosystem and standardization.
 
-2. **SDK implementation requirements**: Should SDKs publish this information by default whenever possible, or be opt-in?
-
-3. **Discovery cost for processes with many mappings**: Should the specification recommend an alternative discovery mechanism to reduce overhead for consumers scanning processes
+2. **Discovery cost for processes with many mappings**: Should the specification recommend an alternative discovery mechanism to reduce overhead for consumers scanning processes
 with very large numbers of `/proc/<pid>/maps` entries? See the [trade-off discussion](#applications-with-many-entries-in-proc) for details.
 
 ## Prototypes
