@@ -29,7 +29,15 @@ release.
 
 ### Resource
 
+- Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
+
 ### Entities
+
+- Add in-development entity-resource startup specification.
+  ([#5057](https://github.com/open-telemetry/opentelemetry-specification/pull/5057))
+- Remove `OTEL_ENTITIES` from general env var configuration spec.
+  ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Common
 
@@ -37,11 +45,20 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Unknown-typed metric transformation.
+  ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
+- Stabilize Prometheus Info metric transformation.
+  ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+
 ### SDK Configuration
 
 - Add Development configuration for blocking behavior when batch processor
   queues are full.
   ([#5181](https://github.com/open-telemetry/opentelemetry-specification/pull/5181))
+- Declarative config should gracefully degrade when encountering unrecognized
+  resource detectors. Other SDK plugin components continue to produce errors
+  when missing.
+  ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
 
 ### Supplementary Guidelines
 
