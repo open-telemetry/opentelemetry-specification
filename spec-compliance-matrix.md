@@ -199,23 +199,23 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| LoggerProvider.Get Logger accepts attributes |  | + | - |  | + |  |  | + | + | + | - |  | + |
+| LoggerProvider.Get Logger accepts attributes |  | + | - | + | + |  |  | + | + | + | - |  | + |
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| Logger.Emit(LogRecord) with Exception parameter | X |  | + |  | + |  |  |  |  |  | - |  | + |
-| LogRecord.Set EventName |  | + | + |  | + | + |  |  | + | + |  |  | + |
+| Logger.Emit(LogRecord) with Exception parameter | X |  | + | + | + |  |  |  |  |  | - |  | + |
+| LogRecord.Set EventName |  | + | + | + | + | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| LogRecordProcessor.Enabled | X | + | - |  |  |  |  |  | + |  | - |  | + |
+| LogRecordProcessor.Enabled | X | + | - | + |  |  |  |  | + |  | - |  | + |
 | OTLP/gRPC exporter |  | + | + | + | + |  |  | + | + | + | + |  | - |
 | OTLP/HTTP exporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| OTLP File exporter |  | - | + |  | + |  |  |  | - | + | - |  | - |
+| OTLP File exporter |  | - | + | - | + |  |  |  | - | + | - |  | - |
 | Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  | + |
+| Trace Context Injection |  | + | + | + | + | + |  | + | + | + | + |  | + |
 
 ## Resource
 
