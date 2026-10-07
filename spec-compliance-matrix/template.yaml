@@ -37,6 +37,8 @@ sections:
           - name: Associate Tracer with InstrumentationScope
           - name: Safe for concurrent calls
           - name: Shutdown (SDK only required)
+          - name: '[Optional shutdown of Samplers (SDK only required)](specification/sdk-component-shutdown.md)'
+            optional: true
           - name: ForceFlush (SDK only required)
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
         features:
@@ -194,6 +196,8 @@ sections:
       - name: The `ExplicitBucketHistogram` aggregation is available.
       - name: The `ExponentialBucketHistogram` aggregation is available.
       - name: The metrics Reader implementation supports registering metric Exporters
+      - name: '[Optional shutdown of MetricProducers](specification/sdk-component-shutdown.md)'
+        optional: true
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
       - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.
       - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
