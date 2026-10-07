@@ -52,6 +52,9 @@ release.
 
 ### SDK Configuration
 
+- Add Development configuration for blocking behavior when batch processor
+  queues are full.
+  ([#5181](https://github.com/open-telemetry/opentelemetry-specification/pull/5181))
 - Declarative config should gracefully degrade when encountering unrecognized
   resource detectors. Other SDK plugin components continue to produce errors
   when missing.
