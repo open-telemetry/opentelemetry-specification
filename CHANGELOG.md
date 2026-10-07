@@ -46,7 +46,7 @@ release.
 - Clarify that the OTLP exporter timeout bounds the entire batch export,
   including all request attempts and waits between retries, and that earlier
   caller deadlines take precedence.
-  ([#2346](https://github.com/open-telemetry/opentelemetry-specification/issues/2346))
+  ([#5347](https://github.com/open-telemetry/opentelemetry-specification/issues/5347))
 
 ### Compatibility
 
