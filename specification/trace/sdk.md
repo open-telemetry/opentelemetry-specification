@@ -421,15 +421,22 @@ Callers SHOULD NOT cache the returned value.
 
 The `Sampler` interface SHOULD provide a `Shutdown` method.
 
-Shuts down the sampler. Called when SDK is shut down. This is an opportunity for
-sampler to do any cleanup required.
+Shuts down the sampler, providing an opportunity to release any resources it holds.
 
 Samplers that delegate to other samplers, such as `ParentBased` and
 `AlwaysRecord`, SHOULD invoke `Shutdown` on each delegate that supports it.
 
-`Shutdown` SHOULD be called only once for each `Sampler` instance. After the
-call to `Shutdown`, subsequent calls to `ShouldSample` are not allowed. SDKs
-SHOULD ignore these calls gracefully, if possible.
+`Shutdown` SHOULD be called only once for each `Sampler` instance. Repeated or
+concurrent calls to `Shutdown` SHOULD NOT repeat cleanup.
+
+Callers, including `TracerProvider`, SHOULD NOT call `ShouldSample` after
+`Shutdown` begins. If such a call occurs, implementations SHOULD return `DROP`
+without executing their sampling logic. Samplers that always return a static
+sampling decision MAY continue returning that decision.
+
+Calls to `ShouldSample` already in progress MAY complete with their normal
+result. Implementations MUST ensure these calls remain safe while shutdown
+releases resources.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
