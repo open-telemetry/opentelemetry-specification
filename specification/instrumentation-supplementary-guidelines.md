@@ -37,11 +37,11 @@ instrumentation-vs-instrumented distinction and package naming.
 
 ## Dependencies
 
-The specification already requires instrumentation to depend only on the
-OpenTelemetry API, not the SDK (see [Overview](overview.md#sdk)).
+The specification already requires instrumentation to depend on the
+OpenTelemetry API, and not the SDK (see [Overview](overview.md#sdk)).
 
-Depending only on the API lets a library ship instrumentation without forcing
-its consumers to adopt OpenTelemetry: with no SDK installed, the
+Depending on the API without the SDK lets a library ship instrumentation without
+forcing its consumers to adopt OpenTelemetry: with no SDK installed, the
 [minimal implementation](library-guidelines.md#api-and-minimal-implementation)
 built into the API generates no telemetry.
 
@@ -53,8 +53,8 @@ for the language.
 
 Telemetry emitted by an instrumentation library is associated with an
 [Instrumentation Scope](common/instrumentation-scope.md) whose `name` and
-optional `version` and `schema_url` identify the instrumentation that produced
-it.
+optional `version`, `schema_url`, and `attributes` identify the instrumentation
+that produced it.
 
 * The scope `name` should identify the **instrumentation** library, not the
   instrumented library, and should uniquely identify it, typically a fully
@@ -69,7 +69,8 @@ it.
 * When the instrumentation targets a particular version of the OpenTelemetry
   Semantic Conventions, it should set the scope `schema_url` to the
   corresponding [Telemetry Schema](schemas/README.md) URL.
-* The scope name and version are part of the emitted telemetry's identity.
+* The scope's identity consists of its `name`, `version`, `schema_url`, and
+  `attributes`.
   Changing the scope `name` is a user-visible change and is best treated as a
   breaking change (see [Stability and Versioning](#stability-and-versioning)).
 
