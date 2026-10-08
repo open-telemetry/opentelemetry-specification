@@ -188,10 +188,10 @@ best handled internally, consistent with
 ## Testing
 
 Instrumentation authors are encouraged to test the telemetry their
-instrumentation emits using OpenTelemetry's in-memory exporter, asserting on the
-spans, metrics, and logs produced (including scope name and version, span and
-metric names, attributes, status, and propagated context) without requiring a
-full backend.
+instrumentation emits, for example using OpenTelemetry's in-memory exporter,
+asserting on the spans, metrics, and logs produced (including scope name and
+version, span and metric names, attributes, status, and propagated context)
+without requiring a full backend.
 
 Beyond asserting on individual signals, instrumentation authors can add a CI
 check that the emitted telemetry conforms to the
