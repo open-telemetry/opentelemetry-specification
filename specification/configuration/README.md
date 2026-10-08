@@ -12,9 +12,11 @@ does not attempt to specify the details of what can be configured.
 
 ## SDK component names
 
-SDK components MAY allow users to configure an optional name. Users SHOULD
-choose a name that uniquely identifies the component within its containing SDK
-instance.
+**Status**: [Development](../document-status.md)
+
+SDK components MAY allow users to configure an optional name. If supported, the
+SDK MUST recommend in its documentation that users choose a name that uniquely
+identifies the component within its containing SDK instance.
 
 Component names may be used by configuration and management mechanisms to refer
 to individual component instances. When a component with a configured name
