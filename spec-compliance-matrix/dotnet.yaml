@@ -578,7 +578,7 @@ sections:
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
             status: '+'
           - name: SchemaURL in ResourceLogs and ScopeLogs
-            status: '-'
+            status: '+'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
             status: '+'
           - name:

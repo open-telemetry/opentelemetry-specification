@@ -334,7 +334,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
-| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
+| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  | + |  |  | + |  |  | + |  | + |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  | - |  | - |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  | - |  | + |
