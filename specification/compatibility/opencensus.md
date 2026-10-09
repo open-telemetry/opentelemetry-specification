@@ -4,7 +4,17 @@ linkTitle: OpenCensus
 
 # OpenCensus Compatibility
 
-**Status**: [Stable](../document-status.md), Unless otherwise specified.
+**Status**: [Deprecated](../document-status.md)
+
+> [!NOTE]
+> OpenCensus compatibility requirements are deprecated.
+> Existing OpenCensus shims MAY continue to be supported for backwards
+> compatibility, but implementing new OpenCensus compatibility is not required
+> by this specification.
+>
+> OpenCensus compatibility requirements are deprecated as of June 2026.
+> OpenCensus compatibility requirements in this specification will be removed
+> no earlier than June 2027.
 
 The OpenTelemetry project aims to provide backwards compatibility with the
 [OpenCensus](https://opencensus.io) project in order to ease migration of

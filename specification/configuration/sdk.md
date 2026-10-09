@@ -1,5 +1,7 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: SDK
+aliases:
+  - /docs/reference/specification/sdk-configuration
 weight: 3
 --->
 
@@ -7,7 +9,7 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
@@ -26,7 +28,7 @@ weight: 3
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 ## Overview
 
@@ -133,20 +135,22 @@ configuration model interpretation.
 
 The following table lists the current status of all SDK plugin components in the configuration data model:
 
-| SDK plugin component                                                                        | Declarative config type                                                                                                                                |
-|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
-| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
-| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
-| [ID generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
+| SDK plugin component                                                                        | Declarative config type                                                                                                    | Missing provider behavior **[1]** |
+|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| [resource detector](../resource/sdk.md#resource-detector)                                   | [ExperimentalResourceDetection](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalresourcedetection) | warn and skip                         |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://opentelemetry.io/docs/specs/otel-config/types/#type-textmappropagator)                         | error                                 |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)                                   | error                                 |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanprocessor)                                 | error                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://opentelemetry.io/docs/specs/otel-config/types/#type-sampler)                                             | error                                 |
+| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://opentelemetry.io/docs/specs/otel-config/types/#type-idgenerator)                                     | error                                 |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pullmetricexporter)                       | error                                 |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-pushmetricexporter)                       | error                                 |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://opentelemetry.io/docs/specs/otel-config/types/#type-metricproducer)                               | error                                 |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                         | error                                 |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordexporter)                         | error                                 |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://opentelemetry.io/docs/specs/otel-config/types/#type-logrecordprocessor)                       | error                                 |
+
+**[1]**: Behavior when no `PluginComponentProvider` is registered for a name referenced in the configuration model. See [Create](#create) for details.
 
 ##### PluginComponentProvider operations
 
@@ -269,10 +273,10 @@ are defined in the configuration data model.
 
 A few examples to illustrate:
 
-* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+* If configuring [`BatchSpanProcessor`](https://opentelemetry.io/docs/specs/otel-config/types/#type-batchspanprocessor)
   and `schedule_delay` is not present or present but null, the component is
   configured according to the `defaultBehavior` of `5000`.
-* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+* If configuring [`SpanExporter`](https://opentelemetry.io/docs/specs/otel-config/types/#type-spanexporter)
   and `console` is present and null, the component is configured with a
   `console` exporter with default configuration since `console` is nullable.
 
@@ -281,17 +285,28 @@ The [configuration model](data-model.md) uses the JSON schema
 annotation to capture property semantics which cannot be encoded using standard
 JSON schema keywords. Create SHOULD return an error if it encounters a value
 which is invalid according to the property `description`. For example, if
-configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+configuring [`HttpTls`](https://opentelemetry.io/docs/specs/otel-config/types/#type-httptls)
 and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
-When encountering a reference to
+If encountering a reference to
 an [SDK plugin component](#sdk-extension-components) which is not built-in to
-the SDK, Create MUST resolve the component using [Create Component](#create-component)
-of the [`PluginComponentProvider`](#plugincomponentprovider) of the corresponding `type`
-and `name` used to [register](#register-plugincomponentprovider), including the
+the SDK, and a `PluginComponentProvider` is registered with the corresponding
+`type` and `name` used to [register](#register-plugincomponentprovider), Create
+MUST resolve the component using [Create Component](#create-component) of the
+[`PluginComponentProvider`](#plugincomponentprovider), including the
 configuration `properties` as an argument. If no `PluginComponentProvider` is
-registered with the `type` and `name`, Create SHOULD return an error.
+registered with the `type` and `name`, Create's behavior is determined by the
+component's `Missing provider behavior` in
+the [Supported SDK plugin components](#supported-sdk-plugin-components) table:
+
+* `error`: Create SHOULD return an error.
+* `warn and skip`: Create SHOULD generate a warning identifying the unrecognized
+  name and gracefully ignore the reference. This allows a portable configuration
+  to reference language-specific components (e.g. resource detectors beyond the
+  reserved names in [Resource detector name](../resource/sdk.md#resource-detector-name))
+  without causing startup failures in SDKs that don't recognize them.
+
 If [Create Component](#create-component) returns an error, Create SHOULD propagate the
 error.
 
@@ -376,7 +391,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -404,7 +419,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -432,7 +447,7 @@ OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpe
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```

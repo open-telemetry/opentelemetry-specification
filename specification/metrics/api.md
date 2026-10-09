@@ -10,7 +10,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Overview](#overview)
 - [MeterProvider](#meterprovider)
@@ -63,7 +63,7 @@ weight: 1
 - [Concurrency requirements](#concurrency-requirements)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 

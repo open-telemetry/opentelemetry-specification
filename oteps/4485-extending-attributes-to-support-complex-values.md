@@ -1,6 +1,6 @@
 # Extending attributes to support complex values
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Glossary](#glossary)
 - [Why?](#why)
@@ -25,7 +25,7 @@
 - [Backend research](#backend-research)
 - [Appendix](#appendix)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 ## Glossary
 

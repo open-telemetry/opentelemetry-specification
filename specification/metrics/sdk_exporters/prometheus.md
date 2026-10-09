@@ -9,7 +9,7 @@ linkTitle: Prometheus
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [Prometheus Exporter Model](#prometheus-exporter-model)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -23,14 +23,14 @@ linkTitle: Prometheus
   * [Host](#host)
   * [Port](#port)
   * [Default Aggregation](#default-aggregation)
-  * [Resource Attributes as Metric Attributes](#resource-attributes-as-metric-attributes)
+  * [Resource Attributes as Metric Labels](#resource-attributes-as-metric-labels)
   * [Translation Strategy](#translation-strategy)
   * [Scope Info](#scope-info)
   * [Target Info](#target-info)
 - [Content Negotiation](#content-negotiation)
   * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 
@@ -52,7 +52,7 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 
 ### Client Libraries
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD use an official [Prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/)
 when one exists for the implementation language and it is practical to do so
@@ -87,7 +87,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 
 ### Target
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
@@ -120,22 +120,23 @@ default.
 
 ### Default Aggregation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
 the [default aggregation](../sdk.md#default-aggregation) by default.
 
-### Resource Attributes as Metric Attributes
+### Resource Attributes as Metric Labels
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
-By default, it MUST NOT add any resource attributes as metric attributes.
-The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
-include / exclude or regular expression based). Copied Resource attributes MUST NOT be
-excluded from the `target` info metric. The option MAY be named `resource_constant_labels`.
+A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
+By default, it MUST NOT add any resource attributes as metric labels.
+The configuration SHOULD allow the user to select resource attributes to
+[include or exclude](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalprometheusmetricexporter).
+Copied Resource attributes MUST NOT be excluded from the `target_info` metric.
+The option MAY be named `resource_constant_labels`.
 
 ### Translation Strategy
 
@@ -167,19 +168,34 @@ The option MAY be named `target_info_enabled`, and MUST be `true` by default.
 
 ## Content Negotiation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
 
+If no `Accept` header is provided and no fallback protocol is configured, the
+exporter MUST use Prometheus text format 0.0.4 (`text/plain; version=0.0.4`) and
+apply `underscores` escaping.
+
 ### Interaction with Translation Strategy
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
+Regardless of the configured `translation_strategy`, the final output format and
+character escaping MUST comply with the content negotiation's restrictions based
+on the `Accept` header.
 
-Examples:
+First, `translation_strategy` MUST be applied to construct metric names. Then,
+the Prometheus Exporter MUST apply content negotiation, which may include a
+second translation of metric names using the requested
+[escaping scheme](https://prometheus.io/docs/instrumenting/escaping_schemes/).
 
-- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
-- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the exporter will continue to be compliant.
+For example, for a counter metric named `foo.bar` with unit `By`:
+
+| `translation_strategy` | No `escaping` parameter or `escaping=underscores` | `escaping=allow-utf-8` |
+| :--- | :--- | :--- |
+| `UnderscoreEscapingWithSuffixes` | `foo_bar_bytes_total` | `foo_bar_bytes_total` |
+| `UnderscoreEscapingWithoutSuffixes` | `foo_bar` | `foo_bar` |
+| `NoUTF8EscapingWithSuffixes` | `foo_bar_bytes_total` | `foo.bar_bytes_total` |
+| `NoTranslation` | `foo_bar` | `foo.bar` |

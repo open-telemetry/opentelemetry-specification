@@ -7,7 +7,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START doctoc -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)
@@ -35,7 +35,7 @@ weight: 1
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
 
-<!-- tocstop -->
+<!-- END doctoc -->
 
 </details>
 
