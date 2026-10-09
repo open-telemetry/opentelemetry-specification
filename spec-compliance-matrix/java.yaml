@@ -133,6 +133,8 @@ sections:
             status: '+'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
+            status: '+'
           - name: Allow samplers to modify tracestate
             status: '+'
           - name: ShouldSample gets full parent Context

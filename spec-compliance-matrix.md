@@ -78,6 +78,7 @@ formats is required. Implementing more than one format is optional.
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  |  |  |  |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
