@@ -63,7 +63,11 @@ Each configuration option MUST be overridable by a signal specific option.
   - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` `OTEL_EXPORTER_OTLP_LOGS_COMPRESSION`
   - Type: [Enum][]
 
-- **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
+- **Timeout**: Maximum time the OTLP exporter will wait for each batch export,
+  including all request attempts and waits between retries. The timeout starts
+  when the batch export begins and MUST NOT be reset for each request attempt.
+  This is an overall export timeout, distinct from connection or individual
+  request attempt timeouts.
   - Default: 10s
   - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
   - Type: [Timeout][]
@@ -190,6 +194,13 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 ## Retry
 
 Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
+
+Each request attempt and wait between retries MUST be bounded by the remaining
+time allowed by the exporter timeout. Any earlier deadline provided by the caller
+(for example, a span processor, log processor, or metric reader) MUST take
+precedence. When either limit is reached, the exporter MUST stop attempting to
+export the batch, including any waits between retries, and complete the export
+with a failure result.
 
 ### Transient errors
 
