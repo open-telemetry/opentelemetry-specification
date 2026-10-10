@@ -105,11 +105,15 @@ interpret telemetry without learning each library's specifics.
 * Semantic conventions assign each attribute a
   [requirement level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md)
   (Required, Conditionally Required, Recommended, or Opt-In). Instrumentation
-  should populate Required, Conditionally Required, and Recommended attributes by
-  default, and should provide a mechanism for users to opt in to Opt-In
-  attributes, which are omitted by default because they can be expensive,
-  high-cardinality, or sensitive. Instrumentation can also let users opt out of
-  Recommended attributes they do not need.
+  should follow the collection and configuration rules for each level:
+  * Populate Required attributes. Populate Conditionally Required attributes
+    when their conditions are satisfied.
+  * Populate Recommended attributes by default when readily available and
+    efficient to collect. They can be omitted by default for performance,
+    security, privacy, or other considerations; when omitted, instrumentation
+    should offer user opt-in where logically applicable. Instrumentation can
+    also offer an option to disable Recommended attributes.
+  * Populate Opt-In attributes only when explicitly enabled by the user.
 * Where no stable semantic convention exists for a domain, instrumentation can
   define its own attributes, and should namespace them to avoid collisions and
   migrate to the OpenTelemetry convention once one stabilizes.
@@ -172,18 +176,25 @@ best handled internally, consistent with
   [Versioning and Stability](versioning-and-stability.md) guidance.
 * The telemetry an instrumentation emits (instrumentation scope name, span
   names, attributes, metric names, and units) is part of its observable
-  contract, which users build dashboards, alerts, and queries on. A change to
-  this contract, including one that results from adopting a newer version of the
-  semantic conventions, is a breaking change for the instrumentation. Where the
-  conventions define a migration path, follow it and communicate the change
-  clearly.
+  contract, which users build dashboards, alerts, and queries on. Incompatible
+  changes to this contract, including those resulting from adopting newer
+  semantic conventions, can break users. Additive changes, such as adding a
+  metric or a span attribute, are non-breaking. Follow the
+  [Telemetry Stability](telemetry-stability.md) guidance for permitted changes
+  and, where applicable, the migration path defined by the semantic conventions.
+  Communicate incompatible changes clearly.
 * Instrumentation that emits telemetry based on experimental (not-yet-stable)
   semantic conventions should make that clear to users. Where a stable
   convention also exists, prefer emitting it by default and gating the
   experimental output behind opt-in, so the default output stays stable.
-* If no stable semantic convention exists for the instrumented domain, the
-  instrumentation's own output cannot yet be stable. Keeping the library pre-1.0
-  (a `0.x` version) signals to users that its telemetry may still change.
+* Document the stability of the emitted telemetry separately from the library's
+  package or API stability. Telemetry based on experimental semantic conventions
+  may change as those conventions evolve. When no stable convention exists,
+  authors can define and preserve a stable custom telemetry contract, subject to
+  the [Telemetry Stability](telemetry-stability.md) guidance. An already-stable
+  library can introduce experimental instrumentation without changing its
+  package to a pre-1.0 version, provided the telemetry's maturity is clearly
+  documented.
 
 ## Testing
 
