@@ -25,6 +25,7 @@ path_base_for_github_subdir:
     - [Package/Library Layout](library-layout.md)
     - [General error handling guidelines](error-handling.md)
     - [Self-Observability](self-observability.md)
+    - [Instrumentation Supplementary Guidelines](instrumentation-supplementary-guidelines.md)
   - [Performance](performance.md)
 - API Specification
   - [Context](context/README.md)
