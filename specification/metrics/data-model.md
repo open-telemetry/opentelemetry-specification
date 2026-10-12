@@ -919,33 +919,40 @@ omitted from the code fragments above, to improve readability.*
 
 ##### Extreme value handling
 
-At the lowest or highest end of the 64 bit IEEE floating point, a
-bucket's range may only be partially representable by the floating
-point number format.  When mapping a number in these buckets, a
-producer may correctly return the index of such a partially
-representable bucket.  This is considered a normal condition.
+At the extremes of the normal binary64 range, a bucket can extend into
+the subnormal range or beyond the largest finite value. Returning the
+index of such a bucket for a representable measurement is consistent
+with the data model.
 
 As examples:
 
-- The smallest normal value `0x1p-1022` belongs to a bucket that
-  includes subnormal values.
-- The largest bucket at any given scale will contain the value
-  `0x1p+1024`, an unrepresentable value.
+- At scale 1, the smallest normal value `0x1p-1022` is the inclusive
+  upper boundary of a bucket that also contains subnormal values.
+- At scale 1, the bucket containing the largest finite binary64 value,
+  `0x1.fffffffffffffp+1023`, has mathematical upper boundary `2^1024`.
+  That boundary is not representable as a finite binary64 value;
+  the measurement itself is representable.
 
 ##### Table lookup implementation
 
-A table lookup implementation is described as an alterative to the
-logarithm method for positive scales. As an alternative to the
-logarithm method, the implementation [detailed in a supplemental
-document](./exponential-histogram-table-lookup.md) uses a table of
-exact logarithm values as the basis for a fast and exact bucket
-calculation.
+A table lookup implementation described in
+[non-normative supplementary guidance](./exponential-histogram-table-lookup.md)
+provides an alternative to the logarithm method for positive scales.
+It maps positive normal values exactly to bucket indexes at scales
+supported by the table. For bucket selection, positive subnormal inputs are
+treated as `0x1p-1022` and mapped to the bucket containing that value,
+as permitted by the [SDK specification](./sdk.md#handle-all-normal-values).
+For positive scales, `0x1p-1022` is that bucket's inclusive upper boundary.
+The supplementary document describes
+[options for scales above the table's resolution](./exponential-histogram-table-lookup.md#table-size-and-scale-selection).
 
-The use of a built-in logarithm function can lead to results that
-differ from the exactly-correct bucket index that would be computed
-with greater precision. As a result, ExponentialHistogram exemplars
-computed alongside the logarithm function could map into buckets with
-zero count. The table lookup method addresses this problem.
+A built-in logarithm can produce a bucket index that differs from the
+exact index near a boundary. If a consumer maps an exemplar value
+using a different method from the producer, it can associate that value
+with a bucket whose count is zero, even though the producer counted the
+measurement in an adjacent bucket. Exact mapping of normal values at
+the same scale avoids this source of discrepancy when used by both
+producer and consumer.
 
 #### ExponentialHistogram: Consumer Recommendations
 

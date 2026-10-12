@@ -25,7 +25,7 @@ func main() {
 
 func generateBoundaries(scale int) []uint64 {
 	n := 1 << scale
-	boundaries := make([]uint64, 0, n+3)
+	boundaries := make([]uint64, 0, n+2)
 	boundaries = append(boundaries, 0, 1)
 
 	for k := 1; k < n; k++ {
@@ -39,7 +39,7 @@ func generateBoundaries(scale int) []uint64 {
 		)
 	}
 
-	return append(boundaries, 1<<fractionBits, 1<<fractionBits)
+	return append(boundaries, 1<<fractionBits)
 }
 
 func ceilSqrt(value *big.Int) *big.Int {
@@ -51,17 +51,17 @@ func ceilSqrt(value *big.Int) *big.Int {
 	return root
 }
 
-func generateIndexTable(scale int, boundaries []uint64) ([]uint16, int) {
+func generateIndexTable(scale int, boundaries []uint64) ([]uint32, int) {
 	n := 1 << scale
 	shift := 51 - scale
-	table := make([]uint16, 2*n)
+	table := make([]uint32, 2*n)
 	j := 0
 	for i := range table {
 		lowerBound := uint64(i) << shift
 		for lowerBound >= boundaries[j+1] {
 			j++
 		}
-		table[i] = uint16(j)
+		table[i] = uint32(j)
 	}
 	return table, shift
 }
@@ -70,7 +70,7 @@ func printTables(
 	scale int,
 	shift int,
 	boundaries []uint64,
-	indexTable []uint16,
+	indexTable []uint32,
 ) {
 	fmt.Printf("SCALE = %d\nSHIFT = %d\nBOUNDARIES = [\n", scale, shift)
 	for i, value := range boundaries {

@@ -17,7 +17,7 @@ release.
 
 ### Metrics
 
-- Exponential Histogram exact table lookup algorithm documented.
+- Add non-normative guidance for Exponential Histogram table lookup.
   ([#5230](https://github.com/open-telemetry/opentelemetry-specification/pull/5230))
 - Specify that `Shutdown` of the periodic exporting MetricReader MUST include
   the effects of `ForceFlush`.

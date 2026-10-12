@@ -17,7 +17,7 @@ def generate_boundaries(scale: int) -> list[int]:
             value = ceil_sqrt(value)
         boundaries.append(value & ((1 << FRACTION_BITS) - 1))
 
-    boundaries.extend((1 << FRACTION_BITS, 1 << FRACTION_BITS))
+    boundaries.append(1 << FRACTION_BITS)
     return boundaries
 
 
