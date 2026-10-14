@@ -46,7 +46,7 @@ OpenTelemetry users and implementors are encouraged to stay up to date with
 the latest releases. Stable API packages remain backward compatible across
 minor and patch releases within the same major version. Stable SDK and Contrib
 packages can include backward-incompatible behavioral or configuration changes
-in minor or patch releases under the
+in minor or patch releases only under the
 [security-related changes exception](versioning-and-stability.md#security-related-changes).
 
 ### Application Developers
