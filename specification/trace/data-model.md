@@ -15,10 +15,23 @@ weight: 2
 - [Overview](#overview)
 - [Operations => Spans => Traces](#operations--spans--traces)
 - [Span](#span)
-  * [Identity and parent](#identity-and-parent)
-  * [Operation and time](#operation-and-time)
-  * [Descriptive data](#descriptive-data)
-  * [Origin](#origin)
+  * [Field: `TraceId`](#field-traceid)
+  * [Field: `SpanId`](#field-spanid)
+  * [Field: `TraceFlags`](#field-traceflags)
+  * [Field: `TraceState`](#field-tracestate)
+  * [Field: `ParentSpanId`](#field-parentspanid)
+  * [Field: `IsRemote`](#field-isremote)
+  * [Field: `Name`](#field-name)
+  * [Field: `Kind`](#field-kind)
+  * [Field: `StartTimestamp`](#field-starttimestamp)
+  * [Field: `EndTimestamp`](#field-endtimestamp)
+  * [Field: `Attributes`](#field-attributes)
+  * [Field: `Events`](#field-events)
+  * [Field: `Links`](#field-links)
+  * [Field: `Status`](#field-status)
+  * [Dropped Attribute Counts](#dropped-attribute-counts)
+  * [Field: `Resource`](#field-resource)
+  * [Field: `InstrumentationScope`](#field-instrumentationscope)
 - [Trace](#trace)
   * [Forming a trace from spans](#forming-a-trace-from-spans)
   * [Root span](#root-span)
@@ -109,41 +122,55 @@ The main parts of a span are:
 | ↳ `TraceFlags` | Carries flags associated with the trace context, including sampling and trace-ID randomness.                                            |
 | ↳ `TraceState` | Immutable ordered list of tracing-system-specific key-value pairs that can accompany the standard identifiers across process boundaries. |
 | ↳ `IsRemote` | Indicates locally whether the `SpanContext` was received from a remote source or generated locally.                                     |
-| Parent | Identifies the operation that directly caused this operation, if any.                                                                   |
-| Name and kind | Classify the operation and its role in a communication.                                                                                 |
-| Start and end timestamps | Describe when the operation took place.                                                                                                 |
-| Attributes | Describe properties of this occurrence of the operation.                                                                                |
-| Events | Describe timestamped occurrences during the operation.                                                                                  |
-| Links | Reference other causally related spans.                                                                                                 |
-| Status | Records the operation's final status when it is explicitly known.                                                                       |
-| Resource | Describes the entity for which the span was produced.                                                                                   |
-| Instrumentation scope | Identifies the instrumentation that produced the span.                                                                                  |
+| `ParentSpanId` | Identifies the operation that directly caused this operation, if any.                                                                   |
+| `Name` and `Kind` | Classify the operation and its role in a communication.                                                                                 |
+| `StartTimestamp` and `EndTimesamp` | Describe when the operation took place.                                                                                                 |
+| `Attributes` | Describe properties of this occurrence of the operation.                                                                                |
+| `Events` | Describe timestamped occurrences during the operation.                                                                                  |
+| `Links` | Reference other causally related spans.                                                                                                 |
+| `Status` | Records the operation's final status when it is explicitly known.                                                                       |
+| `Resource` | Describes the entity for which the span was produced.                                                                                   |
+| Instrumentation `scope` | Identifies the instrumentation that produced the span.                                                                                  |
 
 A `Span` in a process is mutable while its operation is being recorded and becomes
 non-recording when it is ended. An exported span is a readable representation
 of the data captured during that lifetime. The [Span API](api.md#span) defines
 the complete set of span properties and their behavior.
 
-### Identity and parent
+### Field: `TraceId`
 
-The identity and relationship fields are:
+Type: byte sequence.
 
-- `TraceId`: the 16-byte identifier shared by every span in the trace.
-- `SpanId`: the 8-byte identifier of this span.
-- `TraceFlags`: flags associated with the trace context, including the
-  `Sampled` and `Random` flags.
-- `TraceState`: an immutable ordered list of tracing-system-specific key-value
-  pairs that accompanies the trace context.
-- `ParentSpanId`: the `SpanId` of the parent span, or empty for a root span.
-  The SDK's parent `SpanContext` also indicates through
-  [`IsRemote`](api.md#isremote) whether it was extracted from a remote source.
+Request trace ID as defined
+in [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id).
+
+The trace ID is shared by every span in the trace.
+
+### Field: `SpanId`
+
+Type: byte sequence.
+
+The identifier of this span.
 
 The tuple (`TraceId`, `SpanId`) references a span. A `SpanId` alone is not
 enough to uniquely identify a span.
 
-`TraceFlags` and `TraceState` are carried by each `SpanContext`. `TraceFlags`
-are standardized bits that tracing participants interpret consistently.
-`TraceState`, by contrast, gives multiple tracing systems separate entries for
+### Field: `TraceFlags`
+
+Type: byte.
+
+Trace flag as defined in
+[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags)
+specification, including the `Sampled` and `Random` flags.
+
+### Field: `TraceState`
+
+Type: string.
+
+An immutable ordered list of tracing-system-specific key-value pairs that accompanies 
+the trace context.
+
+`TraceState` gives multiple tracing systems separate entries for
 information not represented by `TraceId` and `SpanId`, such as
 system-specific trace identifiers or sampling information. A participant can
 preserve entries it does not interpret, allowing multiple tracing systems to
@@ -156,14 +183,33 @@ same trace a tracing participant can derive a new
 export, without changing the existing immutable `SpanContext`. Consequently,
 spans in the same trace can carry different `TraceState` snapshots.
 
-### Operation and time
+### Field: `ParentSpanId`
+
+Type: byte sequence.
+
+The `SpanId` of the parent span, or empty for a root span. The SDK's parent
+
+### Field: `IsRemote`
+
+Type: enumeration.
+
+Indicates whether the span context was extracted from a remote source. Possible values 
+are: (unknown, is not remote, is remote).
+
+### Field: `Name`
+
+Type: string.
 
 The span name identifies a class of operations. For example, `GET /users/{id}`
 identifies a class of server requests, while a user identifier belongs in an
 attribute. The [span name guidance](api.md#span) describes how names avoid
 unbounded cardinality.
 
-`SpanKind` describes the span's role:
+### Field: `Kind`
+
+Type: enumeration.
+
+`Kind` describes the span's role:
 
 - `SERVER` and `CLIENT` represent the receiving and sending sides of
   request-response communication.
@@ -172,45 +218,90 @@ unbounded cardinality.
 - `INTERNAL` represents an operation internal to an application or when other kinds
   are not applicable.
 
-The start and end timestamps measure the elapsed real time of the operation.
-The span duration is the difference between them. Timestamps come from the
-clock of the process that records the span, so timestamps from different
-processes do not by themselves establish causality or a precise global order.
+### Field: `StartTimestamp`
 
-### Descriptive data
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
-Span attributes are an [Attribute Collection](../common/README.md#attribute-collections) describing this
-occurrence of the operation. Semantic conventions give common attributes
-consistent meanings across implementations and languages.
+Indicates the start time of the operation.
 
-An event is a timestamped annotation on a span. Each event has a name and its
-own attribute collection. Events describe occurrences within the operation.
+Timestamps come from the clock of the process that records the span, so timestamps 
+from different processes do not by themselves establish causality or a precise global 
+order.
+
+### Field: `EndTimestamp`
+
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
+
+Indicates the start end of the operation.
+
+The span duration is the difference between StartTimestamp and EndTimestamp.
+
+### Field: `Attributes`
+
+Type: [Attribute Collection](../common/README.md#attribute-collections).
+
+Span attributes describe this occurrence of the operation. Semantic conventions give 
+common attributes consistent meanings across implementations and languages.
+
+### Field: `Events`
+
+Type: array of Event.
+
+An event is a timestamped annotation on a span. Events describe occurrences within the 
+operation. Each event has a name and its own attribute collection. The Name identifies 
+the class / type of the event. 
+
+Note that [Log events](../logs/data-model.md#events) are another way of recording events.
+OTEPs
+[0265](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0265-event-vision.md) and
+[4430](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/4430-span-event-api-deprecation-plan.md)
+define the relationship between Span Events and Log Events. 
+
+### Field: `Links`
+
+Type: array of Link.
 
 A link references another span through its `SpanContext` and can have its own
 attributes. Links express causal relationships that do not fit the single-parent
 model.
 
+### Field: `Status`
+
+Type: tuple.
+
 [Status](api.md#set-status) has a code of `Unset`, `Ok`, or `Error`, and can include a 
 description for `Error`. Status is distinct from protocol-specific result codes, which are
 represented according to semantic conventions.
+
+### Dropped Attribute Counts
 
 Exportable span representations also include counts of attributes, events,
 and links dropped because of configured limits. These
 counts indicate data loss even though the dropped values
 are no longer available.
 
-### Origin
+### Field: `Resource`
 
-Every span is associated with a [Resource](../resource/README.md) and an
-[Instrumentation Scope](../common/instrumentation-scope.md).
+Type: [Resource](../resource/sdk.md).
 
-The resource identifies the entity for which the span was produced, such as a
-service instance, process, container, or host. A single trace commonly contains
-spans from several resources.
+Description: Describes the source of the log, aka
+[resource](../overview.md#resources). Multiple occurrences of events coming from
+the same event source can happen across time and they all have the same value of
+`Resource`. Can contain for example information about the application that emits
+the record or about the infrastructure where the application runs. Data formats
+that represent this data model may be designed in a manner that allows the
+`Resource` field to be recorded only once per batch of log records that come
+from the same source. SHOULD follow OpenTelemetry
+[semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
+This field is optional.
 
-The instrumentation scope identifies the logical unit of software that emitted
-the span, such as an instrumentation library or application component. A
-single resource can produce spans from several instrumentation scopes.
+### Field: `InstrumentationScope`
+
+Type: [Instrumentation Scope](../common/instrumentation-scope.md).
+
+Description: the [instrumentation scope](../common/instrumentation-scope.md).
+Multiple occurrences of events coming from the same scope can happen across time and
+they all have the same value of `InstrumentationScope`. This field is optional.
 
 ## Trace
 
@@ -267,10 +358,9 @@ span remains a non-root span in that fragment.
 
 ### Causal and temporal relationships
 
-Parent-child relationships describe direct causality, not necessarily lexical
-or temporal containment. A child can outlive its parent, siblings can overlap,
-and asynchronous work can begin after the initiating operation has ended.
-Spans can also have gaps between them.
+Parent-child relationships describe direct causality. A child can outlive its parent, 
+siblings can overlap, and asynchronous work can begin after the initiating operation 
+has ended. Spans can also have gaps between them.
 
 For example, the same parent-child structure can have these temporal
 relationships:
@@ -307,7 +397,9 @@ reasons. Common causes of incomplete trace data include:
 A non-root span whose referenced parent is absent proves that the available
 trace is incomplete. The converse is not true: the presence of every referenced
 parent does not prove completeness because spans do not record a list of
-expected children.
+expected children. See 
+[TraceState Probability Sampling](./tracestate-probability-sampling.md)
+for more details on sampling and trace completeness.
 
 Propagating trace context and exporting span data are separate operations. A
 participant can propagate a valid `SpanContext` even when it does not record or
@@ -340,7 +432,7 @@ A --> [B missing] --> C
 The propagated `SpanContext` contains the trace and span identifiers, trace
 flags, and `TraceState`; it does not contain the complete span with its
 timestamps, attributes, events, and status. The `Sampled` flag communicates a
-recording decision in the propagated context, but it does not guarantee that
+sampling decision in the propagated context, but it does not guarantee that
 every span in the trace is successfully exported and available to a consumer.
 
 ## Relationships between spans
