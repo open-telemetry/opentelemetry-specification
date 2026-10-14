@@ -59,6 +59,9 @@ release.
   resource detectors. Other SDK plugin components continue to produce errors
   when missing.
   ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
+- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
+  exporting MetricReader.
+  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
 
