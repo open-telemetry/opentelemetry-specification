@@ -161,7 +161,7 @@ formats is required. Implementing more than one format is optional.
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | + | + | + |  |  | + | + |  | - |
-| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | + | + | + |  |  | + | + |  | - |
+| The metrics Exporter `export` function does not block indefinitely. | X | + | + | + | + | + | + |  |  | + | + |  | - |
 | The metrics Exporter `export` function receives a batch of metrics. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter `export` function returns `Success` or `Failure`. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter provides a `ForceFlush` function. |  | + | + | + | + | + | + | + | + | + | + |  | - |

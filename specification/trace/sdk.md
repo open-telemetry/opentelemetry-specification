@@ -1166,8 +1166,8 @@ while an instance of an exporter should never have its Export() called
 concurrently it does not mean that the task of exporting can not be done
 concurrently. How this is done is outside the scope of this specification.
 
-Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (`Failure`).
+Export() SHOULD NOT block indefinitely, there SHOULD be a reasonable upper limit
+after which the call times out with an error result (`Failure`).
 
 Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required

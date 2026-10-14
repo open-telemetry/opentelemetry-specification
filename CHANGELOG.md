@@ -11,17 +11,23 @@ release.
 
 ### Traces
 
+- Recommend instead of require a finite upper bound for exporter `Export` calls.
+
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
 
 ### Metrics
 
+- Recommend instead of require a finite upper bound for exporter `Export` calls.
+
 - Specify that `Shutdown` of the periodic exporting MetricReader MUST include
   the effects of `ForceFlush`.
   ([#5305](https://github.com/open-telemetry/opentelemetry-specification/pull/5305))
 
 ### Logs
+
+- Recommend instead of require a finite upper bound for exporter `Export` calls.
 
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))

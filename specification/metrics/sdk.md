@@ -1695,8 +1695,8 @@ information (e.g. name, version, etc.) associated with each `Metric Point`.
 `Export` should never be called concurrently with other `Export` calls for the
 same exporter instance.
 
-`Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (Failure).
+`Export` SHOULD NOT block indefinitely, there SHOULD be a reasonable upper limit
+after which the call times out with an error result (Failure).
 
 Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required
