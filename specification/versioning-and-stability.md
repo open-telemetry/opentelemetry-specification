@@ -430,12 +430,6 @@ or rename public APIs, change their signatures, rename or remove configuration
 parameters, redefine semantic conventions, bypass signal deprecation or removal
 requirements, or make unrelated backward-incompatible changes.
 
-Changes to specification requirements under this exception MUST follow the
-normal [change proposal process](../CONTRIBUTING.md#proposing-a-change).
-The exception MUST NOT be used to disregard existing specification requirements.
-Changes to specified defaults, supported values, or behavior MUST be defined in
-corresponding specification changes.
-
 Release notes MUST identify the affected behavior and any affected configuration
 settings, describe the previous and new behavior (including any newly rejected
 inputs or configuration values and any truncated or dropped telemetry), explain
