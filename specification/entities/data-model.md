@@ -18,6 +18,11 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+- [Identity Scope](#identity-scope)
+  * [Local and Global Identity](#local-and-global-identity)
+  * [ID Context Type](#id-context-type)
+  * [Global Identity Composition](#global-identity-composition)
+  * [Unresolved Identity](#unresolved-identity)
 - [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
@@ -51,8 +56,9 @@ physical format and encoding of how entity data is recorded).
 | ----- | ---- | ----------- |
 | Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
 | Schema URL | string | Identifies the schema version for the entity's attributes. Used to determine merge compatibility (see [Merging of Entities](#merging-of-entities)). MAY be empty. |
-| ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>The scope within which the ID is unique is defined by [Identity Scope](#identity-scope).<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
+| ID Context Type | string | The type of the entity within which this entity's ID is unique.<p>MUST not change during the lifetime of the entity. MAY be empty. See [ID Context Type](#id-context-type). |
 
 ## Minimally Sufficient Identity
 
@@ -153,10 +159,125 @@ different values, then **only** the `k8s.node` entity can reference this key
 Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
 telemetry channel (e.g., entity events) where full ownership context is known.
 
+## Identity Scope
+
+Identifying attributes are not always sufficient to identify an entity
+universally. Some IDs are unique on their own, others are unique only within
+another entity. For example `k8s.pod.uid` is a Kubernetes-generated UUID, while
+`k8s.container.name` is unique only within a single Kubernetes Pod.
+
+Every entity type therefore has a **scope kind**:
+
+- **global**: the ID is universally unique. Any two observers that report the
+  same entity produce the same ID, and that ID does not depend on any other
+  entity.
+- **local**: the ID is unique only within another entity, called the **context
+  entity**.
+
+OpenTelemetry Semantic Conventions MUST declare the scope kind for every defined
+entity type. For a `local` entity type whose context entity type is the same in
+all deployments, Semantic Conventions MUST also declare that context entity
+type.
+
+### Local and Global Identity
+
+An entity's **Local Identity** is its ID attributes.
+
+For a `global` entity, the Global Identity is the Local Identity.
+
+For a `local` entity, the **Global Identity** is the union of its Local Identity
+and the Global Identity of its context entity.
+
+### ID Context Type
+
+The **ID Context Type** records the type of the entity within which this
+entity's ID is unique. It is a statement about this entity's own ID rather than
+a reference to a specific entity: it describes the kind of boundary the ID was
+minted within, which follows from the identifying attributes the producer
+populated.
+
+For a `global` entity the ID Context Type MUST be empty.
+
+For a `local` entity:
+
+- The producer of the entity SHOULD set the ID Context Type when it can
+  determine the kind of boundary within which it minted the ID.
+- An empty ID Context Type means the Semantic Conventions declaration for the
+  entity type applies. If that declaration is not available to the consumer, or
+  if Semantic Conventions declare no single context entity type for the entity
+  type, the scope of the ID is unknown and the identity is
+  [unresolved](#unresolved-identity).
+
+A component MUST NOT set or modify the ID Context Type of an entity it did not
+produce. Only the producer of an entity can know the boundary within which it
+minted that entity's ID. A component that detects an entity serving as the
+context for another entity adds its own entity to the Resource and leaves the
+other entity unchanged.
+
+> [!NOTE]
+> This keeps the ID Context Type independent of the order in which entities are
+> added to a Resource and of which other entities happen to be present. Adding a
+> context entity to a Resource later completes an entity's Global Identity
+> without modifying that entity.
+
+### Global Identity Composition
+
+The context entity is resolved by type. This is unambiguous because a Resource
+holds at most one entity of a given type, see
+[Merging An Entity into a Resource](../resource/data-model.md#merging-an-entity-into-a-resource).
+
+A consumer computes an entity's Global Identity as follows:
+
+1. Start with the entity's Local Identity.
+2. Determine the entity's context entity type: the ID Context Type if it is set,
+   otherwise the context entity type declared in Semantic Conventions for the
+   entity's type.
+3. If there is no context entity type, stop. The accumulated identity is the
+   Global Identity.
+4. Otherwise find the entity on the Resource whose type matches the context
+   entity type. If no such entity is present, the identity is
+   [unresolved](#unresolved-identity).
+5. Union that entity's Local Identity into the accumulated identity and repeat
+   from step 2 for that entity.
+
+A consumer MUST stop walking the chain if it encounters an entity type it has
+already visited.
+
+### Unresolved Identity
+
+An entity's identity is **unresolved** when the scope of its ID is unknown, or
+when a context entity in its chain is not present on the Resource.
+
+An unresolved entity is still a valid entity and still describes the object the
+telemetry is about. A consumer:
+
+- MAY use the entity to correlate signals that carry the same Resource.
+- MUST NOT treat the entity's Local Identity as a Global Identity.
+- MUST NOT merge the entity with an entity from another Resource that has the
+  same type and the same Local Identity, since the two may be distinct objects
+  in different contexts.
+
+An unresolved identity is expected whenever the context entity is reported by a
+different component than the entity itself. It is completed when that component
+adds the context entity to the Resource. For example, a receiver reporting
+Kubernetes objects observed through the Kubernetes API can report a `k8s.pod`
+entity without the `k8s.cluster` entity that gives it global identity, and a
+resource detector that knows the cluster completes the chain by adding the
+`k8s.cluster` entity.
+
+> [!NOTE]
+> For some entity types the producer cannot determine the boundary on its own.
+> A `process` identified by `process.pid` is unique within a PID namespace, and
+> a producer reading a procfs it did not mount itself cannot always tell which
+> namespace that is. Making such entity types resolvable is the responsibility
+> of the Semantic Conventions that model them, for example by defining distinct
+> identifying attributes per boundary.
+
 ## Merging of Entities
 
 Entities MAY be merged if and only if their types are the same, their
-identity attributes are exactly the same AND their schema_url is the same.
+identity attributes are exactly the same, their ID context types are the same
+(including when both are empty) AND their schema_url is the same.
 This means both Entities MUST have the same identity attribute keys and
 for each key, the values of the key MUST be the same.
 
@@ -166,9 +287,17 @@ Here's an example algorithm that will check compatibility:
 can_merge(current_entity, new_entity) {
   current_entity.type == new_entity.type &&
   current_entity.schema_url == new_entity.schema_url &&
+  current_entity.id_context_type == new_entity.id_context_type &&
   has_same_attributes(current_entity.identity, new_entity.identity)
 }
 ```
+
+Note: this algorithm merges entities within a single Resource, where the context
+entity of a given type is the same for both entities, so comparing ID context
+types is sufficient. An operation that merges entities across Resources, which
+this specification does not define, MUST compare
+[Global Identity](#global-identity-composition) instead, because the same Local
+Identity can refer to different objects in different contexts.
 
 When merging entities, all attributes in description are merged together, with
 Conflicting descriptive attributes values from the new entity overwrite descriptive
@@ -210,6 +339,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><strong>Identifying Attributes</strong>
     </td>
+    <td><strong>Scope Kind</strong>
+    </td>
     <td><strong>Descriptive Attributes</strong>
     </td>
    </tr>
@@ -219,6 +350,8 @@ _Note: These examples MAY diverge from semantic conventions._
     <td><pre>container</pre>
     </td>
     <td>container.id
+    </td>
+    <td>global
     </td>
     <td>container.image.id<br/>
         container.image.name<br/>
@@ -237,6 +370,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>host.id
     </td>
+    <td>global when <code>host.id</code> is a machine ID;<br/>local (context: <code>cloud.account</code>) when it is a cloud instance ID
+    </td>
     <td>host.arch<br/>
         host.name<br/>
         host.type<br/>
@@ -253,6 +388,8 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>k8s.node.uid
     </td>
+    <td>global
+    </td>
     <td>k8s.node.name
     </td>
    </tr>
@@ -263,9 +400,23 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>k8s.pod.uid
     </td>
+    <td>global
+    </td>
     <td>k8s.pod.name<br/>
         k8s.pod.label.{key}<br/>
         k8s.pod.annotation.{key}<br/>
+    </td>
+   </tr>
+   <tr>
+    <td>Kubernetes Container
+    </td>
+    <td><pre>k8s.container</pre>
+    </td>
+    <td>k8s.container.name
+    </td>
+    <td>local (context: <code>k8s.pod</code>)
+    </td>
+    <td>k8s.container.restart_count
     </td>
    </tr>
    <tr>
@@ -273,11 +424,16 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><pre>service.instance</pre>
     </td>
-    <td>service.instance.id<br/>
-        service.name<br/>
-        service.namespace
+    <td>service.instance.id
+    </td>
+    <td>local (context: <code>service</code>)
     </td>
     <td>service.version
     </td>
    </tr>
 </table>
+
+The `service.instance` row shows how Identity Scope replaces composing a
+globally unique ID by hand. `service.instance.id` is only required to be unique
+within a `service`, so the `service` entity's identity no longer has to be
+repeated in the `service.instance` identity to make it globally unique.
