@@ -23,6 +23,8 @@ release.
 
 ### Logs
 
+- Extend the ETW example mapping with the optional `etw.provider.name`
+  attribute and describe its availability.
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
 
