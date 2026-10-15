@@ -846,6 +846,15 @@ attributes MUST be combined as `<service.namespace>/<service.name>`, or
 `<service.name>` if namespace is empty, to form the `job` metric label.  The
 `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
+
+NOTE(krajo): implicitly: existing `job` data point attribute would be
+overwritten, however it is kept if there is no `service.name`.
+
+NOTE(krajo): both prometheusremotewriteexporter and the Prometheus OTLP endpoint
+keep track of existing `target` info metrics by the full label set, not just
+`job` and `instance` , so theoretically you can end up with two `target` info
+metric that have the same `job` and `instance`, but different attributes.
+
 Other resource attributes SHOULD be converted to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
