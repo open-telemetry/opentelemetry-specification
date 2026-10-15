@@ -422,10 +422,12 @@ mitigate denial of service or resource exhaustion through unbounded telemetry.
 These changes can affect emitted telemetry, including by truncating values or
 dropping attributes or records.
 
-Changes under this exception MUST be limited to what is necessary to mitigate
-the security risk. They MUST preserve the existing source and ABI compatibility
-guarantees, including compatibility of SDK plugin interfaces, and MUST comply
-with [Error handling](error-handling.md). The exception MUST NOT be used to remove
+Changes under this exception MUST address an identified, concrete security risk
+and MUST be limited to what is necessary to mitigate that risk. Changes made
+solely to reduce resource consumption or improve performance do not qualify.
+They MUST preserve the existing source and ABI compatibility guarantees,
+including compatibility of SDK plugin interfaces, and MUST comply with
+[Error handling](error-handling.md). The exception MUST NOT be used to remove
 or rename public APIs, change their signatures, rename or remove configuration
 parameters, redefine semantic conventions, bypass signal deprecation or removal
 requirements, or make unrelated backward-incompatible changes.
