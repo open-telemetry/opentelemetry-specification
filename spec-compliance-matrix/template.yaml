@@ -199,7 +199,6 @@ sections:
       - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
       - name: The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.
       - name: The metrics Exporter `export` function does not block indefinitely.
-        optional: true
       - name: The metrics Exporter `export` function receives a batch of metrics.
       - name: The metrics Exporter `export` function returns `Success` or `Failure`.
       - name: The metrics Exporter provides a `ForceFlush` function.
