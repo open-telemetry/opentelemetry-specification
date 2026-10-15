@@ -370,7 +370,7 @@
                 "sha256:fa8f5efb344d6908a1ce62f4a24e2e5780f825d6f53f5f50ec5ffacac72936cb",
                 "sha256:fdd28f912fccfec1846a94e2e1e8f9b0012f557f0c46fe4f3eb0d7a87afcf90b"
             ],
-            "markers": "python_version >= '3.9' and python_full_version not in '3.9.0, 3.9.1'",
+            "markers": "python_version >= '3.9' and python_full_version != '3.9.0' and python_full_version != '3.9.1'",
             "version": "==50.0.2"
         },
         "idna": {
@@ -383,11 +383,11 @@
         },
         "pycparser": {
             "hashes": [
-                "sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29",
-                "sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992"
+                "sha256:51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+                "sha256:d875f09c3507d00e1aba0eecc6dcadc1352f30fff09dc6bff2f1c2935e97c2bc"
             ],
             "markers": "python_version >= '3.10'",
-            "version": "==3.0"
+            "version": "==3.11"
         },
         "pygithub": {
             "hashes": [
