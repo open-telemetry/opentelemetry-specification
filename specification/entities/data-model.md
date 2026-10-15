@@ -168,11 +168,21 @@ another entity. For example `k8s.pod.uid` is a Kubernetes-generated UUID, while
 
 Every entity type therefore has a **scope kind**:
 
-- **global**: the ID is universally unique. Any two observers that report the
-  same entity produce the same ID, and that ID does not depend on any other
-  entity.
+- **global**: the ID is unique on its own, because it comes from a scheme that
+  mints identifiers unique across all systems, such as a UUID. Any two
+  observers that report the same entity produce the same ID, and that ID does
+  not depend on any other entity.
 - **local**: the ID is unique only within another entity, called the **context
-  entity**.
+  entity**, because it is assigned by a naming authority whose namespace is
+  bounded by that entity.
+
+> [!NOTE]
+> The scope kind follows from where the uniqueness comes from, not from where
+> the system that assigns the ID documents its guarantee. `k8s.pod.uid` is
+> `global` because Kubernetes UIDs are UUIDs, even though Kubernetes documents
+> uniqueness per cluster. Declaring it `local` to `k8s.cluster` would add
+> nothing, because `k8s.cluster.uid` is itself a Kubernetes UID, so the chain
+> would rest on the same property one step later.
 
 OpenTelemetry Semantic Conventions MUST declare the scope kind for every defined
 entity type. For a `local` entity type whose context entity type is the same in
