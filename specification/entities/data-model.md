@@ -18,9 +18,9 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
-- [Identity Scope](#identity-scope)
+- [Identity Uniqueness](#identity-uniqueness)
   * [Local and Global Identity](#local-and-global-identity)
-  * [ID Context Type](#id-context-type)
+  * [Declaring Uniqueness](#declaring-uniqueness)
   * [Global Identity Composition](#global-identity-composition)
   * [Unresolved Identity](#unresolved-identity)
 - [Merging of Entities](#merging-of-entities)
@@ -56,10 +56,10 @@ physical format and encoding of how entity data is recorded).
 | ----- | ---- | ----------- |
 | Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
 | Schema URL | string | Identifies the schema version for the entity's attributes. Used to determine merge compatibility (see [Merging of Entities](#merging-of-entities)). MAY be empty. |
-| ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>The scope within which the ID is unique is defined by [Identity Scope](#identity-scope).<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>The scope within which the ID is unique is defined by [Identity Uniqueness](#identity-uniqueness).<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
-| Scope Kind | enum: `unspecified`, `global`, `local` | The scope within which the entity's ID is unique.<p>MUST not change during the lifetime of the entity. See [Identity Scope](#identity-scope). |
-| ID Context Type | string | The type of the entity within which this entity's ID is unique. Only meaningful when Scope Kind is `local`.<p>MUST not change during the lifetime of the entity. MAY be empty. See [ID Context Type](#id-context-type). |
+| ID Uniqueness | enum: `unspecified`, `global`, `local` | Whether the entity's ID is unique on its own or only within another entity.<p>MUST not change during the lifetime of the entity. See [Identity Uniqueness](#identity-uniqueness). |
+| Unique Within Entity Type | string | The type of the entity within which this entity's ID is unique. Only meaningful when ID Uniqueness is `local`.<p>MUST not change during the lifetime of the entity. MAY be empty. See [Declaring Uniqueness](#declaring-uniqueness). |
 
 ## Minimally Sufficient Identity
 
@@ -160,114 +160,111 @@ different values, then **only** the `k8s.node` entity can reference this key
 Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
 telemetry channel (e.g., entity events) where full ownership context is known.
 
-## Identity Scope
+## Identity Uniqueness
 
 Identifying attributes are not always sufficient to identify an entity
 universally. Some IDs are unique on their own, others are unique only within
 another entity. For example `k8s.pod.uid` is a Kubernetes-generated UUID, while
 `k8s.container.name` is unique only within a single Kubernetes Pod.
 
-An entity therefore carries a **Scope Kind**:
+An entity therefore records how its ID is unique:
 
-- **global**: the ID is unique on its own, because it comes from a scheme that
-  mints identifiers unique across all systems, such as a UUID. Any two
-  observers that report the same entity produce the same ID, and that ID does
-  not depend on any other entity.
-- **local**: the ID is unique only within another entity, called the **context
-  entity**, because it is assigned by a naming authority whose namespace is
-  bounded by that entity.
-- **unspecified**: the producer did not state the scope of the ID. The identity
-  is [unresolved](#unresolved-identity).
-
-> [!NOTE]
-> The scope kind follows from where the uniqueness comes from, not from where
-> the system that assigns the ID documents its guarantee. `k8s.pod.uid` is
-> `global` because Kubernetes UIDs are UUIDs, even though Kubernetes documents
-> uniqueness per cluster. Declaring it `local` to `k8s.cluster` would add
-> nothing, because `k8s.cluster.uid` is itself a Kubernetes UID, so the chain
-> would rest on the same property one step later.
-
-OpenTelemetry Semantic Conventions MUST declare the Scope Kind for every defined
-entity type, and for a `local` entity type the context entity type where it is
-the same in all deployments. This declaration tells producers what to emit and
-allows producers to be validated against it.
-
-Consumers MUST be able to determine an entity's Scope Kind and context entity
-type from the entity itself. A consumer MUST NOT be required to consult Semantic
-Conventions in order to interpret an entity's identity, because Semantic
-Conventions are not available to every consumer and the version a producer used
-is not knowable from the data.
+- **globally unique**: the ID is unique on its own, because it comes from a
+  scheme that mints identifiers unique across all systems, such as a UUID. Any
+  two observers that report the same entity produce the same ID, and that ID
+  does not depend on any other entity.
+- **locally unique**: the ID is unique only within one other entity, because it
+  is assigned by a naming authority whose namespace is bounded by that entity.
+- **unspecified**: the producer did not state how the ID is unique. The
+  identity is [unresolved](#unresolved-identity).
 
 > [!NOTE]
-> This is why the Scope Kind and the ID Context Type are recorded on the entity
-> at all. If consumers could rely on Semantic Conventions at consumption time,
-> the scope of every entity type would already be known and neither field would
-> be needed.
+> Whether an ID is globally or locally unique follows from where its uniqueness
+> comes from, not from where the system that assigns it documents its guarantee.
+> `k8s.pod.uid` is globally unique because Kubernetes UIDs are UUIDs, even
+> though Kubernetes documents uniqueness per cluster. Treating it as unique only
+> within a `k8s.cluster` would add nothing, because `k8s.cluster.uid` is itself a
+> Kubernetes UID, so the chain would rest on the same property one step later.
+
+OpenTelemetry Semantic Conventions MUST declare, for every defined entity type,
+whether its ID is globally or locally unique, and for a locally unique ID the
+entity type it is unique within where that is the same in all deployments. This
+declaration tells producers what to emit and allows producers to be validated
+against it.
+
+Consumers MUST be able to determine how an entity's ID is unique from the entity
+itself. A consumer MUST NOT be required to consult Semantic Conventions in order
+to interpret an entity's identity, because Semantic Conventions are not
+available to every consumer and the version a producer used is not knowable from
+the data.
+
+> [!NOTE]
+> This is why an entity records its own uniqueness at all. If consumers could
+> rely on Semantic Conventions at consumption time, the uniqueness of every
+> entity type would already be known and neither field would be needed.
 
 ### Local and Global Identity
 
 An entity's **Local Identity** is its ID attributes.
 
-For a `global` entity, the Global Identity is the Local Identity.
+For a globally unique ID, the Global Identity is the Local Identity.
 
-For a `local` entity, the **Global Identity** is the union of its Local Identity
-and the Global Identity of its context entity.
+For a locally unique ID, the **Global Identity** is the union of the entity's
+Local Identity and the Global Identity of the entity it is unique within.
 
-An `unspecified` entity has no Global Identity.
+An entity whose uniqueness is `unspecified` has no Global Identity.
 
-### ID Context Type
+### Declaring Uniqueness
 
-The **ID Context Type** records the type of the entity within which this
-entity's ID is unique. It is a statement about this entity's own ID rather than
-a reference to a specific entity: it describes the kind of boundary the ID was
-minted within, which follows from the identifying attributes the producer
-populated.
+An entity records its **ID Uniqueness**, and when that is `local`, the **Unique
+Within Entity Type**: the type of the entity its ID is unique within.
 
-The two fields combine as follows:
+Both describe the entity's own ID rather than referring to a specific entity.
+They state what kind of boundary the ID was minted within, which follows from
+the identifying attributes the producer populated.
 
-| Scope Kind | ID Context Type | Meaning |
-| ---------- | --------------- | ------- |
+| ID Uniqueness | Unique Within Entity Type | Meaning |
+| ------------- | ------------------------- | ------- |
 | `global` | MUST be empty | The ID is unique on its own. |
-| `local` | the context entity type | The ID is unique within an entity of that type. |
-| `local` | empty | The producer knows the ID is scoped but not by what. The identity is [unresolved](#unresolved-identity). |
-| `unspecified` | MUST be empty | The producer did not state the scope. The identity is [unresolved](#unresolved-identity). |
+| `local` | an entity type | The ID is unique within an entity of that type. |
+| `local` | empty | The producer knows the ID is not unique on its own, but not what it is unique within. The identity is [unresolved](#unresolved-identity). |
+| `unspecified` | MUST be empty | The producer did not state how the ID is unique. The identity is [unresolved](#unresolved-identity). |
 
-The producer of an entity MUST set the Scope Kind, and MUST set the ID Context
-Type when the Scope Kind is `local` and it can determine the boundary within
-which it minted the ID. A producer that cannot determine the scope of an ID it
-minted SHOULD leave the Scope Kind `unspecified` rather than guess, so that
-consumers do not treat a scoped ID as globally unique.
+The producer of an entity MUST set the ID Uniqueness, and MUST set the Unique
+Within Entity Type when the ID is locally unique and the producer can determine
+what it is unique within. A producer that cannot determine how an ID it minted
+is unique SHOULD leave the ID Uniqueness `unspecified` rather than guess, so
+that consumers do not treat a locally unique ID as globally unique.
 
-A component MUST NOT set or modify the Scope Kind or the ID Context Type of an
-entity it did not produce. Only the producer of an entity can know the boundary
-within which it minted that entity's ID. A component that detects an entity
-serving as the context for another entity adds its own entity to the Resource
-and leaves the other entity unchanged.
+A component MUST NOT set or modify either field on an entity it did not produce.
+Only the producer of an entity can know how it minted that entity's ID. A
+component that detects an entity that another entity's ID is unique within adds
+its own entity to the Resource and leaves the other entity unchanged.
 
 > [!NOTE]
 > This keeps both fields independent of the order in which entities are added to
-> a Resource and of which other entities happen to be present. Adding a context
-> entity to a Resource later completes an entity's Global Identity without
-> modifying that entity.
+> a Resource and of which other entities happen to be present. Adding the
+> missing entity to a Resource later completes an entity's Global Identity
+> without modifying that entity.
 
 ### Global Identity Composition
 
-The context entity is resolved by type. This is unambiguous because a Resource
-holds at most one entity of a given type, see
+The entity an ID is unique within is found by type. This is unambiguous because
+a Resource holds at most one entity of a given type, see
 [Merging An Entity into a Resource](../resource/data-model.md#merging-an-entity-into-a-resource).
 
 A consumer computes an entity's Global Identity from the Resource alone, as
 follows:
 
 1. Start with the entity's Local Identity.
-2. If the entity's Scope Kind is `unspecified`, the identity is
+2. If the entity's ID Uniqueness is `unspecified`, the identity is
    [unresolved](#unresolved-identity).
-3. If the entity's Scope Kind is `global`, stop. The accumulated identity is the
-   Global Identity.
-4. If the entity's ID Context Type is empty, the identity is
+3. If the entity's ID Uniqueness is `global`, stop. The accumulated identity is
+   the Global Identity.
+4. If the entity's Unique Within Entity Type is empty, the identity is
    [unresolved](#unresolved-identity).
-5. Otherwise find the entity on the Resource whose type matches the ID Context
-   Type. If no such entity is present, the identity is
+5. Otherwise find the entity on the Resource whose type matches the Unique
+   Within Entity Type. If no such entity is present, the identity is
    [unresolved](#unresolved-identity).
 6. Union that entity's Local Identity into the accumulated identity and repeat
    from step 2 for that entity.
@@ -277,9 +274,9 @@ already visited.
 
 ### Unresolved Identity
 
-An entity's identity is **unresolved** when its Scope Kind is `unspecified`,
-when it is `local` with an empty ID Context Type, or when a context entity in
-its chain is not present on the Resource.
+An entity's identity is **unresolved** when its ID Uniqueness is `unspecified`,
+when its ID is locally unique but it does not state what it is unique within, or
+when an entity in its chain is not present on the Resource.
 
 An unresolved entity is still a valid entity and still describes the object the
 telemetry is about. A consumer:
@@ -288,29 +285,30 @@ telemetry is about. A consumer:
 - MUST NOT treat the entity's Local Identity as a Global Identity.
 - MUST NOT merge the entity with an entity from another Resource that has the
   same type and the same Local Identity, since the two may be distinct objects
-  in different contexts.
+  that are unique within different entities.
 
-An unresolved identity is expected whenever the context entity is reported by a
-different component than the entity itself. It is completed when that component
-adds the context entity to the Resource. For example, a receiver reporting
-Kubernetes objects observed through the Kubernetes API can report a `k8s.pod`
-entity without the `k8s.cluster` entity that gives it global identity, and a
-resource detector that knows the cluster completes the chain by adding the
+An unresolved identity is expected whenever the entity an ID is unique within is
+reported by a different component than the entity itself. It is completed when
+that component adds its entity to the Resource. For example, a receiver
+reporting Kubernetes objects observed through the Kubernetes API can report a
+`k8s.pod` entity without the `k8s.cluster` entity that gives it global identity,
+and a resource detector that knows the cluster completes the chain by adding the
 `k8s.cluster` entity.
 
 > [!NOTE]
-> For some entity types a producer cannot always determine the boundary. A
-> `process` identified by `process.pid` is unique within a PID namespace, and a
-> producer that did not mount the procfs it reads cannot always tell which
-> namespace that is. Leaving the Scope Kind `unspecified` is the correct
-> outcome in that case: the entity is still usable within its Resource, and no
-> consumer is misled into treating a namespaced ID as globally unique.
+> For some entity types a producer cannot always determine what an ID is unique
+> within. A `process` identified by `process.pid` is unique within a PID
+> namespace, and a producer that did not mount the procfs it reads cannot always
+> tell which namespace that is. Leaving the ID Uniqueness `unspecified` is the
+> correct outcome in that case: the entity is still usable within its Resource,
+> and no consumer is misled into treating a locally unique ID as globally
+> unique.
 
 ## Merging of Entities
 
 Entities MAY be merged if and only if their types are the same, their
-identity attributes are exactly the same, their scope kinds and ID context types
-are the same AND their schema_url is the same.
+identity attributes are exactly the same, their ID uniqueness and unique within
+entity types are the same AND their schema_url is the same.
 This means both Entities MUST have the same identity attribute keys and
 for each key, the values of the key MUST be the same.
 
@@ -320,15 +318,15 @@ Here's an example algorithm that will check compatibility:
 can_merge(current_entity, new_entity) {
   current_entity.type == new_entity.type &&
   current_entity.schema_url == new_entity.schema_url &&
-  current_entity.scope_kind == new_entity.scope_kind &&
-  current_entity.id_context_type == new_entity.id_context_type &&
+  current_entity.id_uniqueness == new_entity.id_uniqueness &&
+  current_entity.id_unique_within_type == new_entity.id_unique_within_type &&
   has_same_attributes(current_entity.identity, new_entity.identity)
 }
 ```
 
-Note: this algorithm merges entities within a single Resource, where the context
-entity of a given type is the same for both entities, so comparing scope kinds
-and ID context types is sufficient. An operation that merges entities across Resources, which
+Note: this algorithm merges entities within a single Resource, where an entity
+of a given type is the same for both entities, so comparing ID uniqueness and
+unique within entity types is sufficient. An operation that merges entities across Resources, which
 this specification does not define, MUST compare
 [Global Identity](#global-identity-composition) instead, because the same Local
 Identity can refer to different objects in different contexts.
@@ -373,7 +371,7 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><strong>Identifying Attributes</strong>
     </td>
-    <td><strong>Scope Kind</strong>
+    <td><strong>ID Uniqueness</strong>
     </td>
     <td><strong>Descriptive Attributes</strong>
     </td>
@@ -404,7 +402,7 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>host.id
     </td>
-    <td>global when <code>host.id</code> is a machine ID;<br/>local (context: <code>cloud.account</code>) when it is a cloud instance ID
+    <td>global when <code>host.id</code> is a machine ID;<br/>local, within <code>cloud.account</code>, when it is a cloud instance ID
     </td>
     <td>host.arch<br/>
         host.name<br/>
@@ -448,7 +446,7 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>k8s.container.name
     </td>
-    <td>local (context: <code>k8s.pod</code>)
+    <td>local, within <code>k8s.pod</code>
     </td>
     <td>k8s.container.restart_count
     </td>
@@ -460,14 +458,14 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>service.instance.id
     </td>
-    <td>local (context: <code>service</code>)
+    <td>local, within <code>service</code>
     </td>
     <td>service.version
     </td>
    </tr>
 </table>
 
-The `service.instance` row shows how Identity Scope replaces composing a
+The `service.instance` row shows how Identity Uniqueness replaces composing a
 globally unique ID by hand. `service.instance.id` is only required to be unique
 within a `service`, so the `service` entity's identity no longer has to be
 repeated in the `service.instance` identity to make it globally unique.
