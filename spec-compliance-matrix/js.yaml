@@ -503,6 +503,8 @@ sections:
         status: '?'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
         status: '?'
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
+        status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '?'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
