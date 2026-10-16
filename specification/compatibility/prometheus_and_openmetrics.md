@@ -29,6 +29,7 @@ aliases:
   * [Dropped Types](#dropped-types)
   * [Exemplars](#exemplars)
   * [Instrumentation Scope](#instrumentation-scope)
+  * [Metric Attributes](#metric-attributes)
   * [Resource Attributes](#resource-attributes)
 - [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
   * [Metric Metadata](#metric-metadata-1)
@@ -40,7 +41,7 @@ aliases:
     + [Histograms as Prometheus NHCB](#histograms-as-prometheus-nhcb)
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
-  * [Metric Attributes](#metric-attributes)
+  * [Metric Attributes](#metric-attributes-1)
   * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
@@ -368,42 +369,138 @@ MUST be assigned an instrumentation scope identifying the entity performing
 the translation from Prometheus to OpenTelemetry (e.g. the collector's
 Prometheus receiver).
 
+### Metric Attributes
+
+**Status**: [Development](../document-status.md)
+
+Labels of metrics MUST be copied to data point
+attributes, with the exception of:
+
+- `job` and `instance` labels MUST NOT be copied to data point attributes,
+- `otel_scope_*` labels are excluded due to rules around instrumentation scope,
+- labels of the `target` info metric are implicitly excluded as `target` info
+metric samples are not turned into data points.
+
 ### Resource Attributes
 
 **Status**: [Development](../document-status.md)
 
 When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
-endpoints. In particular, `service.name` and `service.instance.id`, are needed
-to ensure Prometheus exporters can disambiguate metrics using
-[`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/)
-as [described below](#resource-attributes-1).
+endpoints.
 
-The following attributes MUST be associated with scraped metrics as resource
-attributes, and MUST NOT be added as metric attributes:
+NOTE(krajo): this only talks about scraping, but similar rules apply to remote
+write receiver which uses `target` info metric. There are some differences
+though.
 
-| OTLP Resource Attribute | Description |
-| ----------------------- | ----------- |
-| `service.name` | The configured name of the service that the target belongs to |
-| `service.instance.id` | A unique identifier of the target.  By default, it should be the `<host>:<port>` of the scraped URL |
+TODO(krajo): deal with the remote write receiver use case.
+
+In Prometheus metrics the `job` and `instance` are considered identifying,
+therefore a new resource MUST be created for each `job` and `instance` pair
+encountered in the metrics labels, except for the `target` info metric.
+
+NOTE(krajo): both the prometheusreceiver and prometheusremotewritereceiver
+work this way, thus both scrape and remote write can carry multiple resources
+with the `job` and `instance` being the join key between regular metrics and
+the `target` info metric.
+
+If there is no `job` label on a metric and the metrics are being scraped,
+then the `job` label MUST be considered to be equal to the `job` label of the
+scrape target. During scrape, the `job` label of the target may be equal to the scrape
+job name or customized by relabel rules.
+
+If there is no `job` label on a metric and there is no `job` label for the
+scrape target, the scrape MUST fail. Note that this is different from the
+Prometheus behavior that still scrapes the metrics without `job`.
+
+If there is no `instance` label and the metrics are being scraped, the
+`instance` label MUST be considered to be equal to the `instance` label of the
+scrape target. Note that the `instance` label of the target may be equal to the
+`__address__` of the target or customized by relabel rules.
+
+For each resource the attribute `prometheus.job` MUST be set to the value of
+`job` and `prometheus.instance` MUST be set to the value of `instance` as
+calculated above.
+
+For each resource the `service.name` attribute MUST be set to the
+`service.name` or `service_name` label in `target` info metric, if either label
+exists in the `target` info metric with the same `job` and `instance` key as the
+resource. If both `service.name` and `service_name` are present and their
+value is different, then the value of `service.name` MUST take precedence and a
+diagnostic message MUST be emitted.
+
+If neither `service.name` nor `service_name` are present in `target` info
+metric, then, by default `service.name` MUST be set to the value of the `job`,
+as calculated above, unless the `never-derive` configuration option is set in
+which case `service.name` MUST not be set in the resource attributes.
+
+NOTE(krajo): this means that no matter the translation strategy, the
+`service.name` is set the same way and users can opt out of making it
+equivalent to `job` when it cannot be derived.
+
+For each resource the `service.instance.id` attribute MUST be set to the
+`service.instance.id` or `service_instance_id` label in `target` info metric, if
+either label exists in the `target` info metric with the same `job` and
+`instance` key as the resource. If both `service.instance.id` and
+`service_instance_id` are present and their value is different, then the value
+of `service.instance.id` MUST take precedence and a diagnostic message MUST be
+emitted.
+
+If neither `service.instance.id` nor `service_instance_id` are present in
+`target` info metric, then, by default `service.instance.id` MUST be set to the
+value of the `instance` as calculated above, unless the `never-derive`
+configuration option is set in which case `service.instance.id` MUST NOT be set
+in the resource attributes.
+
+NOTE(krajo): this means that no matter the translation strategy, the
+`service.instance.id` is set the same way and users can opt out of making it
+equivalent to `instance` when it cannot be derived.
 
 The following attributes SHOULD be associated with scraped metrics as resource
-attributes, and MUST NOT be added as metric attributes:
+attributes, and MUST NOT be added as metric
+attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
-| `server.address` | The `<host>` portion of the target's URL that was scraped |
-| `server.port` | The `<port>` portion of the target's URL that was scraped |
-| `url.scheme` | `http` or `https` |
+| `server.address` | The `<host>` portion of the `instance` unless it is localhost, a loopback address, or an unspecified address |
+| `server.port` | The `<port>` portion of the `instance` |
+| `url.scheme` | `http` or `https` from the `__scheme__` label on the target |
+
+NOTE(krajo): the receiver sets empty string for `server.port` if it cannot be
+deduced, but perheaps this is a bug?
+
+NOTE(krajo): there is a bug in the receiver whereby it ignores the relabelling
+of the `__scheme__`, so `url.scheme` always reflects the pre-relabelling state.
+
+Further attributes (such as from k8s service discovery metadata labels) MAY be
+added to the resource attributes. Labels from the `target` info metric take
+precedence over all derived resource attributes.
+
+To summarize, `service.name` and `service.instance.id`, are needed
+to ensure Prometheus exporters can disambiguate metrics using
+[`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/)
+as [described below](#resource-attributes-1), this specification
+ensures that `service.name` and `service.instance.id` are defined when
+`never-derive` is false.
 
 In addition to the attributes above, the
-[target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+[`target`](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
  info metric is used to supply additional resource attributes. If present,
-the `target` info metric MUST be dropped from the batch of metrics, and all labels from
-the `target` info metric MUST be converted to resource attributes
-attached to all other metrics which are part of the scrape. By default, label
-keys and values MUST NOT be altered (such as replacing `_` with `.` characters
-in keys).
+the `target` info metric MUST be dropped from the batch of metrics, and all labels
+except `job`, `instance`, `prometheus.job`, `prometheus.instance` and `__name__`
+from the `target` info metric MUST be converted to resource attributes attached
+to all other metrics which are part of the same resource identified by `job` and
+`instance`.
+
+NOTE(krajo): `service_name`, `service_instance_id` are copied as well, they are
+not dropped. This rule doesn't contradict the rules for `service.name`,
+`service.instance.id` above.
+
+By default, label keys and values of the `target` info metric MUST NOT be
+altered (such as replacing `_` with `.` characters in keys).
+
+NOTE(krajo): copying `service_name` to `service.name` isn't altering, it's a
+copy.
 
 ## OTLP Metric points to Prometheus
 
@@ -764,16 +861,46 @@ formats do not include a notion of resource, and expect metric labels to
 distinguish scraped targets. By convention, [`job` and `instance`](https://prometheus.io/docs/concepts/jobs_instances/)
 labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://prometheus.io/docs/prometheus/latest/federation/)
-Prometheus endpoint) or pushed via Prometheus remote-write. In OpenTelemetry
-semantic conventions, the `service.name`, `service.namespace`, and
-`service.instance.id` triplet is
+Prometheus endpoint) or pushed via Prometheus remote-write.
+
+In OpenTelemetry semantic conventions, in the absence of Entities,
+the `service.name`, `service.namespace`, and `service.instance.id` triplet is
 [required to be unique](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service),
-which makes them good candidates to use to construct `job` and `instance`. In
-the collector Prometheus exporters, the `service.name` and `service.namespace`
-attributes MUST be combined as `<service.namespace>/<service.name>`, or
-`<service.name>` if namespace is empty, to form the `job` metric label.  The
-`service.instance.id` attribute, if present, MUST be converted to the
-`instance` label; otherwise, `instance` should be added with an empty value.
+which makes them good candidates to use to construct `job` and `instance`.
+
+When converting OTLP to Prometheus, if there are OpenTelemetry Entities defined
+then the `job` label MUST be set to `<tbd>` and the `instance` label MUST be
+set to the UUIDv5 computed over the resource identity.
+
+NOTE(krajo): the Entities rule is not fully defined, here for discussion only.
+NOTE(krajo): in practice the entity might have overlapping identities, but
+taking the UUIDv5 of all is considered safe. E.g. when logical service identity,
+physical detected identity and even perheaps scrape target identity overlap.
+How the UUIDv5 is exactly calculated and encoded in string is TBD.
+NOTE(krajo): the value of `job` is TBD.
+
+When there are no OpenTelemetry Entities, but `service.name` or `service.name`
+and `service.namespace` exists, then the `job` MUST be set to
+`service.name` or `<service.namespace>/<service.name>`. In this case
+`instance` MUST be set to the value of `service.instance.id` or to the empty
+value if `service.instance.id` is not present.
+
+When there is no OpenTelemetry Entities, nor `service.name`, but
+`prometheus.job` and `prometheus.instance` exists and are not empty,
+the `job` and `instance` MUST be set to these values and `prometheus.job` and
+`prometheus.instance` MUST be dropped.
+
+If none of the above, then a bounded diagnostic message MUST be emitted and the
+`target_info` metric MUST NOT be generated, however the data series still are.
+
+NOTE(krajo): implicitly: existing `job` data point attribute would be
+overwritten, however it is kept if there is no `service.name`.
+
+NOTE(krajo): both prometheusremotewriteexporter and the Prometheus OTLP endpoint
+keep track of existing `target` info metrics by the full label set, not just
+`job` and `instance` , so theoretically you can end up with two `target` info
+metric that have the same `job` and `instance`, but different attributes.
+
 Other resource attributes SHOULD be converted to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
