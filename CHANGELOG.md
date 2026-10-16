@@ -15,6 +15,8 @@ release.
   for synchronous non-network output through APIs without deadline or
   cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add `Sampler.Shutdown` operation.
+  ([#5335](https://github.com/open-telemetry/opentelemetry-specification/pull/5335))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
