@@ -43,6 +43,9 @@ release.
   ([#5057](https://github.com/open-telemetry/opentelemetry-specification/pull/5057))
 - Remove `OTEL_ENTITIES` from general env var configuration spec.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
+- Define Identity Scope: add the ID Scope and Scope Entity Type fields, Global
+  Identity composition, and unresolved identity.
+  ([#5038](https://github.com/open-telemetry/opentelemetry-specification/issues/5038))
 
 ### Common
 
