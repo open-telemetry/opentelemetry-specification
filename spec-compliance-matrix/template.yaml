@@ -101,6 +101,7 @@ sections:
           - name: RecordException with extra parameters
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
           - name: Allow samplers to modify tracestate
           - name: ShouldSample gets full parent Context
           - name: 'Sampler: JaegerRemoteSampler'
@@ -266,8 +267,8 @@ sections:
       - name:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -278,6 +279,7 @@ sections:
       - name: Get current Context
       - name: Composite Propagator
       - name: Global Propagator
+        optional: true
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator
