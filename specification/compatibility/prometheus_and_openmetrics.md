@@ -373,12 +373,17 @@ Prometheus receiver).
 
 **Status**: [Development](../document-status.md)
 
-Labels of metrics MUST be copied to data point
-attributes, with the exception of:
+Labels of metrics MUST be copied to data point attributes, except for the
+following labels, which MUST NOT be copied:
 
-- `job` and `instance` labels MUST NOT be copied to data point attributes,
-- `otel_scope_*` labels are excluded due to rules around instrumentation scope,
-- labels of the `target` info metric are implicitly excluded as `target` info
+- `__name__`,
+- `job` and `instance`,
+- the `le` label of classic Prometheus histogram buckets,
+- the `quantile` label of Prometheus summaries,
+- labels with the `otel_scope_` prefix, which are handled according to the
+  [Instrumentation Scope](#instrumentation-scope) rules.
+
+Labels of the `target` info metric are implicitly excluded, as `target` info
 metric samples are not turned into data points.
 
 ### Resource Attributes
