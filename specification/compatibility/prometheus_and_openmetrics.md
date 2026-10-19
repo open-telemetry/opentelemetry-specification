@@ -433,7 +433,7 @@ attributes:
 | `server.port` | The `<port>` portion of the `instance` |
 | `url.scheme` | `http` or `https` from the `__scheme__` label on the target |
 
-Further attributes (such as from k8s service discovery metadata labels) MAY be
+Further attributes (such as from K8s service discovery metadata labels) MAY be
 added to the resource attributes. Labels from the `target` info metric take
 precedence over all derived resource attributes.
 
