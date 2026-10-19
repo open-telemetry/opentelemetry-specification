@@ -101,6 +101,7 @@ sections:
           - name: RecordException with extra parameters
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
           - name: Allow samplers to modify tracestate
           - name: ShouldSample gets full parent Context
           - name: 'Sampler: JaegerRemoteSampler'
