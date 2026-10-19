@@ -823,7 +823,6 @@ attributes MUST be combined as `<service.namespace>/<service.name>`, or
 `<service.name>` if namespace is empty, to form the `job` metric label.  The
 `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
-
 Other resource attributes SHOULD be converted to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
