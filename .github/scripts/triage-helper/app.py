@@ -7,7 +7,8 @@ from operator import attrgetter
 
 def is_meaningful_activity(item):
     if isinstance(item, dict):  # Comment
-        return True
+        # bot comments (e.g. stale bot) would re-trigger followup and unstale the issue
+        return item['comment'].user is None or item['comment'].user.type != "Bot"
     meaningful_events = [
         "committed",
         "commented",
