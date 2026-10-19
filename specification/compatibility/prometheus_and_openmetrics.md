@@ -394,20 +394,9 @@ When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
 endpoints.
 
-NOTE(krajo): this only talks about scraping, but similar rules apply to remote
-write receiver which uses `target` info metric. There are some differences
-though.
-
-TODO(krajo): deal with the remote write receiver use case.
-
 In Prometheus metrics the `job` and `instance` are considered identifying,
 therefore a new resource MUST be created for each `job` and `instance` pair
 encountered in the metrics labels, except for the `target` info metric.
-
-NOTE(krajo): both the prometheusreceiver and prometheusremotewritereceiver
-work this way, thus both scrape and remote write can carry multiple resources
-with the `job` and `instance` being the join key between regular metrics and
-the `target` info metric.
 
 If there is no `job` label on a metric and the metrics are being scraped,
 then the `job` label MUST be considered to be equal to the `job` label of the
@@ -428,22 +417,11 @@ For each resource the `service.name` attribute MUST be set to the
 `target` info metric with the same `job` and `instance` key as the resource.
 Otherwise `service.name` MUST be set to the value of the `job` label.
 
-NOTE(krajo): when an SDK uses default translation, then `service.name` is
-translated into `service_name`, thus the `job` is copied into `service.name`
-and `service_name` is also kept as a resource attribute.
-This doesn't happen if there is no translation.
-
 For each resource the `service.instance.id` attribute MUST be set to the
 `service.instance.id` label in `target` info metric, if that label exists in the
 `target` info metric with the same `job` and `instance` key as the resource.
 Otherwise `service.instance.id` MUST be set to the value of the `instance`
 label.
-
-NOTE(krajo): when an SDK uses default translation, then `service.instance.id` is
-translated into `service_instance_id`, thus the `instance` is copied into
-`service.instance.id` and `service_instance_id` is also kept as a resource
-attribute.
-This doesn't happen if there is no translation.
 
 The following attributes SHOULD be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric
@@ -454,12 +432,6 @@ attributes:
 | `server.address` | The `<host>` portion of the `instance` unless it is localhost, a loopback address, or an unspecified address |
 | `server.port` | The `<port>` portion of the `instance` |
 | `url.scheme` | `http` or `https` from the `__scheme__` label on the target |
-
-NOTE(krajo): the receiver sets empty string for `server.port` if it cannot be
-deduced, but perheaps this is a bug?
-
-NOTE(krajo): there is a bug in the receiver whereby it ignores the relabelling
-of the `__scheme__`, so `url.scheme` always reflects the pre-relabelling state.
 
 Further attributes (such as from k8s service discovery metadata labels) MAY be
 added to the resource attributes. Labels from the `target` info metric take
