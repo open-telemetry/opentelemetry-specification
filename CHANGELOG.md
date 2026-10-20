@@ -57,6 +57,11 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Clarify that the OTLP exporter timeout bounds the entire batch export,
+  including all request attempts and waits between retries, and that earlier
+  caller deadlines take precedence.
+  ([#5347](https://github.com/open-telemetry/opentelemetry-specification/issues/5347))
+
 ### Compatibility
 
 - Stabilize Prometheus Unknown-typed metric transformation.
@@ -72,6 +77,12 @@ release.
   ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
 
 ### Supplementary Guidelines
+
+- Allow narrowly scoped security-related changes to stable SDK and Contrib
+  behavior, configuration defaults, supported values, and emitted telemetry
+  without a major version bump, while preserving API compatibility and requiring
+  release notes describing the security rationale, user impact, and migration.
+  ([#5357](https://github.com/open-telemetry/opentelemetry-specification/pull/5357))
 
 ### OTEPs
 

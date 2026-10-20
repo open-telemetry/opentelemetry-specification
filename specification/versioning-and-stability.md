@@ -24,6 +24,7 @@
   * [Major version bump](#major-version-bump)
   * [Minor version bump](#minor-version-bump)
   * [Patch version bump](#patch-version-bump)
+  * [Security-related changes](#security-related-changes)
   * [Language version support](#language-version-support)
 - [Long Term Support](#long-term-support)
   * [API support](#api-support)
@@ -50,7 +51,9 @@ Versioning and stability procedures are designed to meet the following goals.
 **Ensure that application owners stay up to date with the latest release of the SDK.**
 We want all users to stay up to date with the latest version of the OpenTelemetry SDK.
 We do not want to create hard breaks in support, of any kind, which leave users stranded on older versions.
-It MUST always be possible to upgrade to the latest minor version of the OpenTelemetry SDK, without creating compilation or runtime errors.
+Except as permitted by [Security-related changes](#security-related-changes),
+it MUST always be possible to upgrade to the latest minor version of the
+OpenTelemetry SDK, without creating compilation or runtime errors.
 
 **Never create a dependency conflict between packages which rely on different versions of OpenTelemetry. Avoid breaking all stable public APIs.**
 Backwards compatibility is a strict requirement.
@@ -108,7 +111,8 @@ Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.
 
 #### SDK Stability
 
-Public portions of SDK packages MUST remain backward compatible.
+Public portions of SDK packages MUST remain backward compatible, except as
+permitted by [Security-related changes](#security-related-changes).
 There are two categories of public features: **plugin interfaces** and **constructors**.
 A plugin interface is an extension point provided by the SDK which is intended to be implemented by end users in order to customize SDK behaviors.
 Examples of plugins interfaces include SpanProcessor, Exporter, and Sampler.
@@ -171,7 +175,9 @@ in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users c
 update to the latest version of OpenTelemetry, and not be held back by the
 plugins that they depend on.
 
-Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backward compatible.
+Public portions of contrib packages (constructors, configuration, interfaces)
+SHOULD remain backward compatible, except as permitted by
+[Security-related changes](#security-related-changes).
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for contrib packages.
 
@@ -338,7 +344,9 @@ We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
-OpenTelemetry clients MUST follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
+OpenTelemetry clients MUST follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html),
+with the following clarifications and the explicit exception for
+[Security-related changes](#security-related-changes).
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
@@ -367,6 +375,9 @@ When a signal becomes stable, the version MUST be bumped to match the other stab
 ### Major version bump
 
 Major version bumps MUST occur when there is a breaking change to a stable interface or a deprecated signal is removed.
+Security-related behavioral and configuration changes that satisfy the
+[security exception](#security-related-changes) do not require a major version
+bump.
 Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
@@ -382,7 +393,9 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 
 ### Patch version bump
 
-Patch versions make no changes which would require recompilation or potentially break application code.
+Patch versions make no changes which would require recompilation or potentially
+break application code, except for the behavioral and configuration changes
+permitted by [Security-related changes](#security-related-changes).
 The following are examples of patch fixes.
 
 * Bug fixes which don't require minor version bump per rules above.
@@ -392,6 +405,42 @@ The following are examples of patch fixes.
 Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
 Security and bug fixes MAY only be applied to the latest minor version.
 We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
+
+### Security-related changes
+
+Stable SDK and Contrib components MAY make backward-incompatible behavioral
+changes, change configuration defaults, or restrict supported configuration
+values without incrementing the major version when necessary to address a
+security risk. This exception applies even when the previous behavior, defaults,
+or supported values were documented. Such changes MAY be released as security
+fixes in a patch release, subject to the support requirements in this document.
+
+Examples include disabling unsafe protocols or cryptographic algorithms,
+rejecting unsafe input, tightening certificate validation, preventing disclosure
+of credentials in telemetry, and introducing or lowering resource limits to
+mitigate denial of service or resource exhaustion through unbounded telemetry.
+These changes can affect emitted telemetry, including by truncating values or
+dropping attributes or records.
+
+Changes under this exception MUST address an identified, concrete security risk
+and MUST be limited to what is necessary to mitigate that risk. Changes made
+solely to reduce resource consumption or improve performance do not qualify.
+They MUST preserve the existing source and ABI compatibility guarantees,
+including compatibility of SDK plugin interfaces, and MUST comply with
+[Error handling](error-handling.md). The exception MUST NOT be used to remove
+or rename public APIs, change their signatures, rename or remove configuration
+parameters, redefine semantic conventions, bypass signal deprecation or removal
+requirements, or make unrelated backward-incompatible changes.
+
+Release notes MUST identify the affected behavior and any affected configuration
+settings, describe the previous and new behavior (including any newly rejected
+inputs or configuration values and any truncated or dropped telemetry), explain
+the security risk and how the change mitigates it, and document any actions users
+need to take. Where safe and feasible, implementations SHOULD provide a
+configuration override or other migration path. Release notes MUST describe any
+available migration path and the security implications of restoring the previous
+behavior. Providing an override does not make the change backward compatible;
+it is permitted by this explicit exception.
 
 ### Language version support
 
