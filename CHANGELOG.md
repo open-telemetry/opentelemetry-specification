@@ -12,8 +12,7 @@ release.
 ### Traces
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
-  for synchronous non-network output through APIs without deadline or
-  cancellation support.
+  for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Add `Sampler.Shutdown` operation.
   ([#5335](https://github.com/open-telemetry/opentelemetry-specification/pull/5335))
@@ -24,8 +23,7 @@ release.
 ### Metrics
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
-  for synchronous non-network output through APIs without deadline or
-  cancellation support.
+  for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Specify that `Shutdown` of the periodic exporting MetricReader MUST include
   the effects of `ForceFlush`.
@@ -34,8 +32,7 @@ release.
 ### Logs
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
-  for synchronous non-network output through APIs without deadline or
-  cancellation support.
+  for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))

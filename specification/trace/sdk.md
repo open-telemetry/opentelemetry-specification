@@ -1199,12 +1199,11 @@ concurrently it does not mean that the task of exporting can not be done
 concurrently. How this is done is outside the scope of this specification.
 
 `Export` MUST NOT block indefinitely, except when performing synchronous
-non-network output through an API that does not support deadlines or
+output through an API that does not support deadlines or
 cancellation of a blocked write.
 
 In all other cases, there MUST be a reasonable finite upper limit after which
-the call times out with an error result (`Failure`). Exporters that perform
-network I/O MUST enforce this upper limit.
+the call times out with an error result (`Failure`).
 
 > [!NOTE]
 > For example, an exporter that writes synchronously to standard output or an
