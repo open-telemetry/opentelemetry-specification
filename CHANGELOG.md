@@ -64,6 +64,12 @@ release.
 
 ### Supplementary Guidelines
 
+- Allow narrowly scoped security-related changes to stable SDK and Contrib
+  behavior, configuration defaults, supported values, and emitted telemetry
+  without a major version bump, while preserving API compatibility and requiring
+  release notes describing the security rationale, user impact, and migration.
+  ([#5357](https://github.com/open-telemetry/opentelemetry-specification/pull/5357))
+
 ### OTEPs
 
 ## v1.61.0 (2026-09-14)
