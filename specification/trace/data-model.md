@@ -5,7 +5,7 @@ weight: 2
 
 # Traces Data Model
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Release Candidate](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -132,11 +132,6 @@ The main parts of a span are:
 | `Resource` | Describes the entity for which the span was produced.                                                                                   |
 | Instrumentation `scope` | Identifies the instrumentation that produced the span.                                                                                  |
 
-A `Span` in a process is mutable while its operation is being recorded and becomes
-non-recording when it is ended. An exported span is a readable representation
-of the data captured during that lifetime. The [Span API](api.md#span) defines
-the complete set of span properties and their behavior.
-
 ### Field: `TraceId`
 
 Type: byte sequence.
@@ -160,7 +155,7 @@ enough to uniquely identify a span.
 Type: byte.
 
 Trace flag as defined in
-[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags)
+[W3C Trace Context](https://www.w3.org/TR/trace-context-2/#trace-flags)
 specification, including the `Sampled` and `Random` flags.
 
 ### Field: `TraceState`
@@ -284,14 +279,10 @@ are no longer available.
 
 Type: [Resource](../resource/sdk.md).
 
-Description: Describes the source of the log, aka
-[resource](../overview.md#resources). Multiple occurrences of events coming from
-the same event source can happen across time and they all have the same value of
-`Resource`. Can contain for example information about the application that emits
-the record or about the infrastructure where the application runs. Data formats
-that represent this data model may be designed in a manner that allows the
-`Resource` field to be recorded only once per batch of log records that come
-from the same source. SHOULD follow OpenTelemetry
+Description: The [resource](../overview.md#resources) identifies the entity
+for which the span was produced, such as a service instance, process,
+container, or host. Data formats can record this field once per batch of
+spans from the same source. The resource SHOULD follow OpenTelemetry
 [semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 This field is optional.
 
@@ -300,7 +291,7 @@ This field is optional.
 Type: [Instrumentation Scope](../common/instrumentation-scope.md).
 
 Description: the [instrumentation scope](../common/instrumentation-scope.md).
-Multiple occurrences of events coming from the same scope can happen across time and
+Multiple occurrences of spans coming from the same scope can happen across time and
 they all have the same value of `InstrumentationScope`. This field is optional.
 
 ## Trace
