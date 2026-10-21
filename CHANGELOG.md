@@ -78,7 +78,7 @@ release.
 ### OTEPs
 
 - Add OTEP proposing a standard shape for metrics derived from spans.
-  ([#0000](https://github.com/open-telemetry/opentelemetry-specification/pull/0000))
+  ([#5377](https://github.com/open-telemetry/opentelemetry-specification/pull/5377))
 
 ## v1.61.0 (2026-09-14)
 
