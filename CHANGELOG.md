@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5376](https://github.com/open-telemetry/opentelemetry-specification/issues/5376))
 - Add `Sampler.Shutdown` operation.
   ([#5335](https://github.com/open-telemetry/opentelemetry-specification/pull/5335))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not

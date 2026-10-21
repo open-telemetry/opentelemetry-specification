@@ -21,11 +21,11 @@ weight: 3
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
   * [Enabled](#enabled)
+  * [SDK Span creation](#sdk-span-creation)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
-  * [SDK Span creation](#sdk-span-creation)
-    + [Span flags](#span-flags)
+  * [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
@@ -231,6 +231,33 @@ However, the changes MUST be eventually visible.
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [Recording Sampled reaction table](#recording-sampled-reaction-table)
+   on whether to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+**Status**: [Development](../document-status.md) - When a span is created with a
+[span type](./api.md#span-type), the SDK SHOULD validate that the span type
+conforms to the [span type syntax](./api.md#span-type-syntax). If the span type
+does not conform to this syntax, the SDK SHOULD emit an error notifying the
+user about the invalid span type and SHOULD create the span as if no span type
+was provided.
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
@@ -262,6 +289,10 @@ Thus, the SDK specification defines sets of possible requirements for
   Counts for attributes, events and links dropped due to collection limits MUST be
   available for exporters to report as described in the [exporters](../common/mapping-to-non-otlp.md#dropped-attributes-count)
   specification.
+
+  **Status**: [Development](../document-status.md) - A function receiving this
+  as argument MUST be able to access the [span type](api.md#span-type), if set.
+  The name of the accessor is language-specific.
 
   As an exception to the authoritative set of span properties defined in the API spec,
   implementations MAY choose not to expose (and store) the full parent [Context](../context/README.md)
@@ -336,27 +367,7 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
-### SDK Span creation
-
-When asked to create a Span, the SDK MUST act as if doing the following in order:
-
-1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
-   (note: this must be done before calling `ShouldSample`, because it expects
-   a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
-3. Generate a new span ID for the `Span`, independently of the sampling decision.
-   This is done so other components (such as logs or exception handling) can rely on
-   a unique span ID, even if the `Span` is a non-recording instance.
-4. Create a span depending on the decision returned by `ShouldSample`:
-   see description of [`ShouldSample`'s](#shouldsample) return value below
-   for how to set `IsRecording` and `Sampled` on the Span,
-   and the [table above](#recording-sampled-reaction-table) on whether
-   to pass the `Span` to `SpanProcessor`s.
-   A non-recording span MAY be implemented using the same mechanism as when a
-   `Span` is created without an SDK installed or as described in
-   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
-
-#### Span flags
+### Span flags
 
 The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
 
