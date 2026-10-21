@@ -27,6 +27,9 @@ release.
 
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
+- Add an advisory `minimum_severity` parameter to `LoggerProvider.GetLogger` so
+  direct instrumentation can provide a default minimum severity without
+  changing the default behavior of log bridges.
 
 ### Baggage
 

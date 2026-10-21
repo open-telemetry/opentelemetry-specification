@@ -90,6 +90,15 @@ parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
+* `minimum_severity` (optional): Specifies an advisory default minimum
+  [SeverityNumber](./data-model.md#field-severitynumber) for the `Logger`.
+  The `LoggerProvider` MUST use this value as the default minimum severity when
+  no minimum severity has been explicitly configured by the user. An explicit
+  user configuration MUST take precedence over this value. Log bridges SHOULD
+  omit this parameter so that the existing default of `0` is preserved. Direct
+  instrumentation MAY provide this parameter to avoid emitting verbose events
+  by default.
+
 The term *identical* applied to `Logger`s describes instances where all
 parameters are equal. The term *distinct* applied to `Logger`s describes
 instances where at least one parameter has a different value.

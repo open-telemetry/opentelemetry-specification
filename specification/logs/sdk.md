@@ -77,6 +77,13 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Logger`.
 
+The optional `minimum_severity` advisory parameter from the [Get a Logger
+API](api.md#get-a-logger) MUST be used as the default `minimum_severity` for
+the created `Logger` when the user has not explicitly configured a minimum
+severity. If no advisory parameter is provided, the default MUST be `0`.
+Explicit user configuration MUST take precedence over the advisory parameter,
+including an explicit configuration of `0`.
+
 In the case where an invalid `name` (null or empty string) is specified, a
 working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
@@ -200,7 +207,9 @@ It consists of the following parameters:
 * `minimum_severity`: A [SeverityNumber](./data-model.md#field-severitynumber)
   indicating the minimum severity level for log records to be processed.
 
-  If not explicitly set, the `minimum_severity` parameter MUST default to `0`.
+  If not explicitly set, the `minimum_severity` parameter MUST default to the
+  `minimum_severity` advisory parameter provided to [Get a Logger](api.md#get-a-logger),
+  or to `0` if no advisory parameter was provided.
 
   If a log record's [SeverityNumber](./data-model.md#field-severitynumber) is
   specified (i.e. not `0`) and is less than the configured `minimum_severity`, the log record MUST
