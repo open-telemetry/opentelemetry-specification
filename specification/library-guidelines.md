@@ -139,23 +139,36 @@ safeties should API implementations provide and how they should be documented:
 
 **Status**: [Development](document-status.md)
 
-This section applies to implementations that automatically activate an OpenTelemetry SDK and/or instrumentations without modifying the application’s source code or build, such as [automatic instrumentation](glossary.md#automatic-instrumentation) agents and distributions.
-These implementations are referred to as “injectable implementations.”
-Tools such as the [OpenTelemetry Operator], the [OpenTelemetry Injector] and the [OpenTelemetry System Packages] rely on injectable implementations.
-Providing an injectable implementation is OPTIONAL.
-The following requirements apply to the injectable implementation as a whole; they do not independently require API or SDK libraries to support injection.
+An injectable distribution provides OpenTelemetry SDKs and/or instrumentation that can be activated without modifying application source code or build. Injector tools, such as the [OpenTelemetry Operator], the [OpenTelemetry Injector] and [OpenTelemetry System Packages], facilitate activation of injectable distributions across polyglot environments. Reliable and safe activation depends on a contract between injectable distributions and injector tools.
 
-* MUST provide a documented mechanism to activate SDK and instrumentations at process startup without modifying application code or build (e.g. by using an
-  environment variable, runtime flag, or attached agent instead).
-  When injectable implementation ships multiple builds of a component for the same runtime (e.g. per CPU architecture or C library flavor), they MUST document a deterministic logic to select the right build of the components at runtime.
-  The injectable implementation MUST act as a no-op when an OpenTelemetry SDK is already active in the process.
-* SHOULD document the runtimes and runtime versions it supports and detect at startup whether the current runtime is supported.
-  The injectable implementation SHOULD fail safe: it SHOULD NOT crash or prevent the application from starting, MAY disable itself and, if it disables itself, SHOULD emit actionable diagnostics explaining why.
-* SHOULD isolate the SDK, instrumentations, and their non-OpenTelemetry dependencies from the application (e.g. via shading or a dedicated classloader), so injection does not change the versions or resolution of the
-  application's own dependencies.
-  When that is not possible, for example due to limitations of the runtime, it SHOULD avoid whenever possible non-vendored dependencies (e.g., by using shading in Java).
-* SHOULD support [declarative configuration](configuration/README.md#declarative-configuration), including [language-specific instrumentation configurations](https://github.com/open-telemetry/opentelemetry-configuration/blob/v1.1.0/schema/instrumentation.yaml), so injectors can configure it and other SDKs in other languages through a single file.
-* SHOULD exercise its injection contract in CI, so that changes which break injectability are caught before release.
+Providing an injectable distribution is OPTIONAL. The requirements below apply to the injectable distributions as a whole. They do not independently require language API or SDK libraries to support injection.
+
+Injectable distributions MUST document their activation mechanism and all prerequisites for safe activation and operation in an injection mechanism contract. Prerequisites include constraints such as supported runtimes and runtime versions, application dependencies, and existing OpenTelemetry SDKs or instrumentation.
+
+The injection mechanism contract MUST identify which prerequisites require verification by the injector tool and which compatibility checks the distribution performs itself.
+
+The injection mechanism contract MUST be subject to semantic versioning. For stable distributions, backward-incompatible changes to the contract MUST require a major version increment. Such changes include tightening prerequisites in ways that make previously supported applications incompatible.
+
+If multiple builds of an injectable distribution are published (e.g. per CPU architecture or C library flavor), the injection mechanism contract MUST document deterministic logic for selecting a compatible build.
+
+When the prerequisites documented in the injection mechanism contract are satisfied, the injectable distribution MUST NOT prevent application startup or cause the application to fail at runtime. Disabling instrumentation does not constitute application failure.
+
+When a distribution performs compatibility checks, it MUST NOT prevent application startup or cause application failure if those checks fail. It MAY disable some or all instrumentation.
+
+Injector tools MUST NOT enable an injectable distribution by default unless they can verify the prerequisites assigned to them by the contract and select a compatible build. Injectable distribution maintainers are encouraged to coordinate with injector tool maintainers to establish prerequisites and detection mechanisms that enable safe injection by default. See [Guidance for injection mechanism contracts](#guidance-for-injection-mechanism-contracts).
+
+When an injector tool declines to activate a distribution, or a distribution disables instrumentation because of incompatibility, it SHOULD emit actionable diagnostics explaining why.
+
+Injectable distributions SHOULD support [declarative configuration](configuration/README.md#declarative-configuration). This enables users to configure OpenTelemetry SDKs and instrumentation in a standard way across polyglot environments. Note: declarative configuration support is a prerequisite for inclusion in the [OpenTelemetry System Packages] project.
+
+#### Guidance for injection mechanism contracts
+
+The following non-normative guidance describes techniques that can help injector tools verify prerequisites and activate distributions safely:
+
+- Support activation through environment variables.
+- Base build selection on properties injector tools are known to be able to inspect, such as CPU architecture, C library flavor, and ELF dynamic symbols.
+- Avoid dependency conflicts with the application by minimizing dependencies and isolating or vendoring dependencies.
+- Design injectable distributions and their SDKs to coexist with existing SDKs and instrumentation.
 
 [OpenTelemetry Injector]: https://github.com/open-telemetry/opentelemetry-injector
 [OpenTelemetry Operator]: https://github.com/open-telemetry/opentelemetry-operator
