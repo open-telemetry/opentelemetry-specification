@@ -47,6 +47,7 @@ formats is required. Implementing more than one format is optional.
 | SpanProcessor.OnStart receives parent Context |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | UpdateName |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | User-defined start timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Create with span type](specification/trace/api.md#span-type) |  | - | - | - | - | - | - | - | - | - | - | - | - |
 | End |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | End with timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRecording |  | + | + | + | + | + | + | + | + | + | + | + | + |
