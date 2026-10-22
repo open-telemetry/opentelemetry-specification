@@ -72,8 +72,10 @@ false. If any value other than a true value, case-insensitive string `"false"`,
 empty, or unset is used, a warning SHOULD be logged to inform users about the
 fallback to false being applied. All Boolean environment variables SHOULD be
 named and defined such that false is the expected safe default behavior.
-Renaming or changing the default value MUST NOT happen without a major version
-upgrade.
+Renaming a Boolean environment variable MUST NOT happen without a major
+version upgrade. Changing its default value MUST NOT happen without a major
+version upgrade, except as permitted by
+[Security-related changes](../versioning-and-stability.md#security-related-changes).
 
 ### Numeric
 
