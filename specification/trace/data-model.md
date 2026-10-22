@@ -136,6 +136,8 @@ The main parts of a span are:
 
 Type: byte sequence.
 
+A 16-byte array with at least one non-zero byte.
+
 Request trace ID as defined
 in [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id).
 
@@ -145,7 +147,7 @@ The trace ID is shared by every span in the trace.
 
 Type: byte sequence.
 
-The identifier of this span.
+An 8-byte array with at least one non-zero byte. The identifier of this span. 
 
 The tuple (`TraceId`, `SpanId`) references a span. A `SpanId` alone is not
 enough to uniquely identify a span.
