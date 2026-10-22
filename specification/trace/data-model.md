@@ -20,7 +20,7 @@ weight: 2
   * [Field: `TraceFlags`](#field-traceflags)
   * [Field: `TraceState`](#field-tracestate)
   * [Field: `ParentSpanId`](#field-parentspanid)
-  * [Field: `IsRemote`](#field-isremote)
+  * [Field: `IsParentRemote`](#field-isparentremote)
   * [Field: `Name`](#field-name)
   * [Field: `Kind`](#field-kind)
   * [Field: `StartTimestamp`](#field-starttimestamp)
@@ -114,23 +114,23 @@ function call, a database query, or a stage of an asynchronous workflow.
 
 The main parts of a span are:
 
-| Part | Purpose                                                                                                                                 |
-| ---- |-----------------------------------------------------------------------------------------------------------------------------------------|
-| `SpanContext` | Span identifier. Carries information used for propagation. Its components are listed below.                                             |
-| ↳ `TraceId` | Identifies the trace and is shared by every span in that trace.                                                                         |
-| ↳ `SpanId` | Identifies the span within the trace.                                                                                                   |
-| ↳ `TraceFlags` | Carries flags associated with the trace context, including sampling and trace-ID randomness.                                            |
-| ↳ `TraceState` | Immutable ordered list of tracing-system-specific key-value pairs that can accompany the standard identifiers across process boundaries. |
-| ↳ `IsRemote` | Indicates locally whether the `SpanContext` was received from a remote source or generated locally.                                     |
-| `ParentSpanId` | Identifies the operation that directly caused this operation, if any.                                                                   |
-| `Name` and `Kind` | Classify the operation and its role in a communication.                                                                                 |
-| `StartTimestamp` and `EndTimesamp` | Describe when the operation took place.                                                                                                 |
-| `Attributes` | Describe properties of this occurrence of the operation.                                                                                |
-| `Events` | Describe timestamped occurrences during the operation.                                                                                  |
-| `Links` | Reference other causally related spans.                                                                                                 |
-| `Status` | Records the operation's final status when it is explicitly known.                                                                       |
-| `Resource` | Describes the entity for which the span was produced.                                                                                   |
-| Instrumentation `scope` | Identifies the instrumentation that produced the span.                                                                                  |
+| Part                               | Purpose                                                                                                                                  |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `SpanContext`                      | Span identifier. Carries information used for propagation. Its components are listed below.                                              |
+| ↳ `TraceId`                        | Identifies the trace and is shared by every span in that trace.                                                                          |
+| ↳ `SpanId`                         | Identifies the span within the trace.                                                                                                    |
+| ↳ `TraceFlags`                     | Carries flags associated with the trace context, including sampling and trace-ID randomness.                                             |
+| ↳ `TraceState`                     | Immutable ordered list of tracing-system-specific key-value pairs that can accompany the standard identifiers across process boundaries. |
+| `ParentSpanId`                     | Identifies the operation that directly caused this operation, if any.                                                                    |
+| `IsParentRemote`                   | Indicates locally whether the parent span is remote or generated locally.                                                                |
+| `Name` and `Kind`                  | Classify the operation and its role in a communication.                                                                                  |
+| `StartTimestamp` and `EndTimesamp` | Describe when the operation took place.                                                                                                  |
+| `Attributes`                       | Describe properties of this occurrence of the operation.                                                                                 |
+| `Events`                           | Describe timestamped occurrences during the operation.                                                                                   |
+| `Links`                            | Reference other causally related spans.                                                                                                  |
+| `Status`                           | Records the operation's final status when it is explicitly known.                                                                        |
+| `Resource`                         | Describes the entity for which the span was produced.                                                                                    |
+| Instrumentation `scope`            | Identifies the instrumentation that produced the span.                                                                                   |
 
 ### Field: `TraceId`
 
@@ -186,12 +186,14 @@ Type: byte sequence.
 
 The `SpanId` of the parent span, or empty for a root span. The SDK's parent
 
-### Field: `IsRemote`
+### Field: `IsParentRemote`
 
 Type: enumeration.
 
-Indicates whether the span context was extracted from a remote source. Possible values 
-are: (unknown, is not remote, is remote).
+Indicates whether the parent span is remote, i.e. has been created from a SpanContext 
+that was propagated from a remote parent.
+
+Possible values are: (unknown, is not remote, is remote).
 
 ### Field: `Name`
 
