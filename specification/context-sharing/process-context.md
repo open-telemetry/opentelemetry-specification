@@ -38,7 +38,7 @@ The Process Context consists of a fixed header and a payload encoded using [Prot
 
 ### Header
 
-The header has the following format:
+The header is stored in a memory mapping with the following format:
 
 | Field                       | Type      | Description                                                                                               |
 |-----------------------------|-----------|-----------------------------------------------------------------------------------------------------------|
@@ -48,27 +48,26 @@ The header has the following format:
 | `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp from `CLOCK_BOOTTIME` of when the context was published, in nanoseconds         |
 | `payload`                   | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64         |
 
-The payload MAY be placed directly after the header or elsewhere in the publishing process's memory. The `payload` field MUST point to its location in the publishing process's address space.
+The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
-`monotonic_published_at_ns` SHOULD use the `CLOCK_BOOTTIME` system clock.
+The `monotonic_published_at_ns` SHOULD use a timestamp from the `CLOCK_BOOTTIME` system clock.
+This timestamp is used for detecting if the context is consistent/during updates and thus:
 
-This timestamp is used to detect whether the Process Context is consistent during updates:
-
-- `monotonic_published_at_ns` being zero is reserved to indicate that the context is being mutated and is not yet ready for reading.
-- Every update to `monotonic_published_at_ns` MUST provide a different value.
+* `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading.
+* Every update to `monotonic_published_at_ns` MUST provide a different value for this timestamp.
 
 ### Payload
 
-The payload uses Protocol Buffers with the [`ProcessContext` message][process-context-proto].
+The payload uses protobuf with the [`ProcessContext` message][process-context-proto].
 
 `ProcessContext` contains:
 
-- `resource`, containing the [Resource](../resource/README.md) associated with the process.
-- `attributes`, containing additional information for external readers that is not part of the Resource.
+- `resource`, containing the [Resource](../resource/README.md) attributes describing this process.
 
-Resource attribute keys MUST be unique. Software receiving duplicate Resource attribute keys may behave unpredictably.
+  Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key). The behavior of software that receives duplicated keys can be unpredictable.
+- `attributes`, containing additional attributes to share with external readers that are not part of the standard Resource.
 
-Attributes SHOULD follow the OpenTelemetry [semantic conventions][semantic-conventions] where applicable.
+Whenever applicable, attributes SHOULD follow the existing OpenTelemetry [semantic conventions][semantic-conventions].
 
 ## Publication Protocol
 
@@ -145,30 +144,27 @@ The remaining option where both `memfd_create` and `prctl` failed does not estab
 
 ## Updating Protocol
 
-When the published information changes, the publisher MUST update the existing Process Context mapping as follows:
+When the attributes change, the process context mapping SHOULD be updated following these steps:
 
-1. Encode the new `ProcessContext` payload.
-2. Write zero to `monotonic_published_at_ns` to indicate that an update is in progress.
-3. Use a sequentially consistent memory barrier to ensure the zero value is visible before modifying the payload fields.
-4. Update `payload` and `payload_size` to refer to the new payload.
-5. Use another sequentially consistent memory barrier to ensure the payload fields are visible before completing the update.
-6. Write a new value to `monotonic_published_at_ns`. The value MUST be different from the value used for the previous completed publication.
-7. Reissue the `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ...)` call to name the mapping `OTEL_CTX`.
+1. **Prepare new payload**: Serialize the new payload message.
+2. **Signal update start**: Write `0` to the `monotonic_published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
+3. **Memory barrier**: Ensure the write to `monotonic_published_at_ns` is visible before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
+4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
+5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
+6. **Signal update complete**: Write the new timestamp to `monotonic_published_at_ns`; this is an aligned 64-bit write and thus expected to be atomic.
+   The new `monotonic_published_at_ns` MUST be different (and after) the value present before the update started.
+7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step MUST be done unconditionally, although naming mappings is not always supported by the kernel.
 
-The final write to `monotonic_published_at_ns` is an aligned 64-bit write and is expected to be atomic.
-
-Because readers compare `monotonic_published_at_ns` before and after reading the payload, they can detect concurrent updates and discard inconsistent reads.
-
-The publisher is responsible for retaining each published payload allocation for as long as a reader may still be accessing it.
+As the reader checks `monotonic_published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
 
 ## Interaction with Existing Functionality
 
-Process Context Sharing is additive and does not change existing OpenTelemetry SDK behaviour:
+This mechanism is additive and does not modify existing OpenTelemetry SDK behavior:
 
-- Resource attributes continue to be associated with telemetry exported by the SDK.
-- The Process Context mapping is process-scoped and does not affect thread-local context propagation.
-- SDKs that do not implement Process Context Sharing continue to function normally.
-- External readers continue to use their existing Resource detection mechanisms when Process Context is unavailable.
+- Resource attributes continue to work as before for exporters within the process.
+- The mapping is process-scoped and does not affect thread-local context propagation.
+
+SDKs that do not implement this feature continue to function normally; external readers simply will not have access to their runtime-generated resource attributes.
 
 [otep]: ../../oteps/profiles/4719-process-ctx.md
 [process-context-proto]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/processcontext/v1development/process_context.proto
