@@ -95,6 +95,9 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
+  the case of unset `Sum` field.
+  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 
 ### SDK Configuration
 
