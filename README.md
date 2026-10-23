@@ -21,6 +21,11 @@ For details, see [CONTRIBUTING.md](CONTRIBUTING.md), in particular read
 
 ## Questions
 
+New to CNCF Slack? [Create an account](https://slack.cncf.io/) first, then join
+the
+[`#otel-specification`](https://cloud-native.slack.com/archives/C01N7PP1THC)
+channel for questions and discussion.
+
 Questions that need additional attention can be brought to the regular
 specifications meeting. EU and US timezone friendly meeting is held every
 Tuesday at 8 AM Pacific time. Meeting notes are held in the [Google

@@ -78,6 +78,7 @@ formats is required. Implementing more than one format is optional.
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  |  |  |  |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
@@ -200,23 +201,23 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| LoggerProvider.Get Logger accepts attributes |  | + | - |  | + |  |  | + | + | + | - |  | + |
+| LoggerProvider.Get Logger accepts attributes |  | + | - | + | + |  |  | + | + | + | - |  | + |
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| Logger.Emit(LogRecord) with Exception parameter | X |  | + |  | + |  |  |  |  |  | - |  | + |
-| LogRecord.Set EventName |  | + | + |  | + | + |  |  | + | + |  |  | + |
+| Logger.Emit(LogRecord) with Exception parameter | X |  | + | + | + |  |  |  |  |  | - |  | + |
+| LogRecord.Set EventName |  | + | + | + | + | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| LogRecordProcessor.Enabled | X | + | - |  |  |  |  |  | + |  | - |  | + |
+| LogRecordProcessor.Enabled | X | + | - | + |  |  |  |  | + |  | - |  | + |
 | OTLP/gRPC exporter |  | + | + | + | + |  |  | + | + | + | + |  | - |
 | OTLP/HTTP exporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| OTLP File exporter |  | - | + |  | + |  |  |  | - | + | - |  | - |
+| OTLP File exporter |  | - | + | - | + |  |  |  | - | + | - |  | - |
 | Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
-| Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  | + |
+| Trace Context Injection |  | + | + | + | + | + |  | + | + | + | + |  | + |
 
 ## Resource
 
@@ -227,8 +228,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  | + |
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | + |
-| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | + |  | + |
+| [Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector) |  | + | + |  |  |  | - | + | + |  | + |  | + |
 
 ## Context Propagation
 
@@ -335,7 +336,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | + |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | + |  | + |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | + |  | + |
-| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
+| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | + |  | + |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + | + |  | + |  |  | + |  |  | + |  | + |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + | - |  |  |  |  | + |  |  | - |  | - |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + | - |  |  |  |  | + |  |  | - |  | + |

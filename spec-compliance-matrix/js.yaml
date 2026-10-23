@@ -133,6 +133,8 @@ sections:
             status: '+'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
+            status: '?'
           - name: Allow samplers to modify tracestate
             status: '?'
           - name: ShouldSample gets full parent Context
@@ -360,7 +362,7 @@ sections:
       - name: LoggerProvider.Get Logger
         status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Shutdown
         status: '+'
       - name: LoggerProvider.ForceFlush
@@ -368,9 +370,9 @@ sections:
       - name: Logger.Emit(LogRecord)
         status: '+'
       - name: Logger.Emit(LogRecord) with Exception parameter
-        status: '?'
+        status: '+'
       - name: LogRecord.Set EventName
-        status: '?'
+        status: '+'
       - name: Logger.Enabled
         status: '?'
       - name: SimpleLogRecordProcessor
@@ -380,17 +382,17 @@ sections:
       - name: Can plug custom LogRecordProcessor
         status: '+'
       - name: LogRecordProcessor.Enabled
-        status: '?'
+        status: '+'
       - name: OTLP/gRPC exporter
         status: '+'
       - name: OTLP/HTTP exporter
         status: '+'
       - name: OTLP File exporter
-        status: '?'
+        status: '-'
       - name: Can plug custom LogRecordExporter
         status: '+'
       - name: Trace Context Injection
-        status: '?'
+        status: '+'
   - name: Resource
     features:
       - name: Create from Attributes
@@ -405,9 +407,9 @@ sections:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
         status: '?'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
         status: '+'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
         status: '?'
   - name: Context Propagation
     features:
