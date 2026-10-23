@@ -134,3 +134,42 @@ safeties should API implementations provide and how they should be documented:
 * [Metrics API](./metrics/api.md#concurrency-requirements)
 * [Metrics SDK](./metrics/sdk.md#concurrency-requirements)
 * [Tracing API](./trace/api.md#concurrency-requirements)
+
+### Automatic Injection
+
+**Status**: [Development](document-status.md)
+
+An injectable distribution provides OpenTelemetry SDKs and/or instrumentation that can be activated without modifying application source code or build. Injector tools, such as the [OpenTelemetry Operator], the [OpenTelemetry Injector] and [OpenTelemetry System Packages], facilitate activation of injectable distributions across polyglot environments. Reliable and safe activation depends on a contract between injectable distributions and injector tools.
+
+Providing an injectable distribution is OPTIONAL. The requirements below apply to the injectable distributions as a whole. They do not independently require language API or SDK libraries to support injection.
+
+Injectable distributions MUST document their activation mechanism and all prerequisites for safe activation and operation in an injection mechanism contract. Prerequisites include constraints such as supported runtimes and runtime versions, application dependencies, and existing OpenTelemetry SDKs or instrumentation.
+
+The injection mechanism contract MUST identify which prerequisites require verification by the injector tool and which compatibility checks the distribution performs itself.
+
+The injection mechanism contract MUST be subject to semantic versioning. For stable distributions, backward-incompatible changes to the contract MUST require a major version increment. Such changes include tightening prerequisites in ways that make previously supported applications incompatible.
+
+If multiple builds of an injectable distribution are published (e.g. per CPU architecture or C library flavor), the injection mechanism contract MUST document deterministic logic for selecting a compatible build.
+
+When the prerequisites documented in the injection mechanism contract are satisfied, the injectable distribution MUST NOT prevent application startup or cause the application to fail at runtime. Disabling instrumentation does not constitute application failure.
+
+When a distribution performs compatibility checks, it MUST NOT prevent application startup or cause application failure if those checks fail. It MAY disable some or all instrumentation.
+
+Injector tools MUST NOT enable an injectable distribution by default unless they can verify the prerequisites assigned to them by the contract and select a compatible build. Injectable distribution maintainers are encouraged to coordinate with injector tool maintainers to establish prerequisites and detection mechanisms that enable safe injection by default. See [Guidance for injection mechanism contracts](#guidance-for-injection-mechanism-contracts).
+
+When an injector tool declines to activate a distribution, or a distribution disables instrumentation because of incompatibility, it SHOULD emit actionable diagnostics explaining why.
+
+Injectable distributions SHOULD support [declarative configuration](configuration/README.md#declarative-configuration). This enables users to configure OpenTelemetry SDKs and instrumentation in a standard way across polyglot environments. Note: declarative configuration support is a prerequisite for inclusion in the [OpenTelemetry System Packages] project.
+
+#### Guidance for injection mechanism contracts
+
+The following non-normative guidance describes techniques that can help injector tools verify prerequisites and activate distributions safely:
+
+- Support activation through environment variables.
+- Base build selection on properties injector tools are known to be able to inspect, such as CPU architecture, C library flavor, and ELF dynamic symbols.
+- Avoid dependency conflicts with the application by minimizing dependencies and isolating or vendoring dependencies.
+- Design injectable distributions and their SDKs to coexist with existing SDKs and instrumentation.
+
+[OpenTelemetry Injector]: https://github.com/open-telemetry/opentelemetry-injector
+[OpenTelemetry Operator]: https://github.com/open-telemetry/opentelemetry-operator
+[OpenTelemetry System Packages]: https://github.com/open-telemetry/opentelemetry-packaging
