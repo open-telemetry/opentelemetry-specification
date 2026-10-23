@@ -1,6 +1,6 @@
 # Process Context Sharing
 
-**Status**: [Development](../document-status.md)
+**Status**: [Alpha](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -22,13 +22,15 @@
 
 ## Overview
 
-Process Context Sharing allows OpenTelemetry SDKs to publish process-level information for access by out-of-process readers running on the same host, such as the OpenTelemetry eBPF Profiler.
+Process Context Sharing allows OpenTelemetry SDKs to publish process-level information for access by out-of-process readers, such as the OpenTelemetry eBPF Profiler.
 
-External readers operate outside the instrumented process and cannot otherwise access Resource attributes configured within an OpenTelemetry SDK. This can prevent telemetry collected externally from being correlated with telemetry produced by the SDK, particularly when attributes such as `service.instance.id` are generated at runtime.
+SDK support for Process Context Sharing is OPTIONAL.
 
-This specification defines Process Context publication and discovery on Linux through a memory mapping that external processes can discover and read. A publisher can make the context available before any reader is running, and readers can access it without requiring the publishing process to be actively emitting telemetry.
+This mechanism relies on Linux-specific features (`mmap`, `prctl`, `/proc`) and requires external readers to run on the same host as the instrumented process with sufficient privileges to access the process's memory mappings and read target process memory.
 
-A reader must have sufficient permissions to inspect the publishing process's memory mappings and read its memory.
+External readers like the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This can prevent telemetry collected externally from being correlated with telemetry produced by the SDK, particularly when attributes such as `service.instance.id` are generated at runtime.
+
+A publisher can make the context available before any reader is running, and readers can access it without requiring the publishing process to be actively emitting telemetry.
 
 For design rationale, alternatives and prototypes, see [OTEP 4719][otep].
 
@@ -95,14 +97,14 @@ Finally, if both `memfd_create` fails (step 2, thus requiring falling back to st
 The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
 
 In a situation where multiple resources exist as per <https://github.com/open-telemetry/opentelemetry-specification/pull/4665>, the process context SHOULD contain the default SDK resource.
-We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](https://github.com/open-telemetry/opentelemetry-specification/pull/4947)
+We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](../../oteps/profiles/4947-thread-ctx.md)
 will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
 Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which SHOULD be ignored. The reading protocol specified below is able to work regardless of `CONFIG_ANON_VMA_NAME` being available.
 
-Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's still possible, using eBPF, [to optionally hook on `prctl`](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program) naming attempts as a way of detecting new mappings being published. For this reason, this step SHOULD always be done even if the publisher somehow is aware that naming will not be successful on the current system.
+Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's still possible, using eBPF, to optionally hook on `prctl` naming attempts as a way of detecting new mappings being published. For this reason, this step SHOULD always be done even if the publisher somehow is aware that naming will not be successful on the current system.
 
 ## Reading Protocol
 
