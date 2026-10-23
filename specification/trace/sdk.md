@@ -22,10 +22,10 @@ weight: 3
   * [TracerConfig](#tracerconfig)
   * [Enabled](#enabled)
   * [SDK Span creation](#sdk-span-creation)
+    + [Span flags](#span-flags)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
-  * [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
@@ -258,6 +258,14 @@ does not conform to this syntax, the SDK SHOULD emit an error notifying the
 user about the invalid span type and SHOULD create the span as if no span type
 was provided.
 
+#### Span flags
+
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
+
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+[See the list of recognized flags](./api.md#spancontext).
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
@@ -366,14 +374,6 @@ The following table summarizes the expected behavior for each combination of
 
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
-
-### Span flags
-
-The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
-
-Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
-specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
-[See the list of recognized flags](./api.md#spancontext).
 
 ### Sampler
 
