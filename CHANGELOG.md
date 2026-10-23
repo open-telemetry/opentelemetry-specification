@@ -35,6 +35,9 @@ release.
 
 ### OTEPs
 
+- Add zstd as a specified OTLP compression codec.
+  ([#5321](https://github.com/open-telemetry/opentelemetry-specification/pull/5321))
+
 ## v1.62.0 (2026-10-21)
 
 ### Context
