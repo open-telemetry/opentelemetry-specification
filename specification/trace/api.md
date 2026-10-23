@@ -45,6 +45,8 @@ weight: 1
   * [Span lifetime](#span-lifetime)
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 - [SpanKind](#spankind)
+- [Span type](#span-type)
+  * [Span type syntax](#span-type-syntax)
 - [Link](#link)
 - [Concurrency requirements](#concurrency-requirements)
 - [Included Propagators](#included-propagators)
@@ -313,6 +315,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
 - A [`SpanKind`](#spankind)
+- (**Development**) A [span type](#span-type)
 - A start timestamp
 - An end timestamp
 - [`Attributes`](../common/README.md#attribute)
@@ -393,6 +396,8 @@ The API MUST accept the following parameters:
   The semantic parent of the Span MUST be determined according to the rules
   described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
+- **Status**: [Development](../document-status.md) - [Span type](#span-type),
+  unset if not specified.
 - [`Attributes`](../common/README.md#attribute). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
   description](sdk.md#sampling). An empty collection will be assumed if
@@ -797,6 +802,43 @@ To summarize the interpretation of these kinds:
 | `PRODUCER` |   outgoing     |  deferred execution |
 | `CONSUMER` |   incoming     |  deferred execution |
 | `INTERNAL` |                |                     |
+
+## Span type
+
+**Status**: [Development](../document-status.md)
+
+Span type is an optional string that identifies the class of spans a span
+belongs to, such as HTTP client requests or database calls, defined
+by [semantic conventions](/specification/semantic-conventions.md).
+Spans of the same type SHOULD have the same name format, kind, attributes, error
+conditions, and operation scope.
+
+[`SpanKind`](#spankind) describes how the span relates to remote peers, while
+span type describes what operation it represents.
+
+Span type is provided at [span creation](#span-creation) and MUST NOT be changed
+afterwards.
+
+The API SHOULD be documented in a way to communicate to users that the span
+type needs to conform to the [span type syntax](#span-type-syntax). The API
+SHOULD NOT validate the span type; that is left to implementations of the API,
+like the [SDK](sdk.md#sdk-span-creation).
+
+### Span type syntax
+
+The span type syntax is defined below using the [Augmented Backus-Naur
+Form](https://datatracker.ietf.org/doc/html/rfc5234):
+
+```abnf
+span-type = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
+
+ALPHA = %x41-5A / %x61-7A; A-Z / a-z
+DIGIT = %x30-39 ; 0-9
+```
+
+* They are case-sensitive ASCII strings.
+* The first character is alphabetic.
+* They have a maximum length of 255 characters.
 
 ## Link
 

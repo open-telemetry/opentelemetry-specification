@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
+
 ### Metrics
 
 ### Logs
