@@ -14,6 +14,43 @@ release.
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
+### Metrics
+
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
+### Logs
+
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.62.0 (2026-10-21)
+
+### Traces
+
 - Add `Sampler.Shutdown` operation.
   ([#5335](https://github.com/open-telemetry/opentelemetry-specification/pull/5335))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
@@ -22,28 +59,19 @@ release.
 
 ### Metrics
 
-- Allow an exception to the finite upper bound for exporter `Export` calls only
-  for synchronous output through APIs without deadline or cancellation support.
-  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Specify that `Shutdown` of the periodic exporting MetricReader MUST include
   the effects of `ForceFlush`.
   ([#5305](https://github.com/open-telemetry/opentelemetry-specification/pull/5305))
 
 ### Logs
 
-- Allow an exception to the finite upper bound for exporter `Export` calls only
-  for synchronous output through APIs without deadline or cancellation support.
-  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
 
-### Baggage
-
-### Profiles
-
 ### Resource
 
-- Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
+- Update resource detectors to generate entities and indicate resource detectors should be entity-aware
+  unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Entities
@@ -54,6 +82,9 @@ release.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Common
+
+- Stabilize Attribute and Attribute Collection representation for non-OTLP.
+  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
 ### OpenTelemetry Protocol
 
@@ -85,6 +116,9 @@ release.
   ([#5357](https://github.com/open-telemetry/opentelemetry-specification/pull/5357))
 
 ### OTEPs
+
+- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
+  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.61.0 (2026-09-14)
 
@@ -156,8 +190,6 @@ release.
 
 - Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
-- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
-  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.59.0 (2026-07-10)
 
@@ -242,8 +274,6 @@ release.
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute collection in non-OTLP protocols.
   ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
-- Stabilize Attribute and Attribute Collection representation for non-OTLP.
-  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
 ### Compatibility
 
