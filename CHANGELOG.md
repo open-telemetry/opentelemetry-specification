@@ -11,7 +11,7 @@ release.
 
 ### Context Sharing
 
-- Add the Development Process Context Sharing specification.
+- Add the Alpha Process Context Sharing specification.
   ([#5370](https://github.com/open-telemetry/opentelemetry-specification/pull/5370))
 
 ### Traces
