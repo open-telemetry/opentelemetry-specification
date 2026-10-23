@@ -50,13 +50,17 @@ The header is stored in a memory mapping with the following format:
 | `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp from `CLOCK_BOOTTIME` of when the context was published, in nanoseconds         |
 | `payload`                   | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64         |
 
-The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
+< JUSTIFICATION: Use BCP 14 MAY instead of informal optional wording. >
 
-The `monotonic_published_at_ns` SHOULD use a timestamp from the `CLOCK_BOOTTIME` system clock.
-This timestamp is used for detecting if the context is consistent/during updates and thus:
+The `payload` MAY be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
-* `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading.
-* Every update to `monotonic_published_at_ns` MUST provide a different value for this timestamp.
+< JUSTIFICATION: Give the BCP 14 requirements a clear publisher subject and clarify the timestamp purpose. >
+
+Publishers SHOULD populate `monotonic_published_at_ns` with a timestamp from the `CLOCK_BOOTTIME` system clock.
+This timestamp detects whether the context remains consistent while updates occur:
+
+* A zero `monotonic_published_at_ns` value indicates the context is being mutated and is not yet ready for reading.
+* Publishers MUST write a different `monotonic_published_at_ns` value on every update.
 
 ### Payload
 
@@ -66,61 +70,106 @@ The payload uses protobuf with the [`ProcessContext` message][process-context-pr
 
 - `resource`, containing the [Resource](../resource/README.md) attributes describing this process.
 
-  Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key). The behavior of software that receives duplicated keys can be unpredictable.
+  < JUSTIFICATION: Keep the uniqueness requirement concise and mark duplicate-key behaviour as explanatory. >
+
+  Attribute keys MUST be unique.
+
+  > [!NOTE]
+  > Software receiving duplicated keys may behave unpredictably.
 - `attributes`, containing additional attributes to share with external readers that are not part of the standard Resource.
 
-Whenever applicable, attributes SHOULD follow the existing OpenTelemetry [semantic conventions][semantic-conventions].
+< JUSTIFICATION: Give the semantic-convention recommendation a clear publisher subject. >
+
+Whenever applicable, publishers SHOULD populate attributes following the existing OpenTelemetry [semantic conventions][semantic-conventions].
 
 ## Publication Protocol
 
-Publishing the context SHOULD follow these steps:
+< JUSTIFICATION: The feature is optional, but participating publishers must follow one interoperable publication protocol. >
+
+Publishers that support Process Context Sharing MUST follow these steps when publishing the context:
 
 1. **Check for existing mapping**: If a previous context was published, follow the "[Updating Protocol](#updating-protocol)" instead.
 2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC_SEAL)`, size it with `ftruncate`.
-   Note that `MFD_NOEXEC_SEAL` is a newer Linux feature so if you get a failure creating the memfd, you probably want to try again with just `MFD_CLOEXEC | MFD_ALLOW_SEALING`.
-3. **Allocate a new mmap from the memfd then close the memfd**: Setup an mmap using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE, memfd, 0)`. This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed.
+
+   < JUSTIFICATION: Replace informal second-person advice with an explicit BCP 14 recommendation. >
+
+   If `memfd_create` fails with `MFD_NOEXEC_SEAL`, publishers SHOULD retry using only `MFD_CLOEXEC | MFD_ALLOW_SEALING`.
+3. **Allocate a new mmap from the memfd then close the memfd**: < JUSTIFICATION: Use the verb "set up" rather than the noun "setup". > Set up an mmap using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE, memfd, 0)`. This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed.
 4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)` and use that instead.
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data.
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation).
 7. **Write header fields**: Populate `signature`, `version`, `payload_size`, `payload` but not yet `monotonic_published_at_ns`.
 8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 9. **Write timestamp**: Write `monotonic_published_at_ns` last. This field is used to detect that the context is ready for use by the reader.
-10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step SHOULD be done unconditionally, although naming mappings is not always supported by the kernel.
 
-The `monotonic_published_at_ns` MUST be written last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
+   < JUSTIFICATION: State the critical write-order requirement once, with the publisher as its subject. >
 
-If attributes are updated during the process lifetime, the "[Updating Protocol](#updating-protocol)" SHOULD be followed.
+   Publishers MUST write `monotonic_published_at_ns` last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
+10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping.
 
-If any of the steps above fail (other than naming or allocating a new memfd), publication is considered to have failed, and the process context will not be available.
-Finally, if both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), then the process context will not be available either.
+    < JUSTIFICATION: Initial publication and updates perform the same interoperability operation, so they should have the same requirement strength. >
 
-The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
+    Publishers MUST perform this step unconditionally, although naming mappings is not always supported by the kernel.
 
-In a situation where multiple resources exist as per <https://github.com/open-telemetry/opentelemetry-specification/pull/4665>, the process context SHOULD contain the default SDK resource.
-We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](../../oteps/profiles/4947-thread-ctx.md)
-will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
+< JUSTIFICATION: Make the update-protocol obligation consistent with mandatory protocol conformance. >
 
-The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
+If attributes are updated during the process lifetime, publishers MUST follow the "[Updating Protocol](#updating-protocol)".
 
-Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which SHOULD be ignored. The reading protocol specified below is able to work regardless of `CONFIG_ANON_VMA_NAME` being available.
+< JUSTIFICATION: Express publication failure as a testable publisher obligation. >
 
-Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's still possible, using eBPF, to optionally hook on `prctl` naming attempts as a way of detecting new mappings being published. For this reason, this step SHOULD always be done even if the publisher somehow is aware that naming will not be successful on the current system.
+If any required step fails, other than naming or allocating a new memfd, publishers MUST treat publication as failed and MUST NOT make the process context available.
+If both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), publishers MUST NOT make the process context available.
+
+< JUSTIFICATION: Give the singleton requirement a clear publisher subject. >
+
+Publishers MUST NOT make more than one process context active for the same process.
+
+< JUSTIFICATION: Use stable OTEP links, identify the publisher, and separate future work from the requirement. >
+
+When multiple resources exist, as described by [OTEP 4665][multiple-resources-otep], publishers SHOULD include the default SDK resource in the process context.
+
+> [!NOTE]
+> Future work may enable more granular attribution of work to specific resources. For example, [OTEP 4947][thread-context-otep] describes identifying which threads are working on what in a multi-tenant scenario.
+
+< JUSTIFICATION: Give the lifecycle permission a clear publisher subject. >
+
+Publishers MAY drop the context during SDK shutdown or retain it until the process terminates and the operating system reclaims the process memory.
+
+< JUSTIFICATION: Separate the error-handling recommendation from informative kernel support details. >
+
+Publishers SHOULD ignore errors returned by the mapping-naming `prctl` call.
+
+> [!NOTE]
+> Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. The reading protocol works regardless of whether `CONFIG_ANON_VMA_NAME` is available.
+
+< JUSTIFICATION: Keep eBPF rationale non-normative and avoid duplicating the naming requirement. >
+
+> [!NOTE]
+> On legacy kernels and those without `CONFIG_ANON_VMA_NAME`, eBPF readers can hook `prctl` naming attempts to detect new mappings. This is why publishers attempt to name mappings even when naming is expected to fail.
 
 ## Reading Protocol
 
-External readers (such as the OpenTelemetry eBPF Profiler) discover and read process context as follows:
+< JUSTIFICATION: Participating readers must follow one interoperable reading protocol. >
+
+External readers (such as the OpenTelemetry eBPF Profiler) MUST follow these steps to discover and read process context:
 
 1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name **starting with** `[anon_shmem:OTEL_CTX]`, `[anon:OTEL_CTX]` or `/memfd:OTEL_CTX`.
 
 2. **Validate signature and version**:
    - Read the first 8 bytes of the header and verify they match `OTEL_CTX`.
    - Read the version field and verify it is supported (currently `2`).
-   - If both of these checks succeed, the reader SHOULD consider the mapping established and MAY optionally cache the mapping address for that process for subsequent process context reads.
+
+   < JUSTIFICATION: Remove redundancy because MAY already expresses optionality. >
+
+   - If both of these checks succeed, the reader SHOULD consider the mapping established and MAY cache the mapping address for that process for subsequent process context reads.
    - If either check fails, skip this mapping.
 
 3. **Verify the rest of the header**:
    - Verify that `monotonic_published_at_ns` is non-zero (zero indicates the context is currently being mutated).
-   - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
+
+   < JUSTIFICATION: Give the parenthetical BCP 14 permission a clear reader subject. >
+
+   - If this fails, restart at 2 (the reader MAY skip signature and version validation after mapping is considered established).
 
 4. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 
@@ -129,24 +178,35 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 
 7. **Re-verify header**: Read `monotonic_published_at_ns` again. If it has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
-If `monotonic_published_at_ns` is different from the value read in step 3, restart at 2 (MAY skip signature and version validation after mapping is considered established).
+
+   < JUSTIFICATION: Give the parenthetical BCP 14 permission a clear reader subject. >
+
+   If `monotonic_published_at_ns` is different from the value read in step 3, restart at 2 (the reader MAY skip signature and version validation after mapping is considered established).
 
 8. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message.
 
 9. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process.
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
-We recommend the use of APIs such as `process_vm_readv` or equivalent to read data, as they allow gracefully handling of issues inherent to racy cross-process memory access.
 
-After the first successful read, if using polling to check for updates, readers can assume that if `monotonic_published_at_ns` has not changed, then the read payload is still consistent.
-That is, the `monotonic_published_at_ns` can be used as a "cache invalidation key" for parsing the payload.
+< JUSTIFICATION: Replace first-person recommendation with explicit BCP 14 guidance. >
 
-The different names in `/proc/<pid>/maps` are caused by the fallback options the writer goes through to setup and name the mapping: `[anon_shmem:OTEL_CTX]` means both `memfd_create` and `prctl` succeeded; `[anon:OTEL_CTX]` means `memfd_create` failed but `prctl` succeeded; `/memfd:OTEL_CTX` means `memfd_create` succeeded but `prctl` failed.
-The remaining option where both `memfd_create` and `prctl` failed does not establish a valid context and is treated as an error in the writer.
+Readers SHOULD use APIs such as `process_vm_readv` or equivalent to handle issues inherent to racy cross-process memory access gracefully.
+
+< JUSTIFICATION: State the cache guarantee separately from the reader's permission to use it. >
+
+After a successful read, an unchanged `monotonic_published_at_ns` value indicates that the payload remains consistent with that read. Readers MAY use `monotonic_published_at_ns` as a cache invalidation key.
+
+< JUSTIFICATION: Mark the mapping-name explanation as non-normative. >
+
+> [!NOTE]
+> The different names in `/proc/<pid>/maps` result from the fallback options used to set up and name the mapping: `[anon_shmem:OTEL_CTX]` means both `memfd_create` and `prctl` succeeded; `[anon:OTEL_CTX]` means `memfd_create` failed but `prctl` succeeded; `/memfd:OTEL_CTX` means `memfd_create` succeeded but `prctl` failed. If both `memfd_create` and `prctl` fail, no valid context is established and the publisher treats publication as failed.
 
 ## Updating Protocol
 
-When the attributes change, the process context mapping SHOULD be updated following these steps:
+< JUSTIFICATION: The feature is optional, but participating publishers must follow one interoperable update protocol. >
+
+When attributes change, publishers MUST follow these steps to update the process context mapping:
 
 1. **Prepare new payload**: Serialize the new payload message.
 2. **Signal update start**: Write `0` to the `monotonic_published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
@@ -157,7 +217,10 @@ When the attributes change, the process context mapping SHOULD be updated follow
    The new `monotonic_published_at_ns` MUST be different (and after) the value present before the update started.
 7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step MUST be done unconditionally, although naming mappings is not always supported by the kernel.
 
-As the reader checks `monotonic_published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
+< JUSTIFICATION: Mark the concurrency explanation as non-normative. >
+
+> [!NOTE]
+> Because readers check `monotonic_published_at_ns` before and after reading the payload, they detect concurrent updates and avoid inconsistent reads.
 
 ## Interaction with Existing Functionality
 
@@ -168,7 +231,9 @@ This mechanism is additive and does not modify existing OpenTelemetry SDK behavi
 
 SDKs that do not implement this feature continue to function normally; external readers simply will not have access to their runtime-generated resource attributes.
 
+[multiple-resources-otep]: ../../oteps/entities/4665-multiple-resource-in-sdk.md
 [otep]: ../../oteps/profiles/4719-process-ctx.md
 [process-context-proto]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/processcontext/v1development/process_context.proto
 [protobuf]: https://protobuf.dev/
 [semantic-conventions]: https://opentelemetry.io/docs/specs/semconv/
+[thread-context-otep]: ../../oteps/profiles/4947-thread-ctx.md
