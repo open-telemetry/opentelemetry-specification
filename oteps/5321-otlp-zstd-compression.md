@@ -6,8 +6,10 @@ default; exporters fall back to `gzip` if a receiver rejects `zstd`.
 ## Motivation
 
 The [OTLP exporter spec][exporter-spec] says `gzip` is the only specified compression method.
-Zstandard has better compression ratio and several-times-faster decompression than gzip at
-comparable CPU cost — a real cost for CPU- and bandwidth-constrained telemetry pipelines.
+Zstandard has better compression ratio and faster decompression than gzip at comparable CPU
+cost, given pooled encoders — a real cost for CPU- and bandwidth-constrained telemetry pipelines.
+The .NET prototype (see Prototypes) measured payloads 11–36% smaller than gzip, with 0.65–1.0x
+gzip's compression CPU when encoders are reused and 1.2–1.5x faster decompression.
 
 The ecosystem has already moved here without the spec:
 
@@ -37,21 +39,32 @@ an unconfigured user would have no way to know their SIG picked a codec their re
 If the configured receiver doesn't support `zstd`:
 
 - **gRPC**: per the [gRPC compression spec][grpc-compression-spec], the server returns
-  `UNIMPLEMENTED` with its supported encodings in `grpc-accept-encoding`. Existing gRPC behavior.
-- **HTTP**: a receiver that doesn't support the request's `Content-Encoding` MUST reject it
-  rather than silently treating the body as uncompressed. It SHOULD do so with
-  `415 Unsupported Media Type`; `400 Bad Request` is also conformant — the reference Collector
-  implementation already returns `400` for an unrecognized `Content-Encoding`
-  ([`confighttp/compression.go`][collector-confighttp]), so this recognizes existing practice
-  rather than requiring every deployed receiver to change.
+  `UNIMPLEMENTED`. That spec also has the server list its supported encodings in
+  `grpc-accept-encoding`, but grpc-go's server (and so the Collector) rejects before any handler
+  runs and sends no `grpc-accept-encoding` on the response, so OTLP can't rely on the header.
+- **HTTP**: a receiver that doesn't support the request's `Content-Encoding` MUST reject it with
+  `415 Unsupported Media Type` rather than silently treating the body as uncompressed, and SHOULD
+  list the codings it does accept in an `Accept-Encoding` response header
+  ([RFC 9110 §15.5.16][rfc9110-415]). `400 Bad Request` is not conformant here: OTLP/HTTP
+  reserves `400` for permanently invalid data. The Collector returns `400` today (see
+  [Compliance gaps](#compliance-gaps-in-existing-implementations)).
 
-Both statuses are non-retryable under OTLP's existing retry semantics. So "fail loud instead of
-silently dropping data" isn't actually true as stated: a compliant `zstd` sender talking to a
-compliant SHOULD-level non-supporting receiver drops every batch, both sides in spec. To close
-that gap: on receiving `UNIMPLEMENTED` (gRPC) or a non-2xx rejection status (`415`/`400`, HTTP)
-for a `zstd`-compressed export, the exporter MUST retry that batch once with `gzip`, and SHOULD
-log a warning when it does. This is one hardcoded fallback rung, not negotiation — an exporter
-may keep trying `zstd` on later batches or remember the downgrade for the connection's lifetime;
+Both statuses are non-retryable under OTLP's existing retry semantics, so a compliant `zstd`
+sender talking to a compliant non-supporting receiver would drop every batch. To close that gap,
+for a `zstd`-compressed export the exporter MUST retry that batch once with `gzip`, and SHOULD log
+a warning, when and only when:
+
+- **gRPC**: the status is `UNIMPLEMENTED` and the response's `grpc-accept-encoding` is absent or
+  does not list `zstd`. If it lists `zstd`, the gRPC spec says the error is unrelated to
+  compression, and existing non-retryable handling applies.
+- **HTTP**: the status is `415`. Every other status keeps its existing OTLP semantics; in
+  particular `400` stays non-retryable.
+
+This can still misfire — a `415` for an unsupported `Content-Type`, or a grpc-go `UNIMPLEMENTED`
+for an unregistered service — but the cost is bounded: one extra `gzip` request that fails the
+same way and is then handled exactly as today. A batch the receiver calls permanently invalid
+(`400`) is never resent. This is one hardcoded fallback rung, not negotiation — an exporter may
+keep trying `zstd` on later batches or remember the downgrade for the connection's lifetime;
 either is fine, as long as no batch is dropped solely for a codec mismatch.
 
 Receiver support is SHOULD, not MUST — same bar as any newly-added optional codec, and it doesn't
@@ -87,26 +100,30 @@ isn't in most languages' standard libraries.
     out-of-band agreement, which is exactly the negotiation surface this OTEP avoids opening.
   - **`Content_Checksum_Flag` is unconstrained** — it's self-describing via the flag, so no prior
     agreement is needed either way.
-- **`opentelemetry-configuration`**: adding `zstd` to `Compression` is a config-surface change;
-  per `CONTRIBUTING.md` it needs a schema PR (today's schema documents only `gzip`/`none`) merged
-  together with this OTEP. **Not yet written — a hard blocker to merging this OTEP**, tracked here
-  rather than solved in this round.
+- **`opentelemetry-configuration`**: adding `zstd` to `Compression` is a config-surface change.
+  `CONTRIBUTING.md` requires a schema PR (today's schema documents only `gzip`/`none`) linked from,
+  and merged together with, the spec PR that changes SDK configuration — here, the follow-up
+  `exporter.md` change this OTEP leads to, not the OTEP itself. That schema PR will be opened
+  alongside the spec PR.
 - **Mixed-version rollout**: no new policy here. Nothing in `specification/configuration`
   mandates warn-vs-fail-fast for an unrecognized value today; the closest existing guidance is
   [`error-handling.md`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/error-handling.md#basic-error-handling-principles) —
   MAY fail fast at init, MUST NOT fail at runtime. An SDK predating `zstd` support that sees it in
   a fleet-wide env var just keeps its existing behavior for an unrecognized value.
 - **Receiver conformance**: gRPC receivers SHOULD register a `zstd` compressor the same way they
-  do `gzip`. HTTP receivers SHOULD accept `Content-Encoding: zstd`, and MUST reject any encoding
-  they don't support with `415` (SHOULD) or `400` (MAY).
+  do `gzip`, and SHOULD include `grpc-accept-encoding` when rejecting an unsupported encoding, as
+  the gRPC spec describes. HTTP receivers SHOULD accept `Content-Encoding: zstd`, MUST reject any
+  encoding they don't support with `415`, and SHOULD include `Accept-Encoding` in that response.
 - **Exporter conformance**: SHOULD, not MUST — see Explanation.
-- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` or `400` (HTTP) on a non-supporting receiver,
-  followed by the mandatory gzip-retry. No other new client-side error modes.
-- **Reference implementation** (non-normative, gRPC only — see Prototypes):
-  [otel-go#8985][otel-go-pr]. Pooled `zstd.Encoder`/`Decoder` via `klauspost/compress/zstd`,
-  registered as a `grpc/encoding.Compressor`, with `zstd.WithWindowSize` pinned to the 8 MB cap.
-  Concurrency pinned to 1: OTLP batches are too small to benefit from zstd's parallel workers, and
-  it bounds leaked goroutines if a pooled decoder is dropped without `Close`.
+- **Error modes**: `UNIMPLEMENTED` (gRPC) / `415` (HTTP) on a non-supporting receiver, followed
+  by the mandatory gzip-retry under the conditions in Explanation. No other new client-side error
+  modes, and no change to how any other status is handled.
+- **Reference implementation** (non-normative — see Prototypes): [otel-go#8985][otel-go-pr].
+  Pooled `zstd.Encoder`/`Decoder` via `klauspost/compress/zstd`, registered as a
+  `grpc/encoding.Compressor` for gRPC and wrapping the request body for HTTP, with
+  `zstd.WithWindowSize` pinned to the 8 MB cap. Concurrency pinned to 1: OTLP batches are too
+  small to benefit from zstd's parallel workers, and it bounds leaked goroutines if a pooled
+  decoder is dropped without `Close`.
 
 ## Trade-offs and mitigations
 
@@ -118,9 +135,9 @@ isn't in most languages' standard libraries.
   dropping telemetry. Worth its own OTEP if there's appetite for more.
 - **New dependency for implementations that add it.** Unlike `gzip`, `zstd` isn't in most
   standard libraries. Rust's Cargo feature flags (`zstd-tonic`/`zstd-http`) are real per-feature
-  opt-in — no feature, no dependency. The otel-go prototype doesn't yet match this:
-  `klauspost/compress` and its `init()`-time registration are unconditional for anyone importing
-  the gRPC exporter packages. A gap in the prototype, not this proposal.
+  opt-in — no feature, no dependency. The otel-go prototype matches this with a `nozstd` build
+  tag that drops the codec and `klauspost/compress`; a build with the tag fails fast at exporter
+  construction if `zstd` is still configured.
 - **SHOULD, not MUST, on both sides.** A compliant receiver can still reject `zstd`, a compliant
   exporter can still omit it. Keeps the adoption bar low; a future OTEP could raise either once
   there's adoption data.
@@ -156,8 +173,13 @@ The prior art above mostly shipped before this OTEP's fallback requirement exist
 - **Collector `configgrpc`**: [a streaming `zstd.NewWriter`][collector-configgrpc-zstd] with a
   fixed 512 KB window — already under this OTEP's 8 MB cap, no dictionary use. Compliant on
   framing already. The remaining gap, same as everyone else: no gzip-fallback-on-rejection, a
-  requirement that didn't exist before this OTEP. `confighttp` is receiver-side decode only
-  ([`availableDecoders["zstd"]`][collector-confighttp-zstd]) and needs no change.
+  requirement that didn't exist before this OTEP. `confighttp` decodes `zstd` by default
+  ([`availableDecoders["zstd"]`][collector-confighttp-zstd]), but when it sees an encoding it
+  doesn't support (e.g. `zstd` removed from its configured algorithms) it returns a plain-text
+  `400` with no `Accept-Encoding` ([`compression.go`][collector-confighttp]), the same status it
+  uses for a corrupt body. It needs to return `415` instead; a small change, and only reachable
+  when an operator has disabled `zstd`. On gRPC, the Collector inherits grpc-go's `UNIMPLEMENTED`
+  with no `grpc-accept-encoding`, which the fallback rule already treats as a codec mismatch.
 - **`opentelemetry-rust`**:
   - gRPC (`zstd-tonic`): delegates to `tonic::codec::CompressionEncoding::Zstd`. Window size is
     tonic's implementation detail, not something `opentelemetry-rust` asserts either way.
@@ -201,12 +223,15 @@ than not.
 
 ## Prototypes
 
-- [otel-go#8985][otel-go-pr] — gRPC only (`otlptracegrpc`/`otlpmetricgrpc`), with wire-level tests
-  asserting the negotiated codec. Blocked pending this OTEP.
-- **No working HTTP prototype exists.** That same PR extends the HTTP exporters' compression enum
-  and env-var parsing to accept `zstd`, but their request builders only handle `none`/`gzip` —
-  selecting `zstd` leaves the body reader nil and the first export panics. A working, tested HTTP
-  prototype is needed before this can be considered validated for that transport.
+- [otel-go#8985][otel-go-pr] — both transports (`otlptracegrpc`/`otlpmetricgrpc`,
+  `otlptracehttp`/`otlpmetrichttp`), implementing the gzip-fallback rule above, with tests for the
+  negotiated codec, the fallback, and the cases that must not fall back (HTTP `400`; gRPC
+  `UNIMPLEMENTED` whose `grpc-accept-encoding` lists `zstd`). `nozstd` build tag for opt-out.
+  Blocked pending this OTEP.
+- [martincostello/opentelemetry-dotnet@63674a2][dotnet-proto] — .NET 11 (built-in Zstandard),
+  both transports, interop-tested against Collector 0.163.1 including the gzip fallback, with
+  benchmarks against gzip ([PR comment][dotnet-bench]). Predates the narrowed trigger above (it
+  falls back on `400`).
 
 ## Future possibilities
 
@@ -216,6 +241,9 @@ than not.
 
 [exporter-spec]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md
 [collector-confighttp]: https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/compression.go
+[rfc9110-415]: https://www.rfc-editor.org/rfc/rfc9110#section-15.5.16
+[dotnet-proto]: https://github.com/martincostello/opentelemetry-dotnet/commit/63674a2d858519f02ecc39536925fd2afd5a5280
+[dotnet-bench]: https://github.com/open-telemetry/opentelemetry-specification/pull/5321#issuecomment-6320068725
 [proto-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md
 [java-contrib-zstd]: https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/compressors/compressor-zstd/README.md
 [proto-629]: https://github.com/open-telemetry/opentelemetry-proto/issues/629
