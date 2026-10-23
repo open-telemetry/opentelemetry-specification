@@ -6,7 +6,7 @@ path_base_for_github_subdir:
 
 # Context Sharing
 
-**Status**: [Development](../document-status.md)
+**Status**: [Alpha](../document-status.md)
 
 ## Overview
 
