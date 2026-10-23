@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add `ComposableAlwaysRecord` sampler.
+  ([#5266](https://github.com/open-telemetry/opentelemetry-specification/issues/5266))
+
 ### Metrics
 
 ### Logs
