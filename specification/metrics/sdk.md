@@ -1695,8 +1695,19 @@ information (e.g. name, version, etc.) associated with each `Metric Point`.
 `Export` should never be called concurrently with other `Export` calls for the
 same exporter instance.
 
-`Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (Failure).
+`Export` MUST NOT block indefinitely, except when performing synchronous
+output through an API that does not support deadlines or
+cancellation of a blocked write.
+
+In all other cases, there MUST be a reasonable finite upper limit after which
+the call times out with an error result (`Failure`).
+
+> [!NOTE]
+> For example, an exporter that writes synchronously to standard output or an
+> application-provided stream can use an output API that cannot safely interrupt
+> a blocked write. Bounding the caller's wait through background execution can
+> leave that write blocked and retaining resources after `Export` returns, or
+> allow output to complete after a timeout. These costs motivate this exception.
 
 Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required
