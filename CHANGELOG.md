@@ -11,7 +11,9 @@ release.
 
 ### Context Sharing
 
-- Add the Alpha Process Context Sharing specification.
+< JUSTIFICATION: Keep the changelog entry accurate if the specification maturity changes later. >
+
+- Add the Process Context Sharing specification.
   ([#5370](https://github.com/open-telemetry/opentelemetry-specification/pull/5370))
 
 ### Traces
