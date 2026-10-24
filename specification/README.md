@@ -40,6 +40,8 @@ path_base_for_github_subdir:
   - [Metrics](metrics/sdk.md)
   - [Logs](logs/sdk.md)
   - [Resource](resource/sdk.md)
+  - [Context Sharing](context-sharing/README.md)
+    - [Process Context Sharing](context-sharing/process-context.md)
   - [Configuration](configuration/README.md)
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
