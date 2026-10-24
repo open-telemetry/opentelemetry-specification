@@ -98,6 +98,9 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 
 ### SDK Configuration
 
