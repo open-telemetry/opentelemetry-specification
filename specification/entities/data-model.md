@@ -186,19 +186,13 @@ Every entity therefore records an **ID Scope**:
 > step later.
 
 OpenTelemetry Semantic Conventions MUST declare the ID Scope of every defined
-entity type, and for a `local` scope the kind of entity the ID is unique within
-when it is the same in all deployments. This declaration tells producers what to
-emit and allows producers to be validated against it.
+entity type. Some `local` entity types are always scoped by the same kind of
+entity, and Semantic Conventions MUST declare it for those. Others are scoped
+differently in different deployments, and the producer determines it.
 
 Consumers MUST be able to determine an entity's ID Scope from the entity itself.
 A consumer MUST NOT be required to consult Semantic Conventions to interpret an
-entity's identity, because Semantic Conventions are not available to every
-consumer and the version a producer used is not knowable from the data.
-
-> [!NOTE]
-> This is why an entity carries its own scope. If consumers could rely on
-> Semantic Conventions at consumption time, the scope of every entity type would
-> already be known and neither field would be needed.
+entity's identity.
 
 ### Local and Global Identity
 
@@ -265,31 +259,33 @@ A consumer computes an entity's Global Identity from the Resource alone:
 6. Union that entity's Local Identity into the accumulated identity and repeat
    from step 2 for that entity.
 
-A consumer MUST stop walking the chain if it reaches an entity type it has
-already visited.
+If the walk reaches an entity type it has already visited, the chain is cyclic.
+The consumer MUST stop and the identity is [unresolved](#unresolved-identity).
 
 ### Unresolved Identity
 
 An entity's identity is **unresolved** when its ID Scope is `unspecified`, when
-its scope is `local` but the Scope Entity Type is empty, or when a scoping
-entity in its chain is missing from the Resource.
+its scope is `local` but the Scope Entity Type is empty, when a scoping entity
+in its chain is missing from the Resource, or when the chain is cyclic.
 
 An unresolved entity is still a valid entity and still describes the object the
 telemetry is about. A consumer:
 
 - MAY use the entity to correlate signals that carry the same Resource.
 - MUST NOT treat the entity's Local Identity as a Global Identity.
-- MUST NOT merge the entity with an entity from another Resource that has the
+- SHOULD NOT merge the entity with an entity from another Resource that has the
   same type and the same Local Identity, since the two may be different objects
-  in different scopes.
+  in different scopes. A consumer MAY merge them if it knows, from outside the
+  data, that every Resource it receives is scoped by the same entity, as in a
+  pipeline that collects from a single cluster.
 
 An unresolved identity is expected when one component reports an entity and a
 different component reports the entity that scopes it. It resolves once that
-component adds its entity to the Resource. For example, a receiver reporting
-Kubernetes objects observed through the Kubernetes API can report a `k8s.pod`
-entity without the `k8s.cluster` entity that gives it global identity, and a
-resource detector that knows the cluster completes the chain by adding
-`k8s.cluster`.
+component adds its entity to the Resource. For example, `k8s.namespace` is
+identified by `k8s.namespace.name`, which is unique only within a cluster, and
+the Kubernetes API exposes no cluster identity, so a receiver watching
+Kubernetes objects can only report the namespace. A resource detector that knows
+the cluster completes the chain by adding `k8s.cluster`.
 
 > [!NOTE]
 > A producer cannot always tell which kind of entity scopes an ID. A `process`
