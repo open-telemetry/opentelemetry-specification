@@ -26,6 +26,7 @@ weight: 1
     + [Instrument advisory parameters](#instrument-advisory-parameters)
       - [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
       - [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
+      - [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -276,6 +277,16 @@ Applies to all instrument types.
 
 `Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
 the recommended set of attribute keys to be used for the resulting metrics.
+
+##### Instrument advisory parameter: `OptIn`
+
+**Status**: [Development](../document-status.md)
+
+Applies to all instrument types.
+
+`OptIn` (bool) indicates that the instrument is disabled unless the user
+explicitly enables it. If true, OpenTelemetry SDKs produce no metric data for
+the instrument by default.
 
 #### Synchronous and Asynchronous instruments
 
