@@ -19,8 +19,6 @@ weight: 2
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
 - [Identity Scope](#identity-scope)
-  * [Local and Global Identity](#local-and-global-identity)
-  * [Declaring Scope](#declaring-scope)
   * [Global Identity Composition](#global-identity-composition)
   * [Unresolved Identity](#unresolved-identity)
 - [Merging of Entities](#merging-of-entities)
@@ -59,7 +57,7 @@ physical format and encoding of how entity data is recorded).
 | ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>The scope within which the ID is unique is defined by [Identity Scope](#identity-scope).<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 | ID Scope | enum: `unspecified`, `global`, `local` | Whether the entity's ID is unique on its own or only within another entity.<p>MUST not change during the lifetime of the entity. See [Identity Scope](#identity-scope). |
-| Scope Entity Type | string | The type of the entity within which this entity's ID is unique. Only meaningful when ID Scope is `local`.<p>MUST not change during the lifetime of the entity. MAY be empty. See [Declaring Scope](#declaring-scope). |
+| Scope Entity Type | string | The type of the entity within which this entity's ID is unique. Only meaningful when ID Scope is `local`.<p>MUST not change during the lifetime of the entity. MAY be empty. See [Identity Scope](#identity-scope). |
 
 ## Minimally Sufficient Identity
 
@@ -167,59 +165,27 @@ Some IDs are unique on their own, others only within another entity. For example
 `k8s.pod.uid` is a Kubernetes-generated UUID, while `k8s.container.name` is
 unique only within a single Kubernetes Pod.
 
-Every entity therefore records an **ID Scope**:
+Every entity therefore records an **ID Scope**, and when that scope is `local`, a
+**Scope Entity Type**: the type of the entity its ID is unique within.
 
-- **global**: the ID is unique on its own, because it comes from a scheme that
-  produces globally unique values, such as a UUID. Any two observers of the same
-  entity produce the same ID, and that ID does not depend on any other entity.
-- **local**: the ID is unique only within one other entity, because whatever
-  assigns it only avoids collisions within that entity.
-- **unspecified**: the producer did not state the scope. The identity is
-  [unresolved](#unresolved-identity).
-
-> [!NOTE]
-> The scope of an ID follows from how the ID is generated, not from where the
-> system that assigns it documents its guarantee. `k8s.pod.uid` is `global` because
-> Kubernetes UIDs are UUIDs, even though Kubernetes documents uniqueness per
-> cluster. Scoping it to `k8s.cluster` would add nothing, since `k8s.cluster.uid`
-> is itself a Kubernetes UID and the chain would rest on the same property one
-> step later.
-
-OpenTelemetry Semantic Conventions MUST declare the ID Scope of every defined
-entity type. Some `local` entity types are always scoped by the same kind of
-entity, and Semantic Conventions MUST declare it for those. Others are scoped
-differently in different deployments, and the producer determines it.
-
-Consumers MUST be able to determine an entity's ID Scope from the entity itself.
-A consumer MUST NOT be required to consult Semantic Conventions to interpret an
-entity's identity.
-
-### Local and Global Identity
-
-An entity's **Local Identity** is its ID attributes.
-
-For a `global` ID Scope, the Global Identity is the Local Identity.
-
-For a `local` ID Scope, the **Global Identity** is the union of the entity's
-Local Identity and the Global Identity of the entity it is unique within.
-
-An entity with an `unspecified` ID Scope has no Global Identity.
-
-### Declaring Scope
-
-Alongside its ID Scope, a `local` entity records a **Scope Entity Type**: the
-type of the entity its ID is unique within.
+| ID Scope | Scope Entity Type | Meaning |
+| -------- | ----------------- | ------- |
+| `global` | MUST be empty | The ID is unique on its own, because it comes from a scheme that produces globally unique values, such as a UUID. Any two observers of the same entity produce the same ID. |
+| `local` | an entity type | The ID is unique only within an entity of that type, because whatever assigns it only avoids collisions within that entity. |
+| `local` | empty | The producer knows the ID is not unique on its own, but not what scopes it. The identity is [unresolved](#unresolved-identity). |
+| `unspecified` | MUST be empty | The producer did not state the scope. The identity is [unresolved](#unresolved-identity). |
 
 Both fields describe the entity's own ID. They say what kind of entity the ID is
 unique within, not which particular entity, and that follows from the
 identifying attributes the producer populated.
 
-| ID Scope | Scope Entity Type | Meaning |
-| -------- | ----------------- | ------- |
-| `global` | MUST be empty | The ID is unique on its own. |
-| `local` | an entity type | The ID is unique within an entity of that type. |
-| `local` | empty | The producer knows the ID is not unique on its own, but not what scopes it. The identity is [unresolved](#unresolved-identity). |
-| `unspecified` | MUST be empty | The producer did not state the scope. The identity is [unresolved](#unresolved-identity). |
+> [!NOTE]
+> The scope of an ID follows from how the ID is generated, not from where the
+> system that assigns it documents its guarantee. `k8s.pod.uid` is `global`
+> because Kubernetes UIDs are UUIDs, even though Kubernetes documents uniqueness
+> per cluster. Scoping it to `k8s.cluster` would add nothing, since
+> `k8s.cluster.uid` is itself a Kubernetes UID and the chain would rest on the
+> same property one step later.
 
 The producer of an entity MUST set the ID Scope, and MUST set the Scope Entity
 Type when the scope is `local` and the producer knows which kind of entity
@@ -238,7 +204,20 @@ leaves the scoped entity unchanged.
 > entity later completes an entity's Global Identity without modifying that
 > entity.
 
+OpenTelemetry Semantic Conventions MUST declare the ID Scope of every defined
+entity type, and for a `local` scope the Scope Entity Types it can have. There
+MAY be more than one: a `process` is scoped by a `host` in one deployment and by
+a `container` in another. The producer records which one applies.
+
+Consumers MUST be able to determine an entity's ID Scope from the entity itself.
+A consumer MUST NOT be required to consult Semantic Conventions to interpret an
+entity's identity.
+
 ### Global Identity Composition
+
+An entity's **Local Identity** is its ID attributes. Its **Global Identity** is
+the union of its Local Identity and the Global Identity of the entity that
+scopes it.
 
 A scoping entity is found by type. This is unambiguous because a Resource holds
 at most one entity of a given type, see
