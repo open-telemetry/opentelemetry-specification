@@ -29,7 +29,7 @@ aliases:
   * [Dropped Types](#dropped-types)
   * [Exemplars](#exemplars)
   * [Instrumentation Scope](#instrumentation-scope)
-  * [Metric Attributes](#metric-attributes)
+  * [Metric Labels](#metric-labels)
   * [Resource Attributes](#resource-attributes)
 - [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
   * [Metric Metadata](#metric-metadata-1)
@@ -41,7 +41,7 @@ aliases:
     + [Histograms as Prometheus NHCB](#histograms-as-prometheus-nhcb)
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
-  * [Metric Attributes](#metric-attributes-1)
+  * [Metric Attributes](#metric-attributes)
   * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
@@ -369,7 +369,7 @@ MUST be assigned an instrumentation scope identifying the entity performing
 the translation from Prometheus to OpenTelemetry (e.g. the collector's
 Prometheus receiver).
 
-### Metric Attributes
+### Metric Labels
 
 **Status**: [Development](../document-status.md)
 
