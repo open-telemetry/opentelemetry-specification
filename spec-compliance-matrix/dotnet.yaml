@@ -134,7 +134,7 @@ sections:
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
-            status: '?'
+            status: '-'
           - name: Allow samplers to modify tracestate
             status: '+'
           - name: ShouldSample gets full parent Context
@@ -354,7 +354,7 @@ sections:
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
         status: '+'
       - name: Metric SDK supports per-timeseries cumulative start timestamps
-        status: '?'
+        status: '-'
       - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
         status: '-'
   - name: Logs
@@ -372,7 +372,7 @@ sections:
       - name: Logger.Emit(LogRecord) with Exception parameter
         status: '-'
       - name: LogRecord.Set EventName
-        status: '?'
+        status: '+'
       - name: Logger.Enabled
         status: '-'
       - name: Ergonomic API
@@ -462,7 +462,7 @@ sections:
       - name: OTEL_SERVICE_NAME
         status: '+'
       - name: OTEL_LOG_LEVEL
-        status: '-'
+        status: '+'
       - name: OTEL_PROPAGATORS
         status: '-'
       - name: OTEL_BSP_*
