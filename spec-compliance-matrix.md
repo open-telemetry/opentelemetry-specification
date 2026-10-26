@@ -78,7 +78,7 @@ formats is required. Implementing more than one format is optional.
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  |  |  |  |
+| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  | - |  |  |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
@@ -190,7 +190,7 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  | - |
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  | - |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  | - |
-| Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  | + |  |  |  |  |  |  |  | - |
+| Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  | + |  |  |  |  |  | - |  | - |
 | The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | + | + | + | - | - | - | - | - | - | - | - | - |
 
 ## Logs
@@ -206,7 +206,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | Logger.Emit(LogRecord) with Exception parameter | X |  | + | + | + |  |  |  |  |  | - |  | + |
-| LogRecord.Set EventName |  | + | + | + | + | + |  |  | + | + |  |  | + |
+| LogRecord.Set EventName |  | + | + | + | + | + |  |  | + | + | + |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  | + |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
@@ -264,7 +264,7 @@ Note: Support for environment variables is optional.
 | OTEL_SDK_DISABLED | - | + | - | + | + | - | + | - | + | + | - | - |
 | OTEL_RESOURCE_ATTRIBUTES | + | + | + | + | + | + | + | + | + | + | - | - |
 | OTEL_SERVICE_NAME | + | + | + | + | + | + | + | + | + | + |  | - |
-| OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | - | - | - |
+| OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | + | - | - |
 | OTEL_PROPAGATORS | - | + |  | + | + | + | + | - | - | - | - | - |
 | OTEL_BSP_* | + | + | + | + | + | + | + | + | + | + | - | - |
 | OTEL_BLRP_* | + | + |  | + | + |  | + | + | + | + |  | - |
