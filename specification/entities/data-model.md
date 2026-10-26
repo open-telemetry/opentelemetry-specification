@@ -171,8 +171,7 @@ Every entity therefore records an **ID Scope**, and when that scope is `local`, 
 | ID Scope | Scope Entity Type | Meaning |
 | -------- | ----------------- | ------- |
 | `global` | MUST be empty | The ID is unique on its own, because it comes from a scheme that produces globally unique values, such as a UUID. Any two observers of the same entity produce the same ID. |
-| `local` | an entity type | The ID is unique only within an entity of that type, because whatever assigns it only avoids collisions within that entity. |
-| `local` | empty | The producer knows the ID is not unique on its own, but not what scopes it. The identity is [unresolved](#unresolved-identity). |
+| `local` | MUST be set | The ID is unique only within an entity of that type, because whatever assigns it only avoids collisions within that entity. |
 | `unspecified` | MUST be empty | The producer did not state the scope. The identity is [unresolved](#unresolved-identity). |
 
 Both fields describe the entity's own ID. They say what kind of entity the ID is
@@ -188,10 +187,9 @@ identifying attributes the producer populated.
 > same property one step later.
 
 The producer of an entity MUST set the ID Scope, and MUST set the Scope Entity
-Type when the scope is `local` and the producer knows which kind of entity
-scopes the ID. A producer that cannot tell SHOULD leave the ID Scope
-`unspecified` rather than guess, so that consumers do not treat a `local` ID as
-globally unique.
+Type when that scope is `local`. A producer that cannot determine the scope of
+an ID it generated MUST use `unspecified` rather than guess, so that consumers
+do not treat a scoped ID as globally unique.
 
 A component MUST NOT set or modify either field on an entity it did not produce.
 Only the producer of an entity knows how it generated that entity's ID. A
@@ -244,8 +242,10 @@ The consumer MUST stop and the identity is [unresolved](#unresolved-identity).
 ### Unresolved Identity
 
 An entity's identity is **unresolved** when its ID Scope is `unspecified`, when
-its scope is `local` but the Scope Entity Type is empty, when a scoping entity
-in its chain is missing from the Resource, or when the chain is cyclic.
+a scoping entity in its chain is missing from the Resource, or when the chain is
+cyclic. A `local` ID Scope with an empty Scope Entity Type does not conform to
+this specification, and a consumer that receives one MUST also treat the
+identity as unresolved.
 
 An unresolved entity is still a valid entity and still describes the object the
 telemetry is about. A consumer:
@@ -372,7 +372,7 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>host.id
     </td>
-    <td>global when <code>host.id</code> is a machine ID;<br/>local, within <code>cloud.account</code>, when it is a cloud instance ID
+    <td>global when <code>host.id</code> is a machine ID;<br/>local, within <code>cloud</code>, when it is a cloud instance ID
     </td>
     <td>host.arch<br/>
         host.name<br/>
