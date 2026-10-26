@@ -394,7 +394,7 @@ When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
 endpoints.
 
-In Prometheus metrics the `job` and `instance` are considered identifying,
+In Prometheus metrics the `job` and `instance` are used as join keys between metrics and the `target` info metric.
 therefore a new resource MUST be created for each `job` and `instance` pair
 encountered in the metrics labels, except for the `target` info metric.
 
