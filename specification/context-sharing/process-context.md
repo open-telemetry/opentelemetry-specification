@@ -81,8 +81,8 @@ Publishers that support Process Context Sharing MUST follow these steps when pub
 1. **Check for existing mapping**: If a previous context was published, follow the "[Updating Protocol](#updating-protocol)" instead.
 2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC_SEAL)`, size it with `ftruncate`.
 
-   If `memfd_create` fails with `MFD_NOEXEC_SEAL`, publishers SHOULD retry using only `MFD_CLOEXEC | MFD_ALLOW_SEALING`.
-3. **Allocate a new mmap from the memfd then close the memfd**: Set up an mmap using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE, memfd, 0)`. This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed.
+   If `memfd_create` fails with `MFD_NOEXEC_SEAL`, publishers SHOULD retry without this flag to support kernels that do not yet implement it.
+3. **Allocate a new mmap from the memfd then close the memfd**: Set up an mmap using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE, memfd, 0)`. This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor SHOULD be closed.
 4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)` and use that instead.
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data.
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation).
@@ -93,12 +93,12 @@ Publishers that support Process Context Sharing MUST follow these steps when pub
    Publishers MUST write `monotonic_published_at_ns` last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping.
 
-    Publishers MUST perform this step unconditionally, although naming mappings is not always supported by the kernel.
+    Publishers SHOULD perform this step unconditionally, even when naming is expected to fail (e.g. on legacy kernels), to allow external readers to detect the mapping attempt. Publishers SHOULD ignore errors returned by the `prctl` call.
 
 If attributes are updated during the process lifetime, publishers MUST follow the "[Updating Protocol](#updating-protocol)".
 
-If any required step fails, other than naming or allocating a new memfd, publishers MUST treat publication as failed and MUST NOT make the process context available.
-If both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), publishers MUST NOT make the process context available.
+If any required step fails, other than naming or allocating a new memfd, publishers MUST treat publication as failed and the process context will not be available.
+If both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), the process context will not be available.
 
 Publishers MUST NOT make more than one process context active for the same process.
 
@@ -114,7 +114,7 @@ Publishers SHOULD ignore errors returned by the mapping-naming `prctl` call.
 > [!NOTE]
 > Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. The reading protocol works regardless of whether `CONFIG_ANON_VMA_NAME` is available.
 >
-> On legacy kernels and those without `CONFIG_ANON_VMA_NAME`, eBPF readers can hook `prctl` naming attempts to detect new mappings. This is why publishers attempt to name mappings even when naming is expected to fail.
+> On legacy kernels and those without `CONFIG_ANON_VMA_NAME`, eBPF readers can hook `prctl` naming attempts to detect new mappings. See [otel-ebpf-profiler PR #1399](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1399).
 
 ## Reading Protocol
 
