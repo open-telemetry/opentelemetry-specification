@@ -57,7 +57,7 @@ physical format and encoding of how entity data is recorded).
 | ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>The scope within which the ID is unique is defined by [Identity Scope](#identity-scope).<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 | ID Scope | enum: `unspecified`, `global`, `local` | Whether the entity's ID is unique on its own or only within another entity.<p>MUST not change during the lifetime of the entity. See [Identity Scope](#identity-scope). |
-| Scope Entity Type | string | The type of the entity within which this entity's ID is unique. Only meaningful when ID Scope is `local`.<p>MUST not change during the lifetime of the entity. MAY be empty. See [Identity Scope](#identity-scope). |
+| Scope Entity Type | string | The type of the entity within which this entity's ID is unique.<p>MUST be set when ID Scope is `local`, and MUST be empty otherwise. MUST not change during the lifetime of the entity. See [Identity Scope](#identity-scope). |
 
 ## Minimally Sufficient Identity
 
