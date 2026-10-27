@@ -875,7 +875,7 @@ of metrics across successive collections.
 
 ### Start timestamps
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The start timestamp for a timeseries is the timestamp which best represents
 the first possible moment a measurement for this timeseries could have been
