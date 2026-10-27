@@ -888,10 +888,13 @@ with delta temporality aggregation for an instrument MUST share the same start
 timestamp.
 
 Cumulative timeseries MUST use a consistent start timestamp for all collection
-intervals.
+intervals while the series is persisted by the SDK. If a cumulative series is
+reset or evicted and is subsequently observed again, it MUST be treated as a
+new series with a new start timestamp (see [Supplementary
+Guidelines](./supplementary-guidelines.md#asynchronous-example-cumulative-temporality)).
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
-For asynchronous instrument, the start timestamp SHOULD be:
+For asynchronous instruments, the start timestamp SHOULD be:
 - The creation time of the instrument, if the first series measurement
     occurred in the first collection interval,
 - Otherwise, the timestamp of the collection interval prior to the first
