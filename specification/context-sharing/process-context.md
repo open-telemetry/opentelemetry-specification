@@ -93,12 +93,13 @@ Publishers that support Process Context Sharing MUST follow these steps when pub
    Publishers MUST write `monotonic_published_at_ns` last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping.
 
-    Publishers SHOULD perform this step unconditionally, even when naming is expected to fail (e.g. on legacy kernels), to allow external readers to detect the mapping attempt. Publishers SHOULD ignore errors returned by the `prctl` call.
+    If `memfd_create` succeeded (steps 2 and 3), publishers MUST perform this step unconditionally, even when naming is expected to fail (e.g. on legacy kernels), to allow external readers to detect the mapping attempt. Publishers SHOULD ignore errors returned by the `prctl` call.
+
+    If `memfd_create` failed (thus requiring falling back to step 4) and `prctl` fails to name the mapping, the process context will not be available, and the `mmap` from step 4 should be destroyed.
 
 If attributes are updated during the process lifetime, publishers MUST follow the "[Updating Protocol](#updating-protocol)".
 
 If any required step fails, other than naming or allocating a new memfd, publishers MUST treat publication as failed and the process context will not be available.
-If both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), the process context will not be available.
 
 Publishers MUST NOT make more than one process context active for the same process.
 
