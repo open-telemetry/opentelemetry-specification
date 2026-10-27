@@ -394,23 +394,18 @@ When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
 endpoints.
 
-In Prometheus metrics the `job` and `instance` are used as join keys between metrics and the `target` info metric.
-therefore a new resource MUST be created for each `job` and `instance` pair
-encountered in the metrics labels, except for the `target` info metric.
+In Prometheus metrics, the `job` and `instance` labels are used as join keys
+between metrics and the `target` info metric. Therefore a new resource MUST be
+created for each `job` and `instance` pair encountered in the metrics labels,
+except for the `target` info metric.
 
-If there is no `job` label on a metric and the metrics are being scraped,
-then the `job` label MUST be considered to be equal to the `job` label of the
-scrape target. During scrape, the `job` label of the target may be equal to the scrape
-job name or customized by relabel rules.
-
-If there is no `job` label on a metric and there is no `job` label for the
-scrape target, the scrape MUST fail. Note that this is different from the
-Prometheus behavior that still scrapes the metrics without `job`.
-
-If there is no `instance` label and the metrics are being scraped, the
-`instance` label MUST be considered to be equal to the `instance` label of the
-scrape target. Note that the `instance` label of the target may be equal to the
-`__address__` of the target or customized by relabel rules.
+The `job` and `instance` labels are attached by Prometheus to each scraped
+metric as described in [Jobs and instances](https://prometheus.io/docs/concepts/jobs_instances/).
+If the `job` or `instance` label of a metric is missing or empty, for example
+due to `metric_relabel_configs`, it MUST be set to the corresponding label of
+the scrape target, after
+[relabeling](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config).
+If either label is still missing or empty, the scrape MUST fail.
 
 For each resource the `service.name` attribute MUST be set to the
 `service.name` label in `target` info metric, if that label exists in the
