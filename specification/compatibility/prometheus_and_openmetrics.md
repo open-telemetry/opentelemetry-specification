@@ -443,8 +443,8 @@ In addition to the attributes above, the
  info metric is used to supply additional resource attributes. If present,
 the `target` info metric MUST be dropped from the batch of metrics, and all labels
 except `job`, `instance` and `__name__` from the `target` info metric MUST be
-converted to resource attributes attached to all other metrics which are part of
-the same resource identified by `job` and `instance`.
+converted to resource attributes attached to all other metrics which share the
+same `job` and `instance` as the `target` info metric.
 
 By default, label keys and values of the `target` info metric MUST NOT be
 altered (such as replacing `_` with `.` characters in keys).
