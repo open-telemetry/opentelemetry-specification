@@ -310,10 +310,11 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
 that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
-| Name                          | Description                                                                   | Default | Type         |
-|-------------------------------|-------------------------------------------------------------------------------|---------|--------------|
-| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   | [Duration][] |
-| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   | [Timeout][]  |
+| Name                                | Description                                                                                                                                                                       | Default  | Type         | Notes                      |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|--------------|----------------------------|
+| `OTEL_METRIC_EXPORT_INTERVAL`       | The time interval (in milliseconds) between the start of two export attempts.                                                                                                     | 60000    | [Duration][] |                            |
+| `OTEL_METRIC_EXPORT_TIMEOUT`        | Maximum allowed time (in milliseconds) to export data.                                                                                                                            | 30000    | [Timeout][]  |                            |
+| `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` | Maximum number of metric data points in a batch that are provided to a single export. See [`maxExportBatchSize`](../metrics/sdk.md#periodic-exporting-metricreader) for details. | no limit | [Integer][]  | Valid values are positive. |
 
 ## Declarative configuration
 

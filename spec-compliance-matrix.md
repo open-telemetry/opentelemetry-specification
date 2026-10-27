@@ -287,6 +287,7 @@ Note: Support for environment variables is optional.
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | + |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | + | + |  | - |
 | OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | + | + |  | - |
+| OTEL_METRIC_EXPORT_MAX_BATCH_SIZE | - | - | - | - | - | - | - | - | - | - | - | - |
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
