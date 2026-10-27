@@ -147,7 +147,7 @@ Injectable distributions MUST document their activation mechanism and all prereq
 
 The injection mechanism contract MUST identify which prerequisites require verification by the injector tool and which compatibility checks the distribution performs itself.
 
-The injection mechanism contract MUST be subject to semantic versioning. For stable distributions, backward-incompatible changes to the contract MUST require a major version increment. Such changes include tightening prerequisites in ways that make previously supported applications incompatible.
+The injection mechanism contract MUST be subject to semantic versioning. For stable distributions, backward-incompatible changes to the contract MUST require a major version increment (except [security-related changes](versioning-and-stability.md#security-related-changes)). Such changes include tightening prerequisites in ways that make previously supported applications incompatible.
 
 If multiple builds of an injectable distribution are published (e.g. per CPU architecture or C library flavor), the injection mechanism contract MUST document deterministic logic for selecting a compatible build.
 
