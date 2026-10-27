@@ -17,6 +17,8 @@ release.
 
 ### Metrics
 
+- Add the OptIn advisory parameter and enabled View stream parameter.
+  ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
@@ -65,6 +67,8 @@ release.
 
 ### Logs
 
+- Extend the ETW example mapping with the optional `etw.provider.name`
+  attribute and describe its availability.
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
 
