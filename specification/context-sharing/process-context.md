@@ -14,6 +14,7 @@
 - [Publication Protocol](#publication-protocol)
 - [Reading Protocol](#reading-protocol)
 - [Updating Protocol](#updating-protocol)
+- [SDK Configuration](#sdk-configuration)
 - [Interaction with Existing Functionality](#interaction-with-existing-functionality)
 
 <!-- END doctoc -->
@@ -173,6 +174,16 @@ When attributes change, publishers MUST follow these steps to update the process
 
 > [!NOTE]
 > Because readers check `monotonic_published_at_ns` before and after reading the payload, they detect concurrent updates and avoid inconsistent reads.
+
+## SDK Configuration
+
+SDKs MUST provide a way to enable and disable Process Context Sharing. While at Alpha status, it SHOULD default to disabled. Where publication is unsupported (e.g. non-Linux), the SDK MUST treat it as a no-op.
+
+| Name                                     | Description                                | Default | Type    |
+|------------------------------------------|--------------------------------------------|---------|---------|
+| `OTEL_EXPERIMENTAL_PROCESS_CONTEXT_ENABLED` | Enable Process Context Sharing publication | `false` | Boolean |
+
+By default, the published `resource` MUST be the `Resource` produced by the SDK's [Resource Provider](../resource/sdk.md#resource-provider). SDKs SHOULD provide a way to override this resource.
 
 ## Interaction with Existing Functionality
 
