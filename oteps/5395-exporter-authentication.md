@@ -141,11 +141,16 @@ interfaces** (which are left to each SDK).
        tenant/routing headers), or wrapping/configuring the underlying HTTP
        transport (`http.RoundTripper`) or gRPC per-RPC credentials
        (`credentials.PerRPCCredentials` / `CallCredentials`) where idiomatic.
-     * Accepting request context (such as target endpoint URI/authority and a
-       timeout/deadline/cancellation signal) when needed to scope credentials
-       and bound out-of-band token refresh calls.
+     * Bounding authentication operations so that credential acquisition MUST
+       NOT block indefinitely, with a reasonable upper limit after which the
+       operation times out with an error (matching the existing exporter
+       `Export` timeout model; OpenTelemetry SDK authors can decide if they want
+       to make the timeout configurable or pass a timeout, deadline, or
+       cancellation signal).
      * An optional `Shutdown` lifecycle operation to release background
        resources (such as token-exchange HTTP clients or file watchers).
+       `Shutdown` SHOULD NOT block indefinitely, and OpenTelemetry SDK authors
+       can decide if they want to make the shutdown timeout configurable.
    * **What the `Authenticator` mechanism MUST NOT require**:
      * MUST NOT require the exporter to materialize or pass the full serialized
        request payload (`byte[]`) in memory, preserving streaming serialization
@@ -155,9 +160,9 @@ interfaces** (which are left to each SDK).
    * **Required documentation for plugin authors**:
      * SDKs MUST document—on the `Authenticator` interface or on the exporter
        configuration option that accepts it—that `Authenticator` implementations
-       must respect any provided cancellation/deadline/timeout signal, must be
-       safe to invoke concurrently, and must not log sensitive credential or
-       header values.
+       must not block indefinitely (honoring any provided timeout, deadline, or
+       cancellation signal), must be safe to invoke concurrently, and must not
+       log sensitive credential or header values.
 2. **OTLP Exporter Specification (`specification/protocol/exporter.md` — new `## Authentication` section)**:
    * **Support on OTLP Exporters**: OTLP HTTP and gRPC exporters across traces,
      metrics, and logs SHOULD support configuring an `Authenticator`.
@@ -175,13 +180,6 @@ interfaces** (which are left to each SDK).
        and static `Headers` (`OTEL_EXPORTER_OTLP_*_HEADERS` or Declarative
        Configuration `headers` / `headers_list`) for that request, without
        mutating the static `Headers`.
-     * The exporter MUST pass the export operation's remaining timeout,
-       deadline, or cancellation signal to the `Authenticator` (where the
-       interface accepts one). Time spent executing the `Authenticator` MUST
-       count against the export attempt's remaining timeout budget; if the
-       timeout or deadline expires during authentication, the exporter MUST fail
-       the export attempt immediately without transmitting the request over the
-       network.
    * **Exporter Behavior with Transport/Credential Wrappers**: When the SDK's
      `Authenticator` wraps the HTTP transport (e.g., Go `http.RoundTripper` or
      .NET `DelegatingHandler`) or provides gRPC per-RPC credentials (e.g., Go
@@ -209,10 +207,8 @@ interfaces** (which are left to each SDK).
        an unhandled exception, and complete the export attempt with a failure
        result.
      * The exporter MUST NOT log dynamic header or metadata values returned by
-       the `Authenticator`, MUST invoke the `Authenticator`'s `Shutdown`
-       operation (if present) when the exporter's `Shutdown` is called, and
-       SHOULD fail initialization if the configured `Authenticator` does not
-       support the exporter's transport protocol (HTTP vs. gRPC).
+       the `Authenticator`, and MUST invoke the `Authenticator`'s `Shutdown`
+       operation (if present) when the exporter's `Shutdown` is called.
 3. **Declarative Configuration (`specification/configuration/sdk.md` & `opentelemetry-configuration`)**:
    * Add `[exporter authenticator]` (`ExperimentalAuthenticator`, with
      `Missing provider behavior: error`) to the
