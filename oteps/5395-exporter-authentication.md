@@ -81,10 +81,15 @@ OtlpHttpSpanExporter exporter = builder.build();
 
 ### Declarative Configuration
 
-`ExperimentalAuthenticator` (stabilizing to `Authenticator`) is defined as a
-reusable SDK extension plugin in `schema/common.yaml`. `OtlpHttpExporter` and
-`OtlpGrpcExporter` (`schema/common.yaml`, shared by trace and log exporters) and
-`OtlpHttpMetricExporter` and `OtlpGrpcMetricExporter`
+`ExperimentalAuthenticator` (stabilizing to `Authenticator`) is defined as an
+open SDK extension plugin (`isSdkExtensionPlugin: true`, accepting any single
+plugin name key mapped to its `ConfigProperties` object or `null`) in
+`schema/common.yaml`. Any custom, contrib, or vendor authenticator registered
+via [`PluginComponentProvider`](../specification/configuration/sdk.md#plugincomponentprovider)
+(such as `oauth2`, `bearertokenauth`, or a user-defined
+`my_custom_authenticator`) can be configured by its registered plugin name.
+`OtlpHttpExporter` and `OtlpGrpcExporter` (`schema/common.yaml`, shared by trace
+and log exporters) and `OtlpHttpMetricExporter` and `OtlpGrpcMetricExporter`
 (`schema/meter_provider.yaml`) gain an optional `authenticator/development`
 property referencing `ExperimentalAuthenticator`:
 
@@ -115,6 +120,19 @@ meter_provider:
             authenticator/development:
               bearertokenauth:
                 filename: /var/run/secrets/tokens/otel-token
+```
+
+```yaml
+file_format: "1.0"
+logger_provider:
+  processors:
+    - batch:
+        exporter:
+          otlp_http:
+            endpoint: https://telemetry.example.com/v1/logs
+            authenticator/development:
+              my_custom_authenticator:
+                custom_option: value
 ```
 
 ## Proposal
@@ -215,7 +233,9 @@ interfaces** (which are left to each SDK).
      [Supported SDK plugin components](../specification/configuration/sdk.md#supported-sdk-plugin-components)
      table.
    * In `opentelemetry-configuration`, define `ExperimentalAuthenticator`
-     (`isSdkExtensionPlugin: true`) in `schema/common.yaml` and add optional
+     (`isSdkExtensionPlugin: true`, with `additionalProperties` accepting any
+     plugin name mapped to an object or `null`, `minProperties: 1`,
+     `maxProperties: 1`) in `schema/common.yaml` and add optional
      `authenticator/development` (`defaultBehavior: no authenticator is used`)
      to `OtlpHttpExporter`, `OtlpGrpcExporter`, `OtlpHttpMetricExporter`, and
      `OtlpGrpcMetricExporter`.
