@@ -14,11 +14,12 @@ keys:
 * **OAuth 2.0 / OIDC (`oauth2client`)**: Enterprise Collector gateways and SaaS
   backends authenticating via OAuth 2.0 Client Credentials grants or OpenID
   Connect tokens that must be refreshed before expiry.
-* **Cloud Provider IAM & Managed Identity (`sigv4auth`, `azureauth`, `googleclientauth`)**:
-  Managed OTLP endpoints requiring short-lived cloud credentials—such as AWS IAM
-  SigV4 request signing or STS session tokens, Microsoft Entra ID (Azure Managed
-  Identity) tokens, and Google Cloud Application Default Credentials (ADC) or
-  Workload Identity tokens.
+* **Cloud Provider IAM & Managed Identity (`azureauth`, `googleclientauth`, `sigv4auth`)**:
+  Managed OTLP endpoints requiring short-lived cloud credentials—such as
+  Microsoft Entra ID (Azure Managed Identity) tokens, Google Cloud Application
+  Default Credentials (ADC) or Workload Identity tokens, and AWS IAM STS
+  credentials or (in SDKs using HTTP transport/request wrappers) SigV4 request
+  signing.
 * **Rotating Bearer Token Files & Custom Schemes (`bearertokenauth`, `basicauth`, `asapclient`)**:
   Workloads authenticating with bearer tokens loaded from mounted secret/token
   files that are periodically rotated on disk (watched by the Collector's
@@ -172,7 +173,15 @@ interfaces** (which are left to each SDK).
    * **What the `Authenticator` mechanism MUST NOT require**:
      * MUST NOT require the exporter to materialize or pass the full serialized
        request payload (`byte[]`) in memory, preserving streaming serialization
-       (e.g., Java's `OkHttpHttpSender`).
+       (e.g., Java's `OkHttpHttpSender`). Consequently, payload-signing schemes
+       like AWS SigV4 (which hash the compressed HTTP request body alongside the
+       request URI and headers) are supported in SDKs whose `Authenticator`
+       wraps the HTTP transport or request (e.g., Go `http.RoundTripper` or
+       Python `requests.Session` / `requests.auth.AuthBase`), whereas SDKs that
+       use a header-only supplier (`getHeaders()`) support payload-independent
+       credentials (such as bearer tokens, OAuth 2.0/OIDC, and API keys) and
+       rely on transport-level hooks or dedicated exporter wrappers for
+       full-payload signing.
      * MUST NOT require access to in-memory telemetry items (spans, metrics, or
        log records), keeping authentication strictly at the transport layer.
    * **Required documentation for plugin authors**:
@@ -295,15 +304,21 @@ interfaces** (which are left to each SDK).
 
 ### Alternatives considered
 
-1. **Passing the serialized request body (`byte[]`) to a signing callback
+1. **Requiring all SDKs to pass the serialized request body (`byte[]`) to a
+   signing callback
    ([spec#4390](https://github.com/open-telemetry/opentelemetry-specification/issues/4390),
    [spec#4500](https://github.com/open-telemetry/opentelemetry-specification/pull/4500))**:
-   Rejected because streaming exporters (such as Java's `OkHttpHttpSender`)
-   write protobuf directly to an `OutputStream` without allocating a contiguous
-   `byte[]` buffer. Protocols like AWS SigV4 over HTTPS can either use
-   `x-amz-content-sha256: UNSIGNED-PAYLOAD` or use language-native transport
-   wrappers (e.g., Go `http.RoundTripper`) where the HTTP client exposes the
-   request stream.
+   Rejected as a cross-language requirement because streaming exporters (such as
+   Java's `OkHttpHttpSender`) write protobuf directly to an `OutputStream`
+   without allocating a contiguous `byte[]` buffer. Because AWS OTLP endpoints
+   (such as X-Ray and CloudWatch) require a SHA-256 hash of the compressed HTTP
+   payload (`x-amz-content-sha256`) and do not accept S3's `UNSIGNED-PAYLOAD`,
+   AWS SigV4 works directly with `Authenticator` in SDKs whose interface wraps
+   the HTTP transport or request (e.g., Go `http.RoundTripper` matching the
+   Collector's `sigv4authextension`, .NET `DelegatingHandler`, or Python
+   `requests.Session` / `requests.auth.AuthBase`), while SDKs that choose a
+   header-only supplier (`getHeaders()`) omit built-in payload signing to
+   preserve zero-copy streaming serialization.
 2. **Dynamic `${secret:TOKEN}` placeholder syntax inside `headers`
    ([opentelemetry-configuration#257](https://github.com/open-telemetry/opentelemetry-configuration/issues/257))**:
    Rejected because `${...}` substitution in Declarative Configuration happens
