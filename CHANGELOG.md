@@ -11,13 +11,26 @@ release.
 
 ### Traces
 
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 - Add Development span type: optional span creation parameter, `ReadableSpan`
   access, and SDK syntax validation.
   ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
 
 ### Metrics
 
+- Add the OptIn advisory parameter and enabled View stream parameter.
+  ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
 ### Logs
+
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 
 ### Baggage
 
@@ -41,8 +54,6 @@ release.
 
 ## v1.62.0 (2026-10-21)
 
-### Context
-
 ### Traces
 
 - Add `Sampler.Shutdown` operation.
@@ -63,10 +74,6 @@ release.
   attribute and describe its availability.
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
-
-### Baggage
-
-### Profiles
 
 ### Resource
 
@@ -106,6 +113,9 @@ release.
   resource detectors. Other SDK plugin components continue to produce errors
   when missing.
   ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
+- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
+  exporting MetricReader.
+  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
 
