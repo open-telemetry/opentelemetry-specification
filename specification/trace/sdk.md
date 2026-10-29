@@ -252,11 +252,12 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
 **Status**: [Development](../document-status.md) - When a span is created with a
-[span type](./api.md#span-type), the SDK SHOULD validate that the span type
-conforms to the [span type syntax](./api.md#span-type-syntax). If the span type
-does not conform to this syntax, the SDK SHOULD emit an error notifying the
-user about the invalid span type and SHOULD create the span as if no span type
-was provided.
+non-empty [span type](./api.md#span-type), the SDK SHOULD validate that the
+span type conforms to the [span type syntax](./api.md#span-type-syntax) before
+calling [`ShouldSample`](#shouldsample). If the span type does not conform to
+this syntax, the SDK SHOULD emit an error notifying the user about the invalid
+span type and SHOULD proceed with creating the span as if no span type was
+provided.
 
 #### Span flags
 

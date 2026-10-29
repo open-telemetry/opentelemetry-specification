@@ -817,7 +817,7 @@ kind, attributes, error conditions, and operation scope.
 span type describes what operation it represents.
 
 Span type is provided at [span creation](#span-creation) and MUST NOT be changed
-afterwards.
+afterwards. An empty span type is equivalent with a not present one.
 
 The API SHOULD be documented in a way to communicate to users that the span
 type needs to conform to the [span type syntax](#span-type-syntax). The API
