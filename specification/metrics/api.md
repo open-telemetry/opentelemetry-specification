@@ -276,7 +276,9 @@ boundaries to use if aggregating to
 Applies to all instrument types.
 
 `Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
-the recommended set of attribute keys to be used for the resulting metrics.
+the recommended set of attribute keys to be retained for the resulting metrics
+(serving as a default allow-list of attribute keys when aggregating
+measurements).
 
 ##### Instrument advisory parameter: `OptIn`
 
