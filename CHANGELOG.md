@@ -49,6 +49,10 @@ release.
 
 ### OTEPs
 
+- Add OTEP proposing an `Authenticator` SDK plugin component for OTLP exporter
+  authentication.
+  ([#5395](https://github.com/open-telemetry/opentelemetry-specification/pull/5395))
+
 ## v1.62.0 (2026-10-21)
 
 ### Traces
