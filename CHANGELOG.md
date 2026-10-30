@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Mark "Environment Variables as Context Propagation Carriers" as Stable.
+  ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
+
 ### Traces
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
