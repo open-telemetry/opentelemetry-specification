@@ -103,6 +103,10 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+- Clarify that the identifying resource attributes `service.name`,
+  `service.namespace`, and `service.instance.id` should be converted to the
+  Prometheus `target` info metric along with all other resource attributes.
+  ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
 
 ### SDK Configuration
 
