@@ -37,7 +37,8 @@ weight: 2
       - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
       - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
-    + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
+      - [Extreme value handling](#extreme-value-handling)
+      - [Table lookup implementation](#table-lookup-implementation)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
     + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
@@ -916,26 +917,42 @@ add `1<<scale` to the index and divide the result by `2`.
 *Note that floating-point to integer type conversions have been
 omitted from the code fragments above, to improve readability.*
 
-#### ExponentialHistogram: Producer Recommendations
+##### Extreme value handling
 
-At the lowest or highest end of the 64 bit IEEE floating point, a
-bucket's range may only be partially representable by the floating
-point number format.  When mapping a number in these buckets, a
-producer may correctly return the index of such a partially
-representable bucket.  This is considered a normal condition.
+At the extremes of the normal binary64 range, a bucket can extend into
+the subnormal range or beyond the largest finite value. Returning the
+index of such a bucket for a representable measurement is consistent
+with the data model.
 
-For positive scales, the logarithm method is preferred because it
-requires very little code, is easy to validate and is nearly as fast
-and accurate as the lookup table approach.  For zero scale and
-negative scales, directly calculating the index from the
-floating-point representation is more efficient.
+As examples:
 
-The use of a built-in logarithm function could lead to results that
-differ from the bucket index that would be computed using arbitrary
-precision or a lookup table, however producers are not required to
-perform an exact computation.  As a result, ExponentialHistogram
-exemplars could map into buckets with zero count.  We expect to find
-such values counted in the adjacent buckets.
+- At scale 1, the smallest normal value `0x1p-1022` is the inclusive
+  upper boundary of a bucket that also contains subnormal values.
+- At scale 1, the bucket containing the largest finite binary64 value,
+  `0x1.fffffffffffffp+1023`, has mathematical upper boundary `2^1024`.
+  That boundary is not representable as a finite binary64 value;
+  the measurement itself is representable.
+
+##### Table lookup implementation
+
+A table lookup implementation described in
+[non-normative supplementary guidance](./exponential-histogram-table-lookup.md)
+provides an alternative to the logarithm method for positive scales.
+It maps positive normal values exactly to bucket indexes at scales
+supported by the table. For bucket selection, positive subnormal inputs are
+treated as `0x1p-1022` and mapped to the bucket containing that value,
+as permitted by the [SDK specification](./sdk.md#handle-all-normal-values).
+For positive scales, `0x1p-1022` is that bucket's inclusive upper boundary.
+The supplementary document describes
+[options for scales above the table's resolution](./exponential-histogram-table-lookup.md#table-size-and-scale-selection).
+
+A built-in logarithm can produce a bucket index that differs from the
+exact index near a boundary. If a consumer maps an exemplar value
+using a different method from the producer, it can associate that value
+with a bucket whose count is zero, even though the producer counted the
+measurement in an adjacent bucket. Exact mapping of normal values at
+the same scale avoids this source of discrepancy when used by both
+producer and consumer.
 
 #### ExponentialHistogram: Consumer Recommendations
 
