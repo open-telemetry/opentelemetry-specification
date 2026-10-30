@@ -17,6 +17,9 @@ release.
 
 ### Metrics
 
+- Clarify that `Exemplar`s retain measurement attributes filtered out by the
+  `Attributes` instrument advisory parameter.
+  ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
 - Add the OptIn advisory parameter and enabled View stream parameter.
   ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
