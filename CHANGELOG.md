@@ -17,6 +17,8 @@ release.
 
 ### Metrics
 
+- Clarify that the `Attributes` metric instrument advisory parameter acts as a recommended allow-list of attribute keys to be retained, and that an empty list retains no attributes.
+  ([#5391](https://github.com/open-telemetry/opentelemetry-specification/pull/5391))
 - Add the OptIn advisory parameter and enabled View stream parameter.
   ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
