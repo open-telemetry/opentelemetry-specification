@@ -251,6 +251,14 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
+**Status**: [Development](../document-status.md) - When a span is created with a
+non-empty [span type](./api.md#span-type), the SDK SHOULD validate that the
+span type conforms to the [span type syntax](./api.md#span-type-syntax) before
+calling [`ShouldSample`](#shouldsample). If the span type does not conform to
+this syntax, the SDK SHOULD emit an error notifying the user about the invalid
+span type and SHOULD proceed with creating the span as if no span type was
+provided.
+
 #### Span flags
 
 The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
@@ -290,6 +298,10 @@ Thus, the SDK specification defines sets of possible requirements for
   Counts for attributes, events and links dropped due to collection limits MUST be
   available for exporters to report as described in the [exporters](../common/mapping-to-non-otlp.md#dropped-attributes-count)
   specification.
+
+  **Status**: [Development](../document-status.md) - A function receiving this
+  as argument MUST be able to access the [span type](api.md#span-type), if set.
+  The name of the accessor is language-specific.
 
   As an exception to the authoritative set of span properties defined in the API spec,
   implementations MAY choose not to expose (and store) the full parent [Context](../context/README.md)
