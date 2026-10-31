@@ -14,6 +14,9 @@ release.
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
 
 ### Metrics
 
