@@ -812,6 +812,9 @@ belongs to, such as HTTP client requests or database calls, defined
 by [semantic conventions](/specification/semantic-conventions.md).
 Span type SHOULD uniquely identify the span structure, such as its name format,
 kind, attributes, error conditions, and operation scope.
+Span type SHOULD have low cardinality, typically lower than the [span name](#span).
+For example, all RPC client spans share the same span type, while their names
+differ by RPC method.
 
 [`SpanKind`](#spankind) describes how the span relates to remote peers, while
 span type describes what operation it represents.
