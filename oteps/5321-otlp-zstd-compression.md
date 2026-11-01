@@ -92,6 +92,21 @@ isn't in most languages' standard libraries.
     sender-reported and unverified until decompression happens, so it isn't a real
     decompression-bomb defense, and requiring it would mean a different implementation shape than
     every other codec here uses for no compensating benefit.
+  - **Receivers MUST bound the window they allocate.** `Window_Size` comes from the frame header,
+    and a decoder allocates that much before it produces any output, so a receiver's maximum
+    message or request body size is enforced too late to help. A receiver that decodes `zstd`
+    MUST NOT allocate a window larger than its configured bound, and MUST reject a frame that
+    declares one, treating it like any other corrupt body. The bound MUST NOT be below 8 MB so
+    frames from conforming encoders still decode, and above that it SHOULD follow the receiver's
+    maximum message size. A decoder that allocates whatever the frame declares — the default in
+    common zstd libraries, which allow windows of hundreds of megabytes, far beyond any OTLP
+    payload — turns one small unauthenticated request into a memory amplification factor that is
+    independent of payload size.
+  - **Pooled decoders need deterministic release.** A receiver that pools decoders returns one to
+    the pool as soon as it is done with a message, including when it stops reading early at its
+    size limit. grpc-go only does that for a decompressor reader that implements `io.Closer`; a
+    wrapper that merely embeds the library decoder does not satisfy it, so the decoder and its
+    window wait for a finalizer instead.
   - **One frame per payload.** RFC 8878 §3.1.1 permits concatenating frames, but no single OTLP
     request/response body needs more than one.
   - **Standard frame format only.** Magic number `0xFD2FB528` (§3.1.1); no legacy
@@ -168,8 +183,11 @@ The prior art above mostly shipped before this OTEP's fallback requirement exist
 `zstd` option doesn't make it automatically compliant — checked against
 [Internal details](#internal-details):
 
-- **Decoders need no changes.** Every implementation checked here already decodes a windowed
-  RFC 8878 frame correctly. The window-size cap is encoder-side only; the gaps below are too.
+- **Decoders need changes.** Every implementation checked here decodes a windowed RFC 8878 frame
+  correctly, but none bounds the window it allocates; the encoder-side cap only protects a
+  receiver from conforming senders. As of this writing the Collector's `confighttp` and
+  `configgrpc` decoders both allocate whatever `Window_Size` the frame declares —
+  `max_request_body_size` and `max_recv_msg_size_mib` bound the decoded output, not the window.
 - **Collector `configgrpc`**: [a streaming `zstd.NewWriter`][collector-configgrpc-zstd] with a
   fixed 512 KB window — already under this OTEP's 8 MB cap, no dictionary use. Compliant on
   framing already. The remaining gap, same as everyone else: no gzip-fallback-on-rejection, a
