@@ -124,7 +124,7 @@ The main parts of a span are:
 | `ParentSpanId`                     | Identifies the operation that directly caused this operation, if any.                                                                    |
 | `IsParentRemote`                   | Indicates locally whether the parent span is remote or generated locally.                                                                |
 | `Name` and `Kind`                  | Classify the operation and its role in a communication.                                                                                  |
-| `StartTimestamp` and `EndTimesamp` | Describe when the operation took place.                                                                                                  |
+| `StartTimestamp` and `EndTimestamp` | Describe when the operation took place.                                                                                                  |
 | `Attributes`                       | Describe properties of this occurrence of the operation.                                                                                 |
 | `Events`                           | Describe timestamped occurrences during the operation.                                                                                   |
 | `Links`                            | Reference other causally related spans.                                                                                                  |
@@ -184,7 +184,7 @@ spans in the same trace can carry different `TraceState` snapshots.
 
 Type: byte sequence.
 
-The `SpanId` of the parent span, or empty for a root span. The SDK's parent
+The `SpanId` of the parent span, or empty for a root span.
 
 ### Field: `IsParentRemote`
 
@@ -231,7 +231,7 @@ order.
 
 Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
-Indicates the start end of the operation.
+Indicates the end time of the operation.
 
 The span duration is the difference between StartTimestamp and EndTimestamp.
 
