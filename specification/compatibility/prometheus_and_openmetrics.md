@@ -31,6 +31,8 @@ aliases:
   * [Instrumentation Scope](#instrumentation-scope)
   * [Metric Labels](#metric-labels)
   * [Resource Attributes](#resource-attributes)
+    + [Scraping metrics (pull)](#scraping-metrics-pull)
+    + [Remote Write metrics (push)](#remote-write-metrics-push)
 - [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
   * [Metric Metadata](#metric-metadata-1)
   * [Instrumentation Scope](#instrumentation-scope-1)
@@ -391,14 +393,39 @@ metric samples are not turned into data points.
 
 **Status**: [Development](../document-status.md)
 
-When scraping a Prometheus endpoint, resource attributes MUST be added to the
-scraped metrics to distinguish them from metrics from other Prometheus
-endpoints.
-
 In Prometheus metrics, the `job` and `instance` labels are used as join keys
 between metrics and the `target` info metric. Therefore a new resource MUST be
 created for each `job` and `instance` pair encountered in the metrics labels,
 except for the `target` info metric.
+
+The `service.name` and `service.instance.id` resource
+attributes are needed to ensure Prometheus exporters can disambiguate metrics
+using [`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/)
+as [described below](#resource-attributes-1), therefore this specification
+aims to ensure that `service.name` and `service.instance.id` are defined
+whenever `job` and `instance` are available.
+
+In addition to the attributes described below, the
+[`target`](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+ info metric is used to supply additional resource attributes. If present,
+the `target` info metric MUST be dropped from the batch of metrics, and all labels
+except `job`, `instance` and `__name__` from the `target` info metric MUST be
+converted to resource attributes attached to all other metrics which share the
+same `job` and `instance` as the `target` info metric.
+
+Labels from the `target` info metric take precedence over all derived resource
+attributes below.
+
+By default, label keys and values of the `target` info metric MUST NOT be
+altered (such as replacing `_` with `.` characters in keys).
+
+#### Scraping metrics (pull)
+
+**Status**: [Development](../document-status.md)
+
+When scraping a Prometheus endpoint, resource attributes MUST be added to the
+scraped metrics to distinguish them from metrics from other Prometheus
+endpoints.
 
 The `job` and `instance` labels are attached by Prometheus to each scraped
 metric as described in [Jobs and instances](https://prometheus.io/docs/concepts/jobs_instances/).
@@ -427,28 +454,40 @@ attributes:
 | ----------------------- | ----------- |
 | `server.address` | The `<host>` portion of the `instance` unless it is localhost, a loopback address, or an unspecified address |
 | `server.port` | The `<port>` portion of the `instance` |
-| `url.scheme` | `http` or `https` from the `__scheme__` label on the target |
+| `url.scheme` | `http` or `https` from the `__scheme__` label on the scrape target before relabelling |
 
 Further attributes (such as from K8s service discovery metadata labels) MAY be
-added to the resource attributes. Labels from the `target` info metric take
-precedence over all derived resource attributes.
+added to the resource attributes.
 
-To summarize, `service.name` and `service.instance.id`, are needed
-to ensure Prometheus exporters can disambiguate metrics using
-[`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/)
-as [described below](#resource-attributes-1), therefore this specification
-ensures that `service.name` and `service.instance.id` are always defined.
+#### Remote Write metrics (push)
 
-In addition to the attributes above, the
-[`target`](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
- info metric is used to supply additional resource attributes. If present,
-the `target` info metric MUST be dropped from the batch of metrics, and all labels
-except `job`, `instance` and `__name__` from the `target` info metric MUST be
-converted to resource attributes attached to all other metrics which share the
-same `job` and `instance` as the `target` info metric.
+**Status**: [Development](../document-status.md)
 
-By default, label keys and values of the `target` info metric MUST NOT be
-altered (such as replacing `_` with `.` characters in keys).
+When receiving metrics over Prometheus Remote Write, a missing `job` or
+`instance` label MUST be treated as an empty strings when creating a new
+resource for the metrics.
+
+For each resource the `service.name` attribute MUST be set to the
+`service.name` label in `target` info metric, if that label exists in the
+`target` info metric with the same `job` and `instance` key as the resource.
+Otherwise, if the `job` is not the empty string, then `service.name` MUST be
+set from the `job` label as follows:
+
+- if `job` can be split into two strings along exactly one slash `/`,
+  then `service.name` MUST be set to the string after the `/`.
+- otherwise `service.name` MUST be set to equal `job`.
+
+For each resource the `service.namespace` attribute MUST be set to the
+`service.namespace` label in `target` info metric, if that label exists in the
+`target` info metric with the same `job` and `instance` key as the resource.
+Otherwise, if the `job` is not the empty string and has exactly one `/`, then
+`service.namespace` MUST be set to the string before the `/`.
+
+For each resource the `service.instance.id` attribute MUST be set to the
+`service.instance.id` label in `target` info metric, if that label exists in the
+`target` info metric with the same `job` and `instance` key as the resource.
+Otherwise, if `instance` is not the empty string, then `service.instance.id`
+MUST be set to equal the `instance` label.
 
 ## OTLP Metric points to Prometheus
 
