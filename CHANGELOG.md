@@ -14,7 +14,6 @@ release.
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
-
 - Add the traces data model.
   ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 
