@@ -812,7 +812,7 @@ belongs to, such as HTTP client requests or database calls, defined
 by [semantic conventions](/specification/semantic-conventions.md).
 Span type SHOULD uniquely identify the span structure, such as its name format,
 kind, attributes, error conditions, and operation scope.
-Span type SHOULD have low cardinality, typically lower than the [span name](#span).
+Span type MUST have low cardinality, typically lower than the [span name](#span).
 For example, all RPC client spans share the same span type, while their names
 differ by RPC method.
 
@@ -822,10 +822,14 @@ span type describes what operation it represents.
 Span type is provided at [span creation](#span-creation) and MUST NOT be changed
 afterwards. An empty span type is equivalent with a not present one.
 
-The API SHOULD be documented in a way to communicate to users that the span
-type needs to conform to the [span type syntax](#span-type-syntax). The API
-SHOULD NOT validate the span type; that is left to implementations of the API,
-like the [SDK](sdk.md#sdk-span-creation).
+The API MUST be documented in a way to communicate to users that the span type:
+
+* is expected to uniquely identify the span structure;
+* needs to have low cardinality;
+* needs to conform to the [span type syntax](#span-type-syntax).
+
+The API SHOULD NOT validate the span type; that is left to implementations of
+the API, like the [SDK](sdk.md#sdk-span-creation).
 
 ### Span type syntax
 
@@ -833,7 +837,7 @@ The span type syntax is defined below using the [Augmented Backus-Naur
 Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-span-type = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
+span-type = ALPHA 0*254 ("_" / "." / ALPHA / DIGIT)
 
 ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
