@@ -50,7 +50,9 @@ release.
 ### Supplementary Guidelines
 
 - Clarify that the security exception includes tightening runtime or dependency
-  version requirements to avoid shipping vulnerable dependencies.
+  version requirements to address risks from versions that no longer receive
+  security fixes.
+  ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
 
 ### OTEPs
 

@@ -423,10 +423,10 @@ These changes can affect emitted telemetry, including by truncating values or
 dropping attributes or records.
 
 Another example is tightening supported runtime or dependency version
-requirements when continued support would require shipping dependencies with
-known vulnerabilities. For example, an end-of-life runtime might not support
-fixed dependency versions. End-of-life status alone does not qualify a change
-for this exception.
+requirements when necessary to address an identified security risk. This can
+include discontinuing support for versions that no longer receive security
+fixes, or for runtimes that prevent using dependency versions that receive
+security fixes.
 
 Changes under this exception MUST address an identified, concrete security risk
 and MUST be limited to what is necessary to mitigate that risk. Changes made
