@@ -422,6 +422,12 @@ mitigate denial of service or resource exhaustion through unbounded telemetry.
 These changes can affect emitted telemetry, including by truncating values or
 dropping attributes or records.
 
+Another example is tightening supported runtime or dependency version
+requirements when continued support would require shipping dependencies with
+known vulnerabilities. For example, an end-of-life runtime might not support
+fixed dependency versions. End-of-life status alone does not qualify a change
+for this exception.
+
 Changes under this exception MUST address an identified, concrete security risk
 and MUST be limited to what is necessary to mitigate that risk. Changes made
 solely to reduce resource consumption or improve performance do not qualify.

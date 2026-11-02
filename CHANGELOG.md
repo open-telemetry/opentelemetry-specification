@@ -49,6 +49,9 @@ release.
 
 ### Supplementary Guidelines
 
+- Clarify that the security exception includes tightening runtime or dependency
+  version requirements to avoid shipping vulnerable dependencies.
+
 ### OTEPs
 
 ## v1.62.0 (2026-10-21)
