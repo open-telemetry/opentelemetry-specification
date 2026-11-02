@@ -190,8 +190,8 @@ The `SpanId` of the parent span, or empty for a root span.
 
 Type: enumeration.
 
-Indicates whether the parent span is remote, i.e. has been created from a SpanContext 
-that was propagated from a remote parent.
+Indicates, when known, whether this span's parent was created in another process,
+as indicated by the parent `SpanContext`'s `IsRemote` value.
 
 Possible values are: (unknown, is not remote, is remote).
 

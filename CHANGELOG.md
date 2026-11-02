@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add the traces data model.
+  ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
@@ -60,8 +62,6 @@ release.
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
-- Add the traces data model.
-  ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 
 ### Metrics
 
