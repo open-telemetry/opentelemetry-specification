@@ -1119,8 +1119,8 @@ produce a metric stream.
 
 If the user has provided attribute keys via View(s), those keys take precedence.
 If no View is configured, or if a matching view does not specify attribute keys,
-the advisory parameter should be used. If neither is provided, all attributes
-must be retained.
+the advisory parameter MUST be used (an empty list `[]` retains no attributes).
+If neither is provided, all attributes MUST be retained.
 
 #### Instrument advisory parameter: `OptIn`
 
