@@ -283,10 +283,10 @@ are no longer available.
 
 Type: [Resource](../resource/sdk.md).
 
-Description: The [resource](../overview.md#resources) identifies the entity
-for which the span was produced, such as a service instance, process,
-container, or host. Data formats can record this field once per batch of
-spans from the same source. The resource SHOULD follow OpenTelemetry
+Description: The [resource](../overview.md#resources) associated with a span
+identifies the entity for which the span was produced, such as a service instance,
+process, container, or host. Multiple spans can share the same resource.
+The resource SHOULD follow OpenTelemetry
 [semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 This field is optional.
 
@@ -294,9 +294,9 @@ This field is optional.
 
 Type: [Instrumentation Scope](../common/instrumentation-scope.md).
 
-Description: the [instrumentation scope](../common/instrumentation-scope.md).
-Multiple occurrences of spans coming from the same scope can happen across time and
-they all have the same value of `InstrumentationScope`. This field is optional.
+Description: The [instrumentation scope](../common/instrumentation-scope.md)
+associated with a span identifies the logical unit of software that produced it.
+Multiple spans can share the same instrumentation scope. This field is optional.
 
 ## Trace
 
@@ -615,13 +615,21 @@ scope:
 ```text
 TracesData
 └── ResourceSpans
+    ├── Resource
     └── ScopeSpans
+        ├── InstrumentationScope
         └── Span
 ```
 
-These containers do not represent a whole trace. One OTLP request can contain
-spans from multiple traces, and spans from one trace can appear in multiple
-requests, resources, and scopes.
+Each `ResourceSpans` container carries a `Resource` associated with all spans
+within that container. Within it, each `ScopeSpans` container carries an
+`InstrumentationScope` associated with its spans. This organization allows
+resource and instrumentation scope metadata to be recorded once per group
+while preserving each individual span.
+
+Grouping by resource and instrumentation scope is independent of trace
+membership. One OTLP request can contain spans from multiple traces, and spans
+from one trace can appear in multiple requests, resources, and scopes.
 
 A trace consumer reconstructs traces from individual spans by:
 
