@@ -211,6 +211,14 @@ Consumers MUST be able to determine an entity's ID Scope from the entity itself.
 A consumer MUST NOT be required to consult Semantic Conventions to interpret an
 entity's identity.
 
+> [!NOTE]
+> The intent is that any component in the path of the data, such as a
+> collector processor or a backend ingest pipeline, can compute an entity's
+> Global Identity from the Resource it receives, as the data flows. It does
+> not need a side channel such as a semantic conventions registry, the schema
+> version the producer used, or an out-of-band entity catalog. Semantic
+> conventions tell producers what to write; they are not needed to read it.
+
 ### Global Identity Composition
 
 An entity's **Local Identity** is its ID attributes. Its **Global Identity** is
