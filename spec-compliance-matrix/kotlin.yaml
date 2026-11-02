@@ -133,6 +133,8 @@ sections:
             status: '-'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
+            status: '?'
           - name: Allow samplers to modify tracestate
             status: '+'
           - name: ShouldSample gets full parent Context
@@ -220,6 +222,8 @@ sections:
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
         status: '-'
       - name: Instrument supports the advisory Attributes parameter.
+        status: '-'
+      - name: Instrument supports the advisory OptIn parameter.
         status: '-'
       - name: Synchronous instruments support Bind to pre-associate attributes.
         status: '-'
@@ -502,6 +506,8 @@ sections:
       - name: OTEL_METRIC_EXPORT_INTERVAL
         status: '-'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
+        status: '-'
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
         status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '-'

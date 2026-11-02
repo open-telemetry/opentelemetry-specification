@@ -42,16 +42,20 @@ to OpenTelemetry’s approach to upgrading.
 
 ## Dependency Management
 
-It is very important that OpenTelemetry users and implementors stay up to date with
-the latest version of the OpenTelemetry API. OpenTelemetry follows strict rules in
-regards to backwards compatibility. It is always safe to upgrade to the latest minor
-version of an OpenTelemetry package.
+OpenTelemetry users and implementors are encouraged to stay up to date with
+the latest releases. Stable API packages remain backward compatible across
+minor and patch releases within the same major version. Stable SDK and Contrib
+packages can include backward-incompatible behavioral or configuration changes
+in minor or patch releases only under the
+[security-related changes exception](versioning-and-stability.md#security-related-changes).
 
 ### Application Developers
 
-Developers who plan to install the OpenTelemetry SDK in their application are advised
-to accept all minor version upgrades. This will ensure that applications
-will always be built with the latest optimizations and security patches.
+Application developers are encouraged to keep the SDK up to date to receive
+optimizations and security fixes. Before upgrading SDK or Contrib packages,
+review the release notes for security-related changes and follow any documented
+migration actions. Such changes can reject previously accepted configuration,
+alter emitted telemetry, or cause application initialization to fail.
 
 Likewise, application developers are encouraged to depend upon all future versions
 of the current major version of the OpenTelemetry API. This will ensure that version

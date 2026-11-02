@@ -50,7 +50,7 @@ path_base_for_github_subdir:
 - an array of `AnyValue`,
 - a [`map<string, AnyValue>`](#mapstring-anyvalue),
 - an empty value if supported by the language,
-  (e.g. `null`, `undefined` in JavaScript/TypeScript, `None` in Python, `nil` in Go/Ruby, not supported in Erlang, etc.)
+  (e.g. `null` in JavaScript/TypeScript, `None` in Python, `nil` in Go/Ruby, not supported in Erlang, etc.)
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
