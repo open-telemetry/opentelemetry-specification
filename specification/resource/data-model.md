@@ -75,8 +75,8 @@ information or descriptive attributes.
 
 We define the following algorithm for merging an Entity into an existing Resource where `e` is the incoming entity and `E` is the set of entities in the resource:
 
-* If `E` contains an entity `e'` that can be merged (equal `type`, `identity`, and `schema_url`) with `e`, apply the [`entity merge algorithm`](../entities/data-model.md#merging-of-entities).
-* Else if `E` contains an entity `e'` with equal `type` that cannot be merged (unequal `identity` or `schema_url`), drop `e'` from `E` including all of its attributes and replace it with incoming entity `e`
+* If `E` contains an entity `e'` that can be merged (equal `type`, `identity`, `id_scope`, `id_scope_entity_type`, and `schema_url`) with `e`, apply the [`entity merge algorithm`](../entities/data-model.md#merging-of-entities).
+* Else if `E` contains an entity `e'` with equal `type` that cannot be merged (unequal `identity`, `id_scope`, `id_scope_entity_type`, or `schema_url`), drop `e'` from `E` including all of its attributes and replace it with incoming entity `e`
 * Else insert incoming entity `e` into `E`, overwriting any existing attributes.
 * If, at any time, an entity being inserted or merged overwrites any attribute, identifying or descriptive, from a pre-existing Entity `e'`, drop `e'`'s `EntityRef`, retaining its other attributes as unassociated attributes.
 
