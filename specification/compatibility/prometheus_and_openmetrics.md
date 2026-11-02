@@ -378,6 +378,7 @@ following labels, which MUST NOT be copied:
 
 - `__name__`,
 - `job` and `instance`,
+- labels with empty values,
 - the `le` label of classic Prometheus histogram buckets,
 - the `quantile` label of Prometheus summaries,
 - labels with the `otel_scope_` prefix, which are handled according to the
