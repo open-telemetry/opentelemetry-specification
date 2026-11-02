@@ -114,7 +114,7 @@ meter_provider:
 - **Provider Configuration**: `TracerProvider`, `MeterProvider`, and `LoggerProvider` SHOULD support a `minimum_stability` configuration parameter of type `Stability` (defaulting to `Stable`).
 - **Suppression and Enablement Across Signals**:
   - When a signal's `Stability` meets or exceeds the provider's `minimum_stability` (including `Development` telemetry when `minimum_stability` is `Development`), the SDK MUST process it according to normal pipeline rules.
-  - When a signal's `Stability` is lower than the provider's `minimum_stability` (that is, `minimum_stability` is `Stable` and `Stability` is `Development`) and it is not explicitly enabled by a Metric `View`:
+  - By default, the SDK suppresses telemetry with a `Stability` that is lower than the provider's `minimum_stability`. For Metrics, this can be overridden by setting `enabled=true` on a Metric `View`. When telemetry is suppressed:
     - `Tracer.Enabled`, synchronous `Instrument.Enabled`, and `Logger.Enabled` MUST return `false`.
     - **Traces**: `StartSpan` MUST behave equivalently to a [No-op Tracer](../specification/trace/api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk)—returning a non-recording `Span` wrapping the `SpanContext` from the parent `Context` unchanged (preserving distributed trace continuity and `ParentBased` sampling for downstream calls), without generating a new `SpanId` or invoking the `Sampler` or any `SpanProcessor`.
     - **Metrics**: The SDK MUST apply the [Drop Aggregation](../specification/metrics/sdk.md#drop-aggregation).
