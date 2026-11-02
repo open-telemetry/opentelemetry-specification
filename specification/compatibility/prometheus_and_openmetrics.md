@@ -403,7 +403,7 @@ except for the `target` info metric.
 The `job` and `instance` labels are attached by Prometheus to each scraped
 metric as described in [Jobs and instances](https://prometheus.io/docs/concepts/jobs_instances/).
 If the `job` or `instance` label of a metric is missing or empty, for example
-due to `metric_relabel_configs`, it MUST be set to the corresponding label of
+due to `metric_relabel_configs`, the missing label MUST be set to the corresponding label of
 the scrape target, after
 [relabeling](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config).
 If either label is still missing or empty, the scrape MUST fail.
