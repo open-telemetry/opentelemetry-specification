@@ -151,7 +151,7 @@ The injection mechanism contract MUST be subject to semantic versioning. For sta
 
 If multiple builds of an injectable distribution are published (e.g. per CPU architecture or C library flavor), the injection mechanism contract MUST document deterministic logic for selecting a compatible build.
 
-When the prerequisites documented in the injection mechanism contract are satisfied, the injectable distribution MUST NOT prevent application startup or cause the application to fail at runtime. Disabling instrumentation does not constitute application failure.
+When the prerequisites assigned to the injector tool by the injection mechanism contract are satisfied and a compatible build is selected, the injectable distribution MUST NOT prevent application startup or cause the application to fail at runtime. Disabling instrumentation does not constitute application failure.
 
 When a distribution performs compatibility checks, it MUST NOT prevent application startup or cause application failure if those checks fail. It MAY disable some or all instrumentation.
 
