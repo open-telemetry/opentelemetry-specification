@@ -54,31 +54,31 @@ defer childSpan.End()
 
 ### Configuration Examples
 
-By default, `TracerProvider`, `MeterProvider`, and `LoggerProvider` set `minimum_stability` to `Stable`. An [Application Owner](../specification/glossary.md#application-owner) can lower `minimum_stability` to `Development` across a provider programmatically or via [Declarative Configuration](../specification/configuration/README.md):
+By default, `TracerProvider`, `MeterProvider`, and `LoggerProvider` set `minimum_stability` to `Stable`. An [Application Owner](../specification/glossary.md#application-owner) can lower `minimum_stability` to `Development` across a provider programmatically or via [Declarative Configuration](../specification/configuration/README.md) (`minimum_stability/development` while experimental):
 
 ```yaml
 file_format: "1.2"
 tracer_provider:
-  minimum_stability: development
+  minimum_stability/development: development
   processors:
     - batch:
         exporter:
           otlp_http: {}
 meter_provider:
-  minimum_stability: development
+  minimum_stability/development: development
   readers:
     - periodic:
         exporter:
           otlp_http: {}
 logger_provider:
-  minimum_stability: development
+  minimum_stability/development: development
   processors:
     - batch:
         exporter:
           otlp_http: {}
 ```
 
-In Metrics, an Application Owner can also keep `minimum_stability: stable` at the provider level and selectively enable a single `Development` instrument (or an `opt_in` attribute on a `Stable` instrument) using a [View](../specification/metrics/sdk.md#view):
+In Metrics, an Application Owner can also keep `minimum_stability` at `Stable` at the provider level and selectively enable a single `Development` or `OptIn` instrument using `stream.enabled/development: true` in a [View](../specification/metrics/sdk.md#view) (whereas `opt_in` attributes on an enabled `Stable` instrument use `stream.attribute_keys.included`):
 
 ```yaml
 meter_provider:
@@ -86,7 +86,7 @@ meter_provider:
     - selector:
         instrument_name: http.server.active_requests
       stream:
-        enabled: true
+        enabled/development: true
 ```
 
 ### Migration Path for Instrumentation Libraries
@@ -121,7 +121,7 @@ meter_provider:
     - **Logs**: `Emit` MUST drop the `LogRecord` before invoking any `LogRecordProcessor`.
 - **Metric `OptIn` and `View` Interaction (`specification/metrics/sdk.md`)**:
   - An instrument is enabled when no `View` sets `enabled` if and only if its `OptIn` advisory parameter is `false` (or unset) **AND** its `Stability` meets or exceeds the `MeterProvider`'s `minimum_stability`.
-  - If a matching `View` explicitly configures `enabled = true`, the SDK MUST enable the stream regardless of whether `OptIn` is `true` or `Stability` is `Development`. If a matching `View` configures `enabled = false`, the SDK MUST use the Drop Aggregation.
+  - If a matching `View` explicitly configures `enabled = true`, the SDK MUST enable the stream regardless of whether `OptIn` is `true` or `Stability` is `Development`. If a matching `View` configures `enabled = false`, the SDK MUST use the Drop Aggregation. A matching `View` that does not explicitly configure `enabled` (for example, a `View` that only customizes aggregation or attributes) MUST NOT override `minimum_stability` or enable a `Development` or `OptIn` instrument.
 
 | Instrument `Stability` | Instrument `OptIn` | Default (`minimum_stability = Stable`) | Provider `minimum_stability = Development` | Matching View `enabled = true` |
 | :--- | :--- | :--- | :--- | :--- |
@@ -138,8 +138,8 @@ meter_provider:
 
 ## Trade-offs and mitigations
 
-- **Default Telemetry Changes When Instrumentation Adopts `Development` Markers**: When an existing pre-`1.0` instrumentation library marks unstable telemetry as `Development`, users who keep the default `minimum_stability: stable` stop receiving that unstable telemetry upon upgrading.
-  - *Mitigation*: Where stable Semantic Conventions already exist for a domain, instrumentation libraries SHOULD upgrade directly to the `Stable` conventions rather than marking legacy or unstable telemetry as `Development`, avoiding the `Development` stage altogether. For telemetry whose conventions are still in `development`, contrib repositories SHOULD adopt the stability API across the entire repository in a coordinated pass (and document newly gated `Development` telemetry in release notes) so that opting in to experimental telemetry via `minimum_stability: development` is a one-time, consistent configuration change.
+- **Default Telemetry Changes When Instrumentation Adopts `Development` Markers**: When an existing pre-`1.0` instrumentation library marks unstable telemetry as `Development`, users who keep the default `minimum_stability` (`Stable`) stop receiving that unstable telemetry upon upgrading.
+  - *Mitigation*: Where stable Semantic Conventions already exist for a domain, instrumentation libraries SHOULD upgrade directly to the `Stable` conventions rather than marking legacy or unstable telemetry as `Development`, avoiding the `Development` stage altogether. For telemetry whose conventions are still in `development`, contrib repositories SHOULD adopt the stability API across the entire repository in a coordinated pass (and document newly gated `Development` telemetry in release notes) so that opting in to experimental telemetry via `minimum_stability` (`minimum_stability/development: development` in Declarative Configuration) is a one-time, consistent configuration change.
 
 ## Prior art and alternatives
 
@@ -155,7 +155,7 @@ meter_provider:
 - **Decoupling package `1.0` stability from default-emitted telemetry stability ([OTEP #4813](https://github.com/open-telemetry/opentelemetry-specification/pull/4813))**: Allowing `1.0` instrumentation libraries to emit `Development` telemetry by default and break it in minor releases was rejected because breaking default-emitted telemetry in a minor upgrade breaks user dashboards and alerts.
 - **Define an API to pass attribute stability**: Adding an API to mark individual attributes as `Development` (either when recording attributes or when creating a `Tracer`, `Meter`, or `Logger`) is unnecessary and would require SDKs to filter attribute keys on hot recording paths. [Weaver's stability policy](https://github.com/open-telemetry/opentelemetry-weaver-packages/blob/main/policies/check/stability/stability.rego) already enforces that a `stable` signal cannot reference a `development` attribute unless that attribute has `requirement_level: opt_in`. Consequently, `Stable` telemetry never emits `Development` attributes by default, and on `Development` signals the entire metric, span, or log record is already gated by the signal's stability.
 - **Scope-level `stability` on `GetTracer`, `GetMeter`, and `GetLogger`**: Passing a single `stability` flag at scope creation makes graduating the first metric or span in an instrumentation package disruptive, as removing the scope-level flag forces the author to annotate every other call site in the package simultaneously. Per-instrument, per-span, and per-log-record `stability` makes graduating any individual signal a one-line change and maps directly to Weaver per-signal code generation.
-- **Reusing `OptIn` (`bool`) instead of a separate `Stability` enum**: In Semantic Conventions, `requirement_level: opt_in` and `stability: development` are orthogonal—a metric can be both `Development` and `OptIn` (meaning it will remain `OptIn` even after it stabilizes). Conflating the two would cause `minimum_stability: development` to enable high-cardinality `OptIn` telemetry.
+- **Reusing `OptIn` (`bool`) instead of a separate `Stability` enum**: In Semantic Conventions, `requirement_level: opt_in` and `stability: development` are orthogonal—a metric can be both `Development` and `OptIn` (meaning it will remain `OptIn` even after it stabilizes). Conflating the two would cause lowering `minimum_stability` to `Development` to enable high-cardinality `OptIn` telemetry.
 
 ## Open questions
 
@@ -175,7 +175,7 @@ meter_provider:
 
 - **Additional `Stability` enum values (such as `Deprecated`)**: Extending the `Stability` enum to include `Deprecated` so instrumentation libraries can mark deprecated telemetry and allow Application Owners to opt in or out of deprecated metrics, spans, and log records centrally in the SDK.
 - **Weaver code generation**: Updating [Weaver](https://github.com/open-telemetry/weaver) templates so generated semantic convention helpers automatically pass `Stability` into the OpenTelemetry APIs.
-- **Targeted span and log enablement**: Extending span and log configuration (or [Telemetry Policy](4738-telemetry-policy.md)) to selectively enable individual `Development` spans or log records by name or scope, analogous to Metric `View`s. Across contrib repositories today, individual by-name experimental toggles exist exclusively for metrics (which are already supported by Metric `View`s with `enabled: true`), while existing trace and log experimental flags in library instrumentations are coarse booleans, so per-span and per-log selectors can be added as a future enhancement without blocking instrumentation migration.
+- **Targeted span and log enablement**: Extending span and log configuration (or [Telemetry Policy](4738-telemetry-policy.md)) to selectively enable individual `Development` spans or log records by name or scope, analogous to Metric `View`s. Across contrib repositories today, individual by-name experimental toggles exist exclusively for metrics (which are already supported by Metric `View`s with `enabled = true`), while existing trace and log experimental flags in library instrumentations are coarse booleans, so per-span and per-log selectors can be added as a future enhancement without blocking instrumentation migration.
 
 ## Appendix: Ecosystem Survey of Experimental Telemetry Gating
 
