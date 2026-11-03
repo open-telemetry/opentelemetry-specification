@@ -9,6 +9,11 @@ release.
 
 ### Context
 
+### Context Sharing
+
+- Add the Process Context Sharing specification.
+  ([#5370](https://github.com/open-telemetry/opentelemetry-specification/pull/5370))
+
 ### Traces
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
