@@ -442,11 +442,11 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:e658af3757f9e26a9d25dd2aff38335acd92bc9104f890a894b2c1ba28311b03",
-                "sha256:fa23724b9c486543b9ff54a327ee7569ac83ade54bb9afd0fc18676620401c86"
+                "sha256:3b0fc2727707663d6e517936f444fd8a8b240f1fc32f4bf7ee03274245945284",
+                "sha256:7fed3fee8fd6bd4a2b7b75a8d56021d0624127bf69bd5691f115db929ac570b3"
             ],
             "index": "pypi",
-            "version": "==2026.5"
+            "version": "==2026.6"
         },
         "requests": {
             "hashes": [
