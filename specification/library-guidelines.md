@@ -153,7 +153,7 @@ If multiple builds of an injectable distribution are published (e.g. per CPU arc
 
 When the prerequisites assigned to the injector tool by the injection mechanism contract are satisfied and a compatible build is selected, the injectable distribution MUST NOT prevent application startup or cause the application to fail at runtime. Disabling instrumentation does not constitute application failure.
 
-When a distribution performs compatibility checks, it MUST NOT prevent application startup or cause application failure if those checks fail. It MAY disable some or all instrumentation.
+When a distribution performs compatibility checks, it MUST NOT prevent application startup or cause application failure if those checks fail. It MAY disable some or all instrumentation. These injection safety requirements are stricter than the initialization fail-fast allowance in [Basic error handling principles](error-handling.md#basic-error-handling-principles).
 
 Injector tools MUST NOT enable an injectable distribution by default unless they can verify the prerequisites assigned to them by the contract and select a compatible build. Injectable distribution maintainers are encouraged to coordinate with injector tool maintainers to establish prerequisites and detection mechanisms that enable safe injection by default. See [Guidance for injection mechanism contracts](#guidance-for-injection-mechanism-contracts).
 
