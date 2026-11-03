@@ -888,10 +888,13 @@ with delta temporality aggregation for an instrument MUST share the same start
 timestamp.
 
 Cumulative timeseries MUST use a consistent start timestamp for all collection
-intervals.
+intervals while the series is persisted by the SDK. If a cumulative series is
+reset or evicted and is subsequently observed again, it MUST be treated as a
+new series with a new start timestamp (see [Supplementary
+Guidelines](./supplementary-guidelines.md#asynchronous-example-cumulative-temporality)).
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
-For asynchronous instrument, the start timestamp SHOULD be:
+For asynchronous instruments, the start timestamp SHOULD be:
 - The creation time of the instrument, if the first series measurement
     occurred in the first collection interval,
 - Otherwise, the timestamp of the collection interval prior to the first
@@ -1116,8 +1119,8 @@ produce a metric stream.
 
 If the user has provided attribute keys via View(s), those keys take precedence.
 If no View is configured, or if a matching view does not specify attribute keys,
-the advisory parameter should be used. If neither is provided, all attributes
-must be retained.
+the advisory parameter MUST be used (an empty list `[]` retains no attributes).
+If neither is provided, all attributes MUST be retained.
 
 #### Instrument advisory parameter: `OptIn`
 
@@ -1732,8 +1735,19 @@ information (e.g. name, version, etc.) associated with each `Metric Point`.
 `Export` should never be called concurrently with other `Export` calls for the
 same exporter instance.
 
-`Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (Failure).
+`Export` MUST NOT block indefinitely, except when performing synchronous
+output through an API that does not support deadlines or
+cancellation of a blocked write.
+
+In all other cases, there MUST be a reasonable finite upper limit after which
+the call times out with an error result (`Failure`).
+
+> [!NOTE]
+> For example, an exporter that writes synchronously to standard output or an
+> application-provided stream can use an output API that cannot safely interrupt
+> a blocked write. Bounding the caller's wait through background execution can
+> leave that write blocked and retaining resources after `Export` returns, or
+> allow output to complete after a timeout. These costs motivate this exception.
 
 Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required

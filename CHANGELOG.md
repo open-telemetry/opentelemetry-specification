@@ -14,12 +14,25 @@ release.
 
 ### Traces
 
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
 ### Metrics
 
+- Clarify that the `Attributes` metric instrument advisory parameter acts as a recommended allow-list of attribute keys to be retained, and that an empty list retains no attributes.
+  ([#5391](https://github.com/open-telemetry/opentelemetry-specification/pull/5391))
 - Add the OptIn advisory parameter and enabled View stream parameter.
   ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 
 ### Logs
+
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
 
 ### Baggage
 
@@ -43,8 +56,6 @@ release.
 
 ## v1.62.0 (2026-10-21)
 
-### Context
-
 ### Traces
 
 - Add `Sampler.Shutdown` operation.
@@ -65,10 +76,6 @@ release.
   attribute and describe its availability.
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
-
-### Baggage
-
-### Profiles
 
 ### Resource
 
@@ -101,6 +108,13 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
+- Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
+  Histogram transformation.
+  ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
+- Clarify that the identifying resource attributes `service.name`,
+  `service.namespace`, and `service.instance.id` should be converted to the
+  Prometheus `target` info metric along with all other resource attributes.
+  ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
 
 ### SDK Configuration
 
@@ -108,6 +122,9 @@ release.
   resource detectors. Other SDK plugin components continue to produce errors
   when missing.
   ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
+- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
+  exporting MetricReader.
+  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
 
