@@ -70,6 +70,11 @@ release.
 
 ### Supplementary Guidelines
 
+- Explicitly permit tightening runtime or dependency version requirements to
+  address an identified security risk, including risks from loss of security
+  maintenance.
+  ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
+
 ### OTEPs
 
 ## v1.62.0 (2026-10-21)
