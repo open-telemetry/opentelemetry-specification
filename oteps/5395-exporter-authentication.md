@@ -330,11 +330,14 @@ interfaces** (which are left to each SDK).
    Rejected as a standalone solution because users cannot select or configure
    an authenticator in the YAML file itself, nor can they easily attach
    different authenticators to different OTLP exporters in the same config file.
-4. **Top-level shared `authenticators:` map (Collector `extensions` style)**:
+4. **Top-level `extensions:` or `authenticators:` map with ID references
+   ([opentelemetry-configuration#640](https://github.com/open-telemetry/opentelemetry-configuration/issues/640))**:
    Deferred in favor of inline `authenticator/development:` on each exporter,
-   which matches all other SDK extension plugins in `opentelemetry-configuration`
-   (`sampler`, `span_exporter`, `resource_detector`) and avoids cross-tree ID
-   references.
+   which matches how `opentelemetry-configuration` models all other SDK plugin
+   components (`sampler`, `span_exporter`, `resource_detector`) today. If
+   `opentelemetry-configuration` introduces a top-level `extensions:` mechanism
+   for shared components in the future, `authenticator` configuration can adopt
+   that pattern.
 
 ## Future possibilities
 
