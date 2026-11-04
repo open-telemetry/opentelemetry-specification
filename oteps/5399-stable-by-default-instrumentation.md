@@ -53,7 +53,7 @@ defer childSpan.End()
 
 // Stable span with a Development attribute (attribute omitted by default; included when enabled)
 var spanAttrs []attribute.KeyValue
-if tracer.AttributeEnabled("http.request.body.size", otel.StabilityDevelopment) {
+if tracer.AttributeEnabled(ctx, "http.request.body.size", otel.StabilityDevelopment) {
     spanAttrs = append(spanAttrs, attribute.Int64("http.request.body.size", req.ContentLength))
 }
 ctx, span := tracer.Start(ctx, "GET /users", trace.WithAttributes(spanAttrs...))
@@ -193,6 +193,7 @@ meter_provider:
 - **Additional `Stability` enum values (such as `Deprecated`)**: Extending the `Stability` enum to include `Deprecated` so instrumentation libraries can mark deprecated telemetry and allow Application Owners to opt in or out of deprecated metrics, spans, log records, and attributes centrally in the SDK.
 - **Weaver code generation**: Updating [Weaver](https://github.com/open-telemetry/weaver) templates so generated semantic convention helpers automatically pass `Stability` into the OpenTelemetry APIs and check `AttributeEnabled` for `development` attributes.
 - **Targeted span, log, and attribute configuration**: Extending `Tracer`, `Meter`, and `Logger` configuration (or [Telemetry Policy](4738-telemetry-policy.md)) to selectively enable or disable individual `Development` spans (for example, by span type), log records (by `event.name`), or individual attributes (via `AttributeEnabled(key, stability)`), analogous to Metric `View`s. Across contrib repositories today, individual by-name experimental toggles exist for metrics (supported by Metric `View`s with `enabled = true` and `attribute_keys`) and per-scope experimental attribute toggles exist in Java (`otel.instrumentation.<name>.experimental-span-attributes`) and `.NET` (`OTEL_DOTNET_EXPERIMENTAL_*`), so fine-grained span, log, and attribute selectors can be added as a future enhancement without changing the instrumentation API.
+- **Additional `AttributeEnabled` parameters (such as opt-in or a span or instrument name)**: Extending `AttributeEnabled` with optional parameters such as whether an attribute is opt-in or a span or instrument name once cross-signal attribute filtering is specified, so instrumentation can check both stability and attribute inclusion in a single call.
 - **Resource detector stability**: Extending stability metadata to [Resource Detectors](../specification/resource/sdk.md#resource-detector) and the [Resource Provider](../specification/resource/sdk.md#resource-provider). Many ecosystems already ship stable (`1.x`+) resource detectors (`host`, `os`, `process`, `container`, `gcp`, `aws`) despite their attributes remaining in `development` in Semantic Conventions, and it is an open question whether users want `Development` resource attributes to be filtered out by default. A future enhancement could allow `Resource.Create` (or entity builders) to attach `Stability` metadata to detected attributes so `ResourceProvider` can filter `Development` resource attributes when merging.
 
 ## Appendix: Ecosystem Survey of Experimental Telemetry Gating
