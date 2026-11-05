@@ -21,14 +21,15 @@ weight: 3
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
   * [Enabled](#enabled)
+  * [SDK Span creation](#sdk-span-creation)
+    + [Span flags](#span-flags)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
-  * [SDK Span creation](#sdk-span-creation)
-    + [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
+    + [Shutdown](#shutdown-1)
   * [Built-in samplers](#built-in-samplers)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
@@ -68,7 +69,7 @@ weight: 3
     + [OnStart](#onstart)
     + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
-    + [Shutdown()](#shutdown-1)
+    + [Shutdown()](#shutdown-2)
     + [ForceFlush()](#forceflush-1)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
@@ -76,7 +77,7 @@ weight: 3
 - [Span Exporter](#span-exporter)
   * [Interface Definition](#interface-definition-1)
     + [`Export(batch)`](#exportbatch)
-    + [`Shutdown()`](#shutdown-2)
+    + [`Shutdown()`](#shutdown-3)
     + [`ForceFlush()`](#forceflush-2)
   * [Further Language Specialization](#further-language-specialization)
     + [Examples](#examples)
@@ -173,6 +174,8 @@ make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
+`Shutdown` SHOULD also invoke [Shutdown](#shutdown-1) on the configured `Sampler`, if supported.
+
 ### ForceFlush
 
 This method provides a way for provider to immediately export all spans that have not yet been exported for all the internal processors.
@@ -227,6 +230,34 @@ However, the changes MUST be eventually visible.
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
+
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [Recording Sampled reaction table](#recording-sampled-reaction-table)
+   on whether to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+#### Span flags
+
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
+
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+[See the list of recognized flags](./api.md#spancontext).
 
 ## Additional Span Interfaces
 
@@ -333,34 +364,6 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
-### SDK Span creation
-
-When asked to create a Span, the SDK MUST act as if doing the following in order:
-
-1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
-   (note: this must be done before calling `ShouldSample`, because it expects
-   a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
-3. Generate a new span ID for the `Span`, independently of the sampling decision.
-   This is done so other components (such as logs or exception handling) can rely on
-   a unique span ID, even if the `Span` is a non-recording instance.
-4. Create a span depending on the decision returned by `ShouldSample`:
-   see description of [`ShouldSample`'s](#shouldsample) return value below
-   for how to set `IsRecording` and `Sampled` on the Span,
-   and the [table above](#recording-sampled-reaction-table) on whether
-   to pass the `Span` to `SpanProcessor`s.
-   A non-recording span MAY be implemented using the same mechanism as when a
-   `Span` is created without an SDK installed or as described in
-   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
-
-#### Span flags
-
-The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
-
-Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
-specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
-[See the list of recognized flags](./api.md#spancontext).
-
 ### Sampler
 
 `Sampler` interface allows users to create custom samplers which will return a
@@ -413,6 +416,35 @@ be displayed on debug pages or in the logs. Example:
 Description MAY change over time, for example, if the sampler supports dynamic
 configuration or otherwise adjusts its parameters.
 Callers SHOULD NOT cache the returned value.
+
+#### Shutdown
+
+The `Sampler` interface SHOULD provide a `Shutdown` method.
+
+Shuts down the sampler, providing an opportunity to release any resources it holds.
+
+Samplers that delegate to other samplers, such as `ParentBased` and
+`AlwaysRecord`, SHOULD invoke `Shutdown` on each delegate that supports it.
+
+`Shutdown` SHOULD be called only once for each `Sampler` instance. Repeated or
+concurrent calls to `Shutdown` SHOULD NOT repeat cleanup.
+
+Callers, including `TracerProvider`, SHOULD NOT call `ShouldSample` after
+`Shutdown` begins. If such a call occurs, implementations SHOULD return `DROP`
+without executing their sampling logic. Samplers that always return a static
+sampling decision MAY continue returning that decision.
+
+Calls to `ShouldSample` already in progress MAY complete with their normal
+result. Implementations MUST ensure these calls remain safe while shutdown
+releases resources.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. It can be implemented
+as a blocking API or an asynchronous API which notifies the caller via a
+callback or an event. OpenTelemetry client authors can decide if they want to
+make the shutdown timeout configurable.
 
 ### Built-in samplers
 
@@ -965,7 +997,7 @@ The `SpanProcessor` interface MUST declare the following methods:
 
 * [OnStart](#onstart)
 * [OnEnd](#onendspan)
-* [Shutdown](#shutdown-1)
+* [Shutdown](#shutdown-2)
 * [ForceFlush](#forceflush-1)
 
 The `SpanProcessor` interface SHOULD declare the following methods:
@@ -1034,8 +1066,9 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 `Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
-the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
-are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
+the call to `Shutdown`, subsequent calls to `OnStart`, (**Development**)
+`OnEnding`, `OnEnd`, or `ForceFlush` are not allowed. SDKs SHOULD ignore these
+calls gracefully, if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
@@ -1165,8 +1198,19 @@ while an instance of an exporter should never have its Export() called
 concurrently it does not mean that the task of exporting can not be done
 concurrently. How this is done is outside the scope of this specification.
 
-Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (`Failure`).
+`Export` MUST NOT block indefinitely, except when performing synchronous
+output through an API that does not support deadlines or
+cancellation of a blocked write.
+
+In all other cases, there MUST be a reasonable finite upper limit after which
+the call times out with an error result (`Failure`).
+
+> [!NOTE]
+> For example, an exporter that writes synchronously to standard output or an
+> application-provided stream can use an output API that cannot safely interrupt
+> a blocked write. Bounding the caller's wait through background execution can
+> leave that write blocked and retaining resources after `Export` returns, or
+> allow output to complete after a timeout. These costs motivate this exception.
 
 Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required
@@ -1294,7 +1338,8 @@ specific guarantees and safeties.
 to be called concurrently.
 
 **Sampler** -  `ShouldSample` and `GetDescription` MUST be safe to be called
-concurrently.
+concurrently. `Shutdown` MUST be safe to be called concurrently with itself
+and the other `Sampler` methods.
 
 **Span processor** - all methods MUST be safe to be called concurrently.
 

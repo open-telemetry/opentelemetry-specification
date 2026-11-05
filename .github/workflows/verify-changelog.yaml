@@ -31,12 +31,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Verify CHANGELOG updated
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           echo "Checking for CHANGELOG modifications..."
-          if git diff --name-only --merge-base origin/${{ github.base_ref }} | grep -q 'CHANGELOG'; then
+          if git diff --name-only --merge-base "origin/${BASE_REF}" | grep -q 'CHANGELOG'; then
             echo "CHANGELOG updated — OK"
           else
             echo "::error::No CHANGELOG file was updated in this PR."

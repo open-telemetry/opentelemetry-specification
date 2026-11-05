@@ -133,6 +133,8 @@ sections:
             status: '-'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
+            status: '?'
           - name: Allow samplers to modify tracestate
             status: '+'
           - name: ShouldSample gets full parent Context
@@ -221,6 +223,8 @@ sections:
         status: '?'
       - name: Instrument supports the advisory Attributes parameter.
         status: '?'
+      - name: Instrument supports the advisory OptIn parameter.
+        status: '-'
       - name: Synchronous instruments support Bind to pre-associate attributes.
         status: '+'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
@@ -403,9 +407,9 @@ sections:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
         status: '?'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
         status: '+'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
         status: '+'
   - name: Context Propagation
     features:
@@ -501,6 +505,8 @@ sections:
         status: '?'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
         status: '?'
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
+        status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '?'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
@@ -680,7 +686,7 @@ sections:
           - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
             status: '-'
           - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
             status: '-'
           - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
@@ -688,13 +694,13 @@ sections:
       - heading: '**Log metrics**'
         features:
           - name: '[`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize)'
             status: '-'
           - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
             status: '-'
           - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'

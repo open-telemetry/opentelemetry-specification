@@ -54,6 +54,7 @@ weight: 3
   * [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
+    + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
   * [Instrument enabled](#instrument-enabled)
   * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
@@ -73,12 +74,13 @@ weight: 3
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
     + [ForceFlush](#forceflush-1)
+    + [Shutdown](#shutdown-2)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
       - [ForceFlush](#forceflush-2)
-      - [Shutdown](#shutdown-2)
+      - [Shutdown](#shutdown-3)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -414,17 +416,18 @@ The SDK MUST accept the following stream configuration parameters:
 
   > [!NOTE]
   > An attribute key removed from the metric stream by View configuration
-  > (for example, to remove an attribute containing sensitive data) may
-  > still be exported on Exemplars as a *filtered attribute*. If this is
+  > or the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
+  > parameter (for example, to remove an attribute containing sensitive data)
+  > may still be exported on Exemplars as a *filtered attribute*. If this is
   > not desired, Exemplars can be disabled by configuring the `AlwaysOff`
   > `ExemplarFilter`, or a custom `ExemplarFilter` / `ExemplarReservoir`
   > can be configured to control which measurements are sampled as
   > Exemplars.
 
   SDK documentation SHOULD inform users that attributes excluded from a
-  metric stream by View configuration may still be exported on Exemplars
-  as filtered attributes, and describe how to disable or otherwise
-  configure Exemplar sampling.
+  metric stream by View configuration or the `Attributes` advisory parameter
+  may still be exported on Exemplars as filtered attributes, and describe how
+  to disable or otherwise configure Exemplar sampling.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
@@ -458,6 +461,23 @@ The SDK MUST accept the following stream configuration parameters:
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
+* **Status**: [Development](../document-status.md) - `enabled`: A boolean
+  denoting whether the resulting stream produces metric data.
+
+  Users can provide an `enabled` value, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept an `enabled` value, but MUST NOT obligate a user to provide one.
+  The parameter MUST distinguish an unset value from `false`.
+
+  * If `enabled` is `true`, the `MeterProvider` MUST aggregate the stream as if
+    the instrument's [`OptIn`](#instrument-advisory-parameter-optin) advisory
+    parameter were `false`.
+  * If `enabled` is `false`, the `MeterProvider` MUST use the
+    [Drop Aggregation](#drop-aggregation), regardless of the `aggregation`
+    provided.
+  * If `enabled` is unset, the
+    [`OptIn`](#instrument-advisory-parameter-optin) advisory parameter
+    determines whether the stream is enabled.
 
 #### Measurement processing
 
@@ -467,9 +487,14 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default Aggregation on the basis of instrument kind according
-    to the [MetricReader](#metricreader) instance's `aggregation` property.
+* If the `MeterProvider` has no `View` registered, or if the Instrument does
+  not match any View's instrument selection criteria:
+  * **Status**: [Development](../document-status.md) - If the instrument's
+    [`OptIn` advisory parameter](#instrument-advisory-parameter-optin)
+    is set to `true`, use the [Drop Aggregation](#drop-aggregation).
+  * If `OptIn` is unset or set to `false`, take the Instrument and apply the
+    default Aggregation on the basis of instrument kind according to the
+    [MetricReader](#metricreader) instance's `aggregation` property.
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
@@ -501,7 +526,7 @@ made with an Instrument:
     * For each resulting stream, apply the Views in its group in registration order.
       For all aspects of the [Stream configuration](#stream-configuration) other
       than `attribute_keys` (`name`, `description`, `aggregation`,
-      `exemplar_reservoir`, `aggregation_cardinality_limit`), the last matching
+      `exemplar_reservoir`, `aggregation_cardinality_limit`, `enabled`), the last matching
       View that specifies that aspect wins. Complex configurations like
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
@@ -516,10 +541,9 @@ made with an Instrument:
         parameters](#instrument-advisory-parameters) specify the same aspect of
         the [Stream configuration](#stream-configuration), the setting defined
         by the Views MUST take precedence over the advisory parameters.
-  * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD enable the instrument using the default aggregation and temporality.
-    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
-    to disable instruments by default.
+
+Users can configure match-all Views with `enabled=false` or with the
+[Drop aggregation](#drop-aggregation), to disable instruments by default.
 
 #### View examples
 
@@ -865,13 +889,16 @@ with delta temporality aggregation for an instrument MUST share the same start
 timestamp.
 
 Cumulative timeseries MUST use a consistent start timestamp for all collection
-intervals.
+intervals while the series is persisted by the SDK. If a cumulative series is
+reset or evicted and is subsequently observed again, it MUST be treated as a
+new series with a new start timestamp (see [Supplementary
+Guidelines](./supplementary-guidelines.md#asynchronous-example-cumulative-temporality)).
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
-For asynchronous instrument, the start timestamp SHOULD be:
-  - The creation time of the instrument, if the first series measurement
+For asynchronous instruments, the start timestamp SHOULD be:
+- The creation time of the instrument, if the first series measurement
     occurred in the first collection interval,
-  - Otherwise, the timestamp of the collection interval prior to the first
+- Otherwise, the timestamp of the collection interval prior to the first
     series measurement.
 
 ### Cardinality limits
@@ -1093,8 +1120,22 @@ produce a metric stream.
 
 If the user has provided attribute keys via View(s), those keys take precedence.
 If no View is configured, or if a matching view does not specify attribute keys,
-the advisory parameter should be used. If neither is provided, all attributes
-must be retained.
+the advisory parameter MUST be used (an empty list `[]` retains no attributes).
+If neither is provided, all attributes MUST be retained.
+
+#### Instrument advisory parameter: `OptIn`
+
+**Status**: [Development](../document-status.md)
+
+This advisory parameter applies to all aggregations.
+
+When an instrument has `OptIn=true`, the SDK MUST use the
+[Drop Aggregation](#drop-aggregation). If the user sets `enabled=true` on a
+View's [Stream configuration](#stream-configuration), this "enables" the
+instrument with the same behavior as-if the instrument was `OptIn=false`,
+including respecting other advisory parameters. Setting fields other than
+`enabled` on the View, including setting the `aggregation`, does not enable
+the instrument.
 
 ### Instrument enabled
 
@@ -1103,15 +1144,16 @@ when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
   of the `Meter` used to create the instrument has parameter `enabled=false`.
-- All [resolved views](#measurement-processing) for the instrument are
+- All [resulting streams](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
-Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.enabled=true` and instruments use the default
-aggregation when no matching views match the instrument.
+Note: If a user makes no configuration changes, `Enabled` returns `true` for
+instruments with `OptIn=false` (or unset), since by default
+`MeterConfig.enabled=true` and instruments use the default aggregation when no
+matching views match the instrument.
 
 ### Instrument bind
 
@@ -1155,7 +1197,8 @@ context to otherwise general aggregations. Exemplars allow correlation between
 aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
 just those that can also be derived from `Span`s. Exemplars also preserve
-attributes that are dropped during aggregation (e.g. by View configuration),
+attributes that are dropped during aggregation (e.g. by View configuration or
+the [`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)),
 regardless of instrument type (including asynchronous instruments).
 
 An [Exemplar](./data-model.md#exemplars) is a recorded
@@ -1282,8 +1325,9 @@ decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
-are not preserved by aggregation or view configuration for the associated
-timeseries. Joining together attributes on an `Exemplar` with
+are not preserved by aggregation, view configuration, or the
+[`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)
+for the associated timeseries. Joining together attributes on an `Exemplar` with
 those available on its associated metric data point should result in the
 full set of attributes from the original sample measurement.
 
@@ -1548,24 +1592,29 @@ Configurable parameters:
 * `exportIntervalMillis` - the time interval in milliseconds between two
   consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
-  The default value is 30000 (milliseconds).
-* **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
-  maximum number of metric data points in a batch that are provided to a single
-  export.
+  The default value is 30000 (milliseconds). When `maxExportBatchSize` is
+  configured and results in splitting the collected metric data into multiple
+  batches, `exportTimeoutMillis` applies to each individual `Export(batch)`
+  invocation.
+* `maxExportBatchSize` - the maximum number of metric data points in a batch
+  that are provided to a single export. The default is that the batch size is not
+  limited.
 
-**Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
-configured, the reader MUST ensure no batch provided to `Export` exceeds the
-`maxExportBatchSize` by splitting the batch of metric data points into smaller
-batches. The initial batch of metric data MUST be split into as many "full"
-batches of size `maxExportBatchSize` as possible -- even if this splits up data
-points that belong to the same metric into different batches. The reader MUST
-ensure all metric data points from a single `Collect()` are provided to
-`Export` before metric data points from a subsequent `Collect()` so that metric
-points are sent in-order. The reader MUST NOT combine metrics from different
-`Collect()` calls into the same batch provided to `Export`.
+When `maxExportBatchSize` is configured, the reader MUST ensure no batch
+provided to `Export` exceeds the `maxExportBatchSize` by splitting the batch of
+metric data points into smaller batches. The initial batch of metric data MUST
+be split into as many "full" batches of size `maxExportBatchSize` as possible --
+even if this splits up data points that belong to the same metric into different
+batches. The reader MUST ensure all batches produced from a single `Collect()`
+are provided to `Export` serially and in-order before metric data points from a
+subsequent `Collect()` are provided. The reader MUST NOT combine metrics from
+different `Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
-to make sure that they are not invoked concurrently.
+to make sure that they are not invoked concurrently. If an export is still in
+progress when the next scheduled interval occurs, the reader MUST either delay
+the subsequent collection and export until the in-progress export finishes, or
+skip the scheduled collection for that interval.
 
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
@@ -1588,7 +1637,7 @@ This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
 `ForceFlush` SHOULD collect metrics, split into batches if necessary, call
-[`Export(batch)`](#exportbatch) on each batch and
+[`Export(batch)`](#exportbatch) on each batch serially, and call
 [`ForceFlush()`](#forceflush-2) on the configured
 [Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
 [`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
@@ -1596,14 +1645,19 @@ SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
 [Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
-is an error condition; and if there is no error condition, it should return some
-**NO ERROR** status, language implementations MAY decide how to model **ERROR**
-and **NO ERROR**.
+failed or timed out. If any [`Export(batch)`](#exportbatch) call fails or times
+out, or if the configured exporter's [`ForceFlush()`](#forceflush-2) fails or
+times out, `ForceFlush` SHOULD return some **ERROR** status. If all calls
+succeed, `ForceFlush` SHOULD return some **NO ERROR** status. Language
+implementations MAY decide how to model **ERROR** and **NO ERROR**.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event.
+
+#### Shutdown
+
+`Shutdown` MUST include the effects of [`ForceFlush`](#forceflush-1).
 
 ## MetricExporter
 
@@ -1684,8 +1738,19 @@ information (e.g. name, version, etc.) associated with each `Metric Point`.
 `Export` should never be called concurrently with other `Export` calls for the
 same exporter instance.
 
-`Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (Failure).
+`Export` MUST NOT block indefinitely, except when performing synchronous
+output through an API that does not support deadlines or
+cancellation of a blocked write.
+
+In all other cases, there MUST be a reasonable finite upper limit after which
+the call times out with an error result (`Failure`).
+
+> [!NOTE]
+> For example, an exporter that writes synchronously to standard output or an
+> application-provided stream can use an output API that cannot safely interrupt
+> a blocked write. Bounding the caller's wait through background execution can
+> leave that write blocked and retaining resources after `Export` returns, or
+> allow output to complete after a timeout. These costs motivate this exception.
 
 Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required

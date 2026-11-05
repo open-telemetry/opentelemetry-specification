@@ -21,6 +21,11 @@ For details, see [CONTRIBUTING.md](CONTRIBUTING.md), in particular read
 
 ## Questions
 
+New to CNCF Slack? [Create an account](https://slack.cncf.io/) first, then join
+the
+[`#otel-specification`](https://cloud-native.slack.com/archives/C01N7PP1THC)
+channel for questions and discussion.
+
 Questions that need additional attention can be brought to the regular
 specifications meeting. EU and US timezone friendly meeting is held every
 Tuesday at 8 AM Pacific time. Meeting notes are held in the [Google
@@ -74,7 +79,7 @@ For more information about the maintainer role, see the [community repository](h
 
 [Specification sponsors](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#specification-sponsor) represent the approver role for the specification, along with additional responsibilities and privileges.
 
-- [Alex Boten](https://github.com/codeboten), Honeycomb
+- [Alex Boten](https://github.com/codeboten), Grafana Labs
 - [Christian Neumüller](https://github.com/Oberon00), Dynatrace
 - [Cijo Thomas](https://github.com/cijothomas), Microsoft
 - [Daniel Dyla](https://github.com/dyladan), Dynatrace

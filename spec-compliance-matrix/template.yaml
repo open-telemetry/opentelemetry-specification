@@ -101,6 +101,7 @@ sections:
           - name: RecordException with extra parameters
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
           - name: Allow samplers to modify tracestate
           - name: ShouldSample gets full parent Context
           - name: 'Sampler: JaegerRemoteSampler'
@@ -155,6 +156,7 @@ sections:
       - name: Instrument descriptions conform to the specified syntax.
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
       - name: Instrument supports the advisory Attributes parameter.
+      - name: Instrument supports the advisory OptIn parameter.
       - name: Synchronous instruments support Bind to pre-associate attributes.
         optional: true
       - name: All methods of `MeterProvider` are safe to be called concurrently.
@@ -266,8 +268,8 @@ sections:
       - name:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
-      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
-      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+      - name: '[Resource detector](specification/resource/sdk.md#resource-detector) interface/mechanism'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#resource-detector)'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -278,6 +280,7 @@ sections:
       - name: Get current Context
       - name: Composite Propagator
       - name: Global Propagator
+        optional: true
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator
@@ -322,6 +325,7 @@ sections:
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
       - name: OTEL_METRIC_EXPORT_INTERVAL
       - name: OTEL_METRIC_EXPORT_TIMEOUT
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
       - name: OTEL_METRICS_EXEMPLAR_FILTER
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION

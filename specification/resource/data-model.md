@@ -14,7 +14,8 @@ weight: 2
 
 - [Identity](#identity)
 - [Merging Resources](#merging-resources)
-  * [Merging Entities into a Resource](#merging-entities-into-a-resource)
+  * [Merging An Entity into a Resource](#merging-an-entity-into-a-resource)
+  * [Merging Resource Attributes into a Resource](#merging-resource-attributes-into-a-resource)
     + [Examples](#examples)
       - [Example 1: Entity replaces loose attribute](#example-1-entity-replaces-loose-attribute)
       - [Example 2: Loose attribute replaces entity attribute](#example-2-loose-attribute-replaces-entity-attribute)
@@ -70,34 +71,18 @@ context to include more details (see
 any identity that already existed on a Resource while adding in new identifying
 information or descriptive attributes.
 
-### Merging Entities into a Resource
+### Merging An Entity into a Resource
 
-We define the following algorithm for merging entities into an existing
-resource.
+We define the following algorithm for merging an Entity into an existing Resource where `e` is the incoming entity and `E` is the set of entities in the resource:
 
-- Construct a set of existing entities on the resource, `E`.
-  - For each entity, `new_entity`, in priority order (highest first),
-    do one of the following:
-    - If an entity `e` exists in `E` with the same entity type as `new_entity`:
-      - Perform an [Entity DataModel Merge](../entities/data-model.md#merging-of-entities) with `e` and `new_entity`
-      - Note: If unable to merge `e` and `new_entity`, then no change is made.
-    - Otherwise, add the entity `new_entity` to set `E`
-- Update the Resource to use the set of entities `E`.
-  - If all entities within `E` have the same `schema_url`, set the
-    resources `schema_url` to match.
-  - Otherwise set the Resource `schema_url` blank.
-  - Remove any attribute from `Attributes` which exists in either the
-    description or identity of an entity in `E`.
-- Solve for resource flattening issues (See
-  [Attribute Referencing Model](../entities/data-model.md#attribute-referencing-model)).
-  - If, for all entities, there are no overlapping attribute keys, then nothing
-    is needed.
-  - If there is a conflict where two entities use the same attribute key then
-    remove the lower priority entity from the Resource.
+* If `E` contains an entity `e'` that can be merged (equal `type`, `identity`, and `schema_url`) with `e`, apply the [`entity merge algorithm`](../entities/data-model.md#merging-of-entities).
+* Else if `E` contains an entity `e'` with equal `type` that cannot be merged (unequal `identity` or `schema_url`), drop `e'` from `E` including all of its attributes and replace it with incoming entity `e`
+* Else insert incoming entity `e` into `E`, overwriting any existing attributes.
+* If, at any time, an entity being inserted or merged overwrites any attribute, identifying or descriptive, from a pre-existing Entity `e'`, drop `e'`'s `EntityRef`, retaining its other attributes as unassociated attributes.
 
-**Note**: Priority of entity merging is generally chosen implicitly by user
-configuration, e.g. the order of Resource Detectors configured for an SDK
-implicitly create an order of priority for merging entities.
+### Merging Resource Attributes into a Resource
+
+When merging a set of attributes into a Resource, the incoming attributes overwrite existing attributes. If any attribute being overwritten is a part of an Entity, the Entity is removed and all non-conflicting attributes of that entity are added to the Resource as unassociated attributes.
 
 #### Examples
 
@@ -145,7 +130,7 @@ The conflict between loose attributes and those belonging to an entity. Here whe
 
 ##### Example 2: Loose attribute replaces entity attribute
 
-The conflict between loose attributes and those belonging to an entity. Here when the loose attribute is added, the entity must be removed due to conflict.
+The conflict between loose attributes and those belonging to an entity. Here when the loose attribute is added, the entity must be removed due to conflict. The removed entity's other attributes are preserved as raw attributes.
 
 **Initial Resource:**
 
@@ -178,11 +163,12 @@ The conflict between loose attributes and those belonging to an entity. Here whe
       - `process.pid`: `12345`
 - Attributes:
   - `host.id`: `"h2"`
+  - `host.name`: `"detected-name"`
   - `env`: `"prod"`
 
 ##### Example 3: Identity & Attribute Conflicts
 
-Reject an entity with a different identity of the same type, and drop a lower priority entity due to an attribute key conflict.
+Replace an existing entity that has the same type but a different identity, and drop a conflicting entity's `EntityRef` due to a descriptive attribute key conflict, retaining its remaining attributes as unassociated.
 
 **Initial Resource:**
 
@@ -190,23 +176,23 @@ Reject an entity with a different identity of the same type, and drop a lower pr
   - `host`
     - type: `"host"`
     - identity:
-      - `host.id`: `"H1"`
+      - `host.id`: `"H2"`
+  - `service`
+    - type: `"service"`
+    - identity:
+      - `service.name`: `"S1"`
     - description:
-      - `env`: `"prod"`
+      - `env`: `"dev"`
 - Attributes: *None*
 
-**Entities to Merge (by priority):**
+**Entity to Merge:**
 
-1. `host`
-   - type: `"host"`
-   - identity:
-     - `host.id`: `"H2"`
-2. `service`
-   - type: `"service"`
-   - identity:
-     - `service.name`: `"S1"`
-   - description:
-     - `env`: `"dev"`
+- `host`
+  - type: `"host"`
+  - identity:
+    - `host.id`: `"H1"`
+  - description:
+    - `env`: `"prod"`
 
 **Resulting Resource:**
 
@@ -217,4 +203,5 @@ Reject an entity with a different identity of the same type, and drop a lower pr
       - `host.id`: `"H1"`
     - description:
       - `env`: `"prod"`
-- Attributes: *None*
+- Attributes:
+  - `service.name`: `"S1"`
