@@ -35,6 +35,9 @@ release.
 - Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+- Specify how to resolve conflicting `target` info metrics when multiple
+  resources map to the same `job` and `instance` labels.
+  ([#5408](https://github.com/open-telemetry/opentelemetry-specification/pull/5408))
 
 ### SDK Configuration
 
