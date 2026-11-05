@@ -76,6 +76,7 @@ release.
   ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
 
 ### OTEPs
+
 - Explicitly permit tightening runtime or dependency version requirements to
   address an identified security risk, including risks from loss of security
   maintenance.
