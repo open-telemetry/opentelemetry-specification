@@ -573,7 +573,8 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
     `PositiveDeltas` MUST be left empty.
 - If the `NoRecordedValue` flag is set to `false`:
   - `Count` is converted to Native Histogram `Count`.
-  - `Sum` is converted to the Native Histogram `Sum`.
+  - `Sum`, if set, is converted to the Native Histogram `Sum`; otherwise, the
+    metric point MUST be dropped.
   - The dense `BucketCounts` are converted into the
     [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
     in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative

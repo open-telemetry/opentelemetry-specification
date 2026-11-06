@@ -416,17 +416,18 @@ The SDK MUST accept the following stream configuration parameters:
 
   > [!NOTE]
   > An attribute key removed from the metric stream by View configuration
-  > (for example, to remove an attribute containing sensitive data) may
-  > still be exported on Exemplars as a *filtered attribute*. If this is
+  > or the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
+  > parameter (for example, to remove an attribute containing sensitive data)
+  > may still be exported on Exemplars as a *filtered attribute*. If this is
   > not desired, Exemplars can be disabled by configuring the `AlwaysOff`
   > `ExemplarFilter`, or a custom `ExemplarFilter` / `ExemplarReservoir`
   > can be configured to control which measurements are sampled as
   > Exemplars.
 
   SDK documentation SHOULD inform users that attributes excluded from a
-  metric stream by View configuration may still be exported on Exemplars
-  as filtered attributes, and describe how to disable or otherwise
-  configure Exemplar sampling.
+  metric stream by View configuration or the `Attributes` advisory parameter
+  may still be exported on Exemplars as filtered attributes, and describe how
+  to disable or otherwise configure Exemplar sampling.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
@@ -1119,8 +1120,8 @@ produce a metric stream.
 
 If the user has provided attribute keys via View(s), those keys take precedence.
 If no View is configured, or if a matching view does not specify attribute keys,
-the advisory parameter should be used. If neither is provided, all attributes
-must be retained.
+the advisory parameter MUST be used (an empty list `[]` retains no attributes).
+If neither is provided, all attributes MUST be retained.
 
 #### Instrument advisory parameter: `OptIn`
 
@@ -1196,7 +1197,8 @@ context to otherwise general aggregations. Exemplars allow correlation between
 aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
 just those that can also be derived from `Span`s. Exemplars also preserve
-attributes that are dropped during aggregation (e.g. by View configuration),
+attributes that are dropped during aggregation (e.g. by View configuration or
+the [`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)),
 regardless of instrument type (including asynchronous instruments).
 
 An [Exemplar](./data-model.md#exemplars) is a recorded
@@ -1323,8 +1325,9 @@ decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
-are not preserved by aggregation or view configuration for the associated
-timeseries. Joining together attributes on an `Exemplar` with
+are not preserved by aggregation, view configuration, or the
+[`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)
+for the associated timeseries. Joining together attributes on an `Exemplar` with
 those available on its associated metric data point should result in the
 full set of attributes from the original sample measurement.
 

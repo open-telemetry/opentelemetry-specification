@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Mark "Environment Variables as Context Propagation Carriers" as Stable.
+  ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
+
 ### Traces
 
 - Allow an exception to the finite upper bound for exporter `Export` calls only
@@ -17,6 +20,11 @@ release.
 
 ### Metrics
 
+- Clarify that `Exemplar`s retain measurement attributes filtered out by the
+  `Attributes` instrument advisory parameter.
+  ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
+- Clarify that the `Attributes` metric instrument advisory parameter acts as a recommended allow-list of attribute keys to be retained, and that an empty list retains no attributes.
+  ([#5391](https://github.com/open-telemetry/opentelemetry-specification/pull/5391))
 - Add the OptIn advisory parameter and enabled View stream parameter.
   ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
@@ -28,6 +36,9 @@ release.
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Extend the ETW example mapping with the optional `etw.provider.name`
+  attribute and describe its availability.
+  ([#5363](https://github.com/open-telemetry/opentelemetry-specification/pull/5363))
 
 ### Baggage
 
@@ -43,9 +54,29 @@ release.
 
 ### Compatibility
 
+- Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
+  Histogram transformation.
+  ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
+- Clarify that the identifying resource attributes `service.name`,
+  `service.namespace`, and `service.instance.id` should be converted to the
+  Prometheus `target` info metric along with all other resource attributes.
+  ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
+- Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+
 ### SDK Configuration
 
+- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
+  exporting MetricReader.
+  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
+
 ### Supplementary Guidelines
+
+- Explicitly permit tightening runtime or dependency version requirements to
+  address an identified security risk, including risks from loss of security
+  maintenance.
+  ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
 
 ### OTEPs
 
@@ -67,8 +98,6 @@ release.
 
 ### Logs
 
-- Extend the ETW example mapping with the optional `etw.provider.name`
-  attribute and describe its availability.
 - Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
   ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
 
@@ -103,13 +132,6 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
-- Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
-  with standard (exponential) schema transformation.
-  ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
-- Clarify that the identifying resource attributes `service.name`,
-  `service.namespace`, and `service.instance.id` should be converted to the
-  Prometheus `target` info metric along with all other resource attributes.
-  ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
 
 ### SDK Configuration
 
@@ -117,9 +139,6 @@ release.
   resource detectors. Other SDK plugin components continue to produce errors
   when missing.
   ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
-- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
-  exporting MetricReader.
-  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
 
