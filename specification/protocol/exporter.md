@@ -191,6 +191,56 @@ release).
 
 The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXPORTER_OTLP_METRICS_HEADERS`, `OTEL_EXPORTER_OTLP_LOGS_HEADERS` environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content) i.e., `key1=value1,key2=value2`. [Semi-colon delimited metadata](https://www.w3.org/TR/baggage/#property) is not supported. All attribute values MUST be considered strings.
 
+### Proxy
+
+**Status**: [Development](../document-status.md)
+
+OTLP exporters SHOULD support sending requests through an HTTP forward proxy
+using the following configuration options. These options have no corresponding
+environment variables. When supported, they are available only through
+[declarative configuration](../configuration/README.md#declarative-configuration)
+and programmatic configuration.
+
+- **Proxy URL**: URL of an HTTP forward proxy through which the exporter sends
+  all requests. The scheme of the URL MUST be `http` or `https`. Support for
+  the `https` scheme, which indicates a TLS connection between the exporter and
+  the proxy, is OPTIONAL. The implementation MUST honor the scheme, host, and
+  port.
+  The implementation SHOULD reject a Proxy URL that contains a
+  [userinfo](https://datatracker.ietf.org/doc/html/rfc3986#section-3.2.1)
+  component; credentials are supplied through Proxy Username and Proxy Password.
+  - Default: n/a (no proxy is used)
+  - Type: [String][]
+
+- **Proxy Username**: Username for
+  [Basic authentication](https://datatracker.ietf.org/doc/html/rfc7617) to the
+  proxy. Only applies when Proxy URL is set.
+  - Default: n/a
+  - Type: [String][]
+
+- **Proxy Password**: Password for
+  [Basic authentication](https://datatracker.ietf.org/doc/html/rfc7617) to the
+  proxy. Only applies when Proxy URL is set. A configuration that sets Proxy
+  Username without Proxy Password, or Proxy Password without Proxy Username, is
+  invalid.
+  - Default: n/a
+  - Type: [String][]
+
+When Proxy URL is set, the exporter MUST send all requests through the proxy.
+
+If the implementation does not support the configured Proxy URL (for example,
+the Proxy URL uses the `https` scheme and support for it is not implemented),
+it SHOULD report an error rather than send requests without the proxy.
+
+When Proxy URL is not set, the exporter SHOULD connect directly to the
+endpoint and SHOULD NOT use a proxy configured by ambient settings, such as the
+`HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables or proxy
+settings of the platform or language runtime. Depending on the language and the
+HTTP or gRPC client, honoring this may require the implementation to explicitly
+disable the client's default proxy detection. This ensures that whether
+exporter traffic goes through a proxy is determined by the exporter
+configuration alone, and not by the environment in which the exporter runs.
+
 ## Retry
 
 Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
