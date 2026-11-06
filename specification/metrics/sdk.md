@@ -1110,7 +1110,7 @@ apply.
 
 #### Instrument advisory parameter: `Attributes`
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 This advisory parameter applies to all aggregations.
 
