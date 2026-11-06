@@ -52,6 +52,10 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add Proxy URL, Proxy Username, and Proxy Password configuration options to
+  the OTLP exporter.
+  ([#5380](https://github.com/open-telemetry/opentelemetry-specification/issues/5380))
+
 ### Compatibility
 
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus

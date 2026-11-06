@@ -113,5 +113,6 @@ words:
   - uprobes # linux feature: https://www.brendangregg.com/blog/2015-06-28/linux-ftrace-uprobe.html
   - Parca # company: https://www.parca.dev/
   - unsuffixed
+  - userinfo # URL component: https://datatracker.ietf.org/doc/html/rfc3986#section-3.2.1
   - cijothomas
   - martincostello
