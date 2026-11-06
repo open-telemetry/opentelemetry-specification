@@ -54,6 +54,9 @@ release.
 
 ### Compatibility
 
+- Stabilize the Pull Metric Exporter section of the Prometheus Metrics Exporter
+  specification.
+  ([#5413](https://github.com/open-telemetry/opentelemetry-specification/pull/5413))
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
   Histogram transformation.
   ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
