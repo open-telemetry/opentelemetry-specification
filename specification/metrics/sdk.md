@@ -531,7 +531,15 @@ made with an Instrument:
       `aggregation` (including internal properties such as bucket boundaries or
       max buckets) are treated as a single atomic unit and are not merged across
       Views.
-    * For `attribute_keys`, merge the Views in the group by combining their attribute filters using logical AND: an attribute key is preserved if it is included in all specified allow-lists (if any) and not excluded by any specified exclude-lists.
+    * For `attribute_keys`, merge the Views in the group that specify
+      `attribute_keys` by combining their attribute filters using logical AND:
+      an attribute key is preserved if it is included in all specified
+      allow-lists (if any) and not excluded by any specified exclude-lists. If
+      any View in the group specifies `attribute_keys`, the merged attribute
+      filter takes precedence over (replaces) the Instrument's
+      [`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)
+      rather than combining with it; if no View in the group specifies
+      `attribute_keys`, the `Attributes` advisory parameter MUST be used.
     * For each resulting stream:
       * If a setting selected for the stream would produce semantic errors, the
         implementation SHOULD emit a warning and use the next valid setting for
@@ -1118,10 +1126,12 @@ This advisory parameter applies to all aggregations.
 specifies the recommended set of attribute keys for measurements aggregated to
 produce a metric stream.
 
-If the user has provided attribute keys via View(s), those keys take precedence.
-If no View is configured, or if a matching view does not specify attribute keys,
-the advisory parameter MUST be used (an empty list `[]` retains no attributes).
-If neither is provided, all attributes MUST be retained.
+If the user has provided attribute keys via matching View(s) for a resulting
+stream, the View configuration takes precedence (replacing the advisory
+parameter rather than combining with it). If no View matches, or if no matching
+View for the resulting stream specifies attribute keys, the advisory parameter
+MUST be used (an empty list `[]` retains no attributes). If neither is provided,
+all attributes MUST be retained.
 
 #### Instrument advisory parameter: `OptIn`
 

@@ -20,6 +20,10 @@ release.
 
 ### Metrics
 
+- Clarify that in `composable` View matching mode, View `attribute_keys` filters
+  replace the Instrument's `Attributes` advisory parameter rather than combining
+  with it via logical AND.
+  ([#5414](https://github.com/open-telemetry/opentelemetry-specification/pull/5414))
 - Clarify that `Exemplar`s retain measurement attributes filtered out by the
   `Attributes` instrument advisory parameter.
   ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
