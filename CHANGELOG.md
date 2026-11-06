@@ -20,6 +20,9 @@ release.
 
 ### Metrics
 
+- Define the `included` and `excluded` pattern matching configuration surface
+  for promoting resource attributes as Prometheus metric labels.
+  ([#5417](https://github.com/open-telemetry/opentelemetry-specification/pull/5417))
 - Clarify that `Exemplar`s retain measurement attributes filtered out by the
   `Attributes` instrument advisory parameter.
   ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
