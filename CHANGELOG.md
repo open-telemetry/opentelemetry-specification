@@ -44,6 +44,12 @@ release.
 
 ### Profiles
 
+- Document well-known values for `Profile.sample_type` and `Profile.period_type`,
+  clarifying that the fields remain openly defined while producers SHOULD use
+  the listed `(type, unit)` pairs for interoperability with existing profiling
+  tools.
+  ([#794](https://github.com/open-telemetry/opentelemetry-proto/issues/794))
+
 ### Resource
 
 ### Entities
