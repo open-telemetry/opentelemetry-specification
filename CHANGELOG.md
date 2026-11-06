@@ -54,6 +54,9 @@ release.
 
 ### Compatibility
 
+- Specify how to resolve conflicting `target` info metrics when multiple
+  resources map to the same `job` and `instance` labels.
+  ([#5408](https://github.com/open-telemetry/opentelemetry-specification/pull/5408))
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
   Histogram transformation.
   ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))

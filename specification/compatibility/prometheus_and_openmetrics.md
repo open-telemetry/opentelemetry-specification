@@ -782,8 +782,13 @@ All resource attributes SHOULD be converted to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
-other labels except `job` and `instance`.  There MUST be at most one
-`target` info metric exported for each unique combination of `job` and `instance`.
+other labels except `job` and `instance`. Within a single Prometheus scrape or
+OTLP batch, there MUST be at most one `target` info metric exported for each
+unique combination of `job` and `instance`: if multiple resources map to the
+same `job` and `instance`, converters MUST keep the `target` info metric for the
+resource with the most recent metric timestamp (or the last-seen resource if
+timestamps are equal). Stateless push converters are only expected to enforce
+this per batch.
 
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
