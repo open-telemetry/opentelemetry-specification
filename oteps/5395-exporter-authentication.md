@@ -334,10 +334,12 @@ interfaces** (which are left to each SDK).
    ([opentelemetry-configuration#640](https://github.com/open-telemetry/opentelemetry-configuration/issues/640))**:
    Deferred in favor of inline `authenticator/development:` on each exporter,
    which matches how `opentelemetry-configuration` models all other SDK plugin
-   components (`sampler`, `span_exporter`, `resource_detector`) today. If
+   components (`sampler`, `span_exporter`, `resource_detector`) today. While
+   YAML anchors can avoid duplicating configuration across multiple exporters,
+   they cannot share the same underlying `Authenticator` instance. If
    `opentelemetry-configuration` introduces a top-level `extensions:` mechanism
-   for shared components in the future, `authenticator` configuration can adopt
-   that pattern.
+   for shared component instances in the future, `authenticator` configuration
+   can adopt that pattern.
 
 ## Future possibilities
 
