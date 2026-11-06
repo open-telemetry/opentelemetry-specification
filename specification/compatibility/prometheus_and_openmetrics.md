@@ -521,8 +521,10 @@ When converting to a Prometheus Histogram, an OpenTelemetry Histogram MUST
 be converted following the rules below:
 
 - `Count` is converted to the Histogram `Count`.
-- `Sum` is converted to the Histogram `Sum`. The sum is positive and monotonic
-  when all observations in the histogram are positive or zero.
+- `Sum`, if set, is converted to the Histogram `Sum`. The sum is positive and monotonic
+  when all observations in the histogram are positive or zero. When the `Sum` is
+  not set and the output protocol requires the existence of `Sum`, then the data
+  point MUST be dropped, otherwise the `Sum` MUST be omitted.
 - The bucket boundaries in `ExplicitBounds` plus the implicit `+Inf` boundary
   and the `BucketCounts` are converted to Histogram `Buckets` in ascending order
   of the `ExplicitBounds` value. For each bucket the explicit bound is
