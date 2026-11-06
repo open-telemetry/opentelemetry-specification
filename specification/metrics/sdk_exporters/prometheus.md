@@ -129,7 +129,7 @@ the [default aggregation](../sdk.md#default-aggregation) by default.
 
 ### Resource Attributes as Metric Labels
 
-**Status**: [Stable](../../document-status.md)
+**Status**: [Stable](../../document-status.md), except where otherwise specified.
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
 By default, it MUST NOT add any resource attributes as metric labels.
@@ -137,6 +137,13 @@ The configuration SHOULD allow the user to select resource attributes to
 [include or exclude](https://opentelemetry.io/docs/specs/otel-config/types/#type-experimentalprometheusmetricexporter).
 Copied Resource attributes MUST NOT be excluded from the `target_info` metric.
 The option MAY be named `resource_constant_labels`.
+
+**Status**: [Development](../../document-status.md) - When offered, the configuration SHOULD allow selecting resource attributes by their OpenTelemetry attribute keys (prior to Prometheus label name conversion) using non-empty `included` and `excluded` lists of case-sensitive patterns (matching [`IncludeExclude`](https://opentelemetry.io/docs/specs/otel-config/types/#type-includeexclude)), or, in programmatic APIs, a filter predicate capable of expressing equivalent selection rules. When `included` and `excluded` pattern lists are used:
+
+- Each pattern MUST match if the attribute key is an exact match or matches a wildcard pattern where `?` matches any single character and `*` matches any number of characters including none.
+- When `included` is non-empty, resource attributes matching at least one pattern in `included` and no pattern in `excluded` MUST be added as metric labels; all other resource attributes MUST NOT be added.
+- When `included` is omitted or empty and `excluded` is non-empty, resource attributes matching at least one pattern in `excluded` MUST NOT be added as metric labels; all other resource attributes MUST be added.
+- When both `included` and `excluded` are omitted or empty, resource attributes MUST NOT be added as metric labels.
 
 ### Translation Strategy
 
