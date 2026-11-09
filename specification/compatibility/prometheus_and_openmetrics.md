@@ -447,14 +447,13 @@ Otherwise `service.instance.id` MUST be set to the value of the `instance`
 label.
 
 The following attributes SHOULD be associated with scraped metrics as resource
-attributes, and MUST NOT be added as metric
-attributes:
+attributes, and MUST NOT be added as metric attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
-| `server.address` | The `<host>` portion of the `instance` unless it is localhost, a loopback address, or an unspecified address |
-| `server.port` | The `<port>` portion of the `instance` |
-| `url.scheme` | `http` or `https` from the `__scheme__` label on the scrape target before relabelling |
+| `server.address` | The `<host>` portion of the `__address__` label of the scrape target after relabeling, unless it is localhost, a loopback address, or an unspecified address |
+| `server.port` | The `<port>` portion of the `__address__` label of the scrape target after relabeling, if present |
+| `url.scheme` | `http` or `https` from the `__scheme__` label of the scrape target after relabeling |
 
 Further attributes (such as from K8s service discovery metadata labels) MAY be
 added to the resource attributes.
