@@ -78,7 +78,7 @@ formats is required. Implementing more than one format is optional.
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  | - |  |  |
+| [Sampler.Shutdown](specification/trace/sdk.md#shutdown-1) |  |  | + |  |  |  |  |  |  |  | + |  |  |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  | - |  | - |
@@ -191,7 +191,7 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  | - |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  | - |
 | Metric SDK supports per-timeseries cumulative start timestamps |  |  | + |  | + |  |  |  |  |  | - |  | - |
-| The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | + | + | + | - | - | - | - | - | - | - | - | - |
+| The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | + | + | + | - | - | - | - | - | - | + | - | - |
 
 ## Logs
 
@@ -287,7 +287,7 @@ Note: Support for environment variables is optional.
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | + |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | + | + |  | - |
 | OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | + | + |  | - |
-| OTEL_METRIC_EXPORT_MAX_BATCH_SIZE | - | - | - | - | - | - | - | - | - | - | - | - |
+| OTEL_METRIC_EXPORT_MAX_BATCH_SIZE | - | - | - | - | - | - | - | - | - | + | - | - |
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
