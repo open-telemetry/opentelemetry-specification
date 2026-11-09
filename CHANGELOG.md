@@ -20,6 +20,9 @@ release.
 
 ### Metrics
 
+- Add `Finish` operation to synchronous instruments to stop reporting matching
+  timeseries and release their internal SDK storage after final collection.
+  ([#5422](https://github.com/open-telemetry/opentelemetry-specification/pull/5422))
 - Clarify that `Exemplar`s retain measurement attributes filtered out by the
   `Attributes` instrument advisory parameter.
   ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
