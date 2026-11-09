@@ -132,6 +132,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  | - |  | - |
 | Instrument supports the advisory OptIn parameter. |  | - | - | - | - | - | - | - | - | - | - | - | - |
 | Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | + | + | - | - | - |
+| Synchronous instruments support Finish to stop reporting timeseries. | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |

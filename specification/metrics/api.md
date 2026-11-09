@@ -33,6 +33,7 @@ weight: 1
   * [General operations](#general-operations)
     + [Enabled](#enabled)
     + [Bind](#bind)
+    + [Finish](#finish)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -489,6 +490,7 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* (**Development**) [Finish reporting timeseries](#finish)
 
 All [synchronous instruments](#synchronous-instrument-api) MAY provide:
 
@@ -547,6 +549,12 @@ the existing instrument interface. If the existing instrument interface is reuse
 recording operations on the returned bound instrument negates the performance benefits
 of binding.
 
+If a bound instrument exposes [`Finish`](#finish) (for example, when the existing
+instrument interface is reused), calling `Finish` on it MUST behave identically to
+calling `Finish` on the unbound instrument with the bound attributes combined with
+any additional attributes provided to the call (with call-time attributes taking
+precedence on duplicate keys).
+
 Measurements recorded on the bound instrument can be associated with the
 [Context](../context/README.md).
 
@@ -565,6 +573,62 @@ var face6 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 6L));
 
 face1.add(1);
 face6.add(1);
+```
+
+#### Finish
+
+**Status**: [Development](../document-status.md)
+
+The `Finish` API marks one or more timeseries associated with a
+[synchronous instrument](#synchronous-instrument-api) as finished, indicating
+that no further measurements are expected for the matching attribute set(s) so
+that implementations can report any remaining aggregated data and release
+internal state associated with those timeseries.
+
+This API MUST be documented to communicate to users:
+
+* Call `Finish` when attribute values identify bounded-lifecycle entities whose
+  end of life is known to the caller (for example, closing a database connection
+  pool, releasing a queue partition, or deleting a container or pod).
+* Do not call `Finish` for bounded-cardinality attributes computed at recording
+  time without an explicit lifecycle (for example, rare HTTP response status
+  codes), where continuing to report cumulative timeseries allows consumers to
+  observe a zero rate of change rather than a disappearing series.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to match against active timeseries
+  on the instrument using subset matching: a timeseries matches if its attribute
+  set contains every provided key-value pair (after deduplicating any duplicate
+  keys using the same semantics as recording operations).
+
+  Users can provide a subset of attributes to finish all matching timeseries
+  without tracking every combination of dynamic attributes recorded, or omit
+  attributes to finish all timeseries recorded on the instrument. Therefore,
+  this API MUST be structured to accept a variable number of attributes,
+  including none.
+
+[OpenTelemetry API](../overview.md#api) authors MAY decide the
+language-idiomatic way to accept attributes (for example, variadic key-value
+pairs, an attribute set/map, or option parameters).
+
+Here is an example that [OpenTelemetry API](../overview.md#api) authors might
+consider:
+
+```python
+# Python
+
+# Finish all timeseries where pool.name is "checkout-db":
+counter.finish({"pool.name": "checkout-db"})
+
+# Finish timeseries containing both pool.name and error.type:
+counter.finish({"pool.name": "checkout-db", "error.type": "timeout"})
+
+# Finish all timeseries on the instrument:
+counter.finish()
 ```
 
 ### Counter

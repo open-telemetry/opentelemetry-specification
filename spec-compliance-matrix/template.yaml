@@ -159,6 +159,8 @@ sections:
       - name: Instrument supports the advisory OptIn parameter.
       - name: Synchronous instruments support Bind to pre-associate attributes.
         optional: true
+      - name: Synchronous instruments support Finish to stop reporting timeseries.
+        optional: true
       - name: All methods of `MeterProvider` are safe to be called concurrently.
       - name: All methods of `Meter` are safe to be called concurrently.
       - name: All methods of any instrument are safe to be called concurrently.
