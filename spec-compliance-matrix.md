@@ -38,7 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  | + |  |  |  |  |  | - |  | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - | + |  | + |  |  |  |  |  | + |  | + |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -287,6 +287,7 @@ Note: Support for environment variables is optional.
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | + |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | + | + |  | - |
 | OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | + | + |  | - |
+| OTEL_METRIC_EXPORT_MAX_BATCH_SIZE | - | - | - | - | - | - | - | - | - | - | - | - |
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |

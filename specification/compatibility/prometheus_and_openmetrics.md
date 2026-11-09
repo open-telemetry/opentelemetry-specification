@@ -605,8 +605,10 @@ When converting to a Prometheus Histogram, an OpenTelemetry Histogram MUST
 be converted following the rules below:
 
 - `Count` is converted to the Histogram `Count`.
-- `Sum` is converted to the Histogram `Sum`. The sum is positive and monotonic
-  when all observations in the histogram are positive or zero.
+- `Sum`, if set, is converted to the Histogram `Sum`. The sum is positive and monotonic
+  when all observations in the histogram are positive or zero. When the `Sum` is
+  not set and the output protocol requires the existence of `Sum`, then the data
+  point MUST be dropped, otherwise the `Sum` MUST be omitted.
 - The bucket boundaries in `ExplicitBounds` plus the implicit `+Inf` boundary
   and the `BucketCounts` are converted to Histogram `Buckets` in ascending order
   of the `ExplicitBounds` value. For each bucket the explicit bound is
@@ -657,7 +659,8 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
     `PositiveDeltas` MUST be left empty.
 - If the `NoRecordedValue` flag is set to `false`:
   - `Count` is converted to Native Histogram `Count`.
-  - `Sum` is converted to the Native Histogram `Sum`.
+  - `Sum`, if set, is converted to the Native Histogram `Sum`; otherwise, the
+    metric point MUST be dropped.
   - The dense `BucketCounts` are converted into the
     [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
     in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative
@@ -858,11 +861,12 @@ attributes MUST be combined as `<service.namespace>/<service.name>`, or
 `<service.name>` if namespace is empty, to form the `job` metric label.  The
 `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
-Other resource attributes SHOULD be converted to a
+
+All resource attributes SHOULD be converted to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
-other labels other than `job` and `instance`.  There MUST be at most one
+other labels except `job` and `instance`.  There MUST be at most one
 `target` info metric exported for each unique combination of `job` and `instance`.
 
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
