@@ -463,8 +463,9 @@ added to the resource attributes.
 **Status**: [Development](../document-status.md)
 
 When receiving metrics over Prometheus Remote Write, a missing `job` or
-`instance` label MUST be treated as an empty strings when creating a new
-resource for the metrics.
+`instance` label MUST be treated as the empty string. Metrics MUST be grouped
+into one resource per distinct `job` and `instance` pair, including pairs
+where one or both values are the empty string.
 
 For each resource the `service.name` attribute MUST be set to the
 `service.name` label in `target` info metric, if that label exists in the
