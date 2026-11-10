@@ -159,7 +159,7 @@ Injector tools MUST NOT enable an injectable distribution by default unless they
 
 When an injector tool declines to activate a distribution, or a distribution disables instrumentation because of incompatibility, it SHOULD emit actionable diagnostics explaining why.
 
-Injectable distributions SHOULD support [declarative configuration](configuration/README.md#declarative-configuration). This enables users to configure OpenTelemetry SDKs and instrumentation in a standard way across polyglot environments. Note: declarative configuration support is a prerequisite for inclusion in the [OpenTelemetry System Packages] project.
+Injectable distributions SHOULD support [declarative configuration](configuration/README.md#declarative-configuration). This enables users to configure OpenTelemetry SDKs and instrumentation in a standard way across polyglot environments. Note that declarative configuration support is a prerequisite for inclusion in the [OpenTelemetry System Packages] project.
 
 #### Guidance for injection mechanism contracts
 
