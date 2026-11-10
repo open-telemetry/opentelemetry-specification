@@ -1,6 +1,6 @@
 # Environment Variables as Context Propagation Carriers
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -15,6 +15,11 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
 - [Implementation Guidelines](#implementation-guidelines)
+- [Instrumentation Guidelines](#instrumentation-guidelines)
+  * [Configuration and Defaults](#configuration-and-defaults)
+  * [Incoming Context](#incoming-context)
+  * [Child Process Injection](#child-process-injection)
+  * [Manual Propagation](#manual-propagation)
 
 <!-- END doctoc -->
 
@@ -105,6 +110,8 @@ that name normalizes to `X_B3_TRACEID`.
 > if a Windows process environment contains `traceparent`, reading the
 > normalized key `TRACEPARENT` may return the value of `traceparent`.
 
+<!-- -->
+
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
 > defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
@@ -136,8 +143,8 @@ When spawning child processes:
 - For multiple child processes with different contexts or baggage, separate
   environment variable copies keep the appropriate information isolated per
   child process.
-- Application code remains responsible for receiving context from the SDK and
-  passing it to the application's process spawning mechanism.
+- Application code or instrumentation remains responsible for receiving context
+  from the SDK and passing it to the application's process spawning mechanism.
 
 #### Security
 
@@ -175,6 +182,81 @@ Example implementations:
 - [OpenTelemetry JavaScript implementation][jsi]
 - [OpenTelemetry Python implementation][pi]
 - [OpenTelemetry Swift implementation][si]
+
+## Instrumentation Guidelines
+
+**Status**: [Alpha](../document-status.md)
+
+> [!IMPORTANT]
+> This section is non-normative and adds no specification requirements.
+
+Agents, framework integrations, test runners, and wrappers can automate context
+propagation through environment variables. Instrumentation identifies the
+command, job, or test invocation that receives context and intercepts supported
+child process launches. SDK initialization alone does not define these
+boundaries.
+
+Extraction and injection use the
+[configured propagators](api-propagators.md#global-propagators) and
+[key name normalization](#key-name-normalization).
+
+### Configuration and Defaults
+
+Recommended defaults for enabled process instrumentation are incoming context
+in `parent` mode and child-process injection enabled, with separate controls
+to disable either direction.
+
+Settings belong to the instrumentation and can be technology-specific.
+This guidance defines no new SDK properties or portable option names.
+Instrumentation documentation describes its supported modes and controls,
+invocation boundaries, precedence for application-provided context and
+explicitly supplied child fields, unsupported launch mechanisms, and behavior
+without a valid current span.
+
+### Incoming Context
+
+Treat the environment as [startup input](#environment-variable-immutability)
+and retain extracted context for the invocation it describes.
+
+Incoming context can be handled in three modes:
+
+- **`parent` (default):** Use the extracted context as the invocation span's
+  remote parent, continuing the incoming trace. An explicit application
+  parent/root choice or an existing current span takes precedence.
+- **`link`:** Add the extracted span context as a link to the invocation span,
+  preserving the selected parent or root. This records the relationship without
+  requiring the invocation to join the incoming trace.
+- **`off`:** Do not automatically extract context or baggage from the
+  environment. Child-process injection is controlled separately.
+
+Supply the parent or link at
+[span creation](../trace/api.md#span-creation), before sampling, preserving the
+extracted span context's remote status, trace flags, and trace state.
+
+When instrumentation creates an invocation span, scope its active context to
+the operation's full lifetime, including asynchronous work, and restore the
+previous context afterward.
+Avoid applying startup context to unrelated future requests in long-running
+processes. Baggage follows normal context inheritance and application updates;
+reapplying startup baggage can overwrite later changes.
+
+### Child Process Injection
+
+At each supported application-initiated launch, copy the environment the
+application would pass to the child. Inject current context and baggage into
+that copy, preserving the parent environment and caller-owned launch settings.
+
+Before injecting, remove inherited fields identified by the configured
+propagators' [Fields](api-propagators.md#fields), using normalized names.
+This also prevents stale values when injection omits fields.
+Apply the documented precedence when clearing or replacing explicitly
+supplied child fields.
+
+### Manual Propagation
+
+Application code can use the same invocation and child-environment guidance for
+manual propagation, as shown in the
+[Go examples](https://pkg.go.dev/go.opentelemetry.io/contrib/propagators/envcar).
 
 [di]: https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/Context/Propagation/EnvironmentVariableCarrier.cs
 [ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
