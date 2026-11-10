@@ -110,8 +110,6 @@ that name normalizes to `X_B3_TRACEID`.
 > if a Windows process environment contains `traceparent`, reading the
 > normalized key `TRACEPARENT` may return the value of `traceparent`.
 
-<!-- -->
-
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
 > defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
