@@ -57,6 +57,7 @@ weight: 3
     + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
   * [Instrument enabled](#instrument-enabled)
   * [Instrument bind](#instrument-bind)
+  * [Instrument finish](#instrument-finish)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -890,8 +891,9 @@ timestamp.
 
 Cumulative timeseries MUST use a consistent start timestamp for all collection
 intervals while the series is persisted by the SDK. If a cumulative series is
-reset or evicted and is subsequently observed again, it MUST be treated as a
-new series with a new start timestamp (see [Supplementary
+reset, evicted, or cleared after being [finished](#instrument-finish) and is
+subsequently observed again, it MUST be treated as a new series with a new start
+timestamp (see [Supplementary
 Guidelines](./supplementary-guidelines.md#asynchronous-example-cumulative-temporality)).
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
@@ -943,10 +945,12 @@ equal to the limit.
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export all attribute sets that were observed prior to the beginning
-of overflow.  [Measurements](./api.md#measurement) corresponding with attribute
-sets that were not observed prior to the overflow will be reflected in a single
-data point described by (only) the overflow attribute.
+continue to export all attribute sets that were observed while below the
+cardinality limit, except for timeseries that have been
+[finished](#instrument-finish) and collected. While at the cardinality limit,
+[Measurements](./api.md#measurement) corresponding with other attribute sets
+will be reflected in a single data point described by (only) the overflow
+attribute.
 
 Aggregators of synchronous instruments with delta aggregation temporality MAY
 choose an arbitrary subset of attribute sets to output to maintain the stated
@@ -1178,6 +1182,58 @@ passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
 
 The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
 map lookup.
+
+### Instrument finish
+
+**Status**: [Development](../document-status.md)
+
+When [`Finish`](./api.md#finish) is called on a synchronous instrument, the
+operation MUST apply to all metric streams produced by that instrument and
+independently for each registered [`MetricReader`](#metricreader). Calling
+`Finish` when no active timeseries match the provided attributes or predicate
+MUST be a no-op and MUST NOT create a new timeseries or emit an error.
+
+If a matching timeseries has uncollected measurements (for delta or cumulative
+temporality) or was previously exported (for cumulative temporality), the SDK
+MUST preserve its previously-aggregated metric data (including sampled
+[Exemplars](#exemplar) and its [start timestamp](#start-timestamps)) until the
+next [`Collect`](#collect) call on each `MetricReader`, export the timeseries
+one final time during that `Collect` call, and then clear all internal storage
+associated with the timeseries. For delta temporality, if a matching timeseries
+has no measurements recorded since the previous collection, it MUST NOT be
+exported and any internal storage associated with it MUST be cleared.
+
+If a new [Measurement](./api.md#measurement) is recorded for a finished
+timeseries before it has been collected and cleared by a `MetricReader`, the SDK
+MUST un-finish (revive) the timeseries for that `MetricReader`: the new
+measurement MUST be aggregated into the existing timeseries (preserving its
+previously accumulated value, exemplars, and start timestamp), and the
+timeseries MUST remain active after collection as if `Finish` had not been
+called.
+
+Once a finished timeseries has been collected and its internal storage cleared,
+it MUST NOT be exported in subsequent collections unless a new measurement is
+recorded for that attribute set, and it MUST no longer count toward the stream's
+[cardinality limit](#cardinality-limits). If a new measurement is recorded for
+that attribute set after the finished timeseries has been collected and cleared,
+the SDK MUST treat it as a new timeseries with fresh aggregation state and a new
+[start timestamp](#start-timestamps), subject to the stream's
+[cardinality limit](#cardinality-limits) at the time of the new measurement.
+
+Because [attribute filtering](#stream-configuration) (configured via
+[Views](#view) or the
+[`Attributes` advisory parameter](#instrument-advisory-parameter-attributes)) is
+applied during aggregation, each metric stream tracks timeseries by their
+filtered attribute sets. When `Finish` is invoked with exact
+[Attributes](../common/README.md#attribute), the SDK MUST apply the stream's
+attribute filter to the provided attributes before matching against the stream's
+timeseries. When `Finish` is invoked with an attribute predicate, the SDK MUST
+evaluate the predicate against the filtered attribute set of each active
+timeseries in the stream. Note that if a View filters out an attribute key used
+to distinguish entity instances, calling `Finish` using that filtered-out
+attribute key may finish the shared aggregated timeseries (when using exact
+attributes) or fail to match (when using a predicate that inspects the
+filtered-out key).
 
 ## Attribute limits
 
@@ -1480,7 +1536,8 @@ influences the persistence of metric data points across collections. For
 synchronous instruments with Cumulative aggregation
 temporality, [MetricReader.Collect](#collect) MUST receive data points exposed
 in previous collections regardless of whether new measurements have been
-recorded. For synchronous instruments with Delta aggregation
+recorded, unless the timeseries was [finished](#instrument-finish) and collected
+in a previous collection cycle. For synchronous instruments with Delta aggregation
 temporality, [MetricReader.Collect](#collect) MUST only receive data points with
 measurements recorded since the previous collection. For asynchronous
 instruments with Delta or Cumulative aggregation

@@ -33,6 +33,7 @@ weight: 1
   * [General operations](#general-operations)
     + [Enabled](#enabled)
     + [Bind](#bind)
+    + [Finish](#finish)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -489,6 +490,7 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* (**Development**) [Finish reporting timeseries](#finish)
 
 All [synchronous instruments](#synchronous-instrument-api) MAY provide:
 
@@ -565,6 +567,110 @@ var face6 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 6L));
 
 face1.add(1);
 face6.add(1);
+```
+
+#### Finish
+
+**Status**: [Development](../document-status.md)
+
+The `Finish` API marks one or more timeseries associated with a
+[synchronous instrument](#synchronous-instrument-api) as finished, indicating
+that no further measurements are expected for the matching attribute set(s) so
+that implementations can export any remaining aggregated data and release
+internal state associated with those timeseries (see
+[SDK Instrument finish](./sdk.md#instrument-finish)).
+
+Instrumentation SHOULD call `Finish` when attribute values identify
+bounded-lifecycle entities whose end of life is known to the caller (for
+example, closing a database connection pool, releasing a queue partition, or
+deleting a container or pod). Instrumentation SHOULD NOT call `Finish` for
+bounded-cardinality attributes computed at recording time without an explicit
+lifecycle (for example, rare HTTP response status codes), where continuing to
+report cumulative timeseries allows consumers to observe a zero rate of change
+rather than a disappearing series.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST allow callers to specify the timeseries to finish by providing
+either:
+
+* [Attributes](../common/README.md#attribute) to match a single timeseries with
+  that exact attribute set.
+
+  Users can provide attributes to identify the timeseries, but it is up to their
+  discretion. Therefore, this API MUST be structured to accept a variable number
+  of attributes, including none (where providing no attributes selects the
+  timeseries with the empty attribute set).
+* An attribute predicate (filter function) that accepts
+  [Attributes](../common/README.md#attribute) and returns a boolean (`true` to
+  finish the timeseries with those attributes, or `false` to retain it). Passing
+  a predicate allows callers to finish all timeseries matching a subset of
+  attributes (or all timeseries on the instrument when the predicate always
+  returns `true`) without knowing every combination of dynamic attributes
+  recorded.
+
+[OpenTelemetry API](../overview.md#api) authors MAY decide the
+language-idiomatic way to accept exact attributes and attribute predicates (for
+example, method overloads, option parameters, or distinct methods).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
+
+```java
+// Java
+
+// Finish a single timeseries matching the exact attribute set:
+counter.finish(Attributes.of(
+    AttributeKey.stringKey("pool.name"), "checkout-db",
+    AttributeKey.stringKey("error.type"), "timeout"));
+
+// Finish all timeseries where pool.name is "checkout-db":
+counter.finish(attributes ->
+    "checkout-db".equals(attributes.get(AttributeKey.stringKey("pool.name"))));
+```
+
+```go
+// Go
+
+// Finish a single timeseries matching the exact attribute set:
+counter.Finish(
+    ctx,
+    metric.WithAttributes(
+        attribute.String("pool.name", "checkout-db"),
+        attribute.String("error.type", "timeout"),
+    ),
+)
+
+// Finish all timeseries where pool.name is "checkout-db":
+counter.Finish(
+    ctx,
+    metric.WithMatchAttributes(func(attrs attribute.Set) bool {
+        val, ok := (&attrs).Value("pool.name")
+        return ok && val.AsString() == "checkout-db"
+    }),
+)
+```
+
+```python
+# Python
+
+# Finish a single timeseries matching the exact attribute set:
+exception_counter.finish({"exception_type": "IOError", "handled_by_user": True})
+
+# Finish all timeseries where exception_type is "IOError":
+exception_counter.finish(lambda attrs: attrs.get("exception_type") == "IOError")
+```
+
+```csharp
+// C#
+
+// Finish a single timeseries matching the exact attribute set:
+counterExceptions.Finish(("exception_type", "FileLoadException"), ("handled_by_user", true));
+
+// Finish all timeseries where exception_type is "FileLoadException":
+counterExceptions.Finish(tags =>
+    tags.Contains(new KeyValuePair<string, object?>("exception_type", "FileLoadException")));
 ```
 
 ### Counter
