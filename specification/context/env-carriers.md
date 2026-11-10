@@ -224,7 +224,7 @@ Incoming context can be handled in three modes:
 - **`link`:** Add the extracted span context as a link to the invocation span,
   preserving the selected parent or root. This records the relationship without
   requiring the invocation to join the incoming trace.
-- **`off`:** Do not automatically extract context or baggage from the
+- **`none`:** Do not automatically extract context or baggage from the
   environment. Child-process injection is controlled separately.
 
 Supply the parent or link at
