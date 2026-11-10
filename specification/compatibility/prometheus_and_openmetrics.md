@@ -470,18 +470,8 @@ where one or both values are the empty string.
 For each resource the `service.name` attribute MUST be set to the
 `service.name` label in `target` info metric, if that label exists in the
 `target` info metric with the same `job` and `instance` key as the resource.
-Otherwise, if the `job` is not the empty string, then `service.name` MUST be
-set from the `job` label as follows:
-
-- if `job` can be split into two strings along exactly one slash `/`,
-  then `service.name` MUST be set to the string after the `/`.
-- otherwise `service.name` MUST be set to equal `job`.
-
-For each resource the `service.namespace` attribute MUST be set to the
-`service.namespace` label in `target` info metric, if that label exists in the
-`target` info metric with the same `job` and `instance` key as the resource.
-Otherwise, if the `job` is not the empty string and has exactly one `/`, then
-`service.namespace` MUST be set to the string before the `/`.
+Otherwise, if `job` is not the empty string, then `service.name` MUST be
+set to equal the `job` label.
 
 For each resource the `service.instance.id` attribute MUST be set to the
 `service.instance.id` label in `target` info metric, if that label exists in the
