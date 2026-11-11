@@ -816,7 +816,6 @@ returns the batch.
   distributions.
 * SHOULD NOT require the Prometheus client library to depend on OpenTelemetry at
   runtime.
-* MUST require no changes to the Prometheus client library.
 * MUST be compatible with push and pull
   [MetricExporters](../metrics/sdk.md#metricexporter).
 * MUST convert Prometheus metrics to OpenTelemetry metrics according to
