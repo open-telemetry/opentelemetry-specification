@@ -821,9 +821,12 @@ returns the batch.
 * MUST convert Prometheus metrics to OpenTelemetry metrics according to
   [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp), except
   where noted below:
-  * The bridge is NOT REQUIRED to populate OTLP
-    [metric.metadata][metricMetadata] (such as `prometheus.type`) when the SDK's
-    in-memory metric representation does not support metric-level metadata.
+  * The bridge MUST still use Prometheus `TYPE` metadata to determine the
+    OpenTelemetry metric data type (following [Unknown-typed](#unknown-typed)
+    when `TYPE` metadata is absent), but is NOT REQUIRED to populate the OTLP
+    [metric.metadata][metricMetadata] key-value list (such as `prometheus.type`)
+    when the SDK's in-memory metric representation does not support metric-level
+    metadata.
   * If a metric sample does not have an explicit timestamp, the data point's
     timestamp MUST be set to the time `Produce` was invoked. If a cumulative
     metric sample does not have a start (created) timestamp, the start timestamp
