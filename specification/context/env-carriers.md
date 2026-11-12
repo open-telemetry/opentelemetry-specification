@@ -206,7 +206,7 @@ Extraction and injection use the
 ### Configuration and Defaults
 
 Recommended configuration leaves automatic process propagation disabled until
-explicitly enabled. General telemetry enablement is separate from this choice.
+explicitly enabled.
 For enabled process instrumentation, recommended defaults are incoming context
 in `parent` mode and child-process injection enabled, with separate controls
 to disable either direction.
