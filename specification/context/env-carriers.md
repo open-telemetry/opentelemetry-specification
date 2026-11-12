@@ -15,7 +15,7 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
 - [Implementation Guidelines](#implementation-guidelines)
-- [Instrumentation Guidelines](#instrumentation-guidelines)
+- [Automatic Propagation Guidelines](#automatic-propagation-guidelines)
   * [Configuration and Defaults](#configuration-and-defaults)
   * [Incoming Context](#incoming-context)
   * [Child Process Injection](#child-process-injection)
@@ -141,8 +141,8 @@ When spawning child processes:
 - For multiple child processes with different contexts or baggage, separate
   environment variable copies keep the appropriate information isolated per
   child process.
-- Application code or instrumentation remains responsible for receiving context
-  from the SDK and passing it to the application's process spawning mechanism.
+- The component handling a child-process launch passes current context to the
+  application's process spawning mechanism.
 
 #### Security
 
@@ -181,18 +181,22 @@ Example implementations:
 - [OpenTelemetry Python implementation][pi]
 - [OpenTelemetry Swift implementation][si]
 
-## Instrumentation Guidelines
+## Automatic Propagation Guidelines
 
 **Status**: [Alpha](../document-status.md)
 
 > [!IMPORTANT]
 > This section is non-normative and adds no specification requirements.
 
-Agents, framework integrations, test runners, and wrappers can automate context
-propagation through environment variables. Instrumentation identifies the
-command, job, or test invocation that receives context and intercepts supported
-child process launches. SDK initialization alone does not define these
-boundaries.
+SDKs, agents, framework integrations, test runners, and wrappers can automate
+context propagation through environment variables. Incoming context describes a
+command, job, or test invocation, and child-process injection targets supported
+application-initiated launches. The scope in which incoming context applies is a
+separate design choice from which component provides propagation.
+
+This guidance does not define a persistent fallback parent for every otherwise
+parentless span or change existing
+[span parent-selection rules](../trace/api.md#determining-the-parent-span-from-a-context).
 
 Extraction and injection use the
 [configured propagators](api-propagators.md#global-propagators) and
@@ -200,13 +204,13 @@ Extraction and injection use the
 
 ### Configuration and Defaults
 
-Recommended defaults for enabled process instrumentation are incoming context
-in `parent` mode and child-process injection enabled, with separate controls
-to disable either direction.
+Recommended defaults for enabled automatic process propagation are incoming
+context in `parent` mode and child-process injection enabled, with separate
+controls to disable either direction.
 
-Settings belong to the instrumentation and can be technology-specific.
+Configuration can vary by language, technology, and implementing component.
 This guidance defines no new SDK properties or portable option names.
-Instrumentation documentation describes its supported modes and controls,
+Implementation documentation describes its supported modes and controls,
 invocation boundaries, precedence for application-provided context and
 explicitly supplied child fields, unsupported launch mechanisms, and behavior
 without a valid current span.
@@ -231,7 +235,7 @@ Supply the parent or link at
 [span creation](../trace/api.md#span-creation), before sampling, preserving the
 extracted span context's remote status, trace flags, and trace state.
 
-When instrumentation creates an invocation span, scope its active context to
+When an implementation creates an invocation span, scope its active context to
 the operation's full lifetime, including asynchronous work, and restore the
 previous context afterward.
 Avoid applying startup context to unrelated future requests in long-running

@@ -11,8 +11,9 @@ release.
 
 - Mark "Environment Variables as Context Propagation Carriers" as Stable.
   ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
-- Add Alpha, non-normative instrumentation guidelines for environment-context
-  propagation, including defaults, invocation boundaries, and manual usage.
+- Add Alpha, non-normative guidelines for automatic environment-context
+  propagation by SDKs and instrumentation, including defaults, invocation scope,
+  and manual usage.
   ([#5398](https://github.com/open-telemetry/opentelemetry-specification/issues/5398))
 
 ### Traces
