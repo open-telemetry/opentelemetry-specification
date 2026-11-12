@@ -66,6 +66,10 @@ release.
 
 ### SDK Configuration
 
+- Fix the declarative config type for a PluginComponentProvider for a resource
+  detector to be `ExperimentalResourceDetector`, rather than
+  `ExperimentalResourceDetection`.
+  ([#5427](https://github.com/open-telemetry/opentelemetry-specification/pull/5427))
 - Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
   exporting MetricReader.
   ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
