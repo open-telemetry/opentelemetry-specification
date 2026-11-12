@@ -15,7 +15,7 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
 - [Implementation Guidelines](#implementation-guidelines)
-- [Automatic Propagation Guidelines](#automatic-propagation-guidelines)
+- [Instrumentation Guidelines](#instrumentation-guidelines)
   * [Configuration and Defaults](#configuration-and-defaults)
   * [Incoming Context](#incoming-context)
   * [Child Process Injection](#child-process-injection)
@@ -181,18 +181,19 @@ Example implementations:
 - [OpenTelemetry Python implementation][pi]
 - [OpenTelemetry Swift implementation][si]
 
-## Automatic Propagation Guidelines
+## Instrumentation Guidelines
 
 **Status**: [Alpha](../document-status.md)
 
 > [!IMPORTANT]
 > This section is non-normative and adds no specification requirements.
 
-SDKs, agents, framework integrations, test runners, and wrappers can automate
-context propagation through environment variables. Incoming context describes a
-command, job, or test invocation, and child-process injection targets supported
-application-initiated launches. The scope in which incoming context applies is a
-separate design choice from which component provides propagation.
+Agents, framework integrations, test runners, and wrappers can automate context
+propagation through environment variables. Instrumentation identifies the
+command, job, or test invocation that receives context and supported
+application-initiated child-process launches. The scope in which incoming
+context applies is a separate design choice from which component provides
+propagation.
 
 This guidance does not define a persistent fallback parent for every otherwise
 parentless span or change existing
@@ -204,16 +205,25 @@ Extraction and injection use the
 
 ### Configuration and Defaults
 
-Recommended defaults for enabled automatic process propagation are incoming
-context in `parent` mode and child-process injection enabled, with separate
-controls to disable either direction.
+Recommended configuration leaves automatic process propagation disabled until
+explicitly enabled. General telemetry enablement is separate from this choice.
+For enabled process instrumentation, recommended defaults are incoming context
+in `parent` mode and child-process injection enabled, with separate controls
+to disable either direction.
 
-Configuration can vary by language, technology, and implementing component.
+Configuration belongs to the instrumentation and can vary by language and
+technology.
 This guidance defines no new SDK properties or portable option names.
-Implementation documentation describes its supported modes and controls,
+Instrumentation documentation describes its supported modes and controls,
 invocation boundaries, precedence for application-provided context and
 explicitly supplied child fields, unsupported launch mechanisms, and behavior
 without a valid current span.
+
+Opting in is an application or operator decision about accepting context from
+the launch environment and forwarding it across process boundaries. Valid
+extracted context does not authenticate its sender. Incoming sampling flags can
+affect recording decisions, and baggage can reach downstream destinations,
+depending on the configured sampler, propagators, and instrumentation.
 
 ### Incoming Context
 
@@ -240,7 +250,8 @@ the operation's full lifetime, including asynchronous work, and restore the
 previous context afterward.
 Avoid applying startup context to unrelated future requests in long-running
 processes. Baggage follows normal context inheritance and application updates;
-reapplying startup baggage can overwrite later changes.
+reapplying startup baggage can overwrite later changes or restore removed
+values.
 
 ### Child Process Injection
 
@@ -256,9 +267,10 @@ supplied child fields.
 
 ### Manual Propagation
 
-Application code can use the same invocation and child-environment guidance for
-manual propagation, as shown in the
-[Go examples](https://pkg.go.dev/go.opentelemetry.io/contrib/propagators/envcar).
+Applications and instrumentation can implement propagation using the existing
+propagator and Context APIs. The
+[Go examples](https://pkg.go.dev/go.opentelemetry.io/contrib/propagators/envcar)
+illustrate extraction at startup and injection into a child's environment.
 
 [di]: https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/Context/Propagation/EnvironmentVariableCarrier.cs
 [ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
