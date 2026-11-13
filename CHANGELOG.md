@@ -119,6 +119,8 @@ release.
 
 ### Common
 
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 - Stabilize Attribute and Attribute Collection representation for non-OTLP.
   ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
