@@ -133,6 +133,8 @@ sections:
             status: '+'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
+          - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
+            status: '?'
           - name: Allow samplers to modify tracestate
             status: '?'
           - name: ShouldSample gets full parent Context
@@ -221,6 +223,8 @@ sections:
         status: '?'
       - name: Instrument supports the advisory Attributes parameter.
         status: '?'
+      - name: Instrument supports the advisory OptIn parameter.
+        status: '-'
       - name: Synchronous instruments support Bind to pre-associate attributes.
         status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
@@ -358,7 +362,7 @@ sections:
       - name: LoggerProvider.Get Logger
         status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Shutdown
         status: '+'
       - name: LoggerProvider.ForceFlush
@@ -366,9 +370,9 @@ sections:
       - name: Logger.Emit(LogRecord)
         status: '+'
       - name: Logger.Emit(LogRecord) with Exception parameter
-        status: '?'
+        status: '+'
       - name: LogRecord.Set EventName
-        status: '?'
+        status: '+'
       - name: Logger.Enabled
         status: '?'
       - name: SimpleLogRecordProcessor
@@ -378,17 +382,17 @@ sections:
       - name: Can plug custom LogRecordProcessor
         status: '+'
       - name: LogRecordProcessor.Enabled
-        status: '?'
+        status: '+'
       - name: OTLP/gRPC exporter
         status: '+'
       - name: OTLP/HTTP exporter
         status: '+'
       - name: OTLP File exporter
-        status: '?'
+        status: '-'
       - name: Can plug custom LogRecordExporter
         status: '+'
       - name: Trace Context Injection
-        status: '?'
+        status: '+'
   - name: Resource
     features:
       - name: Create from Attributes
@@ -501,6 +505,8 @@ sections:
         status: '?'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
         status: '?'
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
+        status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '?'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
@@ -672,45 +678,45 @@ sections:
       - heading: '**Span metrics**'
         features:
           - name: '[`otel.sdk.span.started`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanstarted)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.span.live`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkspanlive)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuesize)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanqueuecapacity)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.span.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorspanprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspaninflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.span.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterspanexported)'
-            status: '-'
+            status: '+'
       - heading: '**Log metrics**'
         features:
           - name: '[`otel.sdk.log.created`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdklogcreated)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.queue.size`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuesize)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.queue.capacity`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogqueuecapacity)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.processor.log.processed`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkprocessorlogprocessed)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterloginflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.log.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporterlogexported)'
-            status: '-'
+            status: '+'
       - heading: '**Metric metrics**'
         features:
           - name: '[`otel.sdk.exporter.metric_data_point.inflight`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointinflight)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.metric_data_point.exported`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexportermetric_data_pointexported)'
-            status: '-'
+            status: '+'
       - heading: '**Shared metrics**'
         features:
           - name: '[`otel.sdk.metric_reader.collection.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkmetric_readercollectionduration)'
-            status: '-'
+            status: '+'
           - name: '[`otel.sdk.exporter.operation.duration`](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/#metric-otelsdkexporteroperationduration)'
-            status: '-'
+            status: '+'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
