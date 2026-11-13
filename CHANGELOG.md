@@ -63,6 +63,8 @@ release.
   `service.namespace`, and `service.instance.id` should be converted to the
   Prometheus `target` info metric along with all other resource attributes.
   ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
+- Add Prometheus `MetricProducer` bridge specification.
+  ([#5426](https://github.com/open-telemetry/opentelemetry-specification/pull/5426))
 
 ### SDK Configuration
 

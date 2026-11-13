@@ -43,6 +43,12 @@ aliases:
   * [Metric Attributes](#metric-attributes)
   * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
+- [Prometheus Bridge](#prometheus-bridge)
+  * [Requirements](#requirements)
+  * [Configuration](#configuration)
+  * [Resource](#resource)
+  * [Instrumentation Scope](#instrumentation-scope-2)
+  * [Usage](#usage)
 
 <!-- END doctoc -->
 
@@ -788,5 +794,89 @@ other labels except `job` and `instance`.  There MUST be at most one
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
+
+## Prometheus Bridge
+
+**Status**: [Development](../document-status.md)
+
+OpenTelemetry MAY provide a Prometheus Bridge component which implements the
+OpenTelemetry [MetricProducer](../metrics/sdk.md#metricproducer) interface to
+collect metrics from an official
+[Prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/).
+When [Produce](../metrics/sdk.md#produce-batch) is invoked, the bridge gathers
+metrics from the configured Prometheus registry (or registries), converts the
+metrics to an OpenTelemetry metrics batch according to
+[Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp), and
+returns the batch.
+
+### Requirements
+
+* This component MUST be an optional dependency.
+* MUST NOT require OpenTelemetry to be included in Prometheus client library
+  distributions.
+* SHOULD NOT require the Prometheus client library to depend on OpenTelemetry at
+  runtime.
+* MUST be compatible with push and pull
+  [MetricExporters](../metrics/sdk.md#metricexporter).
+* MUST convert Prometheus metrics to OpenTelemetry metrics according to
+  [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp), except
+  where noted below:
+  * The bridge MUST still use Prometheus `TYPE` metadata to determine the
+    OpenTelemetry metric data type (following [Unknown-typed](#unknown-typed)
+    when `TYPE` metadata is absent), but is NOT REQUIRED to populate the OTLP
+    [metric.metadata][metricMetadata] key-value list (such as `prometheus.type`)
+    when the SDK's in-memory metric representation does not support metric-level
+    metadata.
+  * If a metric sample does not have an explicit timestamp, the data point's
+    timestamp MUST be set to the time `Produce` was invoked. If a cumulative
+    metric sample does not have a start (created) timestamp, the start timestamp
+    of the data point MAY be set to the process or bridge initialization time,
+    or left unset.
+  * The bridge MUST support [Gauges](#gauges), [Counters](#counters),
+    [Histograms](#histograms), and [Summaries](#summaries), and SHOULD support
+    [Unknown-typed](#unknown-typed) metrics, [Info](#info),
+    [StateSet](#stateset), [Native Histograms](#native-histograms), and
+    [Exemplars](#exemplars) when supported by the Prometheus client library and
+    the OpenTelemetry SDK.
+  * Unsupported Prometheus metric types (including
+    [Dropped Types](#dropped-types), such as `GaugeHistogram`) MUST be dropped.
+
+### Configuration
+
+By default, the bridge SHOULD collect metrics from the Prometheus client
+library's default registry (or gatherer). The bridge SHOULD support
+configuration to specify one or more custom Prometheus registries (or gatherers)
+to collect metrics from instead.
+
+### Resource
+
+Metrics produced by the bridge are associated with the
+[Resource](../resource/sdk.md) of the OpenTelemetry
+[MeterProvider](../metrics/sdk.md#meterprovider). The scraped-endpoint resource
+attribute rules in [Resource Attributes](#resource-attributes) do not apply to
+the Prometheus Bridge.
+
+### Instrumentation Scope
+
+The bridge MUST populate the
+[InstrumentationScope](../common/instrumentation-scope.md) according to
+[Instrumentation Scope](#instrumentation-scope), using an instrumentation scope
+name and version that identifies the Prometheus Bridge when `otel_scope_*`
+labels are not present.
+
+### Usage
+
+The bridge can be passed as a [MetricProducer](../metrics/sdk.md#metricproducer)
+option to an OpenTelemetry [MetricReader](../metrics/sdk.md#metricreader) when
+configuring the OpenTelemetry SDK. This enables the bridge to work with both
+push and pull metric exporters.
+
+If an OpenTelemetry
+[Prometheus Exporter](../metrics/sdk_exporters/prometheus.md) is used in the
+same application, users SHOULD register their Prometheus metrics and the
+OpenTelemetry Prometheus Exporter with the same Prometheus registry rather than
+bridging Prometheus metrics through a Prometheus Bridge into a Prometheus
+Exporter. A Prometheus Exporter MAY ignore metrics produced by a Prometheus
+Bridge.
 
 [metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
