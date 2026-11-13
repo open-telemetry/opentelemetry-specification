@@ -129,7 +129,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  | + |
 | Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  | + |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  | + |  | + |  |  |  | + |  | - |
-| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  | - |  | - |
+| Instrument supports the advisory Attributes parameter. |  | + | + |  |  |  | + |  |  |  | - |  | - |
 | Instrument supports the advisory OptIn parameter. |  | - | - | - | - | - | - | - | - | - | - | - | - |
 | Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | + | + | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | + |  | + |  |  | + | + |  | - |
