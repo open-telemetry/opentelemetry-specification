@@ -134,7 +134,7 @@ sections:
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: '[Sampler.Shutdown](specification/trace/sdk.md#shutdown-1)'
-            status: '-'
+            status: '+'
           - name: Allow samplers to modify tracestate
             status: '+'
           - name: ShouldSample gets full parent Context
@@ -356,7 +356,7 @@ sections:
       - name: Metric SDK supports per-timeseries cumulative start timestamps
         status: '-'
       - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
-        status: '-'
+        status: '+'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -508,7 +508,7 @@ sections:
       - name: OTEL_METRIC_EXPORT_TIMEOUT
         status: '+'
       - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
-        status: '-'
+        status: '+'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '+'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE

@@ -14,6 +14,8 @@ release.
 
 ### Traces
 
+- Add the traces data model.
+  ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
@@ -73,6 +75,10 @@ release.
 
 ### SDK Configuration
 
+- Fix the declarative config type for a PluginComponentProvider for a resource
+  detector to be `ExperimentalResourceDetector`, rather than
+  `ExperimentalResourceDetection`.
+  ([#5427](https://github.com/open-telemetry/opentelemetry-specification/pull/5427))
 - Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
   exporting MetricReader.
   ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
@@ -122,6 +128,8 @@ release.
 
 ### Common
 
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 - Stabilize Attribute and Attribute Collection representation for non-OTLP.
   ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
