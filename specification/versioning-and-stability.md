@@ -375,9 +375,8 @@ When a signal becomes stable, the version MUST be bumped to match the other stab
 ### Major version bump
 
 Major version bumps MUST occur when there is a breaking change to a stable interface or a deprecated signal is removed.
-Security-related behavioral and configuration changes that satisfy the
-[security exception](#security-related-changes) do not require a major version
-bump.
+Changes that satisfy the [security exception](#security-related-changes) do not
+require a major version bump.
 Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
@@ -394,8 +393,8 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 ### Patch version bump
 
 Patch versions make no changes which would require recompilation or potentially
-break application code, except for the behavioral and configuration changes
-permitted by [Security-related changes](#security-related-changes).
+break application code, except as permitted by
+[Security-related changes](#security-related-changes).
 The following are examples of patch fixes.
 
 * Bug fixes which don't require minor version bump per rules above.
@@ -409,11 +408,14 @@ We are committed to making it feasible for end users to stay up to date with the
 ### Security-related changes
 
 Stable SDK and Contrib components MAY make backward-incompatible behavioral
-changes, change configuration defaults, or restrict supported configuration
-values without incrementing the major version when necessary to address a
-security risk. This exception applies even when the previous behavior, defaults,
-or supported values were documented. Such changes MAY be released as security
-fixes in a patch release, subject to the support requirements in this document.
+changes, change configuration defaults, restrict supported configuration values,
+or tighten supported runtime or dependency version requirements without
+incrementing the major version when necessary to address a security risk.
+This exception applies even when the previous behavior, defaults, supported
+values, or version requirements were documented.
+
+Such changes MAY be released as security fixes in a minor or patch release,
+subject to the support requirements in this document.
 
 Examples include disabling unsafe protocols or cryptographic algorithms,
 rejecting unsafe input, tightening certificate validation, preventing disclosure
@@ -421,6 +423,12 @@ of credentials in telemetry, and introducing or lowering resource limits to
 mitigate denial of service or resource exhaustion through unbounded telemetry.
 These changes can affect emitted telemetry, including by truncating values or
 dropping attributes or records.
+
+Another example is tightening supported runtime or dependency version
+requirements when necessary to address an identified security risk. This can
+include discontinuing support for versions that no longer receive security
+fixes, or for runtimes that prevent using dependency versions that receive
+security fixes.
 
 Changes under this exception MUST address an identified, concrete security risk
 and MUST be limited to what is necessary to mitigate that risk. Changes made
@@ -432,11 +440,12 @@ or rename public APIs, change their signatures, rename or remove configuration
 parameters, redefine semantic conventions, bypass signal deprecation or removal
 requirements, or make unrelated backward-incompatible changes.
 
-Release notes MUST identify the affected behavior and any affected configuration
-settings, describe the previous and new behavior (including any newly rejected
-inputs or configuration values and any truncated or dropped telemetry), explain
-the security risk and how the change mitigates it, and document any actions users
-need to take. Where safe and feasible, implementations SHOULD provide a
+Release notes MUST identify the affected behavior, configuration settings, and
+runtime or dependency version requirements, describe the previous and new
+behavior and requirements (including any newly rejected inputs or configuration
+values and any truncated or dropped telemetry), explain the security risk and
+how the change mitigates it, and document any actions users need to take.
+Where safe and feasible, implementations SHOULD provide a
 configuration override or other migration path. Release notes MUST describe any
 available migration path and the security implications of restoring the previous
 behavior. Providing an override does not make the change backward compatible;
