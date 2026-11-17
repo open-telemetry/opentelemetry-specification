@@ -9,8 +9,38 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.63.0 (2026-11-18)
+
+### Context
+
 - Mark "Environment Variables as Context Propagation Carriers" as Stable.
-  ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
+  ([#5389](https://github.com/open-telemetry/opentelemetry-specification/pull/5389))
 
 ### Traces
 
@@ -52,10 +82,16 @@ release.
 
 ### Common
 
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
 
+- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
+  the case of unset `Sum` field.
+  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
   Histogram transformation.
   ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
@@ -119,8 +155,6 @@ release.
 
 ### Common
 
-- Define optional application-provided names for SDK components.
-  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 - Stabilize Attribute and Attribute Collection representation for non-OTLP.
   ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
@@ -137,9 +171,6 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
-- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
-  the case of unset `Sum` field.
-  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 
 ### SDK Configuration
 
