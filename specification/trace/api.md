@@ -46,6 +46,7 @@ weight: 1
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 - [SpanKind](#spankind)
 - [Span type](#span-type)
+  * [Requirements for semantic conventions and instrumentations](#requirements-for-semantic-conventions-and-instrumentations)
   * [Span type syntax](#span-type-syntax)
 - [Link](#link)
 - [Concurrency requirements](#concurrency-requirements)
@@ -810,14 +811,16 @@ To summarize the interpretation of these kinds:
 Span type is an optional string that identifies the class of spans a span
 belongs to, such as HTTP client requests or database calls, defined
 by [semantic conventions](/specification/semantic-conventions.md).
-Span type SHOULD uniquely identify the span structure, such as its name format,
-kind, attributes, error conditions, and operation scope.
-Span type MUST have low cardinality, typically lower than the [span name](#span).
+Span type identifies the span structure, such as its name format,
+kind, attributes, error conditions, and operation scope, and has low
+cardinality, typically lower than the [span name](#span).
 For example, all RPC client spans share the same span type, while their names
 differ by RPC method.
 
 [`SpanKind`](#spankind) describes how the span relates to remote peers, while
-span type describes what operation it represents.
+span type describes what operation it represents. For example, HTTP client and
+RPC client spans have different types but share the `CLIENT` kind - span type
+implies a specific kind.
 
 Span type is provided at [span creation](#span-creation) and MUST NOT be changed
 afterwards. An empty span type is equivalent with a not present one.
@@ -830,6 +833,14 @@ The API MUST be documented in a way to communicate to users that the span type:
 
 The API SHOULD NOT validate the span type; that is left to implementations of
 the API, like the [SDK](sdk.md#sdk-span-creation).
+
+### Requirements for semantic conventions and instrumentations
+
+Semantic conventions and instrumentations hosted in OpenTelemetry that set span type:
+
+* SHOULD use a span type that uniquely identifies the span structure;
+* MUST use a span type with low cardinality;
+* MUST use a span type that conforms to the [span type syntax](#span-type-syntax).
 
 ### Span type syntax
 
