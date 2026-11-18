@@ -839,7 +839,7 @@ The span type syntax is defined below using the [Augmented Backus-Naur
 Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-span-type = ALPHA 0*254 ("_" / "." / ALPHA / DIGIT)
+span-type = ALPHA 0*254("_" / "." / ALPHA / DIGIT)
 
 ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
