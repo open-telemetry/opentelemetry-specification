@@ -23,6 +23,7 @@ weight: 2
   * [Field: `IsParentRemote`](#field-isparentremote)
   * [Field: `Name`](#field-name)
   * [Field: `Kind`](#field-kind)
+  * [Field: `Type`](#field-type)
   * [Field: `StartTimestamp`](#field-starttimestamp)
   * [Field: `EndTimestamp`](#field-endtimestamp)
   * [Field: `Attributes`](#field-attributes)
@@ -124,6 +125,7 @@ The main parts of a span are:
 | `ParentSpanId`                     | Identifies the operation that directly caused this operation, if any.                                                                    |
 | `IsParentRemote`                   | Indicates locally whether the parent span is remote or generated locally.                                                                |
 | `Name` and `Kind`                  | Classify the operation and its role in a communication.                                                                                  |
+| `Type`                             | (**Development**) Identifies the semantic convention definition the span follows.                                                        |
 | `StartTimestamp` and `EndTimestamp` | Describe when the operation took place.                                                                                                  |
 | `Attributes`                       | Describe properties of this occurrence of the operation.                                                                                 |
 | `Events`                           | Describe timestamped occurrences during the operation.                                                                                   |
@@ -216,6 +218,24 @@ Type: enumeration.
   asynchronous execution, such as message processing via a broker.
 - `INTERNAL` represents an operation internal to an application or when other kinds
   are not applicable.
+
+### Field: `Type`
+
+**Status**: [Development](../document-status.md)
+
+Type: string, conforming to the [span type syntax](api.md#span-type-syntax).
+
+The [span type](api.md#span-type) identifies the class of spans the span belongs
+to, such as HTTP client requests or database calls, as defined by
+[semantic conventions](../semantic-conventions.md). It identifies the span
+structure, such as its name format, [`Kind`](#field-kind), attributes, error
+conditions, and operation scope, and implies a specific `Kind`. It has low
+cardinality, typically lower than the [`Name`](#field-name). For example, all
+RPC client spans share the same type, while their names differ by RPC method.
+
+The span type is provided at [span creation](api.md#span-creation) and is not
+changed afterwards. An empty span type is equivalent to an absent one. This
+field is optional.
 
 ### Field: `StartTimestamp`
 
@@ -475,9 +495,9 @@ Propagation is separate from exporting telemetry:
   or message.
 - Export sends recorded spans out-of-band to a telemetry consumer.
 
-Only the `SpanContext` portion of a span is propagated. Span names, timestamps,
-attributes, events, links, status, resource, and instrumentation scope are not
-transferred as trace context.
+Only the `SpanContext` portion of a span is propagated. Span names, kinds,
+types, timestamps, attributes, events, links, status, resource, and
+instrumentation scope are not transferred as trace context.
 
 ### In-process propagation
 
