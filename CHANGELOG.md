@@ -54,7 +54,7 @@ release.
 
 - Consolidate requirements on semantic conventions in
   [`semantic-conventions.md`](specification/semantic-conventions.md).
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#5435](https://github.com/open-telemetry/opentelemetry-specification/pull/5435))
 
 ### OpenTelemetry Protocol
 
