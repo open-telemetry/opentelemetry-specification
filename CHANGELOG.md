@@ -22,6 +22,8 @@ release.
 - Add Development span type: optional span creation parameter, `ReadableSpan`
   access, and SDK syntax validation.
   ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
+- Add Development span `Type` field to the traces data model.
+  ([#5433](https://github.com/open-telemetry/opentelemetry-specification/pull/5433))
 
 ### Metrics
 
