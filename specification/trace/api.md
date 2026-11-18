@@ -46,7 +46,6 @@ weight: 1
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 - [SpanKind](#spankind)
 - [Span type](#span-type)
-  * [Requirements for semantic conventions and instrumentations](#requirements-for-semantic-conventions-and-instrumentations)
   * [Span type syntax](#span-type-syntax)
 - [Link](#link)
 - [Concurrency requirements](#concurrency-requirements)
@@ -810,7 +809,7 @@ To summarize the interpretation of these kinds:
 
 Span type is an optional string that identifies the class of spans a span
 belongs to, such as HTTP client requests or database calls, defined
-by [semantic conventions](/specification/semantic-conventions.md).
+by [semantic conventions](../semantic-conventions).
 Span type identifies the span structure, such as its name format,
 kind, attributes, error conditions, and operation scope, and has low
 cardinality, typically lower than the [span name](#span).
@@ -828,19 +827,11 @@ afterwards. An empty span type is equivalent with a not present one.
 The API MUST be documented in a way to communicate to users that the span type:
 
 * is expected to uniquely identify the span structure;
-* needs to have low cardinality;
-* needs to conform to the [span type syntax](#span-type-syntax).
+* MUST have low cardinality;
+* MUST conform to the [span type syntax](#span-type-syntax).
 
 The API SHOULD NOT validate the span type; that is left to implementations of
 the API, like the [SDK](sdk.md#sdk-span-creation).
-
-### Requirements for semantic conventions and instrumentations
-
-Semantic conventions and instrumentations hosted in OpenTelemetry that set span type:
-
-* SHOULD use a span type that uniquely identifies the span structure;
-* MUST use a span type with low cardinality;
-* MUST use a span type that conforms to the [span type syntax](#span-type-syntax).
 
 ### Span type syntax
 
