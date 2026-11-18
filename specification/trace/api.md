@@ -822,7 +822,7 @@ RPC client spans have different types but share the `CLIENT` kind - span type
 implies a specific kind.
 
 Span type is provided at [span creation](#span-creation) and MUST NOT be changed
-afterwards. An empty span type is equivalent with a not present one.
+afterwards. An empty span type is equivalent to a not present one.
 
 The API MUST be documented in a way to communicate to users that the span type:
 
