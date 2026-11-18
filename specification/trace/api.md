@@ -809,7 +809,7 @@ To summarize the interpretation of these kinds:
 
 Span type is an optional string that identifies the class of spans a span
 belongs to, such as HTTP client requests or database calls, defined
-by [semantic conventions](../semantic-conventions).
+by [semantic conventions](../semantic-conventions.md).
 Span type identifies the span structure, such as its name format,
 kind, attributes, error conditions, and operation scope, and has low
 cardinality, typically lower than the [span name](#span).
