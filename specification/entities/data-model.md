@@ -178,6 +178,12 @@ Both fields describe the entity's own ID. They say what kind of entity the ID is
 unique within, not which particular entity, and that follows from the
 identifying attributes the producer populated.
 
+Both fields describe identity only. They do not express containment, ownership,
+or hierarchy between entities, and `global` does not mean top-level: a `k8s.pod`
+has a `global` ID and still runs on a `k8s.node`. Relationships between
+entities are a separate concern, see
+[Entity Relationships](entity-events.md#entity-relationships).
+
 The producer of an entity MUST set the ID Scope, and MUST set the Scope Entity
 Type when that scope is `local`. A producer that cannot determine the scope of
 an ID it generated MUST use `unspecified` rather than guess, so that consumers
