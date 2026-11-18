@@ -63,6 +63,10 @@ release.
   `service.namespace`, and `service.instance.id` should be converted to the
   Prometheus `target` info metric along with all other resource attributes.
   ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
+- Set the Prometheus Native Histogram `ZeroThreshold` to zero instead of
+  `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
+  set.
+  ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
 
 ### SDK Configuration
 
