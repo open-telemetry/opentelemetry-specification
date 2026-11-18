@@ -1,6 +1,6 @@
 # Semantic Conventions
 
-**Status**: [Development](document-status.md)
+**Status**: [Mixed](document-status.md)
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 
@@ -8,6 +8,8 @@ OpenTelemetry defines its semantic conventions in a separate repository:
 [https://github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions).
 
 ## Reserved Attributes
+
+**Status**: [Stable](document-status.md)
 
 Semantic conventions MUST provide the following attributes:
 
@@ -18,6 +20,7 @@ Semantic conventions MUST provide the following attributes:
 - [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-address)
 - [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-port)
 - [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-name)
+- [`service.instance.id`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-instance-id)
 - [`telemetry.sdk.language`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-language)
 - [`telemetry.sdk.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-name)
 - [`telemetry.sdk.version`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-version)
@@ -27,13 +30,10 @@ Semantic conventions MUST provide the following events:
 
 - [`exception`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-spans.md)
 
-## In-development Reserved Attributes
-
-Semantic conventions MUST provide the following attributes:
-
-- [`service.instance.id`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-instance-id)
-
 ## Reserved Namespace
 
-The `otel.*` namespace is reserved for defining compatibility with
-non-OpenTelemetry technologies.
+**Status**: [Development](document-status.md)
+
+The [`otel.*`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/otel/)
+namespace is reserved for defining compatibility with non-OpenTelemetry
+technologies.
