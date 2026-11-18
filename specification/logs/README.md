@@ -438,9 +438,10 @@ The following functionality exists to enable log collection:
   or parsing in the external agent is used for this.
 
 - Ability to receive logs via common network protocols for logs, such as Syslog
-  and interpret them according to semantic conventions defined in this
-  specification. FluentBit or similar agent is used for this. Over time some of
-  this functionality may be migrated directly to the Collector.
+  and interpret them according to
+  [semantic conventions](../semantic-conventions.md). FluentBit or similar
+  agent is used for this. Over time some of this functionality may be migrated
+  directly to the Collector.
 
 - Ability to send logs via common network protocols for logs, such as Syslog, or
   vendor-specific log formats. Collector contains exporters that directly
