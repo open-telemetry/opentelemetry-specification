@@ -178,14 +178,6 @@ Both fields describe the entity's own ID. They say what kind of entity the ID is
 unique within, not which particular entity, and that follows from the
 identifying attributes the producer populated.
 
-> [!NOTE]
-> The scope of an ID follows from how the ID is generated, not from where the
-> system that assigns it documents its guarantee. `k8s.pod.uid` is `global`
-> because Kubernetes UIDs are UUIDs, even though Kubernetes documents uniqueness
-> per cluster. Scoping it to `k8s.cluster` would add nothing, since
-> `k8s.cluster.uid` is itself a Kubernetes UID and the chain would rest on the
-> same property one step later.
-
 The producer of an entity MUST set the ID Scope, and MUST set the Scope Entity
 Type when that scope is `local`. A producer that cannot determine the scope of
 an ID it generated MUST use `unspecified` rather than guess, so that consumers
@@ -205,7 +197,9 @@ leaves the scoped entity unchanged.
 OpenTelemetry Semantic Conventions MUST declare the ID Scope of every defined
 entity type, and for a `local` scope the Scope Entity Types it can have. There
 MAY be more than one: a `process` is scoped by a `host` in one deployment and by
-a `container` in another. The producer records which one applies.
+a `container` in another. The producer records which one applies. The declared
+scope SHOULD be the widest one the ID generation scheme guarantees. A narrower
+scope makes the identity depend on a scoping entity it does not need.
 
 Consumers MUST be able to determine an entity's ID Scope from the entity itself.
 A consumer MUST NOT be required to consult Semantic Conventions to interpret an
