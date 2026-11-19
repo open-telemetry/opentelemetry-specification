@@ -103,10 +103,10 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
 
 ### Events
 
-Events are OpenTelemetry's standardized format for LogRecords. All semantic
-conventions defined for logs SHOULD be formatted as Events. Requirements and details for the Event format can be found in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+Events are OpenTelemetry's standardized format for LogRecords.
 
-Events are intended to be used by OpenTelemetry instrumentation. It is not a
+Events are intended to be used by OpenTelemetry instrumentations following
+[semantic conventions](../semantic-conventions.md#events). It is not a
 requirement that all LogRecords are formatted as Events.
 
 ### Field Kinds
