@@ -225,8 +225,14 @@ An entity's **Local Identity** is its ID attributes. Its **Global Identity** is
 the union of its Local Identity and the Global Identity of the entity that
 scopes it.
 
-A scoping entity is found by type. This is unambiguous because a Resource holds
-at most one entity of a given type, see
+ID Scope and Scope Entity Type are part of the entity and have the same meaning
+wherever the entity is carried. This section defines how a consumer composes the
+Global Identity of an entity on a Resource. Other carriers of entities, such as
+[Entity Events](entity-events.md#entity-state-event), define where the scoping
+entity is found.
+
+On a Resource, a scoping entity is found by type. This is unambiguous because a
+Resource holds at most one entity of a given type, see
 [Merging An Entity into a Resource](../resource/data-model.md#merging-an-entity-into-a-resource).
 
 A consumer computes an entity's Global Identity from the Resource alone:
