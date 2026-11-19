@@ -308,12 +308,9 @@ can_merge(current_entity, new_entity) {
 }
 ```
 
-Note: this algorithm merges entities within a single Resource, where an entity
-of a given type is the same for both entities, so comparing ID scopes and scope
-entity types is sufficient. An operation that merges entities across Resources, which
-this specification does not define, MUST compare
-[Global Identity](#global-identity-composition) instead, because the same Local
-Identity can refer to different objects in different contexts.
+This algorithm applies to entities within a single Resource. Entities from
+different Resources are compared by
+[Global Identity](#global-identity-composition).
 
 When merging entities, all attributes in description are merged together, with
 Conflicting descriptive attributes values from the new entity overwrite descriptive
