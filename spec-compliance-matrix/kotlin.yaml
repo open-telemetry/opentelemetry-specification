@@ -71,6 +71,8 @@ sections:
             status: '+'
           - name: User-defined start timestamp
             status: '+'
+          - name: '[Create with span type](specification/trace/api.md#span-type)'
+            status: '-'
           - name: End
             status: '+'
           - name: End with timestamp
@@ -222,6 +224,8 @@ sections:
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
         status: '-'
       - name: Instrument supports the advisory Attributes parameter.
+        status: '-'
+      - name: Instrument supports the advisory OptIn parameter.
         status: '-'
       - name: Synchronous instruments support Bind to pre-associate attributes.
         status: '-'
@@ -504,6 +508,8 @@ sections:
       - name: OTEL_METRIC_EXPORT_INTERVAL
         status: '-'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
+        status: '-'
+      - name: OTEL_METRIC_EXPORT_MAX_BATCH_SIZE
         status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '-'

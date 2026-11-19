@@ -21,11 +21,11 @@ weight: 3
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
   * [Enabled](#enabled)
+  * [SDK Span creation](#sdk-span-creation)
+    + [Span flags](#span-flags)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
-  * [SDK Span creation](#sdk-span-creation)
-    + [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
@@ -231,6 +231,42 @@ However, the changes MUST be eventually visible.
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [Recording Sampled reaction table](#recording-sampled-reaction-table)
+   on whether to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+**Status**: [Development](../document-status.md) - When a span is created with a
+non-empty [span type](./api.md#span-type), the SDK MUST validate that the
+span type conforms to the [span type syntax](./api.md#span-type-syntax) before
+calling [`ShouldSample`](#shouldsample). If the span type does not conform to
+this syntax, the SDK SHOULD emit an error notifying the user about the invalid
+span type and MUST proceed with creating the span as if no span type was
+provided.
+
+#### Span flags
+
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
+
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+[See the list of recognized flags](./api.md#spancontext).
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
@@ -262,6 +298,10 @@ Thus, the SDK specification defines sets of possible requirements for
   Counts for attributes, events and links dropped due to collection limits MUST be
   available for exporters to report as described in the [exporters](../common/mapping-to-non-otlp.md#dropped-attributes-count)
   specification.
+
+  **Status**: [Development](../document-status.md) - A function receiving this
+  as argument MUST be able to access the [span type](api.md#span-type), if set.
+  The name of the accessor is language-specific.
 
   As an exception to the authoritative set of span properties defined in the API spec,
   implementations MAY choose not to expose (and store) the full parent [Context](../context/README.md)
@@ -335,34 +375,6 @@ The following table summarizes the expected behavior for each combination of
 
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
-
-### SDK Span creation
-
-When asked to create a Span, the SDK MUST act as if doing the following in order:
-
-1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
-   (note: this must be done before calling `ShouldSample`, because it expects
-   a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
-3. Generate a new span ID for the `Span`, independently of the sampling decision.
-   This is done so other components (such as logs or exception handling) can rely on
-   a unique span ID, even if the `Span` is a non-recording instance.
-4. Create a span depending on the decision returned by `ShouldSample`:
-   see description of [`ShouldSample`'s](#shouldsample) return value below
-   for how to set `IsRecording` and `Sampled` on the Span,
-   and the [table above](#recording-sampled-reaction-table) on whether
-   to pass the `Span` to `SpanProcessor`s.
-   A non-recording span MAY be implemented using the same mechanism as when a
-   `Span` is created without an SDK installed or as described in
-   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
-
-#### Span flags
-
-The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
-
-Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
-specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
-[See the list of recognized flags](./api.md#spancontext).
 
 ### Sampler
 
@@ -1198,8 +1210,19 @@ while an instance of an exporter should never have its Export() called
 concurrently it does not mean that the task of exporting can not be done
 concurrently. How this is done is outside the scope of this specification.
 
-Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
-after which the call must time out with an error result (`Failure`).
+`Export` MUST NOT block indefinitely, except when performing synchronous
+output through an API that does not support deadlines or
+cancellation of a blocked write.
+
+In all other cases, there MUST be a reasonable finite upper limit after which
+the call times out with an error result (`Failure`).
+
+> [!NOTE]
+> For example, an exporter that writes synchronously to standard output or an
+> application-provided stream can use an output API that cannot safely interrupt
+> a blocked write. Bounding the caller's wait through background execution can
+> leave that write blocked and retaining resources after `Export` returns, or
+> allow output to complete after a timeout. These costs motivate this exception.
 
 Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required

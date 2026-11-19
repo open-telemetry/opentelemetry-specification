@@ -87,7 +87,7 @@ attributes:
   [semconv-genai#353](https://github.com/open-telemetry/semantic-conventions-genai/pull/353)
   adds `fetch_response`, which is a non-inference operation and is not an
   inference span).
-- Outside OpenTelemetry, [OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md#span-kinds)
+- Outside OpenTelemetry, [OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/general/span-kinds.md)
   (Arize) requires an `openinference.span.kind` attribute on every span, with
   values `LLM`, `EMBEDDING`, `CHAIN`, `RETRIEVER`, `RERANKER`, `TOOL`, `AGENT`,
   `GUARDRAIL`, `EVALUATOR`, and `PROMPT`. It is named after OTel's `SpanKind`,
@@ -524,7 +524,7 @@ conventions. It is a single string with coarse values (`http`, `db`, `rpc`,
 `messaging`), assigned at ingestion time by rules over OpenTelemetry semantic
 conventions.
 
-[OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md#span-kinds)
+[OpenInference](https://github.com/Arize-ai/openinference/blob/main/spec/general/span-kinds.md)
 requires `openinference.span.kind` on every span (`LLM`, `CHAIN`, `RETRIEVER`,
 `TOOL`, `AGENT`, ...) and its backends dispatch rendering and evaluation on it.
 It is span type under another name, implemented as an attribute because that was
