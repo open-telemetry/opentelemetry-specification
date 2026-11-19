@@ -14,6 +14,10 @@ release.
 
 ### Traces
 
+- Clarify OpenTelemetry TraceState handling (`ot` key, `th` and `rv` ABNF,
+  trailing-zero encoding, representable threshold range, and empty `ot` entry
+  deletion).
+  ([#5446](https://github.com/open-telemetry/opentelemetry-specification/pull/5446))
 - Add the traces data model.
   ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only

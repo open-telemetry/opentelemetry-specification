@@ -30,7 +30,7 @@ When setting [TraceState](api.md#tracestate) values that are part of the OTel ec
 they MUST all be contained in a single entry using the `ot` key, with the value being
 a semicolon separated list of key-value pairs such as:
 
-* `ot=p:8;r:62`
+* `ot=th:c;rv:6e6d1a75832a2f`
 * `ot=foo:bar;k1:13`
 
 The [TraceContext](https://www.w3.org/TR/trace-context/) specification defines support for multiple "tenants" each to use their own `tracestate` entry by prefixing `tenant@` to tenant-specific values in a mixed tracing environment. OpenTelemetry recognizes this syntax but does not specify an interpretation for multi-tenant `tracestate`.
@@ -51,7 +51,7 @@ instead use their own entry.
 ## Key
 
 The key is an identifier that describes an OTel concern.
-Simple examples are `p`, `ts`, or `s1`.
+Simple examples are `th`, `rv`, or `k1`.
 
 The key can be formally defined as:
 
@@ -60,9 +60,11 @@ key        = lcalpha *(lcalpha / DIGIT )
 lcalpha    = %x61-7A ; a-z
 ```
 
-Specific keys used by OTel concerns MUST be defined as part of the Specification,
-and hence it is forbidden to use any key that has not been defined in
-the Specification itself.
+Specific keys produced by OTel concerns MUST be defined as part of the Specification,
+and hence it is forbidden to originate any key that has not been defined in
+the Specification itself. When updating a valid `ot` entry, consumers MUST
+preserve existing unrecognized syntactically valid key-value pairs (see
+[Setting values](#setting-values)) for forward compatibility.
 
 ## Value
 
@@ -82,13 +84,17 @@ lcalpha    = %x61-7A ; a-z
 ## Setting values
 
 Set values MUST be either updated or added to the `ot` entry in `TraceState`,
-in order to preserve existing values belonging to other OTel concerns. For example,
-if a given concern K wants to set `k1:13`:
+in order to preserve existing values belonging to other OTel concerns (including
+unrecognized syntactically valid sub-keys defined by future versions of the
+Specification). For example, if a given concern K wants to set `k1:13`:
 
-* `ot=p:8;r:62` will become `ot=p:8;r:62;k1:13`.
-* `ot=p:8;k1:7;r:62` will become `ot=p:8;r:62;k1:13`. Preserving the order is not required.
+* `ot=th:c;rv:6e6d1a75832a2f` will become `ot=th:c;rv:6e6d1a75832a2f;k1:13`.
+* `ot=th:c;k1:7;rv:6e6d1a75832a2f` will become `ot=th:c;rv:6e6d1a75832a2f;k1:13`. Preserving the order is not required.
 
-If setting a value ends up making the entire `ot` entry exceed the 256 characters limit,
+When removing a sub-key leaves the `ot` list empty, the `ot` entry MUST be
+deleted from `TraceState`, because W3C TraceState does not allow empty values.
+
+If setting a value ends up making the `ot` value exceed the 256 characters limit,
 SDKs are advised to abort the operation and signal the user about the error, e.g.
 
 ```go
@@ -107,14 +113,16 @@ The following values have been defined by OpenTelemetry.
 ### Sampling threshold value `th`
 
 The OpenTelemetry TraceState `th` sub-key defines a sampling threshold, which conveys effective sampling probability.
-Valid values of the `th` sub-fields include between 1 and 14 lowercase hexadecimal digits.
+Valid values of the `th` sub-key MUST consist of between 1 and 14 lowercase hexadecimal digits:
 
 ```
-hexdigit = DIGIT ; a-f
+th-value = 1*14hexdigit
+hexdigit = DIGIT / %x61-66 ; 0-9 or a-f
 ```
 
-To decode the threshold from the OpenTelemetry TraceState `th` value, first extend the value with trailing zeros to make 14 digits.
-Then, parse the 14-digit value as a 56-bit unsigned hexadecimal number, yielding a rejection threshold.
+When encoding `th`, trailing zeros SHOULD be omitted, retaining a single `0` for threshold `0` since `th-value` MUST contain at least one digit.
+To decode the threshold from the OpenTelemetry TraceState `th` value, first extend the value with trailing zeros to make 14 digits (accepting any valid 1 to 14 lowercase hexadecimal digits, including values with trailing zeros).
+Then, parse the 14-digit value as a 56-bit unsigned hexadecimal number, yielding a rejection threshold in the range `[0, 2^56 - 1]`.
 
 OpenTelemetry defines consistent sampling in terms of a 56-bit trace randomness value compared with the 56-bit rejection threshold.
 When the randomness value is less than the rejection threshold, the span is not sampled.
@@ -127,6 +135,7 @@ tracestate: ot=th:0
 ```
 
 To calculate sampling probability from the rejection threshold, define a constant `MaxAdjustedCount` equal to 2^56, the number of distinct 56-bit values.
+Because `Threshold` is in `[0, MaxAdjustedCount - 1]`, representable sampling probabilities are in `[2^-56, 1]` (a 0% sampling probability cannot be represented in `th`).
 The sampling probability is defined:
 
 ```
@@ -155,19 +164,23 @@ tracestate: ot=th:c
 This corresponds with 25% sampling probability, as follows:
 
 - The hexadecimal value `c` is extended to `c0000000000000` for 56 bits
-- The rejection threshold is `0xc0000000000000 / 0x100000000000000` which is 75%
+- The rejection threshold is `0xc0000000000000`, corresponding to a rejection probability of `0xc0000000000000 / 0x100000000000000`, which is 75%
 - The sampling probability is 25%.
 
 ### Explicit randomness value `rv`
 
 The OpenTelemetry TraceState `rv` sub-key defines an alternative source of randomness called the _explicit randomness value_.
-Values of `rv` MUST be exactly 14 lower-case hexadecimal digits:
+Values of `rv` MUST be exactly 14 lowercase hexadecimal digits:
+
+```
+rv-value = 14hexdigit
+```
 
 The explicit randomness value is meant to be used instead of extracting randomness from TraceIDs, therefore it contains the same number of bits as W3C Trace Context Level 2 recommends for TraceIDs.
 
 Lowercase hexadecimal digits are specified to enable direct lexicographical comparison between a sampling threshold and either the TraceID (as it appears in the `traceparent` header) or the explicit randomness value (as it appears in the `tracestate` header).
 
-Explicit randomness values are meant to propagate through [span contexts](../context/README.md) unmodified.
+Explicit randomness values are meant to propagate through [`SpanContext`](api.md#spancontext) unmodified.
 Explicit randomness values SHOULD NOT be erased from the OpenTelemetry TraceState or modified once associated with a new TraceID, so that sampling decisions made using the explicit randomness value are consistent across signals.
 
 For example, here is a W3C TraceState value including an OpenTelemetry explicit randomness value:
