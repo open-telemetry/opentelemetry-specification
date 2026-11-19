@@ -70,6 +70,8 @@ release.
   `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
   set.
   ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Add Prometheus `MetricProducer` bridge specification.
+  ([#5426](https://github.com/open-telemetry/opentelemetry-specification/pull/5426))
 
 ### SDK Configuration
 
