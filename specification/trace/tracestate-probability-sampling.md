@@ -61,7 +61,7 @@ To achieve this, it uses two key building blocks.
 The first is a common source of randomness (`R`) that is available to all participants, which includes a set of tracers and collectors.
 This can be either an explicit randomness value expressed in the OpenTelemetry TraceState `rv` sub-key or taken from the trailing 7 bytes of the TraceID.
 The second is a concept of a rejection threshold (`T`). This is derived directly from a participant's sampling rate and is expressed in the OpenTelemetry TraceState `th` sub-key for sampled spans.
-This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
+This specification describes how these two values should be propagated and how participants should use them to make sampling decisions.
 
 For more details about this specification, see [OTEP
 235](../../oteps/trace/0235-sampling-threshold-in-trace-state.md) and
@@ -115,7 +115,7 @@ See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) 
 A common random value (that is known or propagated to all participants) is the main ingredient that enables consistent probability sampling.
 Each participant can compare this value (`R`) with their rejection threshold (`T`) to make a consistent sampling decision across an entire trace (or even across a group of traces).
 
-This proposal supports two sources of randomness:
+This specification supports two sources of randomness:
 
 - **An explicit source of randomness**: OpenTelemetry supports a *random* (or pseudo-random) 56-bit value known as explicit trace randomness. This can be propagated through the OpenTelemetry TraceState `rv` sub-key and is stored in the Span's TraceState field.
 - **Using TraceID as a source of randomness**: OpenTelemetry supports using the [least-significant 56 bits of the TraceID as the source of randomness, as specified in W3C Trace Context Level 2][W3CCONTEXTTRACEID]. This can be done if the root Span's Trace SDK knows that the TraceID has been generated in a random or pseudo-random manner.
@@ -197,7 +197,7 @@ base cases:
 - Parent-based: When using parent-based sampling at a child, we expect
   the child's decision to match the parent's decision.  The parent and
   child will have matching threshold values.
-- Consistent probability: A probability sampler (e.g., TraceIDRatio)
+- Consistent probability: A probability sampler (e.g., `ProbabilitySampler`)
   makes an independent sampling decision.  A consistent probability
   sampling decision ignores the parent's sampling threshold (if any).
   This case covers always-on and always-off sampling behaviors.
@@ -210,7 +210,7 @@ Some terms are not about one specific sampler, but about the approach:
   the sampling decision an SDK makes when starting a new span, for
   example "head sampling decisions can only consider information
   present during span creation" (from the [API specification for Span
-  Link](./api.md#link).  This can also refer to a distributed tracing
+  Link](./api.md#link)).  This can also refer to a distributed tracing
   setup, in which all child samplers use a parent-based sampler, for
   example "most distributed tracing configurations use head sampling".
 - Tail: This mode of sampling implies that Downstream samplers are
@@ -257,7 +257,7 @@ All sampling stages that modify the effective sampling threshold must
 update the sampling threshold by re-encoding the OpenTelemetry
 TraceState, to maintain the correct statistical interpretation.
 
-For a conditional sampling stages (e.g. rule-based samplers) to remain
+For conditional sampling stages (e.g. rule-based samplers) to remain
 consistent, they must not condition the provided threshold on the
 randomness value or a dependent source of randomness (it can use
 *independent* randomness).
@@ -271,7 +271,7 @@ Sampling stages should check for consistency when it is a simple test,
 and they should erase the threshold when it is apparently
 inconsistent.  For example, a parent-based sampler that receives and
 propagates a sampled context with threshold should check that the
-sampled flag matches the expression `rv >= th`, otherwise it should
+sampled flag matches the expression `R >= T`, otherwise it should
 erase the threshold.
 
 If randomness was derived from an explicit randomness value, the
@@ -290,8 +290,8 @@ Because there is no parent threshold, a root sampler always makes an
 independent decision.  Child samplers may be configured with
 independent samplers, although it can lead to incomplete traces.
 
-The independent Parent/Child sampler base cases (i.e., AlwaysOn,
-TraceIDRatio) cases encode a fixed threshold based on their
+The independent Parent/Child sampler base cases (i.e., `AlwaysOn`,
+`ProbabilitySampler`) encode a fixed threshold based on their
 sampling probability.
 
 #### Parent-based threshold
@@ -306,13 +306,13 @@ threshold, subject to the general requirements:
 ### Downstream threshold
 
 Downstream samplers are able to raise the applied threshold, but they
-cannot lower.  For a Downstream sampler to lower a threshold equates
+cannot lower it.  For a Downstream sampler to lower a threshold equates
 with retroactively raising an earlier stage's sampling probability.
 Stated another way, downstream samplers are permitted to decrease
 sampling probability, but to raise sampling probability would
 introduce a statistical error.
 
-Two downstream probability sampling have standard terminology,
+Two downstream probability sampling modes have standard terminology,
 discussed next.
 
 #### Equalizing downstream sampler
@@ -346,23 +346,23 @@ it computes the product threshold `T_o`:
 T_o = ProbabilityToThreshold(p * ThresholdToProbability(T_s))
 ```
 
-- If `T_o` is smaller than the minimum probability threshold, the span
-  is not sampled.
+- If `p * ThresholdToProbability(T_s)` is smaller than the minimum
+  sampling probability (`2^-56`), the span is not sampled.
 - If `R >= T_o` the span is selected using outbound threshold `T_o`.
 - Otherwise, `R < T_o` indicates that the span is not sampled.
 
 ## Migration to consistent probability samplers
 
-The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.
-The current specification addresses this behavior.
+The OpenTelemetry specification for `TraceIdRatioBased` samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.
+To address this without breaking existing deployments, `TraceIdRatioBased` is deprecated in favor of [`ProbabilitySampler`](./sdk.md#probabilitysampler).
 
-As the OpenTelemetry TraceIdRatioBased sampler changes definition, users must consider how to avoid incomplete traces due to inconsistent sampling during the transition between old and new logic.
+As users migrate from `TraceIdRatioBased` to `ProbabilitySampler`, they must consider how to avoid incomplete traces due to inconsistent sampling during the transition between old and new logic.
 
-The original TraceIdRatioBased sampler specification gave a workaround for the underspecified behavior, that it was safe to use for root spans: "It is recommended to use this sampler algorithm only for root spans (in combination with [`ParentBased`](./sdk.md#parentbased)) because different language SDKs or even different versions of the same language SDKs may produce inconsistent results for the same input."
+The original `TraceIdRatioBased` sampler specification gave a workaround for the underspecified behavior, that it was safe to use for root spans: "It is recommended to use this sampler algorithm only for root spans (in combination with [`ParentBased`](./sdk.md#parentbased)) because different language SDKs or even different versions of the same language SDKs may produce inconsistent results for the same input."
 
 To avoid inconsistency during this transition, users SHOULD follow this guidance until all Trace SDKs in a system have been upgraded to modern Trace randomness requirements based on W3C Trace Context Level 2.
 Users can verify that all Trace SDKs have been upgraded when all Spans in their system have the Trace random flag set (in Span flags).
-To assist with this migration, the TraceIdRatioBased Sampler issues a warning statement the first time it presumes TraceID randomness for a Context where the Trace random flag is not set.
+To assist with this migration, [`TraceIdRatioBased`](./sdk.md#compatibility-warnings-for-traceidratiobased-sampler) warns when operating as a non-root sampler, and [`ProbabilitySampler`](./sdk.md#compatibility-warnings-for-probabilitysampler) issues a warning when it presumes TraceID randomness for a non-root Span where the Trace random flag is not set.
 
 ## Algorithms
 
@@ -384,8 +384,9 @@ One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floatin
 import math
 
 # ProbabilityToThresholdWithPrecision assumes the probability value is in the range
-# [2^-56, 1] and precision is in the range [1, 13], which is the maximum for a
-# IEEE-754 double-width float value.
+# [2^-48, 1] and precision is in the range [1, 12], due to the 12-hex-digit limit
+# used below on IEEE-754 double-width float values. For the full [2^-56, 1] range,
+# use integer arithmetic as noted below.
 def probability_to_threshold_with_precision(probability, precision):
     if probability == 1:
         # Special case
@@ -419,15 +420,15 @@ def probability_to_threshold_with_precision(probability, precision):
         digits = hex_str[4:][:-3]
 
     assert len(digits) == 13
-    # Remove trailing zeros
-    return digits[:precision].rstrip('0')
+    # Remove trailing zeros; preserve "0" if rounding collapses near 1.0
+    return digits[:precision].rstrip('0') or '0'
 ```
 
 Note the use of `math.frexp(probability)` used to adjust precision using the base-2 exponent of the probability argument.
 This makes the configured precision apply to the significant digits of the threshold for probabilities near zero.
 Note that there is not a symmetrical adjustment made for values near unit probability, as we do not believe there is a practical use for sampling very precisely near 100%.
 
-To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package.
+To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING].
 This package demonstrates how to directly calculate integer thresholds from probabilities.
 
 [PKGSAMPLING]: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/sampling/README.md
@@ -462,9 +463,10 @@ To convert a 56-bit integer rejection threshold value to the `T` representation,
 if tvalue == 0:
   add_otel_trace_state('th:0')
 else:
-  h = hex(tvalue).rstrip('0')
-  # remove leading 0x
-  add_otel_trace_state('th:'+h[2:])
+  # Format as 14 lowercase hex digits (56 bits) to preserve leading zeros
+  # before stripping trailing zeros.
+  h = f'{tvalue:014x}'.rstrip('0')
+  add_otel_trace_state('th:' + h)
 ```
 
 ### Testing randomness vs threshold
