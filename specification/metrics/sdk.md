@@ -1231,9 +1231,10 @@ timeseries in a stream:
 This prevents `Finish` from affecting timeseries outside the caller's intended
 scope: if a View drops an attribute key passed to `Finish` (for example,
 dropping `pool.name`), no active timeseries in that stream contains that key, so
-the call safely no-ops instead of clearing a shared aggregated timeseries. To
-finish a shared timeseries whose distinguishing key was dropped, callers broaden
-the provided attributes.
+the call safely no-ops instead of clearing a shared aggregated timeseries. Once
+a View drops an identifying key and merges entities into a shared series, that
+stream no longer tracks per-entity cardinality, so per-entity `Finish` calls do
+not affect the merged aggregate.
 
 On the next [`Collect`](#collect) call for each `MetricReader`:
 
