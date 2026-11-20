@@ -1183,11 +1183,11 @@ implicit or explicit, MUST be used for exemplar [TraceBased](#tracebased) filter
 passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
 
 The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
-map lookup, except when re-resolving a timeseries that was
+map lookup, except (**Development**) when re-resolving a timeseries that was
 [finished](#instrument-finish) and cleared during `Collect` for that
 `MetricReader`.
 
-If a bound concrete timeseries is [finished](#instrument-finish) and cleared during
+(**Development**) If a bound concrete timeseries is [finished](#instrument-finish) and cleared during
 `Collect` for a `MetricReader`, the next attribute-free recording on that bound
 instrument MUST re-resolve the pre-bound attributes against the stream's current
 cardinality state and cache the newly resolved aggregator. If a bound instrument exposes
