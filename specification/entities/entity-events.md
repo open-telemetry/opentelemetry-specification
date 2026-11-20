@@ -25,6 +25,7 @@ weight: 3
 - [Examples](#examples)
   * [Kubernetes Pod Entity State](#kubernetes-pod-entity-state)
   * [Service and Process Relationship](#service-and-process-relationship)
+  * [Identity Scope](#identity-scope)
   * [Entity Delete](#entity-delete)
 
 <!-- END doctoc -->
@@ -88,8 +89,24 @@ change, or periodically to indicate the entity still exists.
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
 | `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. When absent, MUST be treated as an empty map. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| `entity.id_scope` | string | The name of the entity's [ID Scope](data-model.md#identity-scope) value: `unspecified`, `global` or `local`. When absent, MUST be treated as `unspecified`. |
+| `entity.id_scope_entity_type` | string | The entity's [Scope Entity Type](data-model.md#identity-scope). MUST be present when `entity.id_scope` is `local` and absent otherwise. |
 | `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). When absent, MUST be treated as an empty array. |
 | `entity.report.interval` | int64 (seconds) | The reporting period for this entity. MUST be a non-negative value when present. When absent, the reporting period is unknown. A value of `0` indicates that no periodic state events will be sent. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to determine when to expect the next event and infer that an entity is gone if events stop arriving. |
+
+**Identity Scope**:
+
+A consumer computes the entity's [Global Identity](data-model.md#global-identity-composition)
+as defined in the Entity Data Model, with the scoping entity found as follows: it is the
+related entity in `entity.relationships` whose `entity.type` equals the Scope Entity Type, or,
+when there is none, the entity of that type in the event's Resource. If the scoping entity is
+found neither way, the identity is [unresolved](data-model.md#unresolved-identity).
+
+A relationship carries the scoping entity's type and identifying attributes but not its ID
+Scope. That comes from the scoping entity's own Entity State event, which MAY be reported by
+a different producer. Until the consumer has received it, the identity is unresolved. A
+producer that names the scoping entity through a relationship SHOULD also report that entity
+unless another producer does. See [Identity Scope examples](#identity-scope) for both cases.
 
 **Timestamp Field**:
 
@@ -245,6 +262,7 @@ LogRecord:
     entity.type: k8s.pod
     entity.id:
       k8s.pod.uid: abc-123-def-456
+    entity.id_scope: global
     entity.description:
       k8s.pod.name: nginx-deployment-66b6c
       k8s.pod.labels:
@@ -322,7 +340,7 @@ LogRecord:
           service.namespace: prod
 ```
 
-The `service` entity represents the logical service. It is also emitted by the OTel SDK 
+The `service` entity represents the logical service. It is also emitted by the OTel SDK
 alongside the `service.instance` entity event.
 
 ```
@@ -339,6 +357,93 @@ LogRecord:
       service.namespace: prod
     entity.report.interval: 300
 ```
+
+### Identity Scope
+
+The scoping entity of a `local` entity is found either in the event's Resource or through
+a relationship. The examples below follow the OTLP structure, where the Resource is carried
+once on `ResourceLogs` and shared by the log records under it.
+
+**Scoping entity in the Resource.** A host-level OTel Collector emits `process` entity state
+events. Its Resource carries the `host` entity, so every process it reports is scoped by that
+host without naming it in a relationship.
+
+```
+ResourceLogs:
+  Resource:
+    attributes:
+      host.id: host-abc-123
+      host.name: prod-host-01
+    entity_refs:
+      - type: host
+        id_keys: [host.id]
+        description_keys: [host.name]
+        id_scope: global
+  ScopeLogs:
+    LogRecords:
+      - Timestamp: 2026-01-12T11:00:00.000000000Z
+        EventName: entity.state
+        Attributes:
+          entity.type: process
+          entity.id:
+            process.pid: 4821
+            process.start_time: 1736928900
+          entity.id_scope: local
+          entity.id_scope_entity_type: host
+          entity.report.interval: 300
+```
+
+The consumer finds no relationship to a `host`, so it takes the `host` entity from the
+Resource. Its ID Scope is `global`, so the walk stops. The Global Identity of the process is
+`{host.id, process.pid, process.start_time}`.
+
+**Scoping entity through a relationship.** A cluster-level receiver emits `k8s.container`
+and `k8s.pod` entity state events. Its Resource carries the `k8s.cluster` entity, which is
+not what scopes a container. The container is scoped by its Pod and names it in a `part_of`
+relationship. The Pod's own event carries the Pod's ID Scope.
+
+```
+ResourceLogs:
+  Resource:
+    attributes:
+      k8s.cluster.uid: cluster-789
+    entity_refs:
+      - type: k8s.cluster
+        id_keys: [k8s.cluster.uid]
+        id_scope: global
+  ScopeLogs:
+    LogRecords:
+      - Timestamp: 2026-01-12T10:30:00.000000000Z
+        EventName: entity.state
+        Attributes:
+          entity.type: k8s.container
+          entity.id:
+            k8s.container.name: nginx
+          entity.id_scope: local
+          entity.id_scope_entity_type: k8s.pod
+          entity.description:
+            k8s.container.restart_count: 2
+          entity.relationships:
+            - relationship.type: part_of
+              entity.type: k8s.pod
+              entity.id:
+                k8s.pod.uid: abc-123-def-456
+      - Timestamp: 2026-01-12T10:30:00.000000000Z
+        EventName: entity.state
+        Attributes:
+          entity.type: k8s.pod
+          entity.id:
+            k8s.pod.uid: abc-123-def-456
+          entity.id_scope: global
+          entity.description:
+            k8s.pod.name: nginx-deployment-66b6c
+```
+
+The consumer finds the `k8s.pod` relationship on the container event and takes `k8s.pod.uid`
+from it. The Pod's Entity State event reports `global`, so the walk stops. The Global Identity
+of the container is `{k8s.pod.uid, k8s.container.name}`. The `k8s.cluster` entity on the
+Resource is not part of it. Had the consumer not received the Pod's Entity State event, the
+container's identity would be unresolved until it arrives.
 
 ### Entity Delete
 
