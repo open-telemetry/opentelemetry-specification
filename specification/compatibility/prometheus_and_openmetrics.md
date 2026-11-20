@@ -474,17 +474,16 @@ describes. Receivers MAY therefore also apply the resource attributes from a
 `job` and `instance` in later requests, for example by caching them. Resource
 attributes from a `target` info metric in the current request MUST take
 precedence over attributes from an earlier request.
-For each resource the `service.name` attribute MUST be set to the
-`service.name` label in `target` info metric, if that label exists in the
-`target` info metric with the same `job` and `instance` key as the resource.
-Otherwise, if `job` is not the empty string, then `service.name` MUST be
-set to equal the `job` label.
+For each `job` and `instance` pair, if the `target` info metric with that `job`
+and `instance` has a `service.name` label, the `service.name` attribute of the
+resource created for that pair MUST be set to that label's value. Otherwise, if
+`job` is not the empty string, it MUST be set to the value of the `job` label.
 
-For each resource the `service.instance.id` attribute MUST be set to the
-`service.instance.id` label in `target` info metric, if that label exists in the
-`target` info metric with the same `job` and `instance` key as the resource.
-Otherwise, if `instance` is not the empty string, then `service.instance.id`
-MUST be set to equal the `instance` label.
+For each `job` and `instance` pair, if the `target` info metric with that `job`
+and `instance` has a `service.instance.id` label, the `service.instance.id`
+attribute of the resource created for that pair MUST be set to that label's
+value. Otherwise, if `instance` is not the empty string, it MUST be set to the
+value of the `instance` label.
 
 ## OTLP Metric points to Prometheus
 
