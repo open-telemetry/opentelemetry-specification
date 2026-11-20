@@ -467,6 +467,12 @@ When receiving metrics over Prometheus Remote Write, a missing `job` or
 into one resource per distinct `job` and `instance` pair, including pairs
 where one or both values are the empty string.
 
+A `target` info metric can arrive in a different request than the metrics it
+describes. Receivers MAY therefore also apply the resource attributes from a
+`target` info metric received in an earlier request to metrics with the same
+`job` and `instance` in later requests, for example by caching them. Resource
+attributes from a `target` info metric in the current request MUST take
+precedence over attributes from an earlier request.
 For each resource the `service.name` attribute MUST be set to the
 `service.name` label in `target` info metric, if that label exists in the
 `target` info metric with the same `job` and `instance` key as the resource.
