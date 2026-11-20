@@ -410,7 +410,9 @@ In addition to the attributes described below, the
  info metric is used to supply additional resource attributes. If present,
 the `target` info metric MUST be dropped from the batch of metrics, and all labels
 except `job`, `instance` and `__name__` from the `target` info metric MUST be
-converted to resource attributes attached to all other metrics which share the
+same `job` and `instance` as the `target` info metric and are part of the same
+scrape, or of the same request when receiving metrics over Remote Write. Such
+resource attributes MAY be added to metrics from future requests that share the
 same `job` and `instance` as the `target` info metric.
 
 Labels from the `target` info metric take precedence over all derived resource
