@@ -269,7 +269,13 @@ that copy, preserving the parent environment and caller-owned launch settings.
 
 Before injecting, remove inherited fields identified by the configured
 propagators' [Fields](api-propagators.md#fields), using normalized names.
-This also prevents stale values when injection omits fields.
+This clears stale values for those fields when injection omits them. `Fields`
+may not include every field accepted during extraction. When replacing
+inherited context, also clear known alternate fields that a child could
+extract. For example, [B3 extraction](api-propagators.md#b3-extract) accepts
+both single- and multi-header formats, while `Fields` lists only the configured
+injection format. Clear both formats to avoid leaving stale context in the
+child environment. Document any alternate fields that cannot be cleared.
 Apply the documented precedence when clearing or replacing explicitly
 supplied child fields.
 
