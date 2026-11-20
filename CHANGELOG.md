@@ -75,20 +75,10 @@ release.
   attribute and describe its availability.
   ([#5363](https://github.com/open-telemetry/opentelemetry-specification/pull/5363))
 
-### Baggage
-
-### Profiles
-
-### Resource
-
-### Entities
-
 ### Common
 
 - Define optional application-provided names for SDK components.
   ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
-
-### OpenTelemetry Protocol
 
 ### Compatibility
 
@@ -133,15 +123,10 @@ release.
   the foundation of the technical contract for the OpenTelemetry Injector,
   System Packages and the OpenTelemetry Operator.
   ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
-
-### OTEPs
-
 - Explicitly permit tightening runtime or dependency version requirements to
   address an identified security risk, including risks from loss of security
   maintenance.
   ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
-
-### OTEPs
 
 ## v1.62.0 (2026-10-21)
 
