@@ -196,10 +196,14 @@ This section describes how process instrumentation uses
 [environment carriers](#carrier-implementation-guidelines) to automate context
 propagation at invocation and child-process launch boundaries. Agents, framework
 integrations, test runners, and wrappers can provide this instrumentation.
-Instrumentation identifies the command, job, or test invocation that receives
-context and supported application-initiated child-process launches. The scope in
-which incoming context applies is a separate design choice from which component
-provides propagation.
+
+The instrumentation defines and documents the scope in which incoming context
+applies. Depending on the application model, this can be a command, job, or test
+invocation, or the process lifetime. With process-lifetime scope, startup context
+can apply to multiple eligible spans that would otherwise be roots. Documentation
+describes eligible spans, when the context stops applying, and the implications
+for subsequent operations in long-running processes. This guidance does not
+prescribe a common invocation boundary or span-creation mechanism.
 
 This guidance does not define a persistent fallback parent for every otherwise
 parentless span or change existing
