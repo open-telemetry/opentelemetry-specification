@@ -396,7 +396,7 @@ metric samples are not turned into data points.
 In Prometheus metrics, the `job` and `instance` labels are used as join keys
 between metrics and the `target` info metric. Therefore a new resource MUST be
 created for each `job` and `instance` pair encountered in the metrics labels,
-except for the `target` info metric.
+except for the `target` info metric which defines correlated resource labels.
 
 The `service.name` and `service.instance.id` resource
 attributes are needed to ensure Prometheus exporters can disambiguate metrics
