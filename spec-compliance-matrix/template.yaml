@@ -64,6 +64,7 @@ sections:
           - name: SpanProcessor.OnStart receives parent Context
           - name: UpdateName
           - name: User-defined start timestamp
+          - name: '[Create with span type](specification/trace/api.md#span-type)'
           - name: End
           - name: End with timestamp
           - name: IsRecording
