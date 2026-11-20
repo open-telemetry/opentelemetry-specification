@@ -157,8 +157,6 @@ with appropriate permissions.
 - Multi-tenant environments have extra exposure risk when environment variables
   are visible to other processes or users with appropriate permissions.
 
-<a id="implementation-guidelines"></a>
-
 ## Carrier Implementation Guidelines
 
 > [!IMPORTANT]
