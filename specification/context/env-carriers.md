@@ -14,8 +14,8 @@
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
     + [Security](#security)
-- [Implementation Guidelines](#implementation-guidelines)
-- [Instrumentation Guidelines](#instrumentation-guidelines)
+- [Carrier Implementation Guidelines](#carrier-implementation-guidelines)
+- [Process Instrumentation Guidelines](#process-instrumentation-guidelines)
   * [Configuration and Defaults](#configuration-and-defaults)
   * [Incoming Context](#incoming-context)
   * [Child Process Injection](#child-process-injection)
@@ -110,6 +110,8 @@ that name normalizes to `X_B3_TRACEID`.
 > if a Windows process environment contains `traceparent`, reading the
 > normalized key `TRACEPARENT` may return the value of `traceparent`.
 
+<!-- -->
+
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
 > defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
@@ -155,7 +157,9 @@ with appropriate permissions.
 - Multi-tenant environments have extra exposure risk when environment variables
   are visible to other processes or users with appropriate permissions.
 
-## Implementation Guidelines
+<a id="implementation-guidelines"></a>
+
+## Carrier Implementation Guidelines
 
 > [!IMPORTANT]
 > This section is non-normative and provides implementation guidance only. It
@@ -181,19 +185,21 @@ Example implementations:
 - [OpenTelemetry Python implementation][pi]
 - [OpenTelemetry Swift implementation][si]
 
-## Instrumentation Guidelines
+## Process Instrumentation Guidelines
 
 **Status**: [Alpha](../document-status.md)
 
 > [!IMPORTANT]
 > This section is non-normative and adds no specification requirements.
 
-Agents, framework integrations, test runners, and wrappers can automate context
-propagation through environment variables. Instrumentation identifies the
-command, job, or test invocation that receives context and supported
-application-initiated child-process launches. The scope in which incoming
-context applies is a separate design choice from which component provides
-propagation.
+This section describes how process instrumentation uses
+[environment carriers](#carrier-implementation-guidelines) to automate context
+propagation at invocation and child-process launch boundaries. Agents, framework
+integrations, test runners, and wrappers can provide this instrumentation.
+Instrumentation identifies the command, job, or test invocation that receives
+context and supported application-initiated child-process launches. The scope in
+which incoming context applies is a separate design choice from which component
+provides propagation.
 
 This guidance does not define a persistent fallback parent for every otherwise
 parentless span or change existing
