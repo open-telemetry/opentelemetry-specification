@@ -630,7 +630,7 @@ Native Histogram with standard (exponential) schema as follows:
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
   following the appropriate format used by each Prometheus protocol.
 - `ZeroThreshold`, if set, is converted to the Native Histogram `ZeroThreshold`.
-  Otherwise, it is set to the default value `1e-128`.
+  Otherwise, it is set to zero.
 - All fields of the Native Histogram that are not explicitly referenced here
   MUST be set to their zero value, such as custom values.
 - `Min` and `Max` are not used.
