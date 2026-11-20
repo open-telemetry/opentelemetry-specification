@@ -213,11 +213,10 @@ Extraction and injection use the
 
 ### Configuration and Defaults
 
-Recommended configuration leaves automatic process propagation disabled until
-explicitly enabled.
-For enabled process instrumentation, recommended defaults are incoming context
-in `parent` mode and child-process injection enabled, with separate controls
-to disable either direction.
+For process instrumentation, recommended defaults are incoming context in
+`none` mode and child-process injection enabled for supported launches.
+Separate controls select incoming `parent` or `link` mode and disable
+child-process injection.
 
 Configuration belongs to the instrumentation and can vary by language and
 technology.
@@ -227,26 +226,27 @@ invocation boundaries, precedence for application-provided context and
 explicitly supplied child fields, unsupported launch mechanisms, and behavior
 without a valid current span.
 
-Opting in is an application or operator decision about accepting context from
-the launch environment and forwarding it across process boundaries. Valid
-extracted context does not authenticate its sender. Incoming sampling flags can
-affect recording decisions, and baggage can reach downstream destinations,
-depending on the configured sampler, propagators, and instrumentation.
+Selecting `parent` or `link` is an application or operator decision to accept
+context from the launch environment. Valid extracted context does not
+authenticate its sender. Incoming sampling flags can affect recording
+decisions, and baggage can reach downstream destinations, depending on the
+configured sampler, propagators, and instrumentation.
 
 ### Incoming Context
 
-Treat the environment as [startup input](#environment-variable-immutability)
-and retain extracted context for the invocation it describes.
+When incoming extraction is enabled, treat the environment as
+[startup input](#environment-variable-immutability) and retain extracted
+context for the invocation it describes.
 
 Incoming context can be handled in three modes:
 
-- **`parent` (default):** Use the extracted context as the invocation span's
+- **`parent`:** Use the extracted context as the invocation span's
   remote parent, continuing the incoming trace. An explicit application
   parent/root choice or an existing current span takes precedence.
 - **`link`:** Add the extracted span context as a link to the invocation span,
   preserving the selected parent or root. This records the relationship without
   requiring the invocation to join the incoming trace.
-- **`none`:** Do not automatically extract context or baggage from the
+- **`none` (default):** Do not automatically extract context or baggage from the
   environment. Child-process injection is controlled separately.
 
 Supply the parent or link at
@@ -263,9 +263,19 @@ values.
 
 ### Child Process Injection
 
-At each supported application-initiated launch, copy the environment the
-application would pass to the child. Inject current context and baggage into
-that copy, preserving the parent environment and caller-owned launch settings.
+When child-process injection is enabled, at each supported
+application-initiated launch, copy the environment the application would pass
+to the child. Inject current context and baggage into that copy, preserving
+the parent environment and caller-owned launch settings subject to the
+documented precedence for explicitly supplied propagation fields.
+
+Automatic injection can make the current span context, trace state, and
+baggage available to child code through configured propagators, even if the
+child does not use OpenTelemetry. Baggage can have been received through
+another carrier, such as an HTTP request, even when incoming environment
+extraction is `none`.
+Instrumentation documentation describes which launches are affected and how
+to disable injection when a child is outside the application's trust boundary.
 
 Before injecting, remove inherited fields identified by the configured
 propagators' [Fields](api-propagators.md#fields), using normalized names.
