@@ -1173,7 +1173,7 @@ evaluated against the cardinality state at that moment. As a consequence, separa
 to `Bind` with identical attributes may resolve to different aggregators (e.g. one to a
 concrete series, another to the [overflow series](#overflow-attribute)) based on the
 cardinality state at the time of each call. The resolved aggregator MUST be fixed and
-not change across collection cycles, unless the resolved timeseries is
+not change across collection cycles, unless (**Development**) the resolved timeseries is
 [finished](#instrument-finish) and cleared during `Collect` for that
 `MetricReader`.
 
