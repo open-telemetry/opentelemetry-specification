@@ -549,11 +549,11 @@ the existing instrument interface. If the existing instrument interface is reuse
 recording operations on the returned bound instrument negates the performance benefits
 of binding.
 
-If a bound instrument exposes [`Finish`](#finish) (for example, when the existing
-instrument interface is reused), calling `Finish` on it MUST behave identically to
-calling `Finish` on the unbound instrument with the bound attributes combined with
-any additional attributes provided to the call (with call-time attributes taking
-precedence on duplicate keys).
+(**Development**) If a bound instrument exposes [`Finish`](#finish) (for example,
+when the existing instrument interface is reused), calling `Finish` on it MUST
+behave identically to calling `Finish` on the unbound instrument with the bound
+attributes combined with any additional attributes provided to the call (with
+call-time attributes taking precedence on duplicate keys).
 
 Measurements recorded on the bound instrument can be associated with the
 [Context](../context/README.md).
