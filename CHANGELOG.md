@@ -14,6 +14,10 @@ release.
 
 ### Traces
 
+- Clarify `CompositeSampler` `TraceState` and `DROP` attribute handling,
+  document `ComposableSampler.GetDescription`, and add `ComposableSampler`
+  concurrency requirements.
+  ([#5454](https://github.com/open-telemetry/opentelemetry-specification/pull/5454))
 - Add the traces data model.
   ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only

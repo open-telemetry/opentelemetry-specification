@@ -46,6 +46,7 @@ weight: 3
     + [CompositeSampler](#compositesampler)
       - [ComposableSampler](#composablesampler)
         * [GetSamplingIntent](#getsamplingintent)
+        * [GetDescription](#getdescription-1)
       - [Built-in ComposableSamplers](#built-in-composablesamplers)
         * [ComposableAlwaysOn](#composablealwayson)
         * [ComposableAlwaysOff](#composablealwaysoff)
@@ -681,19 +682,20 @@ The CompositeSampler takes a ComposableSampler as input and uses it as a delegat
 The process of constructing the final SamplingResult in response to a call to ShouldSample consists of the following steps.
 
 * The sampler calls `GetSamplingIntent` on the delegate (see ComposableSampler below),
-* If the received THRESHOLD value is `null`, the sampling decision is `DROP`, otherwise
-* The sampler checks the received `adjusted_count_reliable`, and in case of `true` derives the Randomness value R from the TraceState or TraceId as described in [Randomness Value (R)](./tracestate-probability-sampling.md#randomness-value-r), and in case of `false` it generates a new Randomness value R by hex-encoding a new random 56-bit number
-* The sampler compares (lexicographically or by other means, depending on the implementation) the received THRESHOLD value with the Randomness value R to arrive at the final sampling `Decision` as described in [Decision algorithm](./tracestate-probability-sampling.md#decision-algorithm),
-* The sampler calls the received `trace_state_provider` function passing the parent `Tracestate` and the final sampling `Decision` to get the new `Tracestate` to be associated with the `Span`,
+* If the received `threshold` value is `null` (or absent/invalid in language-idiomatic representations), the sampling decision is `DROP`, otherwise
+* The sampler checks the received `adjusted_count_reliable`, and in case of `true` derives the Randomness value R from the TraceState or TraceId as described in [Randomness Value (R)](./tracestate-probability-sampling.md#randomness-value-r), and in case of `false` it generates a new random 56-bit Randomness value R (implementations MAY skip generating a random number when `threshold` is `0`, since `R >= 0` always holds)
+* The sampler compares (lexicographically or by other means, depending on the implementation) the received `threshold` value with the Randomness value R to arrive at the final sampling `Decision` as described in [Decision algorithm](./tracestate-probability-sampling.md#decision-algorithm),
+* Starting from the parent `TraceState` (or an empty `TraceState` if none is present), if `trace_state_provider` is provided, the sampler calls it with that `TraceState` and the final sampling `Decision` to get the base `TraceState` for the `Span`,
 * In case of positive sampling decision:
-  - the sampler calls the received `attributes_provider` function to determine the set of `Attributes` to be added to the `Span`,
-  - if the `adjusted_count_reliable` is `true` it modifies the `th` value for the `ot` key in the `Tracestate` according to the received THRESHOLD; if the returned value was `false`, it removes the `th` value for the `ot` key from the `Tracestate`,
-* In case of negative sampling decision, it removes the `th` value for the `ot` key from the `Tracestate`.
+  - if `attributes_provider` is provided, the sampler calls it to determine the set of `Attributes` to be added to the `Span`,
+  - if `adjusted_count_reliable` is `true` it modifies the `th` value for the `ot` key in the `TraceState` according to the received `threshold`; if `adjusted_count_reliable` is `false`, it removes the `th` value for the `ot` key from the `TraceState`,
+* In case of negative sampling decision, the sampler MUST NOT call `attributes_provider` (returning no attributes in the `SamplingResult`), and removes the `th` value for the `ot` key from the `TraceState`.
+* When updating or removing `th`, the sampler MUST preserve all non-`ot` entries from the base `TraceState` as well as `rv` and any other sub-keys in `ot` (subject to [TraceState](./tracestate-handling.md#setting-values) and W3C TraceContext size and member limits). If removing `th` leaves the `ot` entry empty, the `ot` entry MUST be removed from the outgoing `TraceState`.
 
 ##### ComposableSampler
 
 ComposableSampler is a specialized interface that is used by the CompositeSampler.
-It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
+It introduces a composable approach to sampling by defining `GetSamplingIntent` (which allows multiple samplers to work together in making a sampling decision) and `GetDescription`.
 
 ###### GetSamplingIntent
 
@@ -714,7 +716,7 @@ state.
 
 The method returns a `SamplingIntent` structure with the following elements:
 
-* `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
+* `threshold` - The 56-bit rejection threshold value in `[0, 2^56 - 1]`, or `null` (or a language-idiomatic absent/invalid sentinel) to indicate `DROP`. A lower threshold increases the likelihood of sampling.
 * `adjusted_count_reliable` - A boolean indicating if the threshold can be reliably used for
    [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
 * `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
@@ -722,10 +724,21 @@ The method returns a `SamplingIntent` structure with the following elements:
 
 Note that `trace_state_provider` may be a significant source of
 complexity.  ComposableSamplers MUST NOT modify the OpenTelemetry
-TraceState (i.e., the `ot` sub-key of TraceState).  The calling
-CompositeSampler SHOULD update the threshold of the outgoing
-TraceState, as described above. The explicit
-randomness values MUST not be modified.
+TraceState (i.e., the `ot` entry of TraceState).  The calling
+CompositeSampler MUST update or remove the `th` sub-key of the outgoing
+TraceState, as described above, and MUST NOT overwrite or remove an
+existing explicit randomness value (`rv`) or other `ot` sub-keys (subject
+to [TraceState](./tracestate-handling.md#setting-values) size limits).
+
+###### GetDescription
+
+Returns the composable sampler name or short description with its configuration,
+for use in debug pages, logs, and the wrapping `CompositeSampler`'s
+[`GetDescription`](#getdescription).
+
+Description MAY change over time, for example, if the sampler supports dynamic
+configuration or otherwise adjusts its parameters. Callers SHOULD NOT cache the
+returned value.
 
 ##### Built-in ComposableSamplers
 
@@ -1352,6 +1365,11 @@ to be called concurrently.
 **Sampler** -  `ShouldSample` and `GetDescription` MUST be safe to be called
 concurrently. `Shutdown` MUST be safe to be called concurrently with itself
 and the other `Sampler` methods.
+
+**Status**: [Development](../document-status.md) - **ComposableSampler** -
+`GetSamplingIntent`, `GetDescription`, `ComposableRuleBased` predicates, and
+any `attributes_provider` or `trace_state_provider` callbacks returned in a
+`SamplingIntent` MUST be safe to be called concurrently.
 
 **Span processor** - all methods MUST be safe to be called concurrently.
 
