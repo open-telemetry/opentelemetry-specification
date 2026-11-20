@@ -437,16 +437,15 @@ the scrape target, after
 [relabeling](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config).
 If either label is still missing or empty, the scrape MUST fail.
 
-For each resource the `service.name` attribute MUST be set to the
-`service.name` label in `target` info metric, if that label exists in the
-`target` info metric with the same `job` and `instance` key as the resource.
-Otherwise `service.name` MUST be set to the value of the `job` label.
+For each `job` and `instance` pair, if the `target` info metric with that `job`
+and `instance` has a `service.name` label, the `service.name` attribute of the
+resource created for that pair MUST be set to that label's value. Otherwise, it
+MUST be set to the value of the `job` label.
 
-For each resource the `service.instance.id` attribute MUST be set to the
-`service.instance.id` label in `target` info metric, if that label exists in the
-`target` info metric with the same `job` and `instance` key as the resource.
-Otherwise `service.instance.id` MUST be set to the value of the `instance`
-label.
+For each `job` and `instance` pair, if the `target` info metric with that `job`
+and `instance` has a `service.instance.id` label, the `service.instance.id`
+attribute of the resource created for that pair MUST be set to that label's
+value. Otherwise, it MUST be set to the value of the `instance` label.
 
 The following attributes SHOULD be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric attributes:
