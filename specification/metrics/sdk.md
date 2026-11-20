@@ -57,6 +57,7 @@ weight: 3
     + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
   * [Instrument enabled](#instrument-enabled)
   * [Instrument bind](#instrument-bind)
+  * [Instrument finish](#instrument-finish)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -890,8 +891,9 @@ timestamp.
 
 Cumulative timeseries MUST use a consistent start timestamp for all collection
 intervals while the series is persisted by the SDK. If a cumulative series is
-reset or evicted and is subsequently observed again, it MUST be treated as a
-new series with a new start timestamp (see [Supplementary
+reset, evicted, or cleared after being [finished](#instrument-finish) and is
+subsequently observed again, it MUST be treated as a new series with a new start
+timestamp (see [Supplementary
 Guidelines](./supplementary-guidelines.md#asynchronous-example-cumulative-temporality)).
 For synchronous instruments, the start timestamp SHOULD be the time of the
 first measurement for the series.
@@ -943,10 +945,12 @@ equal to the limit.
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export all attribute sets that were observed prior to the beginning
-of overflow.  [Measurements](./api.md#measurement) corresponding with attribute
-sets that were not observed prior to the overflow will be reflected in a single
-data point described by (only) the overflow attribute.
+continue to export all attribute sets that were observed while below the
+cardinality limit, except for (**Development**) timeseries that have been
+[finished](#instrument-finish) and cleared during `Collect`. While at the
+cardinality limit, [Measurements](./api.md#measurement) corresponding with
+other attribute sets will be reflected in a single data point described by
+(only) the overflow attribute.
 
 Aggregators of synchronous instruments with delta aggregation temporality MAY
 choose an arbitrary subset of attribute sets to output to maintain the stated
@@ -1169,7 +1173,9 @@ evaluated against the cardinality state at that moment. As a consequence, separa
 to `Bind` with identical attributes may resolve to different aggregators (e.g. one to a
 concrete series, another to the [overflow series](#overflow-attribute)) based on the
 cardinality state at the time of each call. The resolved aggregator MUST be fixed and
-not change across collection cycles.
+not change across collection cycles, unless (**Development**) the resolved timeseries is
+[finished](#instrument-finish) and cleared during `Collect` for that
+`MetricReader`.
 
 Measurements recorded on a bound instrument MUST be candidates for [Exemplar](#exemplar)
 sampling. The [Context](../context/README.md) associated with each recording, whether
@@ -1177,7 +1183,95 @@ implicit or explicit, MUST be used for exemplar [TraceBased](#tracebased) filter
 passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
 
 The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
-map lookup.
+map lookup, except (**Development**) when re-resolving a timeseries that was
+[finished](#instrument-finish) and cleared during `Collect` for that
+`MetricReader`.
+
+(**Development**) If a bound concrete timeseries is [finished](#instrument-finish) and cleared during
+`Collect` for a `MetricReader`, the next attribute-free recording on that bound
+instrument MUST re-resolve the pre-bound attributes against the stream's current
+cardinality state and cache the newly resolved aggregator. If a bound instrument exposes
+[`Finish`](./api.md#finish), calling `Finish` on it MUST behave identically to calling
+`Finish` on the unbound instrument with the unfiltered pre-bound attributes combined with
+any call-time attributes (with call-time attributes taking precedence on duplicate keys).
+
+### Instrument finish
+
+**Status**: [Development](../document-status.md)
+
+When [`Finish`](./api.md#finish) is called on a synchronous instrument, it MUST
+apply to all metric streams produced by that instrument and independently for
+each registered [`MetricReader`](#metricreader). Calling `Finish` when no active
+timeseries match (including attributes routed to overflow) MUST be a no-op and
+MUST NOT create a timeseries or emit an error. `Finish` MUST NOT match or clear
+the synthetic [overflow](#overflow-attribute) timeseries
+(`otel.metric.overflow=true`), even when called with no attributes or with
+`otel.metric.overflow=true`. Calling `Finish` on a timeseries already awaiting
+final collection for a `MetricReader` MUST be a no-op for that `MetricReader`,
+preserving its pending final collection and original `Finish` timestamp.
+
+Because [attribute filtering](#stream-configuration) (`Views` and the
+[`Attributes` advisory parameter](#instrument-advisory-parameter-attributes))
+runs during aggregation, each stream tracks timeseries by their filtered
+attribute sets. When matching `Finish` inputs against active non-overflow
+timeseries in a stream:
+
+* The SDK MUST resolve any duplicate keys using the same semantics as recording
+  operations (such as last-value-wins).
+* The SDK MUST NOT apply the stream's attribute filter to the provided
+  attributes before matching, and MUST NOT strip invalid attributes (for
+  example, empty or `null` keys or unsupported values) to broaden the match; if
+  any invalid attribute remains after duplicate-key resolution, the call MUST
+  match no timeseries.
+* Otherwise, a timeseries matches if and only if its filtered attribute set
+  contains every provided key-value pair (using aggregation attribute equality).
+  An empty attribute set (or no attributes) matches all active non-overflow
+  timeseries in the stream.
+
+This prevents `Finish` from affecting timeseries outside the caller's intended
+scope: if a View drops an attribute key passed to `Finish` (for example,
+dropping `pool.name`), no active timeseries in that stream contains that key, so
+the call safely no-ops instead of clearing a shared aggregated timeseries. Once
+a View drops an identifying key and merges entities into a shared series, that
+stream no longer tracks per-entity cardinality, so per-entity `Finish` calls do
+not affect the merged aggregate.
+
+On the next [`Collect`](#collect) call for each `MetricReader`:
+
+* If a matching timeseries has uncollected measurements since the previous
+  collection (for delta temporality) or has recorded at least one measurement
+  since creation or last clear (for cumulative temporality), the SDK MUST
+  preserve its aggregated data (including uncollected sampled
+  [Exemplars](#exemplar) and its [start timestamp](#start-timestamps)), report
+  it one final time during `Collect`, and then clear its internal storage
+  regardless of whether any subsequent [`MetricExporter.Export`](#exportbatch)
+  call succeeds.
+* Otherwise (for example, an idle delta timeseries or a bound instrument never
+  recorded to), it MUST NOT be reported and its internal storage MUST be
+  cleared.
+* While awaiting final collection for a `MetricReader`, a finished timeseries
+  MUST continue to count toward the stream's
+  [cardinality limit](#cardinality-limits).
+
+When reporting a finished timeseries during `Collect`, its ending timestamp
+(`TimeUnixNano`) SHOULD be the time at which `Finish` was called (falling back
+to the collection timestamp if not tracked). SDKs MAY clamp or advance
+`TimeUnixNano` within the collection interval to avoid out-of-order or
+zero-duration points.
+
+If a new [Measurement](./api.md#measurement) is recorded for a finished
+timeseries before `Collect` clears it on a `MetricReader`, the SDK MUST cancel
+the pending `Finish` for that `MetricReader` (discarding its `Finish` timestamp)
+and continue aggregating into the existing timeseries (preserving its start
+timestamp and uncollected exemplars) as if `Finish` had not been called.
+
+Once finished and cleared during `Collect` for a `MetricReader`, the timeseries
+MUST NOT be reported in subsequent collections unless a new measurement is
+recorded, and it MUST no longer count toward the stream's
+[cardinality limit](#cardinality-limits). A subsequent measurement for that
+attribute set MUST be treated as a new timeseries with fresh aggregation state
+(and, for cumulative temporality, a new [start timestamp](#start-timestamps)),
+subject to the stream's cardinality limit at that time.
 
 ## Attribute limits
 
@@ -1480,7 +1574,9 @@ influences the persistence of metric data points across collections. For
 synchronous instruments with Cumulative aggregation
 temporality, [MetricReader.Collect](#collect) MUST receive data points exposed
 in previous collections regardless of whether new measurements have been
-recorded. For synchronous instruments with Delta aggregation
+recorded, unless (**Development**) the timeseries was
+[finished](#instrument-finish) and cleared during a previous `Collect` cycle. For
+synchronous instruments with Delta aggregation
 temporality, [MetricReader.Collect](#collect) MUST only receive data points with
 measurements recorded since the previous collection. For asynchronous
 instruments with Delta or Cumulative aggregation
@@ -1494,12 +1590,17 @@ influences the starting timestamp (i.e. `StartTimeUnixNano`) of metrics data
 points received by [MetricReader.Collect](#collect). For instruments with
 Cumulative aggregation temporality, successive data points received by
 successive calls to [MetricReader.Collect](#collect) MUST repeat the same
-starting timestamps (e.g. `(T0, T1], (T0, T2], (T0, T3]`). For instruments with
-Delta aggregation temporality, successive data points received by successive
-calls to [MetricReader.Collect](#collect) MUST advance the starting timestamp (
-e.g. `(T0, T1], (T1, T2], (T2, T3]`). The ending timestamp (i.e. `TimeUnixNano`)
-MUST always be equal to time the metric data point took effect, which is equal
-to when [MetricReader.Collect](#collect) was invoked. These rules apply to all
+starting timestamps (e.g. `(T0, T1], (T0, T2], (T0, T3]`), unless
+(**Development**) the series is reset, evicted, or cleared after being
+[finished](#instrument-finish) (see [Start timestamps](#start-timestamps)). For
+instruments with Delta aggregation temporality, successive data points received
+by successive calls to [MetricReader.Collect](#collect) MUST advance the
+starting timestamp (e.g. `(T0, T1], (T1, T2], (T2, T3]`). The ending timestamp
+(i.e. `TimeUnixNano`) MUST always be equal to time the metric data point took
+effect, which is equal to when [MetricReader.Collect](#collect) was invoked,
+except (**Development**) when reporting a [finished](#instrument-finish)
+timeseries (see [Instrument finish](#instrument-finish) for ending timestamp
+rules). These rules apply to all
 metrics, not just those whose [point kinds](./data-model.md#point-kinds) includes
 an aggregation temporality field.
 See [data model temporality](./data-model.md#temporality) for more details.
