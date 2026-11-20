@@ -19,6 +19,9 @@ release.
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
 
 ### Metrics
 
@@ -67,6 +70,16 @@ release.
   `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
   set.
   ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Clarify that `server.address`, `server.port` and `url.scheme` of scraped
+  metrics are derived from the scrape target's `__address__` and `__scheme__`
+  labels after relabeling, and that `server.address` is omitted for localhost,
+  loopback and unspecified addresses.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 - Add Prometheus `MetricProducer` bridge specification.
   ([#5426](https://github.com/open-telemetry/opentelemetry-specification/pull/5426))
 
@@ -81,6 +94,13 @@ release.
   ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
+
+- Add to the library guidelines criteria for automatic injectability that are
+  the foundation of the technical contract for the OpenTelemetry Injector,
+  System Packages and the OpenTelemetry Operator.
+  ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
+
+### OTEPs
 
 - Explicitly permit tightening runtime or dependency version requirements to
   address an identified security risk, including risks from loss of security

@@ -71,6 +71,8 @@ sections:
             status: '+'
           - name: User-defined start timestamp
             status: '+'
+          - name: '[Create with span type](specification/trace/api.md#span-type)'
+            status: '-'
           - name: End
             status: '+'
           - name: End with timestamp
