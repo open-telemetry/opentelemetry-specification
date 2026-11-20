@@ -229,9 +229,13 @@ The [span type](api.md#span-type) identifies the class of spans the span belongs
 to, such as HTTP client requests or database calls, as defined by
 [semantic conventions](../semantic-conventions.md). It identifies the span
 structure, such as its name format, [`Kind`](#field-kind), attributes, error
-conditions, and operation scope. It has low
-cardinality, typically lower than the [`Name`](#field-name). For example, all
-RPC client spans share the same type, while their names differ by RPC method.
+conditions, and the boundaries of the operation it covers. For example, the RPC
+client span type applies to a single logical RPC call. It does not apply to the
+underlying transport requests, or to a group of several RPC calls.
+
+The span type has low cardinality, typically lower than the
+[`Name`](#field-name): all RPC client spans share the same type, while their
+names differ by RPC method.
 
 The span type is provided at [span creation](api.md#span-creation) and is not
 changed afterwards. An empty span type is equivalent to an absent one. This
