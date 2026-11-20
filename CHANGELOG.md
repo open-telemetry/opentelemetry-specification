@@ -70,6 +70,16 @@ release.
   `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
   set.
   ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Clarify that `server.address`, `server.port` and `url.scheme` of scraped
+  metrics are derived from the scrape target's `__address__` and `__scheme__`
+  labels after relabeling, and that `server.address` is omitted for localhost,
+  loopback and unspecified addresses.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 
 ### SDK Configuration
 
