@@ -64,8 +64,9 @@ release.
   Prometheus `target` info metric along with all other resource attributes.
   ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
 - Clarify the conversion of Prometheus labels and the `target` info metric to
-  OTLP resources, data point attributes and resource attributes, and the
-  differences between scrape and Remote Write.
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
   ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 - Clarify that `server.address`, `server.port` and `url.scheme` of scraped
   metrics are derived from the scrape target's `__address__` and `__scheme__`
