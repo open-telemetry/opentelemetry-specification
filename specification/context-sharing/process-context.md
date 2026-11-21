@@ -23,13 +23,15 @@
 
 ## Overview
 
-Process Context Sharing allows OpenTelemetry SDKs to publish process-level information for access by out-of-process readers, such as the OpenTelemetry eBPF Profiler.
+Process Context Sharing allows OpenTelemetry SDKs to publish process-level information for access by out-of-process readers, such as the OpenTelemetry eBPF Profiler or [OpenTelemetry eBPF Instrumentation (OBI)][obi].
 
 SDK support for Process Context Sharing is OPTIONAL.
 
 This mechanism relies on Linux-specific features (`mmap`, `prctl`, `/proc`) and requires external readers to run on the same host as the instrumented process with sufficient privileges to access the process's memory mappings and read target process memory.
 
-External readers like the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This can prevent telemetry collected externally from being correlated with telemetry produced by the SDK, particularly when attributes such as `service.instance.id` are generated at runtime.
+External readers like the OpenTelemetry eBPF Profiler and OBI operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This can prevent telemetry collected externally from being correlated with telemetry produced by the SDK, particularly when attributes such as `service.instance.id` are generated at runtime.
+
+External readers can only consume a process context; publishing one requires cooperation from code running inside the instrumented process, such as an OpenTelemetry SDK.
 
 A publisher can make the context available before any reader is running, and readers can access it without requiring the publishing process to be actively emitting telemetry.
 
@@ -104,6 +106,8 @@ If any required step fails, other than naming or allocating a new memfd, publish
 
 Publishers MUST NOT make more than one process context active for the same process.
 
+Publishers MUST serialize publication, updates, and dropping of the process context (e.g. by using a lock, or by only performing these operations from a single thread).
+
 When multiple resources exist, as described by [OTEP 4665][multiple-resources-otep], publishers SHOULD include the default SDK resource in the process context.
 
 > [!NOTE]
@@ -120,7 +124,7 @@ Publishers SHOULD ignore errors returned by the mapping-naming `prctl` call.
 
 ## Reading Protocol
 
-External readers (such as the OpenTelemetry eBPF Profiler) MUST follow these steps to discover and read process context:
+External readers (such as the OpenTelemetry eBPF Profiler or OBI) MUST follow these steps to discover and read process context:
 
 1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name **starting with** `[anon_shmem:OTEL_CTX]`, `[anon:OTEL_CTX]` or `/memfd:OTEL_CTX`.
 
@@ -149,6 +153,8 @@ External readers (such as the OpenTelemetry eBPF Profiler) MUST follow these ste
 8. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message.
 
 9. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process.
+
+   If the reader detects its own value for an attribute that is also present in the published `resource` (e.g. `service.instance.id`), it SHOULD use the published value.
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 
@@ -195,6 +201,7 @@ This mechanism is additive and does not modify existing OpenTelemetry SDK behavi
 SDKs that do not implement this feature continue to function normally; external readers simply will not have access to their runtime-generated resource attributes.
 
 [multiple-resources-otep]: ../../oteps/entities/4665-multiple-resource-in-sdk.md
+[obi]: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation
 [otep]: ../../oteps/profiles/4719-process-ctx.md
 [process-context-proto]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/processcontext/v1development/process_context.proto
 [protobuf]: https://protobuf.dev/
