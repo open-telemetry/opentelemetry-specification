@@ -12,6 +12,11 @@ release.
 - Mark "Environment Variables as Context Propagation Carriers" as Stable.
   ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
 
+### Context Sharing
+
+- Add the Process Context Sharing specification.
+  ([#5370](https://github.com/open-telemetry/opentelemetry-specification/pull/5370))
+
 ### Traces
 
 - Add the traces data model.
