@@ -608,7 +608,8 @@ An attempt to set value `Unset` SHOULD be ignored.
 
 When the status is set to `Error` by Instrumentation Libraries, the `Description`
 SHOULD be documented and predictable. The status code should only be set to `Error`
-according to the rules defined within the semantic conventions. For operations
+according to the rules defined within the
+[semantic conventions](../semantic-conventions.md#spans). For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
 publish their own conventions, including possible values of `Description`
 and what they mean.
@@ -764,11 +765,9 @@ Note: A `CLIENT` span may have a child that is also a `CLIENT` span, or a
 depending on how the various components that are providing the functionality
 are built and instrumented.
 
-[Semantic conventions](../overview.md#semantic-conventions) for
-specific technologies should document kind for each span they define.
-
-For instance, [Database Client Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/db/database-spans/)
-recommend using `CLIENT` span kind to describes database calls.
+[Semantic conventions](../semantic-conventions.md#spans) define the kind for
+each span. For instance, [Database Client Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/db/database-spans/)
+recommend using `CLIENT` span kind to describe database calls.
 If the database client communicates to the server over HTTP, the HTTP
 instrumentation (when enabled) creates nested `CLIENT` spans to track individual
 HTTP calls performed in the scope of logical database `CLIENT` operation.
