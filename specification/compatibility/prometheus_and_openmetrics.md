@@ -932,9 +932,9 @@ to collect metrics from instead.
 
 Metrics produced by the bridge are associated with the
 [Resource](../resource/sdk.md) of the OpenTelemetry
-[MeterProvider](../metrics/sdk.md#meterprovider). The scraped-endpoint resource
-attribute rules in [Resource Attributes](#resource-attributes) do not apply to
-the Prometheus Bridge.
+[MeterProvider](../metrics/sdk.md#meterprovider). The rules in
+[Resource Attributes](#resource-attributes) do not apply to the Prometheus
+Bridge.
 
 ### Instrumentation Scope
 
