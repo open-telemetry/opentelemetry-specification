@@ -64,7 +64,13 @@ context. A new SDK component, provisionally called the **Trace Continuation
 Decider**, evaluates richer boundary inputs and chooses how trace context is
 used.
 
-The decider produces one of three trace continuation strategies:
+The decider returns a structured result with separate trace-context and baggage
+decisions. The trace-context decision includes a continuation strategy and
+separate `TraceState` decisions. Initially, only preservation is supported for
+the `TraceState` and baggage decisions; their separation allows future controls
+without adding combinations to the continuation strategy enum.
+
+The ingress trace-context decision selects one of three continuation strategies:
 
 1. **CONTINUE**: use the candidate `SpanContext` as the parent according to
    existing parentage rules. This applies only when there is exactly one parent
@@ -121,8 +127,8 @@ For ingress, the lifecycle is:
 3. If the selected parent `Context` contains a valid remote span context,
    instrumentation and the SDK assemble a trace continuation input containing
    that candidate and available request metadata.
-4. The decider returns `CONTINUE`, `RESTART_WITH_LINKS`, or
-   `RESTART_WITHOUT_LINKS`.
+4. The decider returns an `IngressResult` whose trace strategy is `CONTINUE`,
+   `RESTART_WITH_LINKS`, or `RESTART_WITHOUT_LINKS`.
 5. Span start logic applies the decision before sampling.
 6. The sampler evaluates the span with the final parentage context.
 
@@ -156,14 +162,15 @@ equivalents.
 
 ```text
 TraceContinuationDecider.ShouldContinue(IngressInput) -> IngressResult
-TraceContinuationDecider.ShouldInject(EgressInput) -> EgressAction
+TraceContinuationDecider.ShouldInject(EgressInput) -> EgressResult
 TraceContinuationDecider.GetDescription() -> String
 ```
 
 `IngressInput` contains the selected parent `Context`, its valid remote candidate
 `SpanContext`, the span kind, the attributes available at span start, and any
-caller-supplied links. `IngressResult` contains the strategy and optional link
-attributes and diagnostics described in [Decision result](#decision-result).
+caller-supplied links. `IngressResult` contains independent trace-context and
+baggage decisions, plus optional diagnostics, as described in
+[Decision result](#decision-result).
 Caller-supplied links are preserved when the SDK applies the result.
 
 The SDK invokes `ShouldContinue` during `StartSpan`, after parent selection and
@@ -174,9 +181,11 @@ Instrumentation uses the existing span creation API for ingress; no additional
 ingress operation is required.
 
 `EgressInput` contains the selected propagation `Context`, the span kind when
-known, and available destination attributes. `ShouldInject` returns
-`INJECT_TRACE_CONTEXT` or `SUPPRESS_TRACE_CONTEXT`. The SDK invokes it from
-`Tracer.ApplyEgressContinuation`, independently of span creation or activation.
+known, and available destination attributes. `ShouldInject` returns an
+`EgressResult` whose trace-context decision selects `INJECT_TRACE_CONTEXT` or
+`SUPPRESS_TRACE_CONTEXT`, independently of its baggage decision. The SDK invokes
+it from `Tracer.ApplyEgressContinuation`, independently of span creation or
+activation.
 The invoked method determines the direction: `ShouldContinue` evaluates ingress
 rules and `ShouldInject` evaluates egress rules. `GetDescription` returns a
 human-readable description for diagnostics.
@@ -230,17 +239,108 @@ when inputs are absent.
 
 ### Decision result
 
-The ingress decider result SHOULD contain:
+Both ingress and egress results MUST be structured values with separate
+trace-context and baggage decisions. They MUST NOT encode combinations of trace
+continuation, `TraceState`, and baggage behavior in a single enum.
 
-- a trace continuation strategy,
-- OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINKS`,
-- OPTIONAL diagnostic attributes or reason codes for implementation-specific
-  observability.
+The initial result types have fields equivalent to the following. Names and
+parameter grouping are illustrative; omitted preservation decisions default to
+`PRESERVE`.
+
+```text
+IngressResult {
+    trace: IngressTraceDecision
+    baggage: BaggageDecision = { action: PRESERVE }
+    diagnostics: optional implementation-specific diagnostics
+}
+
+IngressTraceDecision {
+    strategy: CONTINUE | RESTART_WITH_LINKS | RESTART_WITHOUT_LINKS
+    parent_tracestate: TraceStateDecision = { action: PRESERVE }
+    link_tracestate: TraceStateDecision = { action: PRESERVE }
+    link_attributes: optional attributes for the automatic continuation link
+}
+
+EgressResult {
+    trace: EgressTraceDecision
+    baggage: BaggageDecision = { action: PRESERVE }
+    diagnostics: optional implementation-specific diagnostics
+}
+
+EgressTraceDecision {
+    action: INJECT_TRACE_CONTEXT | SUPPRESS_TRACE_CONTEXT
+    tracestate: TraceStateDecision = { action: PRESERVE }
+}
+
+TraceStateDecision {
+    action: PRESERVE
+}
+
+BaggageDecision {
+    action: PRESERVE
+}
+```
+
+`TraceStateDecision` and `BaggageDecision` are separate structured decision types.
+Their only action in this version is `PRESERVE`. Future actions can carry their
+own parameters, such as entry selectors or key-value updates, without changing
+the trace relationship strategy. Deciders in this version MUST return
+`PRESERVE` for these decisions, either explicitly or through their defaults.
+
+For `TraceStateDecision`, `PRESERVE` means no additional transformation by the
+decider. `parent_tracestate` applies when continuing the candidate as parent;
+`link_tracestate` applies when creating the automatic continuation link. Neither
+decision retains a candidate that the strategy otherwise drops or introduces
+parentage under a restart strategy. Egress `tracestate` applies only when trace
+context is injected. Existing inheritance, sampling, and propagation behavior
+continues to apply, as described in
+[Interaction with tracestate](#interaction-with-tracestate).
+
+For `BaggageDecision`, `PRESERVE` means the SDK leaves baggage behavior unchanged,
+independently of whether trace context is continued, linked, dropped, or
+suppressed for injection. It does not attach a new application context or merge
+baggage from other contexts.
 
 The link attributes are useful for recording why a causal relationship was
 preserved without parentage. For example, an implementation might record that the
 link represents an external audience, public endpoint, partner boundary, or
 policy rule. Exact attribute names are left open by this OTEP.
+
+#### Decision space for future extensions
+
+The following inventory identifies the independent controls the result model
+needs to accommodate. It distinguishes the initial behavior from future
+operations; it does not enable the deferred operations or add configuration for
+them.
+
+| Input and decision | Controls | Initial scope |
+| --- | --- | --- |
+| Single incoming trace context | Continue as parent, restart with a link, or restart without a link | All three strategies |
+| Parent or automatic-link `TraceState` | Preserve, clear, or filter/add entries independently of the trace relationship | Preserve only |
+| Single incoming baggage | Keep all entries, select entries, or drop all entries independently of trace context | Preserve existing baggage behavior |
+| Multiple incoming trace contexts | Retain contexts as links or drop them | Batch evaluation deferred |
+| Multiple incoming `TraceState` values | Preserve or transform the state on each retained link; potentially merge state in a later design | Batch evaluation and merging deferred |
+| Multiple incoming baggage values | Merge all sources, selected sources or entries, or drop all | Batch evaluation and merging deferred |
+| Outgoing trace context | Inject or suppress | Both actions |
+| Outgoing `TraceState` | Preserve, clear, or filter/add entries when trace context is injected | Preserve only |
+| Outgoing baggage | Keep all entries, select entries, or drop all independently of trace injection | Preserve existing baggage behavior |
+
+For example, a future result could continue parentage while clearing its
+`TraceState` and selecting baggage entries, or preserve an incoming context as a
+link while dropping baggage. These are independent decisions rather than new
+continuation strategies. For multiple candidates, `CONTINUE` is not applicable;
+the future result model needs to identify which candidates are retained as links
+and associate `TraceState` decisions with those candidates. Caller-supplied links
+remain outside the initial policy scope.
+
+The output structure alone does not implement these extensions. Future baggage
+filtering needs an ingress operation that evaluates baggage-only input and makes
+the resulting context available to application code; changing a context inside
+`StartSpan` alone is insufficient. Batch evaluation additionally needs candidate
+contexts carrying baggage, distinct from ambient context and explicit links, and
+deterministic merge rules for duplicate baggage keys. `TraceState` merging needs
+its own semantics and is not implied by baggage merging. These input, lifecycle,
+and configuration changes remain future work.
 
 ### Conceptual request flows
 
@@ -250,7 +350,7 @@ Normal continuation:
 - Select a parent `Context` containing the remote span context.
 - Assemble trace continuation input from the selected remote span context and
   request metadata.
-- Decider returns `CONTINUE`.
+- The result's trace strategy is `CONTINUE`.
 - Start span as a child of the remote parent.
 - Sampler runs with the continued parentage.
 
@@ -260,7 +360,7 @@ Boundary restart with link:
 - Select a parent `Context` containing the remote span context.
 - Assemble trace continuation input from the selected remote span context and
   trusted boundary metadata.
-- Decider returns `RESTART_WITH_LINKS`.
+- The result's trace strategy is `RESTART_WITH_LINKS`.
 - Start a new root span.
 - Add one link to the selected remote span context, including any link attributes
   returned by the decider.
@@ -272,7 +372,7 @@ Boundary restart without link:
 - Select a parent `Context` containing the remote span context.
 - Assemble trace continuation input from the selected remote span context and
   trusted boundary metadata.
-- Decider returns `RESTART_WITHOUT_LINKS`.
+- The result's trace strategy is `RESTART_WITHOUT_LINKS`.
 - Start a new root span with no parent and no automatic link to the incoming
   remote span context.
 - Sampler runs for the new root span.
@@ -281,7 +381,7 @@ Egress suppression:
 
 - An outgoing request is prepared with an active in-process context.
 - Instrumentation provides the span attributes.
-- Decider returns an egress propagation action such as
+- The result's trace decision selects an egress propagation action such as
   `SUPPRESS_TRACE_CONTEXT`.
 - Injection omits the suppressed trace context while preserving other configured
   propagation behavior.
@@ -349,6 +449,13 @@ Rules SHOULD distinguish match inputs from rule outputs:
 - Egress rules SHOULD produce an `egress_action`.
 - `link_attributes` SHOULD only apply when the selected ingress strategy is
   `RESTART_WITH_LINKS`.
+
+The configured strategy or egress action populates the trace decision in the
+structured result. The `TraceState` and baggage decisions default to `PRESERVE`;
+this version introduces no configuration fields for their future actions. One
+matching rule produces the whole result; fields are not accumulated from later
+rules. The fallback produces the same structured result with the configured
+default trace strategy or egress action and preservation for the other decisions.
 
 For operator convenience, implementations MAY accept `strategy` on an egress
 rule and map `CONTINUE` to `INJECT_TRACE_CONTEXT` and restart strategies to
@@ -483,17 +590,17 @@ those links when adding the automatic continuation link.
 
 When trace continuation is evaluated for egress:
 
-1. Injection logic MUST preserve existing propagator behavior when the decider
-   returns `INJECT_TRACE_CONTEXT`.
+1. Injection logic MUST preserve existing propagator behavior when the result's
+   trace decision selects `INJECT_TRACE_CONTEXT`.
 2. If the selected action is `SUPPRESS_TRACE_CONTEXT`, injection logic MUST NOT
    propagate the suppressed trace context as the active parent context for that
    destination.
 3. Egress decisions MUST be direction-aware so an ingress rule does not
    accidentally suppress unrelated outgoing propagation, or vice versa.
 
-Egress is about propagation, not span parentage. The egress result SHOULD
-therefore be represented as an explicit propagation action rather than a
-parentage restart strategy. The initial egress actions are:
+Egress is about propagation, not span parentage. The trace decision within the
+structured egress result therefore selects an explicit propagation action rather
+than a parentage restart strategy. The initial egress trace actions are:
 
 1. `INJECT_TRACE_CONTEXT`: preserve existing trace context injection behavior.
 2. `SUPPRESS_TRACE_CONTEXT`: do not inject the selected trace context for this
@@ -531,9 +638,9 @@ observability details are not part of the sampling decision.
 
 ### Interaction with tracestate
 
-`TraceState` is part of the candidate `SpanContext`. The continuation strategies
-apply to that context as a whole; they do not independently transform its
-`TraceState`.
+`TraceState` is part of the candidate `SpanContext`. The separate `TraceState`
+decisions initially support only `PRESERVE`, so continuation uses the following
+behavior:
 
 - `CONTINUE`: the candidate remains the parent, including its `TraceState`.
   The sampler receives that parent context, and existing `TraceState` inheritance
@@ -558,12 +665,15 @@ span's `TraceState`.
 
 Independent `TraceState` controls, such as continuing parentage while clearing
 `TraceState`, filtering or adding individual entries, or removing `TraceState`
-from an automatic link, are outside the scope of this proposal. This does not
-change existing sampler, propagator, or exporter capabilities.
+from an automatic link, are reserved for future extensions to
+`TraceStateDecision`. Their behavior and configuration are outside the initial
+scope. This does not change existing sampler, propagator, or exporter
+capabilities.
 
 ### Interaction with baggage
 
-This OTEP keeps baggage filtering out of scope.
+The result includes a separate `BaggageDecision` with `PRESERVE` as its only
+initial action. Baggage filtering and merging remain outside the initial scope.
 
 Baggage filtering is related operationally because the same boundaries often need
 both trace restart and baggage suppression. However, combining both in the first
@@ -618,12 +728,12 @@ internal callers. Both routes can carry W3C Trace Context. The external webhook
 route is authenticated, but the incoming trace belongs to the partner audience,
 not the service's internal trace.
 
-For `/webhooks/{partner}` the decider returns `RESTART_WITH_LINKS`. The SDK starts
+For `/webhooks/{partner}` the trace strategy is `RESTART_WITH_LINKS`. The SDK starts
 a new internal root span and links to the partner-provided context. Internal child
 spans follow the new trace. The partner context is visible as causal information
 without becoming the default parent.
 
-For `/internal/*` the decider returns `CONTINUE`, so internal service-to-service
+For `/internal/*` the trace strategy is `CONTINUE`, so internal service-to-service
 calls preserve the existing trace ID and parent chain.
 
 ### SaaS internal and customer traces
@@ -645,10 +755,11 @@ A service calls both internal dependencies and an external SaaS API. The active
 in-process span is valid for internal calls, but the operator does not want to
 propagate internal trace context to the external provider.
 
-For internal destinations the decider returns `CONTINUE`, and injectors preserve
-normal trace context propagation. For the external SaaS destination the decider
-returns a restart or suppression decision, and injection omits the internal trace
-context for that outgoing request.
+For internal destinations the trace action is `INJECT_TRACE_CONTEXT`, and
+injectors preserve normal trace context propagation. For the external SaaS
+destination the trace action is `SUPPRESS_TRACE_CONTEXT`, and injection omits the
+internal trace context for that outgoing request. The baggage decision remains
+`PRESERVE` for both destinations.
 
 ## Trade-offs and mitigations
 
@@ -808,7 +919,8 @@ demonstrates:
 3. Which link attributes, if any, are standardized for restart-with-link
    relationships?
 
-4. Is baggage filtering a follow-up OTEP or a separate propagation feature?
+4. How are filtering and merging added to the baggage decision in a follow-up,
+   including the ingress context lifecycle and batch conflict resolution?
 
 5. Which semantic convention attributes are RECOMMENDED as common decision
    inputs?
@@ -824,6 +936,9 @@ Prototype scenarios should cover:
 
 - continue vs restart behavior during ingress span creation,
 - first-match-wins rule evaluation,
+- structured ingress and egress results with independent trace and baggage fields,
+- preservation defaults for parent, link, and egress `TraceState` decisions,
+- unchanged baggage for every trace strategy and egress action,
 - restart with and without preserved causal links,
 - link attributes returned by the decider,
 - correct link consumption during root span creation,
