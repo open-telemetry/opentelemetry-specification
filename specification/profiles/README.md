@@ -217,8 +217,8 @@ records, so `period_type` and `sample_type` can name the same `(type, unit)`
 pair or different ones:
 
 - `sample_type`=(`cpu`, `nanoseconds`) with `period_type`=(`cpu`,
-  `nanoseconds`) describes a profile that records CPU time and samples it every
-  fixed amount of CPU time.
+  `nanoseconds`) describes a profile that records CPU time and samples it once per `period`
+  of CPU time (on average, for probabilistic samplers).
 - `sample_type`=(`off_cpu`, `nanoseconds`) with
   `period_type`=(`context_switch`, `count`) describes a profile that samples
   every so many context switches but records the time spent off CPU.
@@ -230,11 +230,11 @@ The known values are:
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `cpu` | `nanoseconds` | Sampled every fixed amount of CPU time |
-| `wall` | `nanoseconds` | Sampled every fixed amount of wall-clock time |
-| `space` | `bytes` | Sampled every fixed amount of allocated bytes |
-| `contentions` | `count` | Sampled every fixed number of blocking events |
-| `context_switch` | `count` | Sampled every fixed number of context switches |
+| `cpu` | `nanoseconds` | Sampled once per `period` of CPU time, on average |
+| `wall` | `nanoseconds` | Sampled once per `period` of wall-clock time, on average |
+| `space` | `bytes` | Sampled once per `period` of allocated bytes, on average |
+| `contentions` | `count` | Sampled once per `period` blocking events, on average |
+| `context_switch` | `count` | Sampled once per `period` context switches, on average |
 
 ## Specifications
 
