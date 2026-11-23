@@ -29,6 +29,14 @@ instrumentations.
 
 Other changes in the produced telemetry are regulated by the following rules.
 
+Changes in emitted telemetry that satisfy the
+[security-related changes exception](versioning-and-stability.md#security-related-changes)
+MAY be made without incrementing the major version, even when the stability rules
+below would otherwise prohibit them. This exception applies to both fixed-schema
+and schema-file driven producers, including during the moratorium on relying on
+schema transformations. All conditions of the exception apply, including its
+scope, compatibility guarantees, and release note requirements.
+
 ## Unstable Instrumentations
 
 Unstable telemetry-producing instrumentations (unstable instrumentations for short) SHOULD

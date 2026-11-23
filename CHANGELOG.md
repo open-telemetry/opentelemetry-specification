@@ -15,6 +15,130 @@ release.
   traces with links and suppressing trace-context injection at selected
   boundaries.
   ([#5055](https://github.com/open-telemetry/opentelemetry-specification/issues/5055))
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.63.0 (2026-11-23)
+
+### Context
+
+- Mark "Environment Variables as Context Propagation Carriers" as Stable.
+  ([#5389](https://github.com/open-telemetry/opentelemetry-specification/pull/5389))
+
+### Traces
+
+- Add the traces data model.
+  ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
+
+### Metrics
+
+- Clarify that `Exemplar`s retain measurement attributes filtered out by the
+  `Attributes` instrument advisory parameter.
+  ([#5392](https://github.com/open-telemetry/opentelemetry-specification/pull/5392))
+- Clarify that the `Attributes` metric instrument advisory parameter acts as a recommended allow-list of attribute keys to be retained, and that an empty list retains no attributes.
+  ([#5391](https://github.com/open-telemetry/opentelemetry-specification/pull/5391))
+- Add the OptIn advisory parameter and enabled View stream parameter.
+  ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+
+### Logs
+
+- Allow an exception to the finite upper bound for exporter `Export` calls only
+  for synchronous output through APIs without deadline or cancellation support.
+  ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Extend the ETW example mapping with the optional `etw.provider.name`
+  attribute and describe its availability.
+  ([#5363](https://github.com/open-telemetry/opentelemetry-specification/pull/5363))
+
+### Common
+
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
+
+### Compatibility
+
+- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
+  the case of unset `Sum` field.
+  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
+- Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
+  Histogram transformation.
+  ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
+- Clarify that the identifying resource attributes `service.name`,
+  `service.namespace`, and `service.instance.id` should be converted to the
+  Prometheus `target` info metric along with all other resource attributes.
+  ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
+- Set the Prometheus Native Histogram `ZeroThreshold` to zero instead of
+  `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
+  set.
+  ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Clarify that `server.address`, `server.port` and `url.scheme` of scraped
+  metrics are derived from the scrape target's `__address__` and `__scheme__`
+  labels after relabeling, and that `server.address` is omitted for localhost,
+  loopback and unspecified addresses.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+
+### SDK Configuration
+
+- Fix the declarative config type for a PluginComponentProvider for a resource
+  detector to be `ExperimentalResourceDetector`, rather than
+  `ExperimentalResourceDetection`.
+  ([#5427](https://github.com/open-telemetry/opentelemetry-specification/pull/5427))
+- Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
+  exporting MetricReader.
+  ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
+
+### Supplementary Guidelines
+
+- Add to the library guidelines criteria for automatic injectability that are
+  the foundation of the technical contract for the OpenTelemetry Injector,
+  System Packages and the OpenTelemetry Operator.
+  ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
+- Explicitly permit tightening runtime or dependency version requirements to
+  address an identified security risk, including risks from loss of security
+  maintenance.
+  ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
+
+## v1.62.0 (2026-10-21)
+
+### Traces
+
+- Add `Sampler.Shutdown` operation.
+  ([#5335](https://github.com/open-telemetry/opentelemetry-specification/pull/5335))
 - Clarify that calls to the Development `SpanProcessor.OnEnding` method are not
   allowed after `Shutdown`.
   ([#5316](https://github.com/open-telemetry/opentelemetry-specification/pull/5316))
@@ -27,13 +151,13 @@ release.
 
 ### Logs
 
-### Baggage
-
-### Profiles
+- Add systemd-journald example mapping to the logs data model appendix and align syslog mapping.
+  ([#4995](https://github.com/open-telemetry/opentelemetry-specification/pull/4995))
 
 ### Resource
 
-- Update resource detectors to generate entities and indicate resource detectors should be entity-aware unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
+- Update resource detectors to generate entities and indicate resource detectors should be entity-aware
+  unless new `OTEL_EXPERIMENTAL_ENTITIES_ENABLED != true`.
   ([#5147](https://github.com/open-telemetry/opentelemetry-specification/pull/5147))
 
 ### Entities
@@ -45,7 +169,15 @@ release.
 
 ### Common
 
+- Stabilize Attribute and Attribute Collection representation for non-OTLP.
+  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
+
 ### OpenTelemetry Protocol
+
+- Clarify that the OTLP exporter timeout bounds the entire batch export,
+  including all request attempts and waits between retries, and that earlier
+  caller deadlines take precedence.
+  ([#5347](https://github.com/open-telemetry/opentelemetry-specification/issues/5347))
 
 ### Compatibility
 
@@ -56,9 +188,23 @@ release.
 
 ### SDK Configuration
 
+- Declarative config should gracefully degrade when encountering unrecognized
+  resource detectors. Other SDK plugin components continue to produce errors
+  when missing.
+  ([#5323](https://github.com/open-telemetry/opentelemetry-specification/pull/5323))
+
 ### Supplementary Guidelines
 
+- Allow narrowly scoped security-related changes to stable SDK and Contrib
+  behavior, configuration defaults, supported values, and emitted telemetry
+  without a major version bump, while preserving API compatibility and requiring
+  release notes describing the security rationale, user impact, and migration.
+  ([#5357](https://github.com/open-telemetry/opentelemetry-specification/pull/5357))
+
 ### OTEPs
+
+- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
+  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.61.0 (2026-09-14)
 
@@ -130,8 +276,6 @@ release.
 
 - Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
-- Add OTEP proposing a top-level span type field in API, SDK, and OTLP.
-  ([#5233](https://github.com/open-telemetry/opentelemetry-specification/pull/5233))
 
 ## v1.59.0 (2026-07-10)
 
@@ -216,8 +360,6 @@ release.
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute collection in non-OTLP protocols.
   ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
-- Stabilize Attribute and Attribute Collection representation for non-OTLP.
-  ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
 ### Compatibility
 
