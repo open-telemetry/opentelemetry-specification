@@ -124,6 +124,11 @@ The following sections group the known `(type, unit)` pairs of
 organization only. `sample_type` is always an exact `(type, unit)` pair, never
 a family name such as `allocation` or `contention`.
 
+Unless noted otherwise, a sample value is the measured quantity itself, already
+scaled by the producer to account for sampling. `samples`/`count` is the
+exception: it reports the raw number of observations, and `period_type` and
+`period` are required to estimate the sampled quantity from it.
+
 #### Sampled values
 
 | Type | Unit | Description |
@@ -158,8 +163,8 @@ I/O, locks or scheduling).
 #### Event profiles
 
 Event profiles count occurrences of traced events. In contrast to
-[sampled values](#sampled-values), the count is the measured quantity itself:
-no `period_type`/`period` is needed or used to derive it.
+[sampled values](#sampled-values), the count is the measured quantity itself,
+as for any other sample type that is not listed as an exception above.
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
