@@ -53,7 +53,7 @@ release.
   clarifying that the fields remain openly defined while producers SHOULD use
   the listed `(type, unit)` pairs for interoperability with existing profiling
   tools.
-  ([#794](https://github.com/open-telemetry/opentelemetry-proto/issues/794))
+  ([#5409](https://github.com/open-telemetry/opentelemetry-specification/pull/5409))
 
 ### Resource
 
