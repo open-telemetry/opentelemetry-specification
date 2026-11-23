@@ -529,6 +529,38 @@ need to understand why parentage was continued or restarted. Implementations
 MAY expose decider diagnostics as span attributes or metrics, but those
 observability details are not part of the sampling decision.
 
+### Interaction with tracestate
+
+`TraceState` is part of the candidate `SpanContext`. The continuation strategies
+apply to that context as a whole; they do not independently transform its
+`TraceState`.
+
+- `CONTINUE`: the candidate remains the parent, including its `TraceState`.
+  The sampler receives that parent context, and existing `TraceState` inheritance
+  and sampling behavior applies.
+- `RESTART_WITH_LINKS`: the candidate is not the parent. When the automatic link
+  is added, its `SpanContext` includes the candidate's `TraceState`. The new root
+  does not inherit that `TraceState` as parent state.
+- `RESTART_WITHOUT_LINKS`: the candidate's `TraceState` is neither inherited as
+  parent state nor preserved through an automatic link. Caller-supplied links,
+  including their `TraceState`, remain unchanged.
+
+For either restart strategy, the sampler receives a root parentage context.
+Existing root-span sampling behavior determines the new span's `TraceState`,
+which is not necessarily empty. A sampler can inspect supplied links according
+to the existing sampling API; preserving `TraceState` on a link does not make
+that link a parent or cause automatic inheritance.
+
+For W3C Trace Context egress, `INJECT_TRACE_CONTEXT` preserves existing injection
+behavior for both `traceparent` and `tracestate`. `SUPPRESS_TRACE_CONTEXT` omits
+injection of both headers for the selected context, without modifying the active
+span's `TraceState`.
+
+Independent `TraceState` controls, such as continuing parentage while clearing
+`TraceState`, filtering or adding individual entries, or removing `TraceState`
+from an automatic link, are outside the scope of this proposal. This does not
+change existing sampler, propagator, or exporter capabilities.
+
 ### Interaction with baggage
 
 This OTEP keeps baggage filtering out of scope.
@@ -797,6 +829,7 @@ Prototype scenarios should cover:
 - correct link consumption during root span creation,
 - prevention of accidental link inheritance by child spans,
 - sampler ordering after continuation decision,
+- parent and automatic-link `TraceState` handling for each continuation strategy,
 - egress suppression or restart behavior,
 - egress policy using an explicitly supplied provider,
 - unchanged egress context when no SDK is installed,
