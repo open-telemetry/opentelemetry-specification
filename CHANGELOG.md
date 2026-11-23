@@ -9,8 +9,41 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+- Mark reserved attributes in semantic conventions as Stable.
+  ([#5434](https://github.com/open-telemetry/opentelemetry-specification/pull/5434))
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.63.0 (2026-11-23)
+
+### Context
+
 - Mark "Environment Variables as Context Propagation Carriers" as Stable.
-  ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
+  ([#5389](https://github.com/open-telemetry/opentelemetry-specification/pull/5389))
 
 ### Traces
 
@@ -19,6 +52,9 @@ release.
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
 
 ### Metrics
 
@@ -42,23 +78,16 @@ release.
   attribute and describe its availability.
   ([#5363](https://github.com/open-telemetry/opentelemetry-specification/pull/5363))
 
-### Baggage
-
-### Profiles
-
-### Resource
-
-### Entities
-
 ### Common
 
-- Mark reserved attributes in semantic conventions as Stable.
-  ([#5434](https://github.com/open-telemetry/opentelemetry-specification/pull/5434))
-
-### OpenTelemetry Protocol
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 
 ### Compatibility
 
+- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
+  the case of unset `Sum` field.
+  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
   Histogram transformation.
   ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
@@ -70,6 +99,16 @@ release.
   `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
   set.
   ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Clarify that `server.address`, `server.port` and `url.scheme` of scraped
+  metrics are derived from the scrape target's `__address__` and `__scheme__`
+  labels after relabeling, and that `server.address` is omitted for localhost,
+  loopback and unspecified addresses.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 
 ### SDK Configuration
 
@@ -83,12 +122,14 @@ release.
 
 ### Supplementary Guidelines
 
+- Add to the library guidelines criteria for automatic injectability that are
+  the foundation of the technical contract for the OpenTelemetry Injector,
+  System Packages and the OpenTelemetry Operator.
+  ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
 - Explicitly permit tightening runtime or dependency version requirements to
   address an identified security risk, including risks from loss of security
   maintenance.
   ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
-
-### OTEPs
 
 ## v1.62.0 (2026-10-21)
 
@@ -126,8 +167,6 @@ release.
 
 ### Common
 
-- Define optional application-provided names for SDK components.
-  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 - Stabilize Attribute and Attribute Collection representation for non-OTLP.
   ([#5149](https://github.com/open-telemetry/opentelemetry-specification/pull/5149))
 
@@ -144,9 +183,6 @@ release.
   ([#5213](https://github.com/open-telemetry/opentelemetry-specification/pull/5213))
 - Stabilize Prometheus Info metric transformation.
   ([#5211](https://github.com/open-telemetry/opentelemetry-specification/pull/5211))
-- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
-  the case of unset `Sum` field.
-  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 
 ### SDK Configuration
 
