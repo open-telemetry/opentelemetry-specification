@@ -67,12 +67,20 @@ used.
 The decider produces one of three trace continuation strategies:
 
 1. **CONTINUE**: use the candidate `SpanContext` as the parent according to
-   existing parentage rules.
-2. **RESTART_WITH_LINK**: do not use the candidate `SpanContext` as a parent.
-   Start a new trace and add a link to the candidate context when creating the
+   existing parentage rules. This applies only when there is exactly one parent
+   candidate.
+2. **RESTART_WITH_LINKS**: do not use the candidate `SpanContext` as a parent.
+   Start a new trace and add a link to that context when creating the
    restarted root span.
-3. **RESTART_WITHOUT_LINK**: do not use the candidate `SpanContext` as a parent
+3. **RESTART_WITHOUT_LINKS**: do not use the candidate `SpanContext` as a parent
    and do not preserve it as a link.
+
+This proposal evaluates a single candidate from the selected parent `Context`.
+The plural strategy names leave room for future support for multiple incoming
+contexts, such as a batch of messages. Evaluating those contexts as a group,
+including deciding which to preserve as links, is outside the scope of this
+proposal. Caller-supplied links remain subject to the existing span creation
+behavior and are not candidates for the decider.
 
 The decider is similar to a sampler because it is an SDK component that evaluates
 a structured input and returns a structured decision. It is not a sampler because
@@ -112,8 +120,8 @@ For ingress, the lifecycle is:
 3. If the selected parent `Context` contains a valid remote span context,
    instrumentation and the SDK assemble a trace continuation input containing
    that candidate and available request metadata.
-4. The decider returns `CONTINUE`, `RESTART_WITH_LINK`, or
-   `RESTART_WITHOUT_LINK`.
+4. The decider returns `CONTINUE`, `RESTART_WITH_LINKS`, or
+   `RESTART_WITHOUT_LINKS`.
 5. Span start logic applies the decision before sampling.
 6. The sampler evaluates the span with the final parentage context.
 
@@ -152,7 +160,7 @@ when inputs are absent.
 The ingress decider result SHOULD contain:
 
 - a trace continuation strategy,
-- OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINK`,
+- OPTIONAL link attributes to attach when the strategy is `RESTART_WITH_LINKS`,
 - OPTIONAL diagnostic attributes or reason codes for implementation-specific
   observability.
 
@@ -179,7 +187,7 @@ Boundary restart with link:
 - Select a parent `Context` containing the remote span context.
 - Assemble trace continuation input from the selected remote span context and
   trusted boundary metadata.
-- Decider returns `RESTART_WITH_LINK`.
+- Decider returns `RESTART_WITH_LINKS`.
 - Start a new root span.
 - Add one link to the selected remote span context, including any link attributes
   returned by the decider.
@@ -191,7 +199,7 @@ Boundary restart without link:
 - Select a parent `Context` containing the remote span context.
 - Assemble trace continuation input from the selected remote span context and
   trusted boundary metadata.
-- Decider returns `RESTART_WITHOUT_LINK`.
+- Decider returns `RESTART_WITHOUT_LINKS`.
 - Start a new root span with no parent and no automatic link to the incoming
   remote span context.
 - Sampler runs for the new root span.
@@ -229,13 +237,25 @@ Configuration SHOULD follow the same structural conventions used by
 `ExperimentalComposableRuleBasedSamplerRule`:
 
 - a trace continuation decider configuration object contains a `rules` array,
-- rules are matched in order,
+- rules are matched in order, and evaluation stops at the first applicable
+  matching rule,
 - each rule can contain multiple match conditions and all conditions in a rule
   MUST match,
 - each rule MUST declare a direction,
+- a rule is applicable only when its strategy or egress action can be applied to
+  the input,
 - if no optional conditions are specified, the rule matches all inputs for its
-  declared direction,
-- if no rule matches, the decider falls back to its default behavior.
+  declared direction for which it is applicable,
+- if a rule's conditions do not match, or its strategy or egress action is not
+  applicable, evaluation continues with the next rule,
+- if no applicable rule matches, the decider falls back to its default behavior.
+
+For example, `CONTINUE` requires exactly one parent candidate. If support for
+multiple incoming contexts is added, an ingress rule selecting `CONTINUE` would
+be skipped for multiple candidates, even if all its explicit conditions match.
+Evaluation would continue with subsequent rules rather than choosing one of the
+candidates arbitrarily. Multi-context evaluation itself remains outside the
+scope of this proposal.
 
 The default behavior SHOULD preserve existing OpenTelemetry behavior. For
 ingress, the default strategy SHOULD be `CONTINUE`. For egress, the default
@@ -255,7 +275,7 @@ Rules SHOULD distinguish match inputs from rule outputs:
 - Ingress rules SHOULD produce a trace continuation `strategy`.
 - Egress rules SHOULD produce an `egress_action`.
 - `link_attributes` SHOULD only apply when the selected ingress strategy is
-  `RESTART_WITH_LINK`.
+  `RESTART_WITH_LINKS`.
 
 For operator convenience, implementations MAY accept `strategy` on an egress
 rule and map `CONTINUE` to `INJECT_TRACE_CONTEXT` and restart strategies to
@@ -268,7 +288,7 @@ Illustrative configuration shape using placeholder extension names:
 tracer_provider:
   trace_continuation_decider/development:
     rule_based/development:
-      default_ingress_strategy: restart_with_link
+      default_ingress_strategy: restart_with_links
       default_egress_action: inject_trace_context
       rules:
         - direction: ingress
@@ -283,7 +303,7 @@ tracer_provider:
           conditions:
             attributes:
               http.route: /webhooks/*
-          strategy: restart_with_link
+          strategy: restart_with_links
           link_attributes:
             otel.trace_continuation.reason: external_webhook
         - direction: egress
@@ -326,10 +346,12 @@ selected parent `Context`:
 1. Extraction logic MUST parse incoming remote context according to existing
    propagator behavior.
 2. Decider evaluation MUST be deterministic for a given input and configuration.
-3. If multiple configured rules match, implementations SHOULD use first-match
-   wins rule order.
-4. If no configured rule matches, implementations SHOULD preserve existing
-   continuation behavior unless configured otherwise.
+3. If multiple configured rules match and are applicable to the input,
+   implementations SHOULD use first-match wins rule order. A rule whose strategy
+   is not applicable MUST be skipped so evaluation can continue with the next
+   rule.
+4. If no applicable configured rule matches, implementations SHOULD preserve
+   existing continuation behavior unless configured otherwise.
 
 When the selected strategy is `CONTINUE`:
 
@@ -337,7 +359,7 @@ When the selected strategy is `CONTINUE`:
    existing parentage rules.
 2. Any pending-link value associated with that candidate MUST NOT be left behind.
 
-When the selected strategy is `RESTART_WITH_LINK`:
+When the selected strategy is `RESTART_WITH_LINKS`:
 
 1. Span start logic MUST NOT use the candidate remote context as the active
    parent.
@@ -346,7 +368,7 @@ When the selected strategy is `RESTART_WITH_LINK`:
 3. If the decider returns link attributes, implementations SHOULD attach them to
    the automatic link.
 
-When the selected strategy is `RESTART_WITHOUT_LINK`:
+When the selected strategy is `RESTART_WITHOUT_LINKS`:
 
 1. Span start logic MUST NOT use the candidate remote context as the active
    parent.
@@ -367,9 +389,9 @@ local parentage behavior is preserved and the decider is not invoked.
 If the selected parent `Context` contains a valid remote span context, that remote
 span context is the trace continuation candidate. The decider MUST evaluate it:
 - `CONTINUE` uses the remote span context as the parent.
-- `RESTART_WITH_LINK` starts a new root span and adds one automatic link to the
+- `RESTART_WITH_LINKS` starts a new root span and adds one automatic link to the
     remote span context.
-- `RESTART_WITHOUT_LINK` starts a new root span without an automatic link.
+- `RESTART_WITHOUT_LINKS` starts a new root span without an automatic link.
 The API does not distinguish an extracted remote context from any other
 caller-provided remote parent context. Therefore, a caller-provided remote parent
 is subject to the decider unless a language defines an explicit separate API for
@@ -484,7 +506,7 @@ internal callers. Both routes can carry W3C Trace Context. The external webhook
 route is authenticated, but the incoming trace belongs to the partner audience,
 not the service's internal trace.
 
-For `/webhooks/{partner}` the decider returns `RESTART_WITH_LINK`. The SDK starts
+For `/webhooks/{partner}` the decider returns `RESTART_WITH_LINKS`. The SDK starts
 a new internal root span and links to the partner-provided context. Internal child
 spans follow the new trace. The partner context is visible as causal information
 without becoming the default parent.
@@ -536,7 +558,7 @@ longer represented as a single tree in one trace.
 Mitigation:
 
 - Preserve causal relationship using a span link when policy selects
-  `RESTART_WITH_LINK`.
+  `RESTART_WITH_LINKS`.
 - Allow link attributes to describe the boundary or audience relationship.
 - Document backend query patterns that use links.
 
@@ -562,8 +584,8 @@ Mitigation:
 
 - Preserve `CONTINUE` as the compatibility default.
 - Support allowlist defaults for deployments that need strict trust boundaries.
-- Encourage diagnostics such as counts of `continue`, `restart_with_link`, and
-  `restart_without_link` decisions.
+- Encourage diagnostics such as counts of `continue`, `restart_with_links`, and
+  `restart_without_links` decisions.
 
 ### Trade-off: Relationship to baggage controls can be confusing
 
