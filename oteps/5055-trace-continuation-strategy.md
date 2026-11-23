@@ -132,6 +132,17 @@ For ingress, the lifecycle is:
 5. Span start logic applies the decision before sampling.
 6. The sampler evaluates the span with the final parentage context.
 
+The initial ingress hook targets remote parentage because the SDK can apply that
+decision through the existing span creation API before trace ID selection and
+sampling. It preserves local parentage and caller-supplied links, without
+requiring instrumentation to adopt a new ingress operation.
+
+This deliberately excludes baggage-only input and contexts supplied solely as
+links. The structured result reserves independent decisions for future
+extensions, but enabling those decisions will require broader invocation
+conditions and, for baggage, a contract for returning and activating the
+resulting context.
+
 For egress, the lifecycle is:
 
 1. Instrumentation prepares an outgoing request and identifies the current active
