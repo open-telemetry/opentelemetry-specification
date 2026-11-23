@@ -107,9 +107,10 @@ Context and Baggage wire formats.
 
 ### Component lifecycle
 
-The Trace Continuation Decider runs after the existing span creation API has
-selected a parent `Context` and before the SDK finalizes parentage for a new span
-or propagates context across an outgoing boundary.
+For ingress, the Trace Continuation Decider runs after the existing span creation
+API has selected a parent `Context` and before the SDK finalizes parentage for a
+new span. For egress, it runs when instrumentation requests a context for
+injection, immediately before propagating across an outgoing boundary.
 
 For ingress, the lifecycle is:
 
@@ -129,14 +130,86 @@ For egress, the lifecycle is:
 
 1. Instrumentation prepares an outgoing request and identifies the current active
    context or other propagation candidate.
-2. Instrumentation and the SDK assemble a trace continuation input containing the
-   destination metadata and active context candidate.
-3. The decider returns an egress propagation action.
-4. Injection logic applies that decision before writing propagation headers.
+2. Instrumentation calls `Tracer.ApplyEgressContinuation` with the propagation
+   candidate, span kind, and available destination attributes.
+3. The SDK invokes its configured decider and returns a `Context` representing
+   the selected egress propagation action.
+4. Instrumentation passes that `Context` explicitly to propagation injection.
+5. Injection logic observes the action before writing propagation headers.
 
 This proposal intentionally separates propagation parsing from continuation
 policy. Language implementations MAY integrate the mechanics differently, but the
 observable behavior SHOULD match this lifecycle.
+
+### Interfaces and ownership
+
+The Trace Continuation Decider is an SDK extension point. Applications configure
+it on the `TracerProvider`, either programmatically or through declarative
+configuration. Each SDK `Tracer` MUST use the decider configured on the provider
+that created it, including when instrumentation uses an explicitly supplied
+provider rather than the global provider. Instrumentation does not obtain or
+invoke the decider directly.
+
+The following language-neutral signatures describe the SDK interface. Names and
+parameter grouping are illustrative; language implementations can use idiomatic
+equivalents.
+
+```text
+TraceContinuationDecider.ShouldContinue(IngressInput) -> IngressResult
+TraceContinuationDecider.ShouldInject(EgressInput) -> EgressAction
+TraceContinuationDecider.GetDescription() -> String
+```
+
+`IngressInput` contains the selected parent `Context`, its valid remote candidate
+`SpanContext`, the span kind, the attributes available at span start, and any
+caller-supplied links. `IngressResult` contains the strategy and optional link
+attributes and diagnostics described in [Decision result](#decision-result).
+Caller-supplied links are preserved when the SDK applies the result.
+
+The SDK invokes `ShouldContinue` during `StartSpan`, after parent selection and
+before trace ID selection and sampling. It applies the result to parentage and
+automatic links before invoking the sampler. The conditions for invoking the
+decider are defined in [Parent context selection](#parent-context-selection).
+Instrumentation uses the existing span creation API for ingress; no additional
+ingress operation is required.
+
+`EgressInput` contains the selected propagation `Context`, the span kind when
+known, and available destination attributes. `ShouldInject` returns
+`INJECT_TRACE_CONTEXT` or `SUPPRESS_TRACE_CONTEXT`. The SDK invokes it from
+`Tracer.ApplyEgressContinuation`, independently of span creation or activation.
+The invoked method determines the direction: `ShouldContinue` evaluates ingress
+rules and `ShouldInject` evaluates egress rules. `GetDescription` returns a
+human-readable description for diagnostics.
+
+Instrumentation accesses egress policy through an operation on the tracing API,
+with a signature equivalent to:
+
+```text
+Tracer.ApplyEgressContinuation(Context?, SpanKind?, Attributes?) -> Context
+```
+
+Instrumentation SHOULD call this operation immediately before injecting context
+for each outgoing boundary. If the context argument is omitted, the operation
+MUST select the current active `Context`. A supplied `Context`, including an
+empty one, MUST be used as supplied. The operation MUST return a context that
+injection can use to observe the selected egress action, without changing the
+current active context, the input context, or the active span's parentage or
+recording state.
+
+For example, instrumentation using an explicitly supplied provider performs the
+following operations:
+
+```text
+tracer = provider.GetTracer(instrumentationScope)
+injectionContext = tracer.ApplyEgressContinuation(context, kind, attributes)
+propagator.Inject(carrier, injectionContext)
+```
+
+Language implementations MAY expose this operation as a context manager or
+another scoped helper, provided instrumentation can pass the returned context
+explicitly to injection. When no SDK is installed, the API implementation MUST
+return the selected context unchanged. Propagators consume the returned context;
+they do not locate the provider or invoke the decider.
 
 ### Decision input
 
@@ -435,14 +508,21 @@ Rule-based configuration MAY use the same strategy names as ingress for
 operator convenience. If so, implementations SHOULD map `CONTINUE` to
 `INJECT_TRACE_CONTEXT` and map restart strategies to `SUPPRESS_TRACE_CONTEXT`.
 Language implementations MAY represent the selected egress action using context
-state, span state, an SDK propagation hook, or another mechanism, but injection
-MUST observe the selected action before writing propagation headers.
+state or another mechanism associated with the returned injection context, but
+injection MUST observe the selected action before writing propagation headers.
+The action MUST NOT depend on whether the span was created and activated in one
+operation or through separate operations. Each call to
+`Tracer.ApplyEgressContinuation` MUST evaluate the selected propagation context
+for that boundary. If an inner operation selects `INJECT_TRACE_CONTEXT`, a
+suppression hint in its input context MUST NOT override that decision. The input
+context and any outer operation's injection context MUST remain unchanged.
 
 ### Interaction with samplers
 
-The Trace Continuation Decider runs before the sampler observes the span's final
-parentage. This ordering is important because parent-based samplers and
-attribute-based samplers need to evaluate the span that will actually be created.
+For ingress, the Trace Continuation Decider runs before the sampler observes the
+span's final parentage. This ordering is important because parent-based samplers
+and attribute-based samplers need to evaluate the span that will actually be
+created.
 
 The decider MUST NOT make recording or sampling decisions. A sampler does not
 need to understand why parentage was continued or restarted. Implementations
@@ -704,18 +784,6 @@ demonstrates:
 6. How does declarative configuration represent allowlist defaults without
    breaking existing continue-by-default behavior?
 
-7. For egress, where is the continuation decision stored so injection can observe
-   it across different instrumentation patterns? Outgoing instrumentation often
-   creates a client or producer span, makes that span current, and later invokes
-   propagation injection. In many languages these steps are not a single SDK
-   operation: span creation, scope activation, and injection can be performed by
-   different helper APIs or different layers of instrumentation. If the SDK
-   stores egress suppression only in one activation path, other valid activation
-   paths can miss the decision and accidentally propagate the suppressed trace
-   context. Possible designs include an API-level context marker, API-visible
-   span state, a propagation-time SDK hook, or a dedicated egress continuation
-   API that instrumentation calls before injection.
-
 ## Prototypes
 
 - Python prototype at https://github.com/open-telemetry/opentelemetry-python/pull/5394
@@ -730,6 +798,10 @@ Prototype scenarios should cover:
 - prevention of accidental link inheritance by child spans,
 - sampler ordering after continuation decision,
 - egress suppression or restart behavior,
+- egress policy using an explicitly supplied provider,
+- unchanged egress context when no SDK is installed,
+- egress injection after separate span creation and activation,
+- nested egress operations with independent injection decisions,
 - allowlist-style configuration for trusted boundaries.
 
 ## Future possibilities
