@@ -126,8 +126,19 @@ a family name such as `allocation` or `contention`.
 
 Unless noted otherwise, a sample value is the measured quantity itself, already
 scaled by the producer to account for sampling. `samples`/`count` is the
-exception: it reports the raw number of observations, and `period_type` and
-`period` are required to estimate the sampled quantity from it.
+exception: it reports the raw number of observations. Because
+`Profile.sample_type` is singular, a profile using `samples`/`count` SHOULD set
+`Profile.period_type` and a positive `Profile.period`. Without them, backends
+cannot determine what was sampled.
+
+A sampling CPU or wall-clock profiler is equally compliant when it emits either
+form:
+
+- `samples`/`count` with `period_type` of `cpu`/`nanoseconds` (or
+  `wall`/`nanoseconds`) and the sampling interval as `period`, leaving the
+  scaling to the backend.
+- Pre-scaled `cpu`/`nanoseconds` (or `wall`/`nanoseconds`) values, with the
+  scaling already applied by the producer.
 
 #### Sampled values
 
