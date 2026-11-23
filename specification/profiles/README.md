@@ -152,7 +152,7 @@ CPU profiles measure CPU time consumed by the application.
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `cpu` | `nanoseconds` | CPU time samples |
+| `cpu` | `nanoseconds` | CPU time |
 
 #### Wall-clock profiles
 
@@ -160,7 +160,7 @@ Wall-clock (wall time) profiles measure elapsed time.
 
 | Type | Unit | Description |
 | ---- | ---- | ----------- |
-| `wall` | `nanoseconds` | Wall clock time samples |
+| `wall` | `nanoseconds` | Wall-clock time |
 
 #### Off-CPU profiles
 
