@@ -830,7 +830,8 @@ supports them, as follows:
 
 **Status**: [Development](../document-status.md)
 
-In Prometheus exporters, an OpenTelemetry Resource SHOULD be converted to
+In single-target Prometheus exporters (such as OpenTelemetry SDK Prometheus
+exporters), an OpenTelemetry Resource SHOULD be converted to
 a [`target` info metric](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
 The Resource attributes MAY be copied to labels of exported metric families
@@ -839,7 +840,8 @@ info metric MUST be an info-typed
 metric whose labels MUST include the resource attributes, and MUST NOT include
 any other labels.
 
-In the Collector's Prometheus exporters, it is
+In aggregated exporters and OTLP-to-Prometheus converters (such as the
+Collector's Prometheus exporters or Prometheus OTLP ingestion endpoints), it is
 possible for metrics from multiple targets to be sent together, so targets must
 be disambiguated from one another. However, the Prometheus exposition format
 and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto)
@@ -847,18 +849,30 @@ formats do not include a notion of resource, and expect metric labels to
 distinguish scraped targets. By convention, [`job` and `instance`](https://prometheus.io/docs/concepts/jobs_instances/)
 labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://prometheus.io/docs/prometheus/latest/federation/)
-Prometheus endpoint) or pushed via Prometheus remote-write. In OpenTelemetry
-semantic conventions, the `service.name`, `service.namespace`, and
-`service.instance.id` triplet is
+Prometheus endpoint), pushed via Prometheus remote-write, or ingested via OTLP.
+In OpenTelemetry semantic conventions, the `service.name`, `service.namespace`,
+and `service.instance.id` triplet is
 [required to be unique](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service),
-which makes them good candidates to use to construct `job` and `instance`. In
-the collector Prometheus exporters, the `service.name` and `service.namespace`
-attributes MUST be combined as `<service.namespace>/<service.name>`, or
-`<service.name>` if namespace is empty, to form the `job` metric label.  The
-`service.instance.id` attribute, if present, MUST be converted to the
-`instance` label; otherwise, `instance` should be added with an empty value.
+which makes them good candidates to use to construct `job` and `instance`.
 
-All resource attributes SHOULD be converted to a
+In these exporters and converters, resource attribute values are converted to
+strings as described below before constructing the `job` and `instance` labels:
+
+- If `service.name` is present and non-empty, `service.name` and
+  `service.namespace` MUST be combined as `<service.namespace>/<service.name>`,
+  or `<service.name>` if `service.namespace` is absent or empty, to form the
+  `job` metric label; otherwise, the `job` label is empty and SHOULD be omitted
+  (or set to an empty value if required by the output format).
+- If `service.instance.id` is present and non-empty, it MUST be used as the
+  `instance` metric label; otherwise, the `instance` label is empty and SHOULD
+  be omitted (or set to an empty value if required by the output format).
+
+The resulting non-empty `job` and `instance` labels MUST be added to all
+Prometheus metrics associated with the resource, including the `target` info
+metric, if present.
+
+In these exporters and converters, all resource attributes SHOULD be converted
+to a
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 info metric, or MUST be dropped. The `target` metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
@@ -867,6 +881,6 @@ other labels except `job` and `instance`.  There MUST be at most one
 
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
-To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
+To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#anyvalue-representation-for-non-otlp-protocols).
 
 [metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
