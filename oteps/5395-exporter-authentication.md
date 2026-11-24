@@ -162,10 +162,11 @@ interfaces** (which are left to each SDK).
        (`credentials.PerRPCCredentials` / `CallCredentials`) where idiomatic.
      * Bounding authentication operations so that credential acquisition MUST
        NOT block indefinitely, with a reasonable upper limit after which the
-       operation times out with an error (matching the existing exporter
-       `Export` timeout model; OpenTelemetry SDK authors can decide if they want
-       to make the timeout configurable or pass a timeout, deadline, or
-       cancellation signal).
+       operation times out with an error, and remaining bounded by the caller's
+       overall timeout budget when invoked by an exporter (matching the existing
+       exporter `Export` timeout model; OpenTelemetry SDK authors can decide if
+       they want to make an authentication timeout configurable or pass a
+       timeout, deadline, or cancellation signal).
      * An optional `Shutdown` lifecycle operation to release background
        resources (such as token-exchange HTTP clients or file watchers).
        `Shutdown` SHOULD NOT block indefinitely, and OpenTelemetry SDK authors
@@ -221,6 +222,14 @@ interfaces** (which are left to each SDK).
        `Compression`, and `Timeout` settings are preserved rather than
        overwritten, and so that per-RPC credentials apply on each RPC attempt
        (including when a user-supplied gRPC connection is used).
+   * **Shared Export Timeout Budget**:
+     * Time spent executing the `Authenticator` MUST count against the export
+       operation's remaining overall `Timeout` budget (and any earlier caller
+       deadline), even if the `Authenticator` has its own configured timeout
+       (for example, a 30s authentication timeout within a 10s overall export
+       timeout MUST still be bounded to 10s). If the timeout budget expires
+       during authentication, the exporter MUST abort the export attempt and
+       complete the export with a failure result.
    * **Suppressing Recursive Telemetry, Diagnostics & Lifecycle**:
      * In SDKs that provide an in-band `Context` mechanism for suppressing
        instrumentation (see
