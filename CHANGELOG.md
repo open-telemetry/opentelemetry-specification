@@ -33,6 +33,9 @@ release.
 
 ### Supplementary Guidelines
 
+- Add compliance matrix entries for injectable distributions and their injection mechanism contracts.
+  ([#5437](https://github.com/open-telemetry/opentelemetry-specification/pull/5437))
+
 ### OTEPs
 
 ## v1.63.0 (2026-11-23)
