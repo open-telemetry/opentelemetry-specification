@@ -87,6 +87,8 @@ release.
   the foundation of the technical contract for the OpenTelemetry Injector,
   System Packages and the OpenTelemetry Operator.
   ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
+- Add compliance matrix entries for injectable distributions and their injection mechanism contracts.
+  ([#5437](https://github.com/open-telemetry/opentelemetry-specification/pull/5437))
 
 ### OTEPs
 
