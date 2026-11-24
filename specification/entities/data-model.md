@@ -50,6 +50,7 @@ physical format and encoding of how entity data is recorded).
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
+| Schema URL | string | Identifies the schema version for the entity's attributes. Used to determine merge compatibility (see [Merging of Entities](#merging-of-entities)). MAY be empty. |
 | ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
@@ -170,8 +171,8 @@ can_merge(current_entity, new_entity) {
 ```
 
 When merging entities, all attributes in description are merged together, with
-one entity acting as "primary" where any conflicting attribute values will be
-chosen from the "primary" entity.
+Conflicting descriptive attributes values from the new entity overwrite descriptive
+attribute values from the current entity.
 
 Here's an example algorithm that will merge:
 
@@ -179,7 +180,7 @@ Here's an example algorithm that will merge:
 merge(current_entity, new_entity) {
   if can_merge(current_entity, new_entity) {
     for attribute in new_entity.description {
-      // New entity descriptions take precedence.
+      // new_entity descriptions take precedence.
       current_entity.description.insert(attribute)
     }
   }

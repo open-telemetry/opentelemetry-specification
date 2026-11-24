@@ -17,6 +17,7 @@ the respective exporter documentation if exact details are required.
   * [Apache HTTP Server access log](#apache-http-server-access-log)
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
+  * [systemd-journald](#systemd-journald)
   * [Elastic Common Schema](#elastic-common-schema)
   * [ETW (Event Tracing for Windows)](#etw-event-tracing-for-windows)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
@@ -54,7 +55,7 @@ this data model.
     <td>FACILITY</td>
     <td>enum</td>
     <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: <code>mail system</code></td>
-    <td>`Attributes["syslog.facility"]`</td>
+    <td>`Attributes["syslog.facility.code"]`</td>
   </tr>
   <tr>
     <td>VERSION</td>
@@ -72,7 +73,7 @@ this data model.
     <td>APP-NAME</td>
     <td>string</td>
     <td>User-defined app name. Part of event source identity.</td>
-    <td>`Resource["service.name"]`</td>
+    <td>`Attributes["syslog.identifier"]`</td>
   </tr>
   <tr>
     <td>PROCID</td>
@@ -500,6 +501,41 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | trace_sampled | boolean | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED |
 | All other fields | | | `Attributes["gcp.*"]` |
 
+### systemd-journald
+
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| `__REALTIME_TIMESTAMP` | uint64 | The wallclock time at which the entry was received by the journal, as CLOCK_REALTIME in microseconds since the UNIX epoch. Always present. | Timestamp |
+| `PRIORITY` | number | Syslog-compatible priority value (0=Emergency … 7=Debug). | Severity (`SeverityNumber` + `SeverityText`) |
+| `_HOSTNAME` | string | The name of the originating host. | `Resource["host.name"]` |
+| `SYSLOG_FACILITY` | number | Syslog compatibility field: the syslog facility (formatted as decimal string). See [RFC5424 FACILITY](#rfc5424-syslog). | `Attributes["syslog.facility.code"]` |
+| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the client-supplied identifier string (i.e. "tag"). | `Attributes["syslog.identifier"]` |
+| `SYSLOG_PID` | number | Syslog compatibility field: the client-supplied PID. Unlike the trusted `_PID` field, journald does not validate this value. | `Attributes["syslog.pid"]` |
+| `SYSLOG_TIMESTAMP` | string | Syslog compatibility field: the timestamp from the original syslog datagram. | `Attributes["syslog.timestamp"]` |
+| `MESSAGE` | string | The human-readable log message. | Body |
+| `_PID` | number | The process identifier (PID) of the process that generated the log entry. | `Resource["process.pid"]` |
+| `_EXE` | string | The path to the executable. | `Resource["process.executable.path"]` and `Resource["process.executable.name"]` |
+| `_CMDLINE` | string | The command line of the process. | `Resource["process.command_line"]` |
+| `CODE_FILE` | string | The source code file generating this message. | `Attributes["code.file.path"]` |
+| `CODE_LINE` | number | The source code line generating this message. | `Attributes["code.line.number"]` |
+| `CODE_FUNC` | string | The source code function generating this message. | `Attributes["code.function.name"]` |
+| All other fields | any | All other journal fields. | `Attributes["journald.*"]` |
+
+`PRIORITY` maps to `SeverityNumber` following the Syslog column of
+[Appendix B](#appendix-b-severitynumber-example-mappings). `SeverityText` keeps
+the syslog level name (`emerg`, `alert`, `crit`, `err`, `warning`, `notice`,
+`info`, `debug`).
+
+`process.executable.name` is the base name of `_EXE`. `_COMM` is not used for
+it, because a process can change its `comm` value at runtime and the kernel
+truncates it to 15 characters. `_COMM` is kept as `Attributes["journald._COMM"]`.
+
+`SYSLOG_PID` maps to `syslog.pid` rather than the RFC5424 `syslog.procid`
+because journald defines it as a numeric client PID, while RFC5424 `PROCID` is
+an implementation-defined string that is not necessarily a process ID.
+
+See [systemd.journal-fields](https://www.freedesktop.org/software/systemd/man/latest/systemd.journal-fields.html) for detailed description of the journald fields.
+
 ### Elastic Common Schema
 
 <table>
@@ -805,25 +841,26 @@ for an exhaustive list.
 ### ETW (Event Tracing for Windows)
 
 The following table shows how the fields of an ETW event map to the log data
-model. ETW header metadata is preserved under `etw.*` attributes, and
-TDH-decoded TraceLogging payload fields are added as attributes keyed by their
-field name.
+model. ETW header metadata and provider identity are preserved under `etw.*`
+attributes, and TDH-decoded TraceLogging payload fields are added as attributes
+keyed by their field name.
 
-| ETW Field              | Type      | Description                                                                  | Maps to Unified Model Field                                            |
-| ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` converted to UNIX epoch nanoseconds according to the trace/session timestamp metadata (e.g. QPC, system time, or CPU cycle counter) | Timestamp                                                             |
-| Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
-| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<EventId>`            | `EventName`                                                          |
-| Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`; `Body` is left empty          | Body                                                         |
-| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider.id"]`                                      |
-| EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event.id"]`                                        |
-| Opcode                 | uint8     | Opcode from the event descriptor                                            | `Attributes["etw.opcode"]`                                          |
-| Version                | uint8     | Version from the event descriptor                                           | `Attributes["etw.version"]`                                         |
-| Keywords               | uint64    | Keywords bitmask from the event descriptor                                  | `Attributes["etw.keywords"]`                                        |
-| ProcessId              | uint32    | Emitting process ID from the event header                                   | `Attributes["etw.process.id"]`                                      |
-| ThreadId               | uint32    | Emitting thread ID from the event header                                    | `Attributes["etw.thread.id"]`                                       |
-| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                  | `Attributes["etw.activity.id"]`                                     |
-| Decoded payload fields | any       | TDH-decoded TraceLogging fields, keyed by field name                        | `Attributes[<field name>]`                                          |
+| ETW Field              | Type      | Description                                                                                                                                                  | Maps to Unified Model Field                                                |
+|------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` converted to UNIX epoch nanoseconds according to the trace/session timestamp metadata (e.g. QPC, system time, or CPU cycle counter) | Timestamp                                                                  |
+| Level                  | uint8     | Event severity/verbosity level                                                                                                                               | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
+| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<EventId>`                                                                                             | `EventName`                                                                |
+| Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`; `Body` is left empty                                                                     | Body                                                                       |
+| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                                                                                                          | `Attributes["etw.provider.id"]`                                            |
+| Provider name          | string    | Provider name, when available                                                                                                                                | `Attributes["etw.provider.name"]`                                          |
+| EventId                | uint16    | Event identifier from the event descriptor                                                                                                                   | `Attributes["etw.event.id"]`                                               |
+| Opcode                 | uint8     | Opcode from the event descriptor                                                                                                                             | `Attributes["etw.opcode"]`                                                 |
+| Version                | uint8     | Version from the event descriptor                                                                                                                            | `Attributes["etw.version"]`                                                |
+| Keywords               | uint64    | Keywords bitmask from the event descriptor                                                                                                                   | `Attributes["etw.keywords"]`                                               |
+| ProcessId              | uint32    | Emitting process ID from the event header                                                                                                                    | `Attributes["etw.process.id"]`                                             |
+| ThreadId               | uint32    | Emitting thread ID from the event header                                                                                                                     | `Attributes["etw.thread.id"]`                                              |
+| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                                                                                                   | `Attributes["etw.activity.id"]`                                            |
+| Decoded payload fields | any       | TDH-decoded TraceLogging fields, keyed by field name                                                                                                         | `Attributes[<field name>]`                                                 |
 
 The ETW `Level` is an 8-bit value whose meaning is defined by the
 [`EVENT_DESCRIPTOR`](https://learn.microsoft.com/windows/win32/api/evntprov/ns-evntprov-event_descriptor). `SeverityText`
