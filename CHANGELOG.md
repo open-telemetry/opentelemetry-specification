@@ -9,14 +9,53 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+- Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.63.0 (2026-11-23)
+
+### Context
+
 - Mark "Environment Variables as Context Propagation Carriers" as Stable.
-  ([#5040](https://github.com/open-telemetry/opentelemetry-specification/issues/5040))
+  ([#5389](https://github.com/open-telemetry/opentelemetry-specification/pull/5389))
 
 ### Traces
 
+- Add the traces data model.
+  ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only
   for synchronous output through APIs without deadline or cancellation support.
   ([#5355](https://github.com/open-telemetry/opentelemetry-specification/pull/5355))
+- Add Development span type: optional span creation parameter, `ReadableSpan`
+  access, and SDK syntax validation.
+  ([#5378](https://github.com/open-telemetry/opentelemetry-specification/pull/5378))
 
 ### Metrics
 
@@ -40,20 +79,16 @@ release.
   attribute and describe its availability.
   ([#5363](https://github.com/open-telemetry/opentelemetry-specification/pull/5363))
 
-### Baggage
-
-### Profiles
-
-### Resource
-
-### Entities
-
 ### Common
 
-### OpenTelemetry Protocol
+- Define optional application-provided names for SDK components.
+  ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 
 ### Compatibility
 
+- Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
+  the case of unset `Sum` field.
+  ([#5274](https://github.com/open-telemetry/opentelemetry-specification/pull/5274))
 - Fix missing handling of optional Sum in the OpenTelemetry Histogram to Prometheus
   Histogram transformation.
   ([#5271](https://github.com/open-telemetry/opentelemetry-specification/pull/5271))
@@ -61,24 +96,41 @@ release.
   `service.namespace`, and `service.instance.id` should be converted to the
   Prometheus `target` info metric along with all other resource attributes.
   ([#5368](https://github.com/open-telemetry/opentelemetry-specification/pull/5368))
-- Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
-  with standard (exponential) schema transformation.
-  ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+- Set the Prometheus Native Histogram `ZeroThreshold` to zero instead of
+  `1e-128` when the OpenTelemetry Exponential Histogram `ZeroThreshold` is not
+  set.
+  ([#5418](https://github.com/open-telemetry/opentelemetry-specification/pull/5418))
+- Clarify the conversion of Prometheus labels and the `target` info metric to
+  OTLP resources, data point attributes and resource attributes for scraped
+  metrics, and define it for Prometheus Remote Write, where the whole `job`
+  label becomes `service.name`
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Clarify that `server.address`, `server.port` and `url.scheme` of scraped
+  metrics are derived from the scrape target's `__address__` and `__scheme__`
+  labels after relabeling, and that `server.address` is omitted for localhost,
+  loopback and unspecified addresses.
+  ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
 
 ### SDK Configuration
 
+- Fix the declarative config type for a PluginComponentProvider for a resource
+  detector to be `ExperimentalResourceDetector`, rather than
+  `ExperimentalResourceDetection`.
+  ([#5427](https://github.com/open-telemetry/opentelemetry-specification/pull/5427))
 - Add `OTEL_METRIC_EXPORT_MAX_BATCH_SIZE` environment variable for Periodic
   exporting MetricReader.
   ([#5359](https://github.com/open-telemetry/opentelemetry-specification/pull/5359))
 
 ### Supplementary Guidelines
 
+- Add to the library guidelines criteria for automatic injectability that are
+  the foundation of the technical contract for the OpenTelemetry Injector,
+  System Packages and the OpenTelemetry Operator.
+  ([#5308](https://github.com/open-telemetry/opentelemetry-specification/pull/5308))
 - Explicitly permit tightening runtime or dependency version requirements to
   address an identified security risk, including risks from loss of security
   maintenance.
   ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
-
-### OTEPs
 
 ## v1.62.0 (2026-10-21)
 
