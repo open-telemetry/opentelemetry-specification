@@ -29,6 +29,13 @@ release.
 
 ### Compatibility
 
+- Preserve Prometheus `job` and `instance` labels as `prometheus.job` and
+  `prometheus.instance` resource attributes when converting Prometheus metrics
+  to OTLP, make defaulting `service.name` and `service.instance.id` optional
+  with an opt-out, and prioritize `prometheus.job` and `prometheus.instance`
+  when translating OTLP resources back to Prometheus.
+  ([#5464](https://github.com/open-telemetry/opentelemetry-specification/pull/5464))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
