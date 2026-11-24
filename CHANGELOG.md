@@ -35,6 +35,9 @@ release.
 - Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+- Specify how OpenTelemetry Entities map to and from the Prometheus data model
+  using the `otel_entity` info metric.
+  ([#5462](https://github.com/open-telemetry/opentelemetry-specification/pull/5462))
 
 ### SDK Configuration
 

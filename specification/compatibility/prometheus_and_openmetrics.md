@@ -33,6 +33,7 @@ aliases:
   * [Resource Attributes](#resource-attributes)
     + [Scraping metrics (pull)](#scraping-metrics-pull)
     + [Remote Write metrics (push)](#remote-write-metrics-push)
+  * [Entities](#entities)
 - [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
   * [Metric Metadata](#metric-metadata-1)
   * [Instrumentation Scope](#instrumentation-scope-1)
@@ -46,6 +47,7 @@ aliases:
   * [Metric Attributes](#metric-attributes)
   * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
+  * [Entities](#entities-1)
 
 <!-- END doctoc -->
 
@@ -163,7 +165,7 @@ A [Prometheus Gauge](https://prometheus.io/docs/instrumenting/exposition_formats
 
 **Status**: [Stable](../document-status.md)
 
-A [Prometheus Info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the `target` info metric, which is used to populate [resource attributes](#resource-attributes). A Prometheus Info metric can be thought of as a special-case of the Prometheus Gauge metric which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+A [Prometheus Info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the `target` info metric, which is used to populate [resource attributes](#resource-attributes), or the `otel_entity` info metric, which is used to populate [entities](#entities). A Prometheus Info metric can be thought of as a special-case of the Prometheus Gauge metric which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### StateSet
 
@@ -386,8 +388,8 @@ following labels, which MUST NOT be copied:
 - labels with the `otel_scope_` prefix, which are handled according to the
   [Instrumentation Scope](#instrumentation-scope) rules.
 
-Labels of the `target` info metric are implicitly excluded, as `target` info
-metric samples are not turned into data points.
+Labels of the `target` and `otel_entity` info metrics are implicitly excluded,
+as their samples are not turned into data points.
 
 ### Resource Attributes
 
@@ -396,7 +398,8 @@ metric samples are not turned into data points.
 In Prometheus metrics, the `job` and `instance` labels are used as join keys
 between metrics and the `target` info metric. Therefore a new resource MUST be
 created for each `job` and `instance` pair encountered in the metrics labels,
-except for the `target` info metric which defines correlated resource labels.
+except for the `target` and `otel_entity` info metrics which define correlated
+resource metadata.
 
 The `service.name` and `service.instance.id` resource
 attributes are needed to ensure Prometheus exporters can disambiguate metrics
@@ -484,6 +487,49 @@ and `instance` has a `service.instance.id` label, the `service.instance.id`
 attribute of the resource created for that pair MUST be set to that label's
 value. Otherwise, if `instance` is not the empty string, it MUST be set to the
 value of the `instance` label.
+
+### Entities
+
+**Status**: [Development](../document-status.md)
+
+If present, `otel_entity` info metrics SHOULD be dropped from the batch of
+metrics and used to populate `Resource.entity_refs` for the resource with the
+same `job` and `instance` pair, following the same correlation and Remote Write
+caching rules as the `target` info metric in
+[Resource Attributes](#resource-attributes).
+
+Each `otel_entity` info metric maps to an OTLP `EntityRef` using the following
+labels:
+
+- `otel_entity_type` (required): sets `type`.
+- `otel_entity_schema_url` (optional): sets `schema_url` if non-empty.
+- `otel_entity_id_keys` (required): parsed as a
+  [JSON array](../common/README.md#arrays) of non-empty strings to populate
+  `id_keys`.
+- `otel_entity_description_keys` (optional): if non-empty, parsed as a
+  [JSON array](../common/README.md#arrays) of non-empty strings to populate
+  `description_keys`.
+
+When populating `Resource.entity_refs`:
+
+- By default, keys parsed from `otel_entity_id_keys` and
+  `otel_entity_description_keys` MUST NOT be altered (such as replacing `_`
+  with `.`), matching the `target` info metric rule in
+  [Resource Attributes](#resource-attributes).
+- Samples with a
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go),
+  or with missing, empty, or malformed `otel_entity_type` or
+  `otel_entity_id_keys`, malformed non-empty `otel_entity_description_keys`, or
+  any key in `otel_entity_id_keys` absent from the resource's attributes, MUST
+  be ignored.
+- Keys in `otel_entity_description_keys` absent from the resource's attributes
+  or already in `id_keys` MUST be omitted.
+- Unrecognized labels on `otel_entity` MUST be ignored.
+- Multiple valid `otel_entity` metrics for the same resource and
+  `otel_entity_type` MUST be reconciled per
+  [Merging An Entity into a Resource](../resource/data-model.md#merging-an-entity-into-a-resource)
+  (and current-request samples MUST replace cached Remote Write entries for the
+  same `job`, `instance`, and `otel_entity_type`).
 
 ## OTLP Metric points to Prometheus
 
@@ -868,5 +914,75 @@ other labels except `job` and `instance`.  There MUST be at most one
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
+
+### Entities
+
+**Status**: [Development](../document-status.md)
+
+All resource attributes (identifying and descriptive) continue to be converted
+to the `target` info metric, and `job` and `instance` remain unaffected by
+[entities](../entities/data-model.md).
+
+When a resource has entities (`Resource.entity_refs`) and a `target` info
+metric is exported, each valid entity SHOULD be converted to an `otel_entity`
+info metric with a constant value of `1`. If info-typed metric families are not
+supported, a gauge-typed metric family named `otel_entity_info` with a constant
+value of `1` MUST be used instead.
+
+The `otel_entity` info metric MUST populate its labels as follows and MUST NOT
+include any other labels (except `job` and `instance` in multi-target exporters,
+matching the corresponding `target` info metric):
+
+- `otel_entity_type` (required): the entity's `type`.
+- `otel_entity_schema_url` (optional): the entity's `schema_url`, omitted if
+  empty.
+- `otel_entity_id_keys` (required): the entity's `id_keys`, translated using
+  the same label-name translation as `target`, deduplicated, and encoded as a
+  [JSON array](../common/README.md#arrays) of strings.
+- `otel_entity_description_keys` (optional): the entity's `description_keys`
+  present in `Resource.attributes` (excluding keys in `otel_entity_id_keys`),
+  translated, deduplicated, and encoded as a
+  [JSON array](../common/README.md#arrays) of strings, omitted if empty.
+
+Exporters SHOULD sort translated keys lexicographically and omit insignificant
+JSON whitespace to avoid unnecessary time series churn. There MUST be at most
+one `otel_entity` info metric per `otel_entity_type` (per unique `job` and
+`instance` in multi-target exporters), matching the resource exported for
+`target`.
+
+For example, given an OTLP resource:
+
+```yaml
+resource:
+  attributes:
+    service.namespace: "shop"
+    service.name: "checkout"
+    service.instance.id: "id-1"
+    service.version: "2.4.0"
+    k8s.pod.uid: "pod-uid-123"
+    k8s.pod.name: "checkout-7f9"
+  entity_refs:
+    - type: "service.instance"
+      schema_url: "https://opentelemetry.io/schemas/1.31.0"
+      id_keys: ["service.namespace", "service.name", "service.instance.id"]
+      description_keys: ["service.version"]
+    - type: "k8s.pod"
+      schema_url: "https://opentelemetry.io/schemas/1.31.0"
+      id_keys: ["k8s.pod.uid"]
+      description_keys: ["k8s.pod.name"]
+```
+
+an SDK exporter with underscore label translation produces:
+
+```text
+# TYPE target info
+target_info{k8s_pod_name="checkout-7f9",k8s_pod_uid="pod-uid-123",service_instance_id="id-1",service_name="checkout",service_namespace="shop",service_version="2.4.0"} 1
+# TYPE otel_entity info
+otel_entity_info{otel_entity_description_keys="[\"service_version\"]",otel_entity_id_keys="[\"service_instance_id\",\"service_name\",\"service_namespace\"]",otel_entity_schema_url="https://opentelemetry.io/schemas/1.31.0",otel_entity_type="service.instance"} 1
+otel_entity_info{otel_entity_description_keys="[\"k8s_pod_name\"]",otel_entity_id_keys="[\"k8s_pod_uid\"]",otel_entity_schema_url="https://opentelemetry.io/schemas/1.31.0",otel_entity_type="k8s.pod"} 1
+# TYPE http_server_requests counter
+http_server_requests_total{otel_scope_name="http"} 42
+# EOF
+```
 
 [metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
