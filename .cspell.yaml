@@ -93,6 +93,7 @@ words:
   - BLRP
   - Kubecon
   - OpAMP
+  - STEF # collector-contrib exporter: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/stefexporter
   - OTCA
   - OTEP
   - OTTL

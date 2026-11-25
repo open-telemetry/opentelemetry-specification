@@ -25,16 +25,28 @@ release.
 
 ### Common
 
+- Mark reserved attributes in semantic conventions as Stable.
+  ([#5434](https://github.com/open-telemetry/opentelemetry-specification/pull/5434))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
 
 ### SDK Configuration
 
 ### Supplementary Guidelines
 
+- Add compliance matrix entries for injectable distributions and their injection mechanism contracts.
+  ([#5437](https://github.com/open-telemetry/opentelemetry-specification/pull/5437))
+
 ### OTEPs
 
+- Add zstd as a specified OTLP compression codec.
+  ([#5321](https://github.com/open-telemetry/opentelemetry-specification/pull/5321))
 - Add OTEP proposing an `Authenticator` SDK plugin component for OTLP exporter
   authentication.
   ([#5395](https://github.com/open-telemetry/opentelemetry-specification/pull/5395))
