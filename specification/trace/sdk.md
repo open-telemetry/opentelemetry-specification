@@ -60,10 +60,9 @@ weight: 3
       - [Do not overwrite explicit randomness](#do-not-overwrite-explicit-randomness)
       - [Root samplers set explicit randomness for non-random TraceIDs](#root-samplers-set-explicit-randomness-for-non-random-traceids)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
-    + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
 - [ID Generators](#id-generators)
-  * [IdGenerator randomness](#idgenerator-randomness-1)
+  * [IdGenerator randomness](#idgenerator-randomness)
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
@@ -840,7 +839,7 @@ For root span contexts, the SDK SHOULD implement the TraceID randomness requirem
 
 #### Random trace flag
 
-For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
+For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID]. See [IdGenerator randomness](#idgenerator-randomness) for `IdGenerator` extension point requirements.
 
 #### Explicit randomness
 
@@ -861,7 +860,7 @@ value.
 
 When the SDK has generated a TraceID that does not meet the [W3C Trace
 Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
-by an unset trace random flag, and when the the [`rv` sub-key of the
+by an unset trace random flag, and when the [`rv` sub-key of the
 OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
 sampler has the opportunity to insert an explicit randomness value.
 
@@ -880,10 +879,6 @@ tracestate: ot=rv:7479cfb506891d
 #### Presumption of TraceID randomness
 
 For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
-
-#### IdGenerator randomness
-
-If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the Random flag is set when new IDs are generated.
 
 ## Span Limits
 
@@ -958,6 +953,8 @@ OpenTelemetry [Core packages](../overview.md#core-packages).
 ### IdGenerator randomness
 
 **Status**: [Development](../document-status.md)
+
+If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the [Random flag](#random-trace-flag) is set when new IDs are generated.
 
 Custom implementations of the `IdGenerator` SHOULD identify themselves
 appropriately when all generated TraceID values meet the [W3C Trace
