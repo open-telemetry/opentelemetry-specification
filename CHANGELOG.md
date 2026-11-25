@@ -31,6 +31,10 @@ release.
 
 ### SDK Configuration
 
+- Define SDK `ConfigProvider` change-listener behavior for runtime declarative
+  configuration notifications.
+  ([#4900](https://github.com/open-telemetry/opentelemetry-specification/pull/4900))
+
 ### Supplementary Guidelines
 
 ### OTEPs
@@ -304,10 +308,6 @@ release.
 
 - Add Profiles data model (data-model.md).
   ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
-
-- Define SDK `ConfigProvider` change-listener behavior for runtime declarative
-  configuration notifications.
-  ([#4900](https://github.com/open-telemetry/opentelemetry-specification/pull/4900))
 
 ### Supplementary Guidelines
 

@@ -14,6 +14,7 @@ weight: 3
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
   * [ConfigProvider](#configprovider)
+    + [Set instrumentation config](#set-instrumentation-config)
     + [Add change listener](#add-change-listener)
   * [SDK extension components](#sdk-extension-components)
     + [PluginComponentProvider](#plugincomponentprovider)
@@ -72,51 +73,25 @@ created using a [`ConfigProperties`](./api.md#configproperties) representing
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
 mapping node of the [configuration model](./data-model.md).
 
+#### Set instrumentation config
+
+The SDK implementation of `ConfigProvider` MUST provide an operation that takes
+a [`ConfigProperties`](./api.md#configproperties) instance and replaces the
+provider's instrumentation mapping with it. Subsequent calls to
+[Get instrumentation config](./api.md#get-instrumentation-config) MUST return
+the updated configuration.
+
+The SDK MUST notify registered listeners whose watched mapping changed,
+including changes to its contents, its appearance, or its removal. Replacing a
+mapping with an equivalent mapping MUST NOT trigger a notification.
+
 #### Add change listener
 
-Register a listener to be notified when configuration at a specific watched path
-changes.
+When implementing [Add change listener](./api.md#add-change-listener), the SDK
+MUST support independent registrations for the same path.
 
-The SDK implementation of `ConfigProvider` MUST provide an operation to register
-change listeners. This operation does not require the SDK implementation to
-support runtime configuration updates.
-
-The registration operation MUST accept the following parameters:
-
-* `path`: declarative configuration path to watch.
-* `listener`: callback invoked on changes.
-
-**Returns:** A registration handle. The handle MUST provide a close (or
-language-equivalent) operation that unregisters the listener.
-
-Path requirements:
-
-* `path` MUST use the declarative configuration path syntax defined here.
-* `path` MUST start with `.`.
-* Nested named properties MUST be separated with `.`.
-* `path` matching is exact. Wildcards and prefix matching are not supported.
-* In this version, paths are defined only for named properties. Sequence/array
-  indexing is not supported.
-* `path` MUST identify a mapping node when the watched path is set. Watching
-  scalar values or sequences is not supported.
-* Examples include `.instrumentation/development.general.http` and
-  `.instrumentation/development.java.methods`.
-
-Callback requirements:
-
-* SDK implementations MUST allow multiple listeners to be registered for the same
-  watched path. Each registration is independent and has its own registration
-  handle.
-* If a watched path changes, the callback MUST receive:
-  * `path`: the changed watched path.
-  * `newConfig`: the updated
-    [`ConfigProperties`](./api.md#configproperties) for that path.
-* If the watched path resolves to a mapping node, `newConfig` MUST be a valid
-  [`ConfigProperties`](./api.md#configproperties) instance representing that
-  mapping node, including an explicitly empty mapping node (`{}`).
-* If the watched path is unset, cleared, or no longer resolves to a mapping
-  node, `newConfig` MUST be null/nil/None/undefined, according to what is idiomatic for
-  the language.
+* Registering a listener MUST NOT invoke it with the current configuration.
+  Notifications begin with the first subsequent change to the watched mapping.
 * SDK implementations MAY coalesce rapid successive updates for the same watched
   path. If coalescing is performed, callback delivery MUST use the latest
   configuration state.
@@ -128,13 +103,8 @@ Callback requirements:
 
 Concurrency and lifecycle requirements:
 
-* SDK implementations MUST document whether callbacks for the same registration
-  may be invoked concurrently.
-* If an SDK implementation does not document callback concurrency behavior,
-  instrumentation and component authors MUST assume callbacks may be invoked
-  concurrently.
-* SDK implementations MUST NOT hold internal synchronization locks while
-  invoking listener callbacks.
+* If the SDK can invoke callbacks for the same registration concurrently, it
+  MUST document this behavior for API callers.
 * Callback implementations SHOULD avoid blocking operations.
 * Closing a registration handle MUST unregister the listener.
 * SDK implementations MUST allow a listener callback to close its own
@@ -145,13 +115,8 @@ Concurrency and lifecycle requirements:
 * SDK implementations SHOULD drop registrations automatically when the
   corresponding `ConfigProvider` is shut down or otherwise disposed.
 
-Error handling and unsupported implementations:
-
-* If callback execution throws an error, SDK implementations SHOULD isolate the
-  failure to that callback and SHOULD continue notifying other callbacks.
-* If an SDK implementation of `ConfigProvider` does not support change
-  notifications, registration of a change listener MUST return a no-op
-  registration handle, and callbacks MUST NOT be invoked.
+If a listener callback fails, the SDK SHOULD log the error, isolate the failure
+to that callback, and continue notifying other listeners.
 
 ### SDK extension components
 

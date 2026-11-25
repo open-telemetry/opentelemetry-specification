@@ -519,6 +519,8 @@ sections:
         status: '?'
   - name: Declarative configuration
     features:
+      - name: Register a `ConfigProvider` change listener
+        status:
       - name: '`Parse` a configuration file'
         status: '?'
       - name: The `Parse` operation accepts the configuration YAML file format

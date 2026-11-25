@@ -77,25 +77,25 @@ This operation MUST accept the following parameters:
 * `path`: declarative configuration path to watch.
 * `listener`: callback invoked on changes.
 
-Path requirements:
+A watched path MUST use the following subset of JSONPath syntax:
 
-* `path` MUST use the declarative configuration path syntax defined here.
-* `path` MUST start with `.`.
-* Nested named properties MUST be separated with `.`.
-* `path` matching is exact. Wildcards and prefix matching are not supported.
-* In this version, paths are defined only for named properties. Sequence/array
-  indexing is not supported.
-* `path` MUST identify a mapping node when the watched path is set. Watching
-  scalar values or sequences is not supported.
-* Examples include `.instrumentation/development.general.http` and
-  `.instrumentation/development.java.methods`.
+* The path starts with `$.`. The root identifier `$` represents the declarative
+  configuration document.
+* Each segment selects a named property using JSONPath member-name shorthand.
+  A single dot separates consecutive segments.
+
+Paths select individual mapping nodes in the instrumentation configuration.
+Matching is exact. Wildcards, prefix matching, and sequence indexing are
+unsupported. Examples include `$.instrumentation.general.http` and
+`$.instrumentation.java.methods`.
 
 The callback MUST accept the following parameters:
 
 * `path`: the changed watched path.
-* `newConfig`: the updated [`ConfigProperties`](#configproperties) for that
-  path, or null/nil/None/undefined if the watched path is unset, cleared, or no longer
-  resolves to a mapping node, according to what is idiomatic for the language.
+* `newConfig`: the updated [`ConfigProperties`](#configproperties) for the
+  mapping at that path, including an explicitly empty mapping (`{}`). If the
+  path is unset, cleared, or no longer resolves to a mapping, the value is
+  null/nil/None/undefined, according to what is idiomatic for the language.
 
 **Returns:** A registration handle. The handle MUST provide a close (or
 language-equivalent) operation that unregisters the listener.
