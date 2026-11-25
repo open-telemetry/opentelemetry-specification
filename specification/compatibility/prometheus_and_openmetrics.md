@@ -447,14 +447,15 @@ and `instance` has a `service.instance.id` label, the `service.instance.id`
 attribute of the resource created for that pair MUST be set to that label's
 value. Otherwise, it MUST be set to the value of the `instance` label.
 
-The following attributes SHOULD be associated with scraped metrics as resource
-attributes, and MUST NOT be added as metric attributes:
+The following attributes MAY be derived from the scrape target and added as
+resource attributes; these derived attributes MUST NOT be added as data point
+attributes (labels already present on a scraped metric are still copied per
+[Metric Labels](#metric-labels)):
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
-| `server.address` | The `<host>` portion of the `__address__` label of the scrape target after relabeling, unless it is localhost, a loopback address, or an unspecified address |
-| `server.port` | The `<port>` portion of the `__address__` label of the scrape target after relabeling, if present |
-| `url.scheme` | `http` or `https` from the `__scheme__` label of the scrape target after relabeling |
+| [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-address) | The `<host>` portion of the `__address__` label of the scrape target after relabeling, as a string, unless it is localhost, a loopback address, or an unspecified address |
+| [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-port) | The `<port>` portion of the `__address__` label of the scrape target after relabeling, as an integer, if present and a valid port number (1-65535) |
 
 Further attributes (such as from K8s service discovery metadata labels) MAY be
 added to the resource attributes.

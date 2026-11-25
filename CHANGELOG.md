@@ -32,6 +32,11 @@ release.
 
 ### Compatibility
 
+- Remove `url.scheme` from Prometheus scraped-metric resource attributes,
+  downgrade `server.address` and `server.port` from `SHOULD` to `MAY`
+  (clarifying `server.port` as an integer), and scope the data-point-attribute
+  exclusion to scrape-derived attributes.
+  ([#5475](https://github.com/open-telemetry/opentelemetry-specification/pull/5475))
 - Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
