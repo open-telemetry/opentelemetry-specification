@@ -134,6 +134,10 @@ release.
   maintenance.
   ([#5404](https://github.com/open-telemetry/opentelemetry-specification/pull/5404))
 
+- Add OTEP proposing an Instrumentation Stability API (`Stability` parameter and
+  provider `minimum_stability` configuration).
+  ([#5399](https://github.com/open-telemetry/opentelemetry-specification/pull/5399))
+
 ## v1.62.0 (2026-10-21)
 
 ### Traces
