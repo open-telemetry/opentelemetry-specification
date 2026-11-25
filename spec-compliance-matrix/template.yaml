@@ -349,6 +349,12 @@ sections:
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
       - name: Register a `PluginComponentProvider`
     hide_optional_column: true
+  - name: Automatic Injection
+    features:
+      - name: '[Provide an injectable distribution](specification/library-guidelines.md#automatic-injection)'
+        optional: true
+      - name: '[Document activation mechanism and prerequisites in an injection mechanism contract subject to semantic versioning](specification/library-guidelines.md#automatic-injection)'
+        optional: if above
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'

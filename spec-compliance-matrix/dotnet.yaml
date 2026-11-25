@@ -549,6 +549,12 @@ sections:
         status: '-'
       - name: Register a `PluginComponentProvider`
         status: '-'
+  - name: Automatic Injection
+    features:
+      - name: '[Provide an injectable distribution](specification/library-guidelines.md#automatic-injection)'
+        status: '-'
+      - name: '[Document activation mechanism and prerequisites in an injection mechanism contract subject to semantic versioning](specification/library-guidelines.md#automatic-injection)'
+        status: '-'
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
