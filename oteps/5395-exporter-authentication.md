@@ -57,6 +57,8 @@ auth, err := oauth2.New(
     oauth2.WithTokenURL("https://idp.example.com/oauth/token"),
     oauth2.WithClientCredentials(clientID, clientSecret),
 )
+// Caller owns the shared authenticator lifecycle and shuts it down after exporters finish.
+defer auth.Shutdown(ctx)
 httpExporter, err := otlptracehttp.New(ctx,
     otlptracehttp.WithEndpointURL("https://telemetry.example.com/v1/traces"),
     otlpauth.WithTraceHTTPAuthenticator(auth),
@@ -243,8 +245,16 @@ interfaces** (which are left to each SDK).
        an unhandled exception, and complete the export attempt with a failure
        result.
      * The exporter MUST NOT log dynamic header or metadata values returned by
-       the `Authenticator`, and MUST invoke the `Authenticator`'s `Shutdown`
-       operation (if present) when the exporter's `Shutdown` is called.
+       the `Authenticator`.
+     * **Lifecycle Ownership**: When an `Authenticator` is created by the
+       exporter or SDK on its behalf (such as inline in Declarative
+       Configuration), the exporter owns its lifecycle and MUST invoke the
+       `Authenticator`'s `Shutdown` operation (if present) when the exporter's
+       `Shutdown` is called. When a caller passes an `Authenticator`
+       programmatically, the caller owns its lifecycle by default (so a single
+       `Authenticator` can be shared across trace, metric, and log exporters)
+       and the exporter MUST NOT invoke `Shutdown` on it; the caller is
+       responsible for shutting it down after all consumers finish.
 3. **Declarative Configuration (`specification/configuration/sdk.md` & `opentelemetry-configuration`)**:
    * Add `[exporter authenticator]` (`ExperimentalAuthenticator`, with
      `Missing provider behavior: error`) to the
