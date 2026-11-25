@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add Development span `Type` field to the traces data model.
+  ([#5433](https://github.com/open-telemetry/opentelemetry-specification/pull/5433))
+
 ### Metrics
 
 ### Logs
