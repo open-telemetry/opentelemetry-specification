@@ -13,6 +13,7 @@ linkTitle: Mapping to AnyValue
 
 - [Converting to AnyValue](#converting-to-anyvalue)
   * [Primitive Values](#primitive-values)
+    + [Boolean Values](#boolean-values)
     + [Integer Values](#integer-values)
     + [Enumerations](#enumerations)
     + [Floating Point Values](#floating-point-values)
@@ -54,10 +55,17 @@ follow the rules described below.
 
 ### Primitive Values
 
+#### Boolean Values
+
+Boolean values (`true` and `false`) SHOULD be converted to AnyValue's
+[bool_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L32)
+field, including in languages where booleans are a subtype of integers.
+
 #### Integer Values
 
-Integer values which are within the range of 64 bit signed numbers
-[-2^63..2^63-1] SHOULD be converted to AnyValue's
+Integer values (excluding [boolean values](#boolean-values)) which are within
+the range of 64 bit signed numbers [-2^63..2^63-1] SHOULD be converted to
+AnyValue's
 [int_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L33)
 field.
 
