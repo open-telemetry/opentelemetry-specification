@@ -84,7 +84,7 @@ release.
   ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 - Specify mapping of boolean values to `AnyValue`'s `bool_value` field in
   "Mapping Arbitrary Data to OTLP AnyValue".
-  ([#5428](https://github.com/open-telemetry/opentelemetry-specification/issues/5428))
+  ([#5429](https://github.com/open-telemetry/opentelemetry-specification/pull/5429))
 
 ### Compatibility
 
