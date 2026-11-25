@@ -50,6 +50,9 @@ release.
 
 ### Traces
 
+- Clarify `ComposableRuleBased` predicate arguments, evaluation order, and
+  no-match fallback behavior.
+  ([#5456](https://github.com/open-telemetry/opentelemetry-specification/pull/5456))
 - Add the traces data model.
   ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only

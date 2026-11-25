@@ -771,12 +771,14 @@ a `Composite(ComposableProbability(ratio))` configuration.
 
 ###### ComposableRuleBased
 
-* Evaluates a series of rules based on predicates and returns the `SamplingIntent` from the first matching sampler
-* If no rules match, returns a non-sampling intent
+* Evaluates the configured rules in order and returns the `SamplingIntent` from the first rule whose predicate matches (without evaluating subsequent rules)
+* If `rules` is empty or no predicate matches, returns a non-sampling intent (no threshold, `adjusted_count_reliable` set to `false`, no attributes, and no `TraceState` modification)
 
 **Required parameters:**
 
-* `rules` - A list of (Predicate, ComposableSampler) pairs, where Predicate is a function that evaluates whether a rule applies
+* `rules` - A list of `(Predicate, ComposableSampler)` pairs, where `Predicate` is a function that evaluates whether a rule applies
+
+`Predicate` receives the same read-only arguments as `GetSamplingIntent` (which excludes `TraceId`) and returns a boolean. To preserve consistent probability sampling, `Predicate`s MUST NOT modify the passed arguments and MUST NOT depend on trace randomness (explicit `rv` or the randomness bits of the parent `SpanContext`'s `TraceId`) or the parent's *sampled* flag.
 
 ###### ComposableAnnotating
 
