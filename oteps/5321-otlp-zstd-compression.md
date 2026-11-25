@@ -51,8 +51,9 @@ If the configured receiver doesn't support `zstd`:
 
 Both statuses are non-retryable under OTLP's existing retry semantics, so a compliant `zstd`
 sender talking to a compliant non-supporting receiver would drop every batch. To close that gap,
-for a `zstd`-compressed export the exporter MUST retry that batch once with `gzip`, and SHOULD log
-a warning, when and only when:
+for a `zstd`-compressed export the exporter MUST retry that batch once with `gzip`
+(see the [open question on requiring fallback](#open-questions)), and SHOULD log a warning,
+when and only when:
 
 - **gRPC**: the status is `UNIMPLEMENTED` and the response's `grpc-accept-encoding` is absent or
   does not list `zstd`. If it lists `zstd`, the gRPC spec says the error is unrelated to
@@ -219,6 +220,16 @@ than not.
 
 ## Open questions
 
+- Should exporters be required to retry once with `gzip` when a receiver rejects explicitly
+  configured `zstd`, or should they report the export failure and rely on operators to verify
+  receiver support? Retrying with `gzip` preserves the telemetry during rolling upgrades or when
+  receivers behind one endpoint support different codecs. A warning makes the mismatch visible.
+  Reporting the error keeps exporter logic simpler and leaves operators responsible for restoring
+  delivery. The fallback also raises the question of what precedent it sets for OTLP negotiation.
+  A dedicated capability endpoint could support broader negotiation and would need to account for
+  receiver capabilities changing after negotiation. Prototypes across language SDKs can help
+  assess the implementation cost and inform whether to keep or refine the requirement.
+  See the [review discussion](https://github.com/open-telemetry/opentelemetry-specification/pull/5321#discussion_r4457744588).
 - Does this need to say anything about the profiles signal specifically, or is transport-level,
   signal-agnostic wording sufficient? (Profiles dropped a *mandatory* gzip requirement for its
   on-disk format — a different axis from the transport compression here.)
