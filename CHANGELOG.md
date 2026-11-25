@@ -50,6 +50,10 @@ release.
 
 ### Traces
 
+- Clarify `ComposableAnnotating` field preservation and attribute precedence,
+  clarify `ComposableProbability` zero/underflow behavior, and fix stale
+  `CompositeSampler` example.
+  ([#5457](https://github.com/open-telemetry/opentelemetry-specification/pull/5457))
 - Add the traces data model.
   ([#5238](https://github.com/open-telemetry/opentelemetry-specification/pull/5238))
 - Allow an exception to the finite upper bound for exporter `Export` calls only

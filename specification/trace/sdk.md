@@ -732,7 +732,7 @@ randomness values MUST not be modified.
 ###### ComposableAlwaysOn
 
 * Always returns a `SamplingIntent` with threshold set to sample all spans (threshold = 0)
-* Sets `adjusted_count_reliable` to `true`
+* Sets `adjusted_count_reliable` to `true` (except when `ratio` is `0` or rounds to `2^56`, see below)
 * Does not add any attributes
 
 ###### ComposableAlwaysOff
@@ -744,18 +744,20 @@ randomness values MUST not be modified.
 ###### ComposableProbability
 
 * Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
-* Sets `adjusted_count_reliable` to `true`
+* Sets `adjusted_count_reliable` to `true` (except when `ratio` is `0` or rounds to `2^56`, see below)
 * Does not add any attributes
 
 **Required parameters:**
 
 * `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling.
 
-A ratio value of 0 is considered non-probabilistic. For the zero case
-a `ComposableAlwaysOff` instance SHOULD be returned instead.
+A ratio value of 0 is considered non-probabilistic. For the zero case (or a
+positive ratio that rounds to a rejection threshold of `2^56`), implementations
+SHOULD return the same `SamplingIntent` as `ComposableAlwaysOff` (or return a
+`ComposableAlwaysOff` instance).
 
 Note that the top-level `ProbabilitySampler` can be implemented using
-a `Composite(ComposableProbability(ratio))` configuration.
+a `CompositeSampler(ComposableProbability(ratio))` configuration.
 
 ###### ComposableParentThreshold
 
@@ -781,7 +783,7 @@ a `Composite(ComposableProbability(ratio))` configuration.
 ###### ComposableAnnotating
 
 * Delegates the sampling decision to another sampler but adds attributes to sampled spans
-* Returns a `SamplingIntent` that combines the delegate's threshold with additional attributes
+* Returns a `SamplingIntent` that preserves the delegate's `threshold`, `adjusted_count_reliable`, and `trace_state_provider`, and merges the configured `attributes` with any attributes produced by the delegate (with the configured `attributes` taking precedence on key conflicts)
 
 **Required parameters:**
 
@@ -797,11 +799,11 @@ An example of creating a composite sampler configuration:
 rootSampler = ComposableRuleBased([
   (isHealthCheck, ComposableAlwaysOff),
   (isCheckout, ComposableAlwaysOn),
-  (isAnything, ComposableTraceIDRatio(0.1))
+  (isAnything, ComposableProbability(0.1))
 ])
 
-// Create a parent-based sampler for child spans
-finalSampler = ComposableParentThreshold(rootSampler)
+// Create a parent-based composite sampler for child spans
+finalSampler = CompositeSampler(ComposableParentThreshold(rootSampler))
 ```
 
 This example creates a configuration where:
