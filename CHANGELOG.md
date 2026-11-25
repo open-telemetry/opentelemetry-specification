@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Stabilize `Attributes` instrument advisory parameter.
+  ([#5393](https://github.com/open-telemetry/opentelemetry-specification/pull/5393))
+
 ### Logs
 
 ### Baggage

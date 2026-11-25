@@ -271,7 +271,7 @@ boundaries to use if aggregating to
 
 ##### Instrument advisory parameter: `Attributes`
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Applies to all instrument types.
 
