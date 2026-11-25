@@ -25,6 +25,8 @@ release.
 
 ### Common
 
+- Mark reserved attributes in semantic conventions as Stable.
+  ([#5434](https://github.com/open-telemetry/opentelemetry-specification/pull/5434))
 - Specify mapping of boolean values to `AnyValue`'s `bool_value` field in
   "Mapping Arbitrary Data to OTLP AnyValue".
   ([#5429](https://github.com/open-telemetry/opentelemetry-specification/pull/5429))
