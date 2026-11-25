@@ -25,6 +25,10 @@ release.
 
 ### Common
 
+- Specify mapping of boolean values to `AnyValue`'s `bool_value` field in
+  "Mapping Arbitrary Data to OTLP AnyValue".
+  ([#5429](https://github.com/open-telemetry/opentelemetry-specification/pull/5429))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
@@ -82,9 +86,6 @@ release.
 
 - Define optional application-provided names for SDK components.
   ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
-- Specify mapping of boolean values to `AnyValue`'s `bool_value` field in
-  "Mapping Arbitrary Data to OTLP AnyValue".
-  ([#5429](https://github.com/open-telemetry/opentelemetry-specification/pull/5429))
 
 ### Compatibility
 
