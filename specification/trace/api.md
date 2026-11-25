@@ -747,11 +747,15 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 parent/child relationships or span links. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis:
 
-1. Whether a span represents an outgoing call to a remote service (`CLIENT` and
-   `PRODUCER` spans) or a processing of an incoming request initiated externally (`SERVER`
-   and `CONSUMER` spans).
+1. Whether a span represents an outgoing operation (`CLIENT` and `PRODUCER`
+   spans) or the processing of an incoming operation (`SERVER` and `CONSUMER`
+   spans).
 2. Whether a Span represents a request/response operation (`CLIENT` and `SERVER`
    spans) or a deferred execution (`PRODUCER` and `CONSUMER` spans).
+
+`PRODUCER` and `CONSUMER` spans can describe deferred work within the same
+process. For example, a `PRODUCER` span can describe adding a task to an
+in-memory worker queue, and a `CONSUMER` span can describe processing that task.
 
 In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
@@ -789,9 +793,8 @@ These are the possible `SpanKind`s:
   a new `PRODUCER` span per message to be created.
 * `CONSUMER` indicates that the span represents the processing of an operation
   initiated by a producer, where the producer does not wait for the outcome.
-* `INTERNAL` Default value. Indicates that the span represents an
-  internal operation within an application, as opposed to an
-  operations with remote parents or children.
+* `INTERNAL` Default value. Indicates that the span represents an internal
+  operation within an application.
 
 To summarize the interpretation of these kinds:
 
@@ -816,10 +819,10 @@ cardinality, typically lower than the [span name](#span).
 For example, all RPC client spans share the same span type, while their names
 differ by RPC method.
 
-[`SpanKind`](#spankind) describes how the span relates to remote peers, while
-span type describes what operation it represents. For example, HTTP client and
-RPC client spans have different types but share the `CLIENT` kind - span type
-implies a specific kind.
+[`SpanKind`](#spankind) describes the operation's direction and communication
+style, while span type describes what operation it represents. For example,
+HTTP client and RPC client spans have different types but share the `CLIENT`
+kind - span type implies a specific kind.
 
 Span type is provided at [span creation](#span-creation) and MUST NOT be changed
 afterwards. An empty span type is equivalent to a not present one.

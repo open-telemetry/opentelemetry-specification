@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Clarify that `PRODUCER` and `CONSUMER` span kinds can describe deferred work
+  within the same process, including in-memory worker queues.
+  ([#4758](https://github.com/open-telemetry/opentelemetry-specification/issues/4758))
+
 ### Metrics
 
 ### Logs
