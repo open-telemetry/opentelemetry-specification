@@ -25,6 +25,9 @@ release.
 
 ### Common
 
+- Mark reserved attributes in semantic conventions as Stable.
+  ([#5434](https://github.com/open-telemetry/opentelemetry-specification/pull/5434))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
