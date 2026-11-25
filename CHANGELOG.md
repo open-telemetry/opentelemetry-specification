@@ -38,6 +38,10 @@ release.
 
 ### SDK Configuration
 
+- Define SDK `ConfigProvider` change-listener behavior for runtime declarative
+  configuration notifications.
+  ([#4900](https://github.com/open-telemetry/opentelemetry-specification/pull/4900))
+
 ### Supplementary Guidelines
 
 - Add compliance matrix entries for injectable distributions and their injection mechanism contracts.
