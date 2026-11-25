@@ -86,6 +86,10 @@ release.
 - Define optional application-provided names for SDK components.
   ([#5300](https://github.com/open-telemetry/opentelemetry-specification/pull/5300))
 
+- Add Proxy URL, Proxy Username, and Proxy Password configuration options to
+  the OTLP exporter.
+  ([#5415](https://github.com/open-telemetry/opentelemetry-specification/pull/5415))
+
 ### Compatibility
 
 - Fix the OpenTelemetry Histogram to Prometheus Histogram transformation to include
