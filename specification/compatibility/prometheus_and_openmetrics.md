@@ -397,6 +397,9 @@ In Prometheus metrics, the `job` and `instance` labels are used as join keys
 between metrics and the `target` info metric. Therefore a new resource MUST be
 created for each `job` and `instance` pair encountered in the metrics labels,
 except for the `target` info metric which defines correlated resource labels.
+Missing and empty `job` or `instance` labels are equivalent for grouping, and
+metrics with missing or empty `job` or `instance` MUST still be grouped into a
+resource rather than failing ingestion.
 
 The `service.name` and `service.instance.id` resource
 attributes are needed to ensure Prometheus exporters can disambiguate metrics
@@ -421,31 +424,27 @@ attributes below.
 By default, label keys and values of the `target` info metric MUST NOT be
 altered (such as replacing `_` with `.` characters in keys).
 
+For each `job` and `instance` pair:
+
+- `service.name` MUST be set to the `service.name` label of the matching
+  `target` info metric if non-empty, or else to `job` if non-empty. A missing
+  or empty `job` label MUST NOT be added as `service.name`.
+- `service.instance.id` MUST be set to the `service.instance.id` label of the
+  matching `target` info metric if non-empty, or else to `instance` if
+  non-empty. A missing or empty `instance` label MUST NOT be added as
+  `service.instance.id`.
+
 #### Scraping metrics (pull)
 
 **Status**: [Development](../document-status.md)
 
-When scraping a Prometheus endpoint, resource attributes MUST be added to the
-scraped metrics to distinguish them from metrics from other Prometheus
-endpoints.
-
 The `job` and `instance` labels are attached by Prometheus to each scraped
 metric as described in [Jobs and instances](https://prometheus.io/docs/concepts/jobs_instances/).
-If the `job` or `instance` label of a metric is missing or empty, for example
-due to `metric_relabel_configs`, the missing label MUST be set to the corresponding label of
-the scrape target, after
-[relabeling](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config).
-If either label is still missing or empty, the scrape MUST fail.
-
-For each `job` and `instance` pair, if the `target` info metric with that `job`
-and `instance` has a `service.name` label, the `service.name` attribute of the
-resource created for that pair MUST be set to that label's value. Otherwise, it
-MUST be set to the value of the `job` label.
-
-For each `job` and `instance` pair, if the `target` info metric with that `job`
-and `instance` has a `service.instance.id` label, the `service.instance.id`
-attribute of the resource created for that pair MUST be set to that label's
-value. Otherwise, it MUST be set to the value of the `instance` label.
+If `job` or `instance` is missing or empty on a scraped metric (including the
+`target` info metric), it MUST fall back to the scrape target's corresponding
+label after [relabeling](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config),
+if present and non-empty. If either label is still missing or empty, the scrape
+MUST NOT fail.
 
 The following attributes SHOULD be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric attributes:
@@ -463,27 +462,12 @@ added to the resource attributes.
 
 **Status**: [Development](../document-status.md)
 
-When receiving metrics over Prometheus Remote Write, a missing `job` or
-`instance` label MUST be treated as the empty string. Metrics MUST be grouped
-into one resource per distinct `job` and `instance` pair, including pairs
-where one or both values are the empty string.
-
 A `target` info metric can arrive in a different request than the metrics it
 describes. Receivers MAY therefore also apply the resource attributes from a
 `target` info metric received in an earlier request to metrics with the same
 `job` and `instance` in later requests, for example by caching them. Resource
 attributes from a `target` info metric in the current request MUST take
 precedence over attributes from an earlier request.
-For each `job` and `instance` pair, if the `target` info metric with that `job`
-and `instance` has a `service.name` label, the `service.name` attribute of the
-resource created for that pair MUST be set to that label's value. Otherwise, if
-`job` is not the empty string, it MUST be set to the value of the `job` label.
-
-For each `job` and `instance` pair, if the `target` info metric with that `job`
-and `instance` has a `service.instance.id` label, the `service.instance.id`
-attribute of the resource created for that pair MUST be set to that label's
-value. Otherwise, if `instance` is not the empty string, it MUST be set to the
-value of the `instance` label.
 
 ## OTLP Metric points to Prometheus
 

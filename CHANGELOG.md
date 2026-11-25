@@ -32,6 +32,11 @@ release.
 
 ### Compatibility
 
+- Relax Prometheus pull scraping rules so scrapes no longer fail when `job` or
+  `instance` remains missing or empty after scrape target fallback, and
+  consolidate shared resource grouping and `service.*` derivation rules with
+  Remote Write.
+  ([#5468](https://github.com/open-telemetry/opentelemetry-specification/pull/5468))
 - Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
