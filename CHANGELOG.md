@@ -112,6 +112,8 @@ release.
   labels after relabeling, and that `server.address` is omitted for localhost,
   loopback and unspecified addresses.
   ([#5356](https://github.com/open-telemetry/opentelemetry-specification/pull/5356))
+- Add Prometheus `MetricProducer` bridge specification.
+  ([#5426](https://github.com/open-telemetry/opentelemetry-specification/pull/5426))
 
 ### SDK Configuration
 
