@@ -35,6 +35,10 @@ release.
 - Stabilize the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#5272](https://github.com/open-telemetry/opentelemetry-specification/pull/5272))
+- Clarify `OTLP -> Prometheus` resource attribute scoping for single-target
+  versus aggregated exporters and OTLP converters, empty `service.*` and
+  `job`/`instance` handling, and non-string attribute value conversion.
+  ([#5465](https://github.com/open-telemetry/opentelemetry-specification/pull/5465))
 
 ### SDK Configuration
 
