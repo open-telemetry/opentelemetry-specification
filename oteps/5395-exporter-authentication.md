@@ -85,17 +85,18 @@ OtlpHttpSpanExporter exporter = OtlpHttpSpanExporter.builder()
 
 ### Declarative Configuration
 
-`ExperimentalAuthenticator` (stabilizing to `Authenticator`) is defined as an
-open SDK extension plugin (`isSdkExtensionPlugin: true`, accepting any single
-plugin name key mapped to its `ConfigProperties` object or `null`) in
-`schema/common.yaml`. Any custom, contrib, or vendor authenticator registered
-via [`PluginComponentProvider`](../specification/configuration/sdk.md#plugincomponentprovider)
-(such as `oauth2`, `bearertokenauth`, or a user-defined
-`my_custom_authenticator`) can be configured by its registered plugin name.
-`OtlpHttpExporter` and `OtlpGrpcExporter` (`schema/common.yaml`, shared by trace
-and log exporters) and `OtlpHttpMetricExporter` and `OtlpGrpcMetricExporter`
-(`schema/meter_provider.yaml`) gain an optional `authenticator/development`
-property referencing `ExperimentalAuthenticator`:
+`ExperimentalAuthenticator` (stabilizing to `Authenticator`) is defined in
+`schema/common.yaml` with a single built-in open authenticator (`bearer_token`,
+for file-backed rotating tokens) and `isSdkExtensionPlugin: true` (accepting
+any other single plugin name key mapped to its `ConfigProperties` object or
+`null`). Any custom, contrib, or vendor authenticator registered via
+[`PluginComponentProvider`](../specification/configuration/sdk.md#plugincomponentprovider)
+(such as `oauth2` or a user-defined `my_custom_authenticator`) can be
+configured by its registered plugin name alongside the built-in `bearer_token`
+authenticator. `OtlpHttpExporter` and `OtlpGrpcExporter` (`schema/common.yaml`,
+shared by trace and log exporters) and `OtlpHttpMetricExporter` and
+`OtlpGrpcMetricExporter` (`schema/meter_provider.yaml`) gain an optional
+`authenticator/development` property referencing `ExperimentalAuthenticator`:
 
 ```yaml
 file_format: "1.0"
@@ -122,8 +123,8 @@ meter_provider:
           otlp_grpc:
             endpoint: https://telemetry.example.com:4317
             authenticator/development:
-              bearertokenauth:
-                filename: /var/run/secrets/tokens/otel-token
+              bearer_token:
+                token_file: /var/run/secrets/tokens/otel-token
 ```
 
 ```yaml
@@ -262,12 +263,31 @@ interfaces** (which are left to each SDK).
      [Supported SDK plugin components](../specification/configuration/sdk.md#supported-sdk-plugin-components)
      table.
    * In `opentelemetry-configuration`, define `ExperimentalAuthenticator`
-     (`isSdkExtensionPlugin: true`, with `additionalProperties` accepting any
-     plugin name mapped to an object or `null`, `minProperties: 1`,
-     `maxProperties: 1`) in `schema/common.yaml` and add optional
-     `authenticator/development` (`defaultBehavior: no authenticator is used`)
-     to `OtlpHttpExporter`, `OtlpGrpcExporter`, `OtlpHttpMetricExporter`, and
+     (`isSdkExtensionPlugin: true`, with built-in `bearer_token` referencing
+     `ExperimentalBearerTokenAuthenticator` and `additionalProperties`
+     accepting any plugin name mapped to an object or `null`,
+     `minProperties: 1`, `maxProperties: 1`) in `schema/common.yaml` and add
+     optional `authenticator/development`
+     (`defaultBehavior: no authenticator is used`) to `OtlpHttpExporter`,
+     `OtlpGrpcExporter`, `OtlpHttpMetricExporter`, and
      `OtlpGrpcMetricExporter`.
+4. **Built-in File-Backed Bearer Token Authenticator (`bearer_token`)**:
+   * To exercise the `Authenticator` contract and Declarative Configuration
+     extension point with a concrete, widely used open use case (such as
+     Kubernetes projected service account tokens and mounted secret files that
+     rotate on disk), the specification will define one minimal built-in
+     authenticator (`bearer_token` / `ExperimentalBearerTokenAuthenticator`)
+     implementable with only standard-library file I/O:
+     * `token_file` (required string): Path to a text file containing the
+       token. Leading and trailing whitespace is trimmed, and the authenticator
+       picks up updates when the file rotates on disk (via file watching or
+       periodic reload) without restarting the process.
+     * `scheme` (optional string, default `"Bearer"`): Authentication scheme
+       prefix prepended to the token value (an empty string omits the prefix).
+     * `header` (optional string, default `"Authorization"`): HTTP header or
+       gRPC metadata key to populate.
+   * SDKs implementing `Authenticator` and Declarative Configuration SHOULD
+     provide this built-in `bearer_token` authenticator.
 
 ### What the Specification WILL NOT specify
 
@@ -288,13 +308,14 @@ interfaces** (which are left to each SDK).
        (where HTTP exporters span `RequestsHTTPTransport` and
        `Urllib3HTTPTransport`), and JS/TS (`OTLPExporterBase`), returning
        dynamic key-value header/metadata maps per export attempt.
-2. **Built-in Vendor or Protocol Implementations and Schemas**:
-   * This proposal does not define fixed YAML schemas or require SDKs to bundle
-     concrete authentication implementations (such as `oauth2`, `aws`, `azure`,
-     or `gcp`); like vendor exporters or cloud resource detectors, these are
+2. **Vendor and Complex Protocol Implementations (such as OAuth 2.0 and Cloud IAM)**:
+   * Beyond the minimal built-in `bearer_token` authenticator, this proposal
+     does not define fixed YAML schemas or require SDKs to bundle vendor or
+     complex protocol implementations (such as `oauth2`, `aws`, `azure`, or
+     `gcp`); like vendor exporters or cloud resource detectors, these are
      provided as contrib or third-party plugin packages configured via the
-     `ExperimentalAuthenticator` extension point. Promoting common protocol
-     authenticators (such as `oauth2`) to built-in types is left as a
+     `ExperimentalAuthenticator` extension point. Promoting additional common
+     protocol authenticators (such as `oauth2`) to built-in types is left as a
      [future extension](#future-possibilities).
 3. **New Environment Variables**:
    * This proposal does not introduce `OTEL_EXPORTER_OTLP_AUTHENTICATOR`
@@ -363,8 +384,8 @@ interfaces** (which are left to each SDK).
 
 ## Future possibilities
 
-* Promoting common authenticators (such as `oauth2` / `oauth2client` or
-  `bearertokenauth`) to built-in types in `opentelemetry-configuration` and
+* Promoting additional common authenticators (such as `oauth2` /
+  `oauth2client`) to built-in types in `opentelemetry-configuration` and
   standardizing their configuration fields.
   Reference prototypes in Go, Java, Python, and JS/TS demonstrated that an
   RFC 6749 `client_credentials` `oauth2` authenticator can be implemented using
