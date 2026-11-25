@@ -48,7 +48,8 @@ Configuration.
 
 ### Programmatic configuration (Go and Java)
 
-SDKs expose an `Authenticator` option following their language conventions:
+SDKs expose an `Authenticator` option following their language conventions
+(illustrative proposed APIs):
 
 ```go
 // Go example with otlptracehttp / otlptracegrpc and an OAuth2 authenticator
@@ -70,16 +71,16 @@ grpcExporter, err := otlptracegrpc.New(ctx,
 ```
 
 ```java
-// Java example with OtlpHttpSpanExporter and an OAuth2 authenticator
+// Illustrative proposed Java example with OtlpHttpSpanExporter and an OAuth2 authenticator
 Authenticator auth = OAuth2ClientCredentialsAuthenticator.builder()
     .setTokenUrl("https://idp.example.com/oauth/token")
     .setClientId(clientId)
     .setClientSecret(clientSecret)
     .build();
-OtlpHttpSpanExporterBuilder builder = OtlpHttpSpanExporter.builder()
-    .setEndpoint("https://telemetry.example.com/v1/traces");
-OtlpExporterUtil.setAuthenticator(builder, auth);
-OtlpHttpSpanExporter exporter = builder.build();
+OtlpHttpSpanExporter exporter = OtlpHttpSpanExporter.builder()
+    .setEndpoint("https://telemetry.example.com/v1/traces")
+    .setAuthenticator(auth)
+    .build();
 ```
 
 ### Declarative Configuration
