@@ -47,6 +47,7 @@ formats is required. Implementing more than one format is optional.
 | SpanProcessor.OnStart receives parent Context |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | UpdateName |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | User-defined start timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Create with span type](specification/trace/api.md#span-type) |  | - | - | - | - | - | - | - | - | - | - | - | - |
 | End |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | End with timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRecording |  | + | + | + | + | + | + | + | + | + | + | + | + |
@@ -314,6 +315,13 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | The `Create` operation returns `Propagators` | + | + | + |  |  |  | + |  | + | - |  | - |
 | The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + | - |  | - |
 | Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + | - |  | - |
+
+## Automatic Injection
+
+| Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
+| [Provide an injectable distribution](specification/library-guidelines.md#automatic-injection) | X | - | - | - | - | - | - | - | - | - | - | - | - |
+| [Document activation mechanism and prerequisites in an injection mechanism contract subject to semantic versioning](specification/library-guidelines.md#automatic-injection) | if above | - | - | - | - | - | - | - | - | - | - | - | - |
 
 ## Exporters
 
