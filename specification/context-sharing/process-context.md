@@ -43,12 +43,12 @@ The Process Context consists of a fixed header and a payload encoded using [Prot
 
 ### Header
 
-The header is stored in a memory mapping with the following format:
+The header is stored at offset 0 of the memory mapping using native byte order with no additional padding, following this format:
 
 | Field                       | Type      | Description                                                                                               |
 |-----------------------------|-----------|-----------------------------------------------------------------------------------------------------------|
 | `signature`                 | `char[8]` | Always set to the 8-byte sequence `"OTEL_CTX"` (not NUL-terminated; readers MUST compare exactly 8 bytes) |
-| `version`                   | `uint32`  | Format version. Currently `2` (`1` can be used for development)                                           |
+| `version`                   | `uint32`  | Format version. Currently `2` (`1` might be used for development and can be ignored by readers)           |
 | `payload_size`              | `uint32`  | Number of bytes of the encoded payload                                                                    |
 | `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp from `CLOCK_BOOTTIME` of when the context was published, in nanoseconds         |
 | `payload`                   | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64         |
@@ -113,9 +113,7 @@ When multiple resources exist, as described by [OTEP 4665][multiple-resources-ot
 > [!NOTE]
 > Future work may enable more granular attribution of work to specific resources. For example, [OTEP 4947][thread-context-otep] describes identifying which threads are working on what in a multi-tenant scenario.
 
-Publishers MAY drop the context during SDK shutdown or retain it until the process terminates and the operating system reclaims the process memory.
-
-Publishers SHOULD ignore errors returned by the mapping-naming `prctl` call.
+Publishers MAY drop the context during SDK shutdown by unmapping it (`munmap`), or retain it until the process terminates and the operating system reclaims the process memory.
 
 > [!NOTE]
 > Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. The reading protocol works regardless of whether `CONFIG_ANON_VMA_NAME` is available.
@@ -142,7 +140,7 @@ External readers (such as the OpenTelemetry eBPF Profiler or OBI) MUST follow th
 
 4. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 
-5. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from the `payload` pointer into reader-local memory.
+5. **Read payload**: Read the `payload` and `payload_size` fields, then copy `payload_size` bytes from the address referenced by `payload` into reader-local memory. Readers SHOULD enforce an upper bound on `payload_size`.
 
 6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 
@@ -157,6 +155,7 @@ External readers (such as the OpenTelemetry eBPF Profiler or OBI) MUST follow th
    If the reader detects its own value for an attribute that is also present in the published `resource` (e.g. `service.instance.id`), it SHOULD use the published value.
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
+Readers SHOULD limit the number of times they restart the reading protocol, and treat the context as unavailable for that read once the limit is reached.
 
 Readers SHOULD use APIs such as `process_vm_readv` or equivalent to handle issues inherent to racy cross-process memory access gracefully.
 
