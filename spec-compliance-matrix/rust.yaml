@@ -453,6 +453,10 @@ sections:
         status: 'N/A'
       - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
         status: '?'
+  - name: Context Sharing
+    features:
+      - name: '[Process Context Sharing](specification/context-sharing/process-context.md)'
+        status: '?'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -516,6 +520,8 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '?'
       - name: OTEL_CONFIG_FILE
+        status: '?'
+      - name: OTEL_EXPERIMENTAL_PROCESS_CONTEXT_ENABLED
         status: '?'
   - name: Declarative configuration
     features:

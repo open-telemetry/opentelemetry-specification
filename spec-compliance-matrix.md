@@ -256,6 +256,12 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | + |
 | [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + | + | + |  |  |  |  | + | + | + | - |
 
+## Context Sharing
+
+| Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
+| ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
+| [Process Context Sharing](specification/context-sharing/process-context.md) | X |  |  |  |  |  |  |  |  |  |  |  |  |
+
 ## Environment Variables
 
 Note: Support for environment variables is optional.
@@ -293,6 +299,7 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - | + |  | - |
 | OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + | - |  | + |
+| OTEL_EXPERIMENTAL_PROCESS_CONTEXT_ENABLED |  |  |  |  |  |  |  |  |  |  |  |  |
 
 ## Declarative configuration
 

@@ -298,6 +298,10 @@ sections:
       - name: Getter argument returning Keys
         optional: true
       - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
+  - name: Context Sharing
+    features:
+      - name: '[Process Context Sharing](specification/context-sharing/process-context.md)'
+        optional: true
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -331,6 +335,7 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
       - name: OTEL_CONFIG_FILE
+      - name: OTEL_EXPERIMENTAL_PROCESS_CONTEXT_ENABLED
     hide_optional_column: true
   - name: Declarative configuration
     features:
