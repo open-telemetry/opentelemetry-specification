@@ -2,6 +2,8 @@
 
 Define an initial Alpha Profiles SDK specification covering lifecycle guarantees, pull-oriented collection components, boundary data invariants, and OTLP exporter configuration for in-process OpenTelemetry profiling SDKs.
 
+![OpenTelemetry Profiles SDK overview](./images/otep5476/profiles-sdk.png)
+
 ## Motivation
 
 Out-of-process profilers such as the [OpenTelemetry eBPF Profiler](https://github.com/open-telemetry/opentelemetry-ebpf-profiler) collect low-overhead CPU profiles across hosts without code changes, but cannot cheaply capture runtime-internal profiles such as live heap retention, allocation rates, goroutine stacks, lock contention, or managed runtime events, and cannot run in restricted environments without eBPF privileges.
