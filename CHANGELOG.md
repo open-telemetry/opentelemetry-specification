@@ -45,6 +45,8 @@ release.
 
 ### OTEPs
 
+- Add Profiles SDK OTEP proposing lifecycle guarantees, pull-oriented collection components, and OTLP exporter configuration.
+  ([#5476](https://github.com/open-telemetry/opentelemetry-specification/pull/5476))
 - Add zstd as a specified OTLP compression codec.
   ([#5321](https://github.com/open-telemetry/opentelemetry-specification/pull/5321))
 
